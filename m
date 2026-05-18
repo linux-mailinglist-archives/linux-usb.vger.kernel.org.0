@@ -1,572 +1,236 @@
-Return-Path: <linux-usb+bounces-37574-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37575-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yBMvO0O1CmoB6QQAu9opvQ
-	(envelope-from <linux-usb+bounces-37574-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 08:44:19 +0200
+	id CAQFK+G1CmoB6QQAu9opvQ
+	(envelope-from <linux-usb+bounces-37575-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 08:46:57 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E766566E23
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 08:44:19 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56090566E85
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 08:46:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 80EAF3025D03
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 06:42:57 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BCDFE3004931
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 06:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4A6C3CDBD1;
-	Mon, 18 May 2026 06:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA9E3C1F37;
+	Mon, 18 May 2026 06:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F0Guppam"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pFLTQ09f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C013C76BB
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 06:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A918D380FFD
+	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 06:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779086574; cv=none; b=CAWxD4lUm1Wd7FBzW2bTpQ78ylkjHp58Xc7WA+Hj7/sTlyNBZoKSXtMm4nUwlunivDEqsAIgiJYKn5CRPHKX7TUGcCMoArByYegbikV/JAQRnDbnIAM0gYxRGMsF8j8YiwtUvbTSxzCqDIAJDdP3L0BryZB9VwCWzYwfyTPRXZA=
+	t=1779086815; cv=none; b=HE5U5E8LnHhxw3EVuOZ1SiILgIxRIhaZSikBMWAlIaS6eZ6cUw5lfyBlflWfpO5UPPN1GVF73LpcePC0af3LlVHSxbhSKhFAdY09uB2iEnM6atu+uLosTC1Twf51u56QDE4I2MFalk/6avY1L92YYt7haq6bBiSIT8th1zi4ktQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779086574; c=relaxed/simple;
-	bh=q4px7FA7QJBQEoEgHFr4uUrnQYPx6Th/v6bmTrVHXe4=;
-	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:Cc:To; b=nl/9hb+mOrWW8i+0NDYU/ycgRdpaSrZfSTinuBCbhX0Zs9a+0zxiPvlWmOkanm+H8LvNlaLqrg29zodiV3JlWSK19BWBDsnz2EYeyJAZTEEdmBTqO4gFkytYJVbAtgckIpJpBWdXVeVfItm/EQxPlo3V91cROnlOHQh1/4WXuo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F0Guppam; arc=none smtp.client-ip=74.125.82.52
+	s=arc-20240116; t=1779086815; c=relaxed/simple;
+	bh=rvMG2WzzM7DPviAzAz1n9hBNlKv9P04YcncPa6PUsDE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kRfZfgw6ErAGOY3x+W9QQf3xT+ZZ1L/9VPxw5AhIdHe127rzCz1PLn7AzwO9G/NgE8/V/+9W5b5U9hwzzFlwS5o8O2MkRKRrGllq4xFkgFvgYO6AoqA8ildcCTG/LLWDPUicIkhzM//hi4fsfB7P3YpHhQS9eQ06dpREcZUGi24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pFLTQ09f; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-1309f4ee97fso1892449c88.1
-        for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 23:42:48 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4891e5b9c1fso14096685e9.2
+        for <linux-usb@vger.kernel.org>; Sun, 17 May 2026 23:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779086567; x=1779691367; darn=vger.kernel.org;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bf7Uwn5rJEErcj+T3jaqHrHTEQJpwlE6XJq01d7ai4o=;
-        b=F0GuppamkiNZNpBVOpFJPOZ0g9REj4bL256F2rs7TfZv0YVy+G+rXqhLolvjYOlFwG
-         QRZmQhwA1kfcj5Dw8fvjrIOtob8EuVS8huwwGsjNr8fqE4bXDKXYVIu/hCRZRLxTzDEH
-         SFmO+jdxLNEJR/bbx9Pcn9N+6m0oP7hscgBOI2C9/ZQSYzJz1L1Peq0IXpq0mJnyAg4q
-         lURmn0VCgIJxZwrWPCCQq7iGL4Net2ydNk0f6/lzOaR7wkQhfwl5TQZxz0RSKm6pzBzG
-         h1O8LJYijwr9Qiq4y66rJLx4Jz7MvayG5Lcj3JH23cyzsMbGsmzSSMnESJoopTBCpH3z
-         r9Fg==
+        d=gmail.com; s=20251104; t=1779086812; x=1779691612; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=36mFXyzrM9yDHoBL7zTKgPeCpz83tVhqQtJMltbmXVc=;
+        b=pFLTQ09fLnTz9ML2vunIuFsQrPZc51PdrPCWBOyZs9jQ8n7vGIuTW2MHqM8SMmkowq
+         ThpfM0DtJ/RYReYcSD7EnCTj8tlfm1HQual16Yh50F6PmPb9z+KfuSe8fczytQEBwbo6
+         4phM3Sq3/sQxcgDYcYI8Tjntt8gvZE5AYllCCgvBvJmh65keUwsGq4Rm0XsSj9vo7mTr
+         mia75bhVKtfVKxGGmOY0MhLS7naMem1yxsgikMQHZNexJLUsbXfD869Kk7vV+Ehlr+xc
+         EQA99Dz093Dvyj4pq+8HJvyLTiZvNkysH9MJO87wMJJnrAYI/TiZGo7VPeIpIKvcuQwG
+         TAUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779086567; x=1779691367;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Bf7Uwn5rJEErcj+T3jaqHrHTEQJpwlE6XJq01d7ai4o=;
-        b=D8uBwUvLAyxmCsKpmwuD6zuMwXZGoEG0GKskpXye4tp8g9TO4XMNfSFWOxz2kSuV+F
-         38W11u6324p97BPgbXammLo1nFE2ti3dDF3UQYRdY1gmf6GMfQhRPnJ9U+/6FYPhXxXU
-         CTPrRm7y4oxSYy2jYAQ3C0I7yX3ol7QT7IFzGlWM7GgUjg3mdTUSVsnX/9aAgDUtX2JP
-         V2R9NmBmaSzr0Zf9ZtSMZBl6Jeptl4iojMpNlbl/XtCwtrGzc1w4Op97Zp5GvD8WNNXI
-         PT+MyJrHrndib/LqVAY6cbwVhduVHhTJoNei/z37biuUCE5fv9dS47Vvgtjck0u2W1/r
-         z75g==
-X-Gm-Message-State: AOJu0Yzf9qRqLLKIZSaxpArQrafgTyWKsdaj3dphwkaxIsUfUSN1cKtP
-	cLXf76qMTZA80GIvYo+FrrKTjN3st9Jlsh4n8HSS1Q/yG9RmVCbXRRR8BqzPE45G
-X-Gm-Gg: Acq92OEC0UuKd/cn2yZ8NzEEBMpqimbn3fAUcwz40alOZRj1XzYAp7AAGfTIe990n8F
-	bdcziHmXCbiHiMXXtjKaTWiMs6zQpymqvRT1S7Tx9JqNucNyjickljK2vJwgFqhYALRDs0mxmKW
-	zaQhmcjq4/IPdpnBFbrbcG+tNM6g+Ap2T5UYUeiJJjAvouc8JExs/a4MOsO60oJHb3k4MxTi75j
-	xwyfxpCxd5ue33qNIZbvdWPBvnRpf3L2dNBdqv/nLQ7lWCIpj1pMscCsLtni69LKFkwx051ZZlO
-	xf696J1CX4+JAyMZNSJlMQcUvWwrtOAeuTs2/k25J7Yaz0SgRn18NrglTG5PIj30wtYUpbLkaGK
-	t0ObRrUYwV4ft2+Ga5U9xtxAap28mEnH6JA2kSlAZxMNXchUcwmmv/rTlX2KeqhLGYAguC7V3lb
-	kovaRgtsds1tEVkTbHuyNImHGpybB/hjUSHm7WSyTsMxjfCA==
-X-Received: by 2002:a05:7300:7490:b0:2f5:5907:3a48 with SMTP id 5a478bee46e88-30398285d3bmr6065595eec.1.1779086567058;
-        Sun, 17 May 2026 23:42:47 -0700 (PDT)
-Received: from smtpclient.apple ([2601:644:601:140:aca3:7865:bb3:82fe])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcc458sm15821081eec.18.2026.05.17.23.42.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 17 May 2026 23:42:46 -0700 (PDT)
-From: Brent Page <brentfpage@gmail.com>
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        d=1e100.net; s=20251104; t=1779086812; x=1779691612;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=36mFXyzrM9yDHoBL7zTKgPeCpz83tVhqQtJMltbmXVc=;
+        b=jQrlJ/XI+KQmukq3GnTvlXFVC6iJ5K6I/11LDtyrV2RX4hkHjOk8Do+0OXXBRhZBFE
+         +HKNXHOTxDCDUphYqUiEybTgFgIhsgJqk/6mMQTrYWu8kATMMxyGFmJvlzFiuNeGdLek
+         4uWWdCr9v0fpu4Yzszb/foYelrx+G7VrNQPXUdf0OGrlStOnOxLwaM6wXaoKSGhIEwwo
+         SSlyPu9PvQVCbHpH/zknp55OLZdAbq6x3I+QkfN6DnWMy9kCp9qCuaJArjuxuQ6sIkTH
+         ifoZoF79JVEg+QbsibZhes7oZjO+qOI+c3iT5qvdq6B/z8p6vDlgHXtUMUGGPwiriHEl
+         C+Zg==
+X-Gm-Message-State: AOJu0YxGvbB1i0Y6GvPpGnRb6gTBETmIr552ZGn3LautKEHWwDXsHO9B
+	FN7AESTgebFVf45u68xIk3m+ZXhoxch8xh7GQ4ko1KS02jTVjoXm3rvd
+X-Gm-Gg: Acq92OF1r1zePnOyy4LqiArdgUOjwOEevisf8rxjvEB/ZF7YcsPFD0dp+n5T25H4ytf
+	1KmOOP2j2EFP5zPSePGS54oG/3DSBzjPqWHul6rkfiYV249F0PQkUPBCpoQFMfWrvm3OlER8FY0
+	Cxed5MjbKbqXbibrpNjO7/043f6kIka5nJC4Qz4Jkb8blWg+mEIMF9WDqbPPI/pWughNAbPLsj9
+	UoWctQ4lhtGKU8TIqiuzqwsZJr5N7ohmB/cC5qJQvC65Ku3lIxI991rW0REwx6qstSGv7sV37KK
+	5uAc/T/6lxeBBFd6N0yaCkTrT6nA3Cn6IYy5uHI0VnqSvMXBrH6lA2FojiAFY+DJQRSsIsw7uLO
+	PiDOwDhMgjZiO/1y2Uz5hQYSQA2R3/dHA3HDBGb94kknBKMycgM/OUWWCpq+Dhd8Yp0Dt509FDr
+	BMY3lYpdMNAuUtlPVFgBZ9/q5Y3qWituSE0VLnBKtXKak=
+X-Received: by 2002:a05:600c:c096:b0:48f:d1b8:9aaa with SMTP id 5b1f17b1804b1-48fe60e525bmr153251975e9.6.1779086811657;
+        Sun, 17 May 2026 23:46:51 -0700 (PDT)
+Received: from foxbook (bfk48.neoplus.adsl.tpnet.pl. [83.28.48.48])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48feae166dasm85403565e9.9.2026.05.17.23.46.50
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 17 May 2026 23:46:51 -0700 (PDT)
+Date: Mon, 18 May 2026 08:46:48 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Anders Thomson <andtho888@gmail.com>
+Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Subject: Re: renesas 1912:0014 failures
+Message-ID: <20260518084648.00fdc77e.michal.pecio@gmail.com>
+In-Reply-To: <CAGwGCQJ5eOfuq2dKPSL1yocruT8prwns93sTvzAUVZTJ4CZsyg@mail.gmail.com>
+References: <CAGwGCQ+YFkxxnnbSKbSWC7wsh5ORAT=5riqHJrwsimtqFCuKYw@mail.gmail.com>
+	<20260512122719.51338042.michal.pecio@gmail.com>
+	<CAGwGCQLjcOkjgDZgxmL0gR6uVwmFjxJ22sMzBYRJLXrDtbZZCQ@mail.gmail.com>
+	<20260512190203.5695eb7f.michal.pecio@gmail.com>
+	<CAGwGCQJ5eOfuq2dKPSL1yocruT8prwns93sTvzAUVZTJ4CZsyg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.4\))
-Subject: [PATCH] USB: EHCI: inflate max_tt_usecs and implement sitd
- backpointers
-Message-Id: <35666FD0-D108-41FD-8CE4-CD8F0DD87472@gmail.com>
-Date: Sun, 17 May 2026 23:42:35 -0700
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- Michal Pecio <michal.pecio@gmail.com>
-To: linux-usb@vger.kernel.org
-X-Mailer: Apple Mail (2.3826.700.81.1.4)
-X-Rspamd-Queue-Id: 8E766566E23
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 56090566E85
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[rowland.harvard.edu,gmail.com];
+	TAGGED_FROM(0.00)[bounces-37575-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37574-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brentfpage@gmail.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
 	RCPT_COUNT_THREE(0.00)[3];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-This is a follow-up on=20
-https://lore.kernel.org/linux-usb/
-B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com/T/#u.
-The goal is to accommodate 1023-byte-endpoint full-speed isochronous-in
-transactions on a USB2 bus.
+On Wed, 13 May 2026 00:34:02 +0200, Anders Thomson wrote:
+> Here we go:
+> [  469.798260] PM: suspend entry (deep)
+> [  470.046476] Filesystems sync: 0.248 seconds
+> [  470.048616] Freezing user space processes
+> [  470.049453] Freezing user space processes completed (elapsed 0.000 seconds)
+> [  470.049499] OOM killer disabled.
+> [  470.049536] Freezing remaining freezable tasks
+> [  470.050449] Freezing remaining freezable tasks completed (elapsed
+> 0.000 seconds)
+> [  470.050516] printk: Suspending console(s) (use no_console_suspend to debug)
+> [  470.051839] xhci-pci-renesas 0000:03:00.0: Get port status 9-1
+> read: 0x2a0, return 0x100
+> [  470.051866] xhci-pci-renesas 0000:03:00.0: Get port status 9-2
+> read: 0x2a0, return 0x100
+> [  470.051876] xhci-pci-renesas 0000:03:00.0: Get port status 9-3
+> read: 0x2a0, return 0x100
+> [  470.051886] xhci-pci-renesas 0000:03:00.0: Get port status 9-4
+> read: 0x2a0, return 0x100
+> [  470.077248] xhci-pci-renesas 0000:03:00.0: Get port status 10-1
+> read: 0x2a0, return 0x2a0
+> [  470.077264] xhci-pci-renesas 0000:03:00.0: Get port status 10-2
+> read: 0x2a0, return 0x2a0
+> [  470.077276] xhci-pci-renesas 0000:03:00.0: Get port status 10-3
+> read: 0x2a0, return 0x2a0
+> [  470.077292] xhci-pci-renesas 0000:03:00.0: Get port status 10-4
+> read: 0x2a0, return 0x2a0
+> [  470.077501] sd 7:0:0:0: [sdf] Synchronizing SCSI cache
+> [  470.077635] xhci-pci-renesas 0000:03:00.0: config port 10-1 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077818] xhci-pci-renesas 0000:03:00.0: config port 10-2 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077825] xhci-pci-renesas 0000:03:00.0: config port 10-3 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077833] xhci-pci-renesas 0000:03:00.0: config port 10-4 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077842] xhci-pci-renesas 0000:03:00.0: config port 9-1 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077847] xhci-pci-renesas 0000:03:00.0: config port 9-2 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077852] xhci-pci-renesas 0000:03:00.0: config port 9-3 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077856] xhci-pci-renesas 0000:03:00.0: config port 9-4 wake
+> bits, portsc: 0x2a0, write: 0x202a0
+> [  470.077859] xhci-pci-renesas 0000:03:00.0: xhci_suspend: stopping
+> usb9 port polling.
+> [  470.078452] r8169 0000:02:00.0 enp2s0: Link is Down
+> [  470.083228] xhci-pci-renesas 0000:03:00.0: Setting command ring
+> address to 0x2476001
 
-One of the main changes is
-- max_tt_usecs[] =3D { 125, 125, 125, 125, 125, 125, 30, 0 };
-+ max_tt_usecs[] =3D { 145, 145, 145, 145, 145, 145, 35, 0 };
-To repeat for documentation's sake, "145 us is longer than a microframe, =
-so
-this best-case budget will often not reflect the times when transactions =
-occur.
-But, this situation is consistent with the best-case budget in section =
-11.18.1
-of the USB-2 spec, in which 1157 data-bytes are scheduled to occur as =
-though no
-bit-stuffing is necessary (i.e., the 188 bytes =3D 12 megabits/second * =
-(1 byte/8
-bits)* 0.125 ms that can run on the full-speed bus in a microframe are =
-all
-taken taken be data-bytes).  So, after the patch, max_tt_usecs is the =
-same as
-the spec's best-case budget but is just scaled by (125 us / 188 bytes) =3D=
- 1/(12
-megabits/s) and by the 7/6 bit-stuffing multiplier to reflect the fact =
-that the
-scheduling code works in bit-stuffing-inclusive bus-time instead of
-data-bytes."  However, as pointed out in the linked email chain, because
-ehci-sched.c currently doesn't allow frame-hopping CSPLITS (a CSPLIT for =
-a
-given transaction that gets executed in the H-frame following the =
-H-frame in
-which the transaction was initiated), "it doesn't support 1023 byte =
-packets at
-all. 1023/188=3D5.4 and if worst case bit stuffing factor is 7/6 then up =
-to 6.3
-uframes of transfer time. Completion in [HuFrame 6 or 7] and CSPLIT =
-required in
-[HuFrame 0 of the next frame]." So, this patch also adds support for
-frame-hopping CSPLITS.  Per EHCI-1.0 4.12.3.3.2.1, the sitd containing =
-such
-CSPLITS must have a backpointer to the sitd of the previous frame.
+This looks like normal suspend, no indication that the chip failed
+to halt or otherwise appeared nonresponsive.
 
-The main cases to handle in the backpointer code are period=3D=3D(1 =
-frame) and
-period!=3D(1 frame), where period is specifically derived from the =
-bInterval of
-the endpoint.
+> [  470.085447] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+> [  470.085685] ata1.00: Entering standby power mode
+> [  470.089467] sd 3:0:0:0: [sdd] Synchronizing SCSI cache
+> [  470.089471] sd 1:0:0:0: [sdb] Synchronizing SCSI cache
+> [  470.089498] sd 2:0:0:0: [sdc] Synchronizing SCSI cache
+> [  470.089976] ata3.00: Entering standby power mode
+> [  471.185801] ata4.00: Entering standby power mode
+> [  471.923516] ACPI: PM: Preparing to enter system sleep state S3
+> [  471.923767] ACPI: PM: Saving platform NVS memory
+> [  471.924004] Disabling non-boot CPUs ...
+> [  471.925486] smpboot: CPU 3 is now offline
+> [  471.927750] smpboot: CPU 2 is now offline
+> [  471.930012] smpboot: CPU 1 is now offline
+> [  471.937302] ACPI: PM: Low-level resume complete
+> [  471.937330] ACPI: PM: Restoring platform NVS memory
+> [  471.937770] Enabling non-boot CPUs ...
+> [  471.937814] smpboot: Booting Node 0 Processor 1 APIC 0x1
+> [  471.948497] CPU1 is up
+> [  471.948526] smpboot: Booting Node 0 Processor 2 APIC 0x2
+> [  471.958206] CPU2 is up
+> [  471.958233] smpboot: Booting Node 0 Processor 3 APIC 0x3
+> [  471.967051] CPU3 is up
+> [  471.970459] ACPI: PM: Waking up from system sleep state S3
+> [  471.973104] usb usb2: root hub lost power or was reset
+> [  471.973129] usb usb4: root hub lost power or was reset
+> [  471.973229] usb usb5: root hub lost power or was reset
+> [  471.973248] usb usb6: root hub lost power or was reset
+> [  471.973325] usb usb7: root hub lost power or was reset
+> [  471.973345] usb usb8: root hub lost power or was reset
+> [  471.973735] hpet: Lost 1253 RTC interrupts
+> [  471.973898] usb usb9: root hub lost power or was reset
+> [  471.973901] usb usb10: root hub lost power or was reset
+> [  471.973904] xhci-pci-renesas 0000:03:00.0: Stop HCD
+> [  471.973906] xhci-pci-renesas 0000:03:00.0: // Halt the HC
+> [  471.973917] xhci-pci-renesas 0000:03:00.0: // Reset the HC
+> [  500.363392] hpet: Lost 1815 RTC interrupts
+> [  500.363631] xhci-pci-renesas 0000:03:00.0: PCI post-resume error -110!
+> [  500.363635] xhci-pci-renesas 0000:03:00.0: HC died; cleaning up
+> [  500.363715] xhci-pci-renesas 0000:03:00.0: PM: dpm_run_callback():
+> pci_pm_resume returns -110
+> [  500.363725] xhci-pci-renesas 0000:03:00.0: PM: failed to resume
+> async: error -110
 
-Say there's a 3-packet urb for the endpoint (urb0, with labels td0_#) in =
-the
-pipeline and another gets added (urb1, with labels td1_#).  The result =
-is (the
-nodes below are sitds, and "td" stands for "transaction descriptor") ...
-if period=3D=3D(1 frame):
-|-----|   |-----|   |-----|   |-----|   |-----|   |-----|
-|td0_0|-->|td0_1|-->|td0_2|-->|td1_0|-->|td1_1|-->|td1_2|
-|-----|<  |-----|<  |-----|<  |-----|<  |-----|<  |-----|
-       |    |    |   |     |   |     |   |     |   |=20
-       |----|    |---|     |---|     |---|     |---|
+I see you still have the quirk, but it doesn't matter, the chip is
+stuck and doesn't work either way.
 
-where time increases from left to right, and the lines/arrows on the =
-bottom
-represent backpointer relationships.  Also, all sitds are initialized in =
-the Do
-Complete Split state except for the very first in a stream.=20
+I don't know what causes this, looks like a low level problem - in HW
+or possibly the PCI layer. Maybe Mathias will have other ideas, but
+I'm not sure that USB subsystem can do anything about it.
 
-Including a backpointer from the first sitd of urb1 to the last sitd of =
-urb0
-(as done here) is not certainly the 'correct' way to handle urb =
-boundaries. An
-alternative strategy would be to add an additional sitd, td0_3, to urb0 =
-after
-td0_2 that just contains CSPLITS for td0_2. However, td0_3 would have to =
-be in
-the same frame as td1_0 (the first sitd of urb1).  It's possible that =
-the
-HC supports having two sitds for one endpoint in one frame, but it
-seems unusual enough that it could produce issues, hence why I avoid =
-this
-alternative strategy. Also, the adopted strategy is simpler to code =E2=80=
-=93 the only
-distinctive sitd is the very first in a stream.
-
-if period!=3D(1 frame):
-|-----|   |-----|   |-----|   |-----|   |-----|   |-----|  =20
-|td0_0|-->|td0_1|-->|td0_2|-->|td0_3|-->|td0_4|-->|td0_5|-->
-|-----|<  |-----|   |-----|<  |-----|   |-----|<  |-----| cont.
-       |    |              |    |              |    |     below
-       |----|              |----|              |----|      =20
-
-   |-----|   |-----|   |-----|   |-----|   |-----|   |-----|  =20
--->|td1_0|-->|td1_1|-->|td1_2|-->|td1_3|-->|td1_4|-->|td1_5|
-   |-----|<  |-----|   |-----|<  |-----|   |-----|<  |-----|  =20
-          |    |              |    |              |    |      =20
-          |----|              |----|              |----|      =20
-where the second sitd in each pair is positioned one frame after the =
-first sitd
-of the pair, gets initialized in the Do Complete Split state, contains =
-CSPLITS
-for the transfer that was started in the first sitd of the pair, and has =
-no
-SSPLITS.
-
-
-I also want to make sure I understand something that line ~2197 of the =
-patched
-ehci-sched.c:=20
-    sitd_before =3D list_last_entry(&sched->td_list, struct ehci_sitd, =
-sitd_list);
-is based on.  Namely, in the current code, am I correct that
-insertion of a new urb's sitds into the endpoint's td_list looks like:=20=
-
-
-td_list initially (say it's loaded up with a 3-packet urb)
-|-----|   |-----|   |-----|
-|td0_0|-->|td0_1|-->|td0_2|
-|-----|   |-----|   |-----|
-
-line 2090 in the genuine kernel code:
-(executed three times for a new 3-packet urb)
-list_add(&sitd->sitd_list, &iso_sched->td_list);=20
-
-|-----|   |-----|   |-----|   |-----|   |-----|   |-----|
-|td0_0|-->|     |-->|     |-->|     |-->|td0_1|-->|td0_2|
-|-----|   |-----|   |-----|   |-----|   |-----|   |-----|
-
-?
-
-The following later lines in stid_link_urb (again genuine kernel code) =
-then put
-these new sitds in their proper place I think:
-2177  sitd =3D list_entry(iso_sched->td_list.next,
-2178    struct ehci_itd, sitd_list);
-2179  list_move_tail(&sitd->sitd_list, &stream->td_list);=20
-
-Lastly, I'm still a bit confused by this comment in ehci-sched.c:
-/* special case for isoc transfers larger than 125us:
-* the first and each subsequent fully used uframe
-* must be empty, so as to not illegally delay
-* already scheduled transactions
-*/
-To me, the main issue is that the adopted "carryover" approach to =
-budgeting
-doesn't take into account the fact that the TT processes the =
-transactions
-sequentially (at least according to all the footprints shown in the =
-figs. in
-EHCI1 and USB2) and doesn't, e.g., do part of transaction 1, switch to
-transaction 2, then go back to transaction 1.  This most obviously is
-problematic for long transactions, hence ehci-sched.c handling this case
-separately.
-I make a point of bringing this up because, given the inflation of the
-max_tt_usecs values in the patch, it is actually the case that a newly =
-budgeted
-endpoint may "delay already scheduled transactions". For example, say =
-there's a
-transaction budgeted for HuFrame 1 with tt_usecs=3D2 us and a new device =
-gets
-plugged in that requires up to tt_usecs=3D140 us per transaction.  The =
-new device
-will also get budgeted for HuFrame 1.  Then, the device's transactions =
-that
-actually do take >125 us (due to unfavorable bit stuffing requirements) =
-will
-delay the 2 us transaction (it's maybe worth pointing out that this =
-relies on
-the fact that sitd_link in ehci-sched.c puts the newer sitds first in =
-the
-periodic queue for each uframe).  I don't think there's anything =
-"illegal"
-about this though.
-
----
- drivers/usb/host/ehci-sched.c | 132 ++++++++++++++++++++++++++--------
- drivers/usb/host/ehci.h       |   5 +-
- 2 files changed, 106 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/usb/host/ehci-sched.c =
-b/drivers/usb/host/ehci-sched.c
-index a241337c9..7c2f2125d 100644
---- a/drivers/usb/host/ehci-sched.c
-+++ b/drivers/usb/host/ehci-sched.c
-@@ -285,13 +285,13 @@ static void compute_tt_budget(u8 =
-budget_table[EHCI_BANDWIDTH_SIZE],
-  for (uf =3D ps->phase_uf; uf < 8; ++uf) {
-  x +=3D budget_line[uf];
- - /* Each microframe lasts 125 us */
-- if (x <=3D 125) {
-+ /* Cumulative tt_usecs can be as large as 145 us */
-+ if (x <=3D 145) {
-  budget_line[uf] =3D x;
-  break;
-  }
-- budget_line[uf] =3D 125;
-- x -=3D 125;
-+ budget_line[uf] =3D 145;
-+ x -=3D 145;
-  }
-  }
-  }
-@@ -313,7 +313,13 @@ static int __maybe_unused same_tt(struct usb_device =
-*dev1,
- #ifdef CONFIG_USB_EHCI_TT_NEWSCHED
-  static const unsigned char
--max_tt_usecs[] =3D { 125, 125, 125, 125, 125, 125, 30, 0 };
-+/*
-+ * tt_usecs includes worst-case bit stuffing time, so the transactions
-+ * (complete and/or partial) budgeted for a given 125 us uframe can =
-have a
-+ * cumulative tt_usecs as large as 145 us and still possibly fit into =
-the
-+ * uframe.
-+*/
-+max_tt_usecs[] =3D { 145, 145, 145, 145, 145, 145, 35, 0 };
-  /* carryover low/fullspeed bandwidth that crosses uframe boundries */
- static inline void carryover_tt_bandwidth(unsigned short tt_usecs[8])
-@@ -378,13 +384,13 @@ static int tt_available(
-  if (max_tt_usecs[uframe] <=3D tt_usecs[uframe])
-  return 0;
- - /* special case for isoc transfers larger than 125us:
-+ /* special case for isoc transfers larger than max_tt_usecs:
-  * the first and each subsequent fully used uframe
-  * must be empty, so as to not illegally delay
-  * already scheduled transactions
-  */
-- if (usecs > 125) {
-- int ufs =3D (usecs / 125);
-+ if (usecs > 145) {
-+ int ufs =3D (usecs / 145);
-   for (i =3D uframe; i < (uframe + ufs) && i < 8; i++)
-  if (tt_usecs[i] > 0)
-@@ -1388,19 +1394,40 @@ sitd_slot_ok(
-  struct ehci_tt *tt
- )
- {
-- unsigned mask, tmp;
-+ unsigned mask, c_mask2, tmp;
-  unsigned frame, uf;
-   mask =3D stream->ps.cs_mask << (uframe & 7);
-+    c_mask2 =3D mask >> 16;
-+    mask =3D mask & 0xffff;
-+    if((c_mask2 & 1) && (c_mask2 & 1<<1) && (c_mask2 & 1<<2)) {
-+        /* if BuFrame6 is the last uframe in which a transaction is =
-budgeted,
-+         * the transaction will initially be configured to have CSPLITS =
-in
-+         * BuFrame7 as well as BuFrames 0 and 1 of the following frame
-+         * (HuFrames 0,1,2) */
-+        /* below: usb2 spec 11.18.4.3.c paragraph 2 */
-+        if(mask & 1) {
-+            c_mask2 =3D 1;=20
-+        } else {
-+            c_mask2 =3D (1<<2)-1;
-+        }
-+    } else if ((c_mask2 & 1) && (c_mask2 & 1<<1)) {
-+        /* if BuFrame5 is the last uframe in which a transaction is =
-budgeted,
-+         * the transaction will initially be configured to have CSPLITS =
-in
-+         * BuFrames 6 and 7 as well as BuFrame 0 of the following frame
-+         * (HuFrames 7,0,1) */
-+        /* below: usb2 spec 11.18.4.3.c paragraph 1 */
-+        if(mask & 1) {
-+            c_mask2 =3D 1;=20
-+        }
-+    }
-+    if((c_mask2 & mask & 1<<1))
-+        return 0; /* ehci1 4.12.3.1 */
-   /* for OUT, don't wrap SSPLIT into H-microframe 7 */
-  if (((stream->ps.cs_mask & 0xff) << (uframe & 7)) >=3D (1 << 7))
-  return 0;
- - /* for IN, don't wrap CSPLIT into the next frame */
-- if (mask & ~0xffff)
-- return 0;
--
-  /* check bandwidth */
-  uframe &=3D stream->ps.bw_uperiod - 1;
-  frame =3D uframe >> 3;
-@@ -1450,8 +1477,10 @@ sitd_slot_ok(
-  uframe +=3D stream->ps.bw_uperiod;
-  } while (uframe < EHCI_BANDWIDTH_SIZE);
- - stream->ps.cs_mask <<=3D uframe & 7;
-+ stream->ps.cs_mask =3D mask;
-+ stream->ps.c_mask2 =3D c_mask2;
-  stream->splits =3D cpu_to_hc32(ehci, stream->ps.cs_mask);
-+ stream->c_splits2 =3D cpu_to_hc32(ehci, stream->ps.c_mask2);
-  return 1;
- }
- @@ -2049,13 +2078,13 @@ sitd_urb_transaction(
-   /* allocate/init sITDs */
-  spin_lock_irqsave(&ehci->lock, flags);
-- for (i =3D 0; i < urb->number_of_packets; i++) {
--
-- /* NOTE:  for now, we don't try to handle wraparound cases
-- * for IN (using sitd->hw_backpointer, like a FSTN), which
-- * means we never need two sitds for full speed packets.
-- */
--
-+ for (i =3D 0; i < 2 * urb->number_of_packets; i++) {
-+        /* use 2 * number_of_packets to accommodate frame-hopping =
-CSPLITS. if
-+         * there are no such CSPLITS OR if the packet interval is 1 =
-frame
-+         * (meaning frame-hopping CSPLITS don't require an extra sitd, =
-ehci
-+         * spec 1.0 4.12.3.4), then more sitds than needed are =
-allocated by
-+         * this loop.  Excess sitds are added to the free list later
-+         */
-  /*
-  * Use siTDs from the free list, but not siTDs that may
-  * still be in use by the hardware.
-@@ -2107,12 +2136,24 @@ sitd_patch(
- {
-  struct ehci_iso_packet *uf =3D &iso_sched->packet[index];
-  u64 bufp;
-+    __hc32      transaction;
-   sitd->hw_next =3D EHCI_LIST_END(ehci);
-  sitd->hw_fullspeed_ep =3D stream->address;
-- sitd->hw_uframe =3D stream->splits;
-- sitd->hw_results =3D uf->transaction;
-- sitd->hw_backpointer =3D EHCI_LIST_END(ehci);
-+ sitd->hw_backpointer =3D cpu_to_hc32(ehci, =
-sitd->backpointer_sitd_dma);=20
-+    transaction =3D uf->transaction;
-+
-+    if(sitd->backpointer_sitd_dma=3D=3D1) { /* null backpointer */
-+        sitd->hw_uframe=3Dstream->splits;
-+    } else {
-+        if(stream->ps.period=3D=3D1) {
-+            sitd->hw_uframe=3Dstream->splits|stream->c_splits2;
-+        } else  {
-+            sitd->hw_uframe=3Dstream->c_splits2;
-+        }
-+        transaction |=3D SITD_STS_STS; /* start in Do Complete Split =
-mode, ehci1 4.12.3.3.2.1*/
-+    }
-+ sitd->hw_results =3D transaction;
-   bufp =3D uf->bufp;
-  sitd->hw_buf[0] =3D cpu_to_hc32(ehci, bufp);
-@@ -2149,13 +2190,19 @@ static void sitd_link_urb(
-  unsigned next_uframe;
-  struct ehci_iso_sched *sched =3D urb->hcpriv;
-  struct ehci_sitd *sitd;
-+ struct ehci_sitd *sitd_before;
-   next_uframe =3D stream->next_uframe;
- - if (list_empty(&stream->td_list))
-+ if (list_empty(&stream->td_list)) {
-  /* usbfs ignores TT bandwidth */
-  ehci_to_hcd(ehci)->self.bandwidth_allocated
-  +=3D stream->bandwidth;
-+        sitd_before =3D NULL;
-+    } else {
-+        sitd_before =3D list_last_entry(&sched->td_list,
-+                struct ehci_sitd, sitd_list);
-+    }
-   if (ehci_to_hcd(ehci)->self.bandwidth_isoc_reqs =3D=3D 0) {
-  if (ehci->amd_pll_fix =3D=3D 1)
-@@ -2165,9 +2212,9 @@ static void sitd_link_urb(
-  ehci_to_hcd(ehci)->self.bandwidth_isoc_reqs++;
-   /* fill sITDs frame by frame */
-- for (packet =3D sched->first_packet, sitd =3D NULL;
-- packet < urb->number_of_packets;
-- packet++) {
-+ for (int i =3D sched->first_packet, sitd =3D NULL;
-+ i < 2 * urb->number_of_packets;
-+ i++) {
-   /* ASSERT:  we have all necessary sitds */
-  BUG_ON(list_empty(&sched->td_list));
-@@ -2176,15 +2223,40 @@ static void sitd_link_urb(
-   sitd =3D list_entry(sched->td_list.next,
-  struct ehci_sitd, sitd_list);
-+        =
-if((i>=3Durb->number_of_packets)&&((stream->ps.period=3D=3D1)||(!(stream->=
-ps.c_mask2)))) {
-+            /*=20
-+             * no frame-hopping CSPLITS OR the period is 1, so such =
-CSPLITS are
-+             * put into the sitd for the next transfer ; in both cases
-+             * #sitds=3D#transfers, so move the surplus sitd to the =
-free list
-+             */
-+            list_move_tail(&sitd->sitd_list, &stream->free_list);
-+            continue;
-+        }
-+        if(stream->ps.c_mask2 && !list_empty(&stream->td_list) &&
-+                ((stream->ps.period=3D=3D1)||(i%2=3D=3D1)) ) {
-+            sitd->backpointer_sitd_dma =3D sitd_before->sitd_dma;
-+        } else {
-+            sitd->backpointer_sitd_dma =3D 1;
-+        }
-  list_move_tail(&sitd->sitd_list, &stream->td_list);
-  sitd->stream =3D stream;
-  sitd->urb =3D urb;
- - sitd_patch(ehci, stream, sitd, sched, packet);
-+ sitd_patch(ehci, stream, sitd, sched, i);
-  sitd_link(ehci, (next_uframe >> 3) & (ehci->periodic_size - 1),
-  sitd);
- - next_uframe +=3D stream->uperiod;
-+        if(stream->ps.c_mask2 && (stream->ps.period!=3D1)) {
-+            if((i%2)=3D=3D0) {
-+                /* next sitd only has frame-hopping CSPLITS */
-+                next_uframe +=3D 8;
-+            } else if ((i%2)=3D=3D1) {
-+                next_uframe +=3D stream->uperiod - 8;
-+            }
-+        } else {
-+            next_uframe +=3D stream->uperiod;
-+        }
-+        sitd_before =3D sitd;
-  }
-  stream->next_uframe =3D next_uframe & (mod - 1);
- diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-index d7a3c8d13..c1c006bd3 100644
---- a/drivers/usb/host/ehci.h
-+++ b/drivers/usb/host/ehci.h
-@@ -51,6 +51,7 @@ struct ehci_per_sched {
-  struct list_head ps_list; /* node on ehci_tt's ps_list */
-  u16 tt_usecs; /* time on the FS/LS bus */
-  u16 cs_mask; /* C-mask and S-mask bytes */
-+ u8 c_mask2; /* C-mask for frame-crossing TT-iso transfer */
-  u16 period; /* actual period in frames */
-  u16 phase; /* actual phase, frame part */
-  u8 bw_phase; /* same, for bandwidth
-@@ -489,7 +490,8 @@ struct ehci_iso_stream {
-  /* output of (re)scheduling */
-  struct ehci_per_sched ps; /* scheduling info */
-  unsigned next_uframe;
-- __hc32 splits;
-+ __hc32 splits; /* C-mask and S-mask */
-+ __hc32 c_splits2; /* C-mask for frame-hopping CSPLITS */
-   /* the rest is derived from the endpoint descriptor,
-  * including the extra info for hw_bufp[0..2]
-@@ -579,6 +581,7 @@ struct ehci_sitd {
-   /* the rest is HCD-private */
-  dma_addr_t sitd_dma;
-+ dma_addr_t backpointer_sitd_dma;
-  union ehci_shadow sitd_next; /* ptr to periodic q entry */
-   struct urb *urb;
---=20
-2.39.5
-
+Regards,
+Michal
 
