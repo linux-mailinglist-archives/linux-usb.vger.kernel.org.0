@@ -1,248 +1,216 @@
-Return-Path: <linux-usb+bounces-37563-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37562-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kNX4Get0Cmq41gQAu9opvQ
-	(envelope-from <linux-usb+bounces-37563-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 04:09:47 +0200
+	id aETPFZ10Cmq41gQAu9opvQ
+	(envelope-from <linux-usb+bounces-37562-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 04:08:29 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A42E5564ECD
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 04:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3611564E9F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 04:08:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7CCDD301F18F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 02:09:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 569303020035
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 02:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3102B261B92;
-	Mon, 18 May 2026 02:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D97623AB87;
+	Mon, 18 May 2026 02:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="WjJ1dXe9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from tpecef21.compal.com (exmail3.compal.com [59.120.207.196])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A5F1F37D3;
-	Mon, 18 May 2026 02:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=59.120.207.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5B0288D0;
+	Mon, 18 May 2026 02:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779070181; cv=none; b=Po0ftrDBmL4/lO0m7Iprnllt4OkhvuSFCJQmR0DfdA/Dfrv9bnV4cBEsV4NNGNjkhIwhCrsDcrVXLHVmBSTlyDTga8JV5FDk2zad2C10usv7Osfl2+342qK+fbQ96QuywCeitNDqyEOlh1qQ4lgaVmOlNPiWcKN7ygBjyHvNtKA=
+	t=1779070099; cv=none; b=nUbPj8EMsaztcLCMsIEAQflHEYaecxmghxyFZXGf7hdk/X4zDuWPT182X/fLMOV2DXLU6v5BAW9sR7YUbstIQUx3cCo/iQIq3wi8MTmKDaRvS7jl7NP8AgBoB85xruG59IG+S7eZGRgOubZWcC2TfCGTRG5i2zIwpFUTDFhRThg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779070181; c=relaxed/simple;
-	bh=rzoCcBQ8by8M5svA0axYj2TNGJGHdiXTF6Eg5lqDjb4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I4K96OwVCeI01S5wwQPDnG3+9q6OmoCwyQbcgxqxygufedYqULMNmVztxG9gcmhD85vv52Blwx3TYtlhxVDuTfY5hL4k1AnRAKHVfJA6tN/tocRrENeroKF4uV3KTaJmeNgQV7lHgpuSwwRP18uEszB6wyTnp41EOHkALQSrf9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=compal.com; spf=pass smtp.mailfrom=compal.com; arc=none smtp.client-ip=59.120.207.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=compal.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=compal.com
-X-UUID: 7fdd8e9a525c11f18b9b2d0ef2884acc-20260518
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:deb77c85-37a7-467e-824f-bea035d0ab36,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:8cd37ce1-02d4-4065-accc-97789b7ab0e5,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|850|865|888|898,TC:-5,Conten
-	t:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,
-	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 7fdd8e9a525c11f18b9b2d0ef2884acc-20260518
-Received: from sdmg12.sdbg.compal.com [(10.113.168.10)] by tpecef21.compal.com
-	(envelope-from <jackbb_wu@compal.com>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1976489773; Mon, 18 May 2026 09:54:26 +0800
-X-UUID: 7dc523c0525c11f1a42089d3d1632821-20260518
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:3143d83d-4197-4709-aa54-04bce10e0f5c,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:f1326cf,CLOUDID:d8d87ca4-a669-48ac-a1cb-3b38a93be682,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|850|865|888|898,TC:-5,Conten
-	t:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,
-	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 7dc523c0525c11f1a42089d3d1632821-20260518
-Received: from sdbmbx12.tpe.compalcomm.com [(10.113.2.136)] by sdmg12.sdbg.compal.com
-	(envelope-from <jackbb_wu@compal.com>)
-	(Compal Mail Service with TLSv1.2 ECDHE-RSA-AES256-SHA 256/256)
-	with ESMTP id 2011231038; Mon, 18 May 2026 09:54:22 +0800
-Received: from SDBMBX13.tpe.compalcomm.com (10.113.2.137) by
- SDBMBX12.tpe.compalcomm.com (10.113.2.136) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.2.2562.29;
- Mon, 18 May 2026 09:54:18 +0800
-Received: from SDMR01.tpe.compalcomm.com (10.113.2.107) by
- SDBMBX13.tpe.compalcomm.com (10.113.2.137) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Mon, 18 May 2026 09:54:18 +0800
-Received: from localhost ([10.113.70.1]) by SDMR01.tpe.compalcomm.com with Microsoft SMTPSVC(10.0.14393.4169);
-	 Mon, 18 May 2026 09:54:18 +0800
-From: Jack Wu <jackbb_wu@compal.com>
-To: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] USB: serial: qcserial: add new usb-id for Dell Wireless DW5826e-m
-Date: Mon, 18 May 2026 09:54:18 +0800
-Message-ID: <20260518015418.327252-1-jackbb_wu@compal.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1779070099; c=relaxed/simple;
+	bh=x8u7GTxrVk0C2PJrbCem+3xBCd5jbswvYhojVoW4ZD0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NPrHQJEKsG7YEdLV06l5ghKPzUP5bV5UmQ8x2CXvumy4pOtCv84B/Px1ZAc8lN7xdXK8zsexVo5sImFarbRVhgsxk48pclSwliIj5H6z+97YiqkqT/8a75dp541zpo6fE5UUnNYiLTX6JMTMhFTS85vBBLkyoytAGYGrc63wWCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=WjJ1dXe9; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1779070089;
+	bh=x8u7GTxrVk0C2PJrbCem+3xBCd5jbswvYhojVoW4ZD0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=WjJ1dXe9pkIadrwUEsZ3nLCVl/sBeoO0RlerFs/2F7dsR1vqQ6h9eDUgMn+2BkJTx
+	 sU+ufPnAAQlTC2n1ZqiIJ57FPvyX6d2rHwaqtdVQA2eHw9vQaKS71sYWwy+v42CegN
+	 J/IlaMjSZiSqQ8sIqirJmsH1FPCrhnyLjeoSEK5x0PyTXTU4nWKrgUf0odHukYNQFB
+	 OHEFn5a34TwZfn+n3rTOyQ72FOxTIW6NCsSFIYu/6tKwi/8j+t2+PmB3GBPebZHusL
+	 QRsB5qRB4R0G8390g019AOKULWeZ0eKglLCCxJPRG+SUCKjYcAHVgaMAaFMht7F8gx
+	 c7PaiHl78VcVw==
+Received: from [192.168.68.117] (unknown [180.150.112.11])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 2BFAC6037B;
+	Mon, 18 May 2026 10:08:06 +0800 (AWST)
+Message-ID: <7927e6edf6cbe915a66b76746436c8d19f317bd6.camel@codeconstruct.com.au>
+Subject: Re: usb: gadget: aspeed_udc: list iterator used after loop in
+ ast_udc_ep_dequeue
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Maoyi Xie <maoyixie.tju@gmail.com>, neal_liu@aspeedtech.com, 
+	gregkh@linuxfoundation.org
+Cc: joel@jms.id.au, linux-aspeed@lists.ozlabs.org,
+ linux-usb@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 18 May 2026 11:38:05 +0930
+In-Reply-To: <CAHPEe=Fs223obDewRunPdTtqhVOM11AXVsLRNHx+=NP0KiFwMQ@mail.gmail.com>
+References: 
+	<CAHPEe=Fs223obDewRunPdTtqhVOM11AXVsLRNHx+=NP0KiFwMQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-OriginalArrivalTime: 18 May 2026 01:54:18.0496 (UTC) FILETIME=[3D143000:01DCE669]
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3239-9.1.2019-29950.003
-X-TM-AS-Result: No-10--1.503500-8.000000
-X-TMASE-MatchedRID: RtHHqK+8YWPJ+P2VFrJmrEkXVQaP16N5tGx+miwM7d3dC+Bs3HApSUmp
-	6+bNSfqBh/CVyipgEfZZrmOTQ1vpL63XYtsOH2/QRYNhzuZZjRDn0oaU6WM++yIeU+yFXn+49WS
-	TU5Hd4RnYeXOEzfM22Vztkif7r1iVJU0nG3tpe+D+pgwsOtbJY5K8CvXZ80MHrNSifc7aHXV9Su
-	bnPXCGzr5V40+3FpmWpmcL/Wp+R46LSBmdjXatOd9AsbFExCVPjOYqV6AKVU92dBWxz66y1/hdb
-	kKx5t5FQByVZYibFxpprHDlfzYAbSeCoNkC91GeUG9FuKxZE9E=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--1.503500-8.000000
-X-TMASE-Version: SMEX-14.0.0.3239-9.1.2019-29950.003
-X-TM-SNTS-SMTP:
-	12807CBA57080A65C920DC2ADDB639E2662AF8F04D30F6D9C19F396EF9DCA7C52000:8
-X-Rspamd-Queue-Id: A42E5564ECD
+X-Rspamd-Queue-Id: B3611564E9F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.04 / 15.00];
-	DMARC_POLICY_REJECT(2.00)[compal.com : SPF not aligned (relaxed), No valid DKIM,reject];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[codeconstruct.com.au,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[codeconstruct.com.au:s=2022a];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-37562-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37563-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,aspeedtech.com,linuxfoundation.org];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[codeconstruct.com.au:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[jackbb_wu@compal.com,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[8];
-	R_DKIM_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@codeconstruct.com.au,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[codeconstruct.com.au:mid,codeconstruct.com.au:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Add support for Dell DW5826e-m with USB-id 0x413c:0x81ea & 0x413c:0x81eb.
+Hi,
 
-It is 0x413c:0x81ea
-T:  Bus=3D02 Lev=3D01 Prnt=3D01 Port=3D05 Cnt=3D01 Dev#=3D110 Spd=3D480  Mx=
-Ch=3D 0
-D:  Ver=3D 2.10 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D413c ProdID=3D81ea Rev=3D 5.04
-S:  Manufacturer=3DDELL
-S:  Product=3DDW5826e-m Qualcomm Snapdragon X12 Global LTE-A
-S:  SerialNumber=3D358988870177734
-C:* #Ifs=3D 7 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-A:  FirstIf#=3D12 IfCount=3D 2 Cls=3D02(comm.) Sub=3D0e Prot=3D00
-I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
-=3Dqcserial
-E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-I:* If#=3D 1 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D42 Prot=3D01 Driver=
-=3Dusbfs
-E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-I:* If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D60 Driver=
-=3Dqcserial
-E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-E:  Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-I:* If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Driver=
-=3Dqcserial
-E:  Ad=3D86(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-E:  Ad=3D85(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-I:* If#=3D 4 Alt=3D 0 #EPs=3D 1 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3D(none)
-E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D32ms
-I:* If#=3D12 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D0e Prot=3D00 Driver=
-=3Dcdc_mbim
-E:  Ad=3D88(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D32ms
-I:  If#=3D13 Alt=3D 0 #EPs=3D 0 Cls=3D0a(data ) Sub=3D00 Prot=3D02 Driver=
-=3Dcdc_mbim
-I:* If#=3D13 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D02 Driver=
-=3Dcdc_mbim
-E:  Ad=3D8e(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D0f(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+On Sun, 2026-05-17 at 23:46 +0800, Maoyi Xie wrote:
+> Hi all,
+>=20
+> (Resending from a personal address =E2=80=94 my previous attempt from
+> my NTU corporate account carried an auto-appended confidentiality
+> disclaimer that you've declined to accept. The content below is
+> unchanged.)
+>=20
+> I have been running a small static check for list_for_each_entry
+> past-the-end patterns, similar to Jakob Koschel's 2022 cleanup
+> (commit 2966a9918df and related). The check flagged
+> ast_udc_ep_dequeue() in drivers/usb/gadget/udc/aspeed_udc.c, and I
+> would like to ask whether you consider this a real defect before I
+> send anything formal. The same code is present in v7.0 and in
+> v7.1-rc1 (the two files are byte-identical).
+>=20
+> The code in question is around line 691:
+>=20
+> =C2=A0=C2=A0=C2=A0 struct ast_udc_request *req;
+> =C2=A0=C2=A0=C2=A0 ...
+> =C2=A0=C2=A0=C2=A0 list_for_each_entry(req, &ep->queue, queue) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (&req->req =3D=3D _req) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 list_d=
+el_init(&req->queue);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ast_ud=
+c_done(ep, req, -ESHUTDOWN);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 _req->=
+status =3D -ECONNRESET;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> =C2=A0=C2=A0=C2=A0 }
+> =C2=A0=C2=A0=C2=A0 if (&req->req !=3D _req)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D -EINVAL;
+>=20
+> If nothing matches, the loop exits past-the-end and req becomes the
+> synthetic container_of(&ep->queue, struct ast_udc_request, queue).
+> Reading &req->req after the loop is undefined per C11. The post-loop
+> check works in practice only because real _req values do not collide
+> with that synthetic address.
+>=20
+> What made me suspect this was not intentional is that 14 other UDC
+> drivers in the same directory (at91_udc, atmel_usba_udc, dummy_hcd,
+> fsl_qe_udc, fsl_udc_core, goku_udc, gr_udc, lpc32xx_udc, max3420_udc,
+> net2280, omap_udc, pxa25x_udc, pxa27x_udc, udc-xilinx) use a
+> different pattern, with a separate iter cursor and a result variable.
+> For example dummy_hcd.c:
+>=20
+> =C2=A0=C2=A0=C2=A0 struct dummy_request *req =3D NULL, *iter;
+> =C2=A0=C2=A0=C2=A0 list_for_each_entry(iter, &ep->queue, queue) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (&iter->req !=3D _req) cont=
+inue;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 req =3D iter;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retval =3D 0;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> =C2=A0=C2=A0=C2=A0 }
+> =C2=A0=C2=A0=C2=A0 if (retval =3D=3D 0) { ... }
+>=20
+> aspeed_udc seems to be the only outlier in drivers/usb/gadget/udc/,
+> which is what made me think this was probably an oversight rather
+> than a deliberate idiom.
+>=20
+> I also tried to confirm whether it observably misbehaves. If _req
+> happens to coincide with the synthetic past-the-end address, the
+> function returns 0 (success) on an empty queue without removing
+> anything. I attached a small userspace reproducer (poc_aspeed_udc.c
+> and its output log) that arranges this collision. In normal use _req
+> comes from the kernel slab and the collision is unlikely to happen
+> naturally, so I am not sure whether this rises to the level of a
+> real bug or just a code-quality issue.
+>=20
+> Two questions:
+>=20
+> =C2=A0 1. Do you consider the past-the-end use here a defect worth fixing=
+,
+> =C2=A0=C2=A0=C2=A0=C2=A0 or is it an accepted idiom in this driver that I=
+ am misreading?
 
-It is 0x413c:0x81eb
-T:  Bus=3D02 Lev=3D01 Prnt=3D01 Port=3D05 Cnt=3D01 Dev#=3D109 Spd=3D480  Mx=
-Ch=3D 0
-D:  Ver=3D 2.10 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D413c ProdID=3D81eb Rev=3D 0.00
-S:  Manufacturer=3DDELL
-S:  Product=3DDW5826e-m Qualcomm Snapdragon X12 Global LTE-A
-S:  SerialNumber=3D358988870177734
-C:* #Ifs=3D 1 Cfg#=3D 1 Atr=3Da0 MxPwr=3D  2mA
-I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Dqcserial
-E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+I don't know that it's an accepted idiom - there are only two
+invocations in the driver and the other doesn't suffer the problem
+you've highlighted.
 
-Signed-off-by: Jack Wu <jackbb_wu@compal.com>
----
-v2:
-  -sorted by PID and add the newline separator before the Huawei devices.
----
----
- drivers/usb/serial/qcserial.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+list_first_entry() does note that the caller be sure that the list
+isn't empty. As you note this isn't tested, so it's now a pre-condition
+of ast_udc_ep_dequeue() that it's not. A bunch of gadgets test if they
+have requests in-flight before invoking dequeue, so that may not be
+unreasonable. However, given ast_udc_nuke(), and the implementation
+admitting that the provided req might be invalid by the existence of
+the test, I'm not convinced that the invariant is upheld.
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index 1a930dc668e4..bb1647a17066 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -186,9 +186,11 @@ static const struct usb_device_id id_table[] =3D {
-        {DEVICE_SWI(0x413c, 0x81d0)},   /* Dell Wireless 5819 */
-        {DEVICE_SWI(0x413c, 0x81d1)},   /* Dell Wireless 5818 */
-        {DEVICE_SWI(0x413c, 0x81d2)},   /* Dell Wireless 5818 */
-+       {DEVICE_SWI(0x413c, 0x81ea)},   /* Dell Wireless DW5826e-m */
-+       {DEVICE_SWI(0x413c, 0x81eb)},   /* Dell Wireless DW5826e-m QDL */
-        {DEVICE_SWI(0x413c, 0x8217)},   /* Dell Wireless DW5826e */
-        {DEVICE_SWI(0x413c, 0x8218)},   /* Dell Wireless DW5826e QDL */
--
-+
-        /* Huawei devices */
-        {DEVICE_HWI(0x03f0, 0x581d)},   /* HP lt4112 LTE/HSPA+ Gobi 4G Mode=
-m (Huawei me906e) */
+Note that the (other, separate) Aspeed vhub driver avoids your concern
+in its dequeue implementations, so I'd rather it's avoided in the udc
+implementation as well:
 
---
-2.34.1
+ * https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+drivers/usb/gadget/udc/aspeed-vhub/ep0.c?h=3Dv7.1-rc4#n438
+ * https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+drivers/usb/gadget/udc/aspeed-vhub/epn.c?h=3Dv7.1-rc4#n472
 
+>=20
+> =C2=A0 2. If it is worth fixing, I already have a small patch that brings
+> =C2=A0=C2=A0=C2=A0=C2=A0 the function in line with the 14 sibling drivers=
+. Would you like
+> =C2=A0=C2=A0=C2=A0=C2=A0 me to send it, or would you rather address it lo=
+cally?
 
+IMO send the patch. It's almost always better to be reviewing a
+concrete change proposal.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-This message may contain information which is private, privileged or confid=
-ential of Compal Electronics, Inc. If you are not the intended recipient of=
- this message, please notify the sender and destroy/delete the message. Any=
- review, retransmission, dissemination or other use of, or taking of any ac=
-tion in reliance upon this information, by persons or entities other than t=
-he intended recipient is prohibited.
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Andrew
 
