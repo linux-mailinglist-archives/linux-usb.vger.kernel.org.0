@@ -1,151 +1,215 @@
-Return-Path: <linux-usb+bounces-37644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37645-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4AOBBCSOC2p1IwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37644-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 00:09:40 +0200
+	id +InIHtqUC2ohJgUAu9opvQ
+	(envelope-from <linux-usb+bounces-37645-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 00:38:18 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A85AA5744DE
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 00:09:39 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE97E574A66
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 00:38:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C0753301F343
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 22:09:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A146E3048C18
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2026 22:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147453A8723;
-	Mon, 18 May 2026 22:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8BB398910;
+	Mon, 18 May 2026 22:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fnfy4wsP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T8DrAleS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A02B3644C7
-	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 22:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779142173; cv=none; b=tw2gfPkSXHRlNknQk5p7aXHc0V9GTKkQMNHdBd/xUYVToSDEr5Qz4JMK1KCZFL0GLVcbKtKrdN6Ns4zle6yZKUHzCwRVb0CWeYABOJfnQ8FpqXMt/oD8GE3TCJRD3AO2NYZKN4GI4DZHT48BqBWwqn18rgbuSkidjwRG71E6n8w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779142173; c=relaxed/simple;
-	bh=m+DvEjh5e50QoZEQpu7fp79r2/ZAEXh0/plL42oC1Sc=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=JNwgD9Hbll2j17lDKU6dsIbpPT8vVG4sXEAMZfUYiTxiTQNJ1TJeD3HAlFvoJdJ19V6r/1YWyemJTJm1w8i1fF5u3pvGNaNI9euLvqB8Ob2Hy20FIHejqgFqXZ78qyrBSE+EkKEYFtl49jDvy5YRPP5+jURTa0enSUFtajeNsxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fnfy4wsP; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b0046078so25762805e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 15:09:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40CB2ED846
+	for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 22:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779143872; cv=pass; b=mt6ZbPOaZXw+A/s73a6wE6MTAVqq1O+ApYzJr0Glikqso49wah5L5Tu4wffF8ay6MfjHWl750Y1TaQ+nNE56n/x6CoLLyKJJOHJfBqJQ7TvT0tU2GaUbh9M+hUxNfjk3bXOze66I1fR1V4kJbEYNDTybkRd4Qqtm+LA6T9e1cxI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779143872; c=relaxed/simple;
+	bh=zVH9YEIH9Jj4pvYqYjCWleuCjg1+IKQGcGIJdO1LwvA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Jna6jlhEIleWW+yJHJ7j25YMrO/u3HXsyfNr5DuT58o0h4OZrVjOBwG1AGv0aMULh3+k0B9pwxEtqzDqvGpqv3W4JkVW2Ue0DnJbMNJG6KCQUWVlO8HiRyZRLdxJMlY6+VgaG0W5rGEeYz72KFVvo/jO699kWS6GbIkF4S61bAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T8DrAleS; arc=pass smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488b150559bso22098345e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2026 15:37:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779143869; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QyCa96nwPeaO+NAnGouz1oIPwBPHAs6vYWU9ODEkTEyl71Yiyr/LWx760ejKQynitQ
+         XBBA4882D/FatSuaV1PDvW2l3ZrjcazpArE327KejQJtHb1dI55GknkTkuJBIXwcxqqQ
+         XwpMo+P9zSgTo9DhhcD4dAgQkU3DvzFJabZN+A8yn04QvbSxQoamB2KlDWRO5bTJ/YLV
+         8vNmvNFeO77n/RIusO3IK2VhY40/dC7p68qpuOyvQ9zMvabNC5I1JHbbW7jFDcrfzIJP
+         41ysC+nZ2zMX4x8aVW5DUn17W0471isIL0jWCb8JpuHezqn1sotNN/ulUFo8XFQKFc0J
+         1FDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=664GWszhyp31Qa0bLmQEwoNrNiUNgsJ84EqGT9xrYhg=;
+        fh=ctNoIViXZ9Jmr7mAv8W82TEDWzOOLeEPYKvSsSHkOAM=;
+        b=LbO4CsNSgCn0LpN+lPE0BfVDteOtzpBw8toQuqy1ng1GvMt/IVPs4yP5oN+2kWlI2g
+         RA/0FeRMidfWuGieXROMduZqlW6Q17qkMktmE9QCu5Vf8YYMXKSJf1dHJbXsiB3BwRss
+         zm2XUulQuq1HF6td1bqZ58AaDhYCgUIJSYgJ8m3WoYKZhk3U+ZCPE0F8QRubAC/RTgc/
+         Aptsn0LtJH5kkT309yibv44j2OiPtsPZfpUTrch2qECY18Z3rHLCkVx/X4HUlcNx2L2N
+         0Xh2sRaa8qdriFRaNRcNP+LMPkJwyVhwDVWyj+zkH69MQ7fCNM+C74fLWIJfHL4mZhT2
+         adNg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1779142171; x=1779746971; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=m+DvEjh5e50QoZEQpu7fp79r2/ZAEXh0/plL42oC1Sc=;
-        b=Fnfy4wsPDmB6YFCkVAMazIsBdQEjB4Gdt++18XBjAI1HEJvEYq7ytCrXQLQ+yt0Lml
-         rM31JHMfkWaZi7Dq1cKCdQFjJWANrhavO/wYevENmfVQbHwusfqW0UJ4C8xYEzOE85m4
-         m8idBcL37bUpW3Vs7+Wq9rW/mgcb4iLnZQKie7apMcKatUVM5ujzd27LaT1j6K+JsAX4
-         zn0OdUaLpBNnIwSaewVdAzKEtO9ZfslBoXtKT62/F3z3RIE8RJamUYKTbOGaMRsxguEE
-         L9vepsRXd6+DtKMeeVst86KPob98gbpt2MowBObi9qlfpj2D9gbkx2LmG4ghlwIeoHRq
-         8HOA==
+        d=gmail.com; s=20251104; t=1779143869; x=1779748669; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=664GWszhyp31Qa0bLmQEwoNrNiUNgsJ84EqGT9xrYhg=;
+        b=T8DrAleSSpiLZyx1P56QDzq9a71zIDp3wOZqe2awkw6+Hvapp2YLnYZC6bLmVlRrzG
+         6+fDoGVNaf/0RZM+j71PmVlXqeMXcFaMpparyr+brBDR+fsjmCzxx7wE8pOAoPDLvRHH
+         WbiPdfbcGJxDeVpFaXUUWToC4Wee6Zs4XcLyB1bi+7uYP/A4gksvMqR9c7RqP57QtMpb
+         sIAtiEY1Sjw4UNPKIO1hvRJErCSoxbusi47Mh//cXtfRZKwa/VDr2B98/5Yr7AIO+/mP
+         mry3cgiL3KJxiwLQpbyL512GaVrfdFjWjhTqEOQZIZ/QieAeT42fc6iD8aRb4RvMteGX
+         Bj+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779142171; x=1779746971;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+DvEjh5e50QoZEQpu7fp79r2/ZAEXh0/plL42oC1Sc=;
-        b=G/g3eP7ka6nuxV4LUCKRj7vQ+dVBWERlW5ox8jnguxPco3r6b2Pj2tet74DgO1FEtz
-         PsjYjsQM6eTOaDExEp7Kb70IgQaV/BgEGim7ndT8yYxdvuLkKdHIbUEOmRfMccM6dut+
-         jpAVlFg0b0yFgEgsKzzGI/h90U/kOMCBLMMQOO0+npegEo2TndYsTBWcaxzKoUKfFxSP
-         AK2gDoEXGudrn4dsD2gxIBdoIf1paSq04zFFnjBcQxj4C091rOCpiEegwzUmJ2oLI+qU
-         OO316wCfy0SFxtoJj9Wn57hbjW0MCwC0qrBfGwW21500unIzg84tFipV+H8ILIR57YUa
-         ScVQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+C3J/p+OSgkfW5s/XdswQheob39mhwEDHqoeksiSS//LXXoeaZw61iyhvzSaTQwRKbUwm7N20WUxM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqN5lJzOa3t8PipbstfTqt3doAs0uYrEoVfUy9xghEuh0nkYlY
-	OU7jrrVe7WAKqbn6w/+37cVQ5EtJXfC+8UZMfd1dALAJl4ZaZbMe0qnHcoKfjNjxyBsAfpwD6/H
-	ikf9tIA0=
-X-Gm-Gg: Acq92OHjREuVNmQzHofg9vGrAHUMSy0Q8JuLV+7u90DM/2bY1BfB6xPsM5OHSEEd0qR
-	FOPK4iRjFf6twJk7dua/CFcQ0Wg9s01rjgnGcUhrFoODmPxNifa+YhHJhexABYE5ozEZkG/6Lto
-	CnfCyz7zeOd0B7kOj9XVYowp5rGQIBmvoS8UO/mZbNVWiVux+9JKJYghI0MqYz//S8sewMW7FEe
-	DsytJQmG1myTBrqhAwVFyusMVDaaJ/fPutJc/4Ox7o/d37dSAc9MOxD40fLUxieyYQBobo46AZj
-	FdYGLwJBDLmgn7JnUTHBhWlbqF8Jp3sog5B3OSHT4x7+uJyNsdyqbUwYEeEdzKEcxhlW7SIyLUu
-	B8YO1N/omFIIYZFaNxIAOk952+QEvzNR86sOACHv3ld39F5l3MFmtzimfYnquq0Ik5zFqPDLR/J
-	4AFl0R+3FVY9iGL5SntAMaEzeYbqsiDzqkqoTYK9sTtSw=
-X-Received: by 2002:a05:600c:4e02:b0:48a:906a:9050 with SMTP id 5b1f17b1804b1-48fe5fdb076mr267945245e9.10.1779142170621;
-        Mon, 18 May 2026 15:09:30 -0700 (PDT)
-Received: from [192.168.0.35] ([64.43.40.255])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48feb00bbe4sm91333105e9.12.2026.05.18.15.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 15:09:29 -0700 (PDT)
-Message-ID: <c1b0347e-0f90-422a-93d1-eb1122de2292@linaro.org>
-Date: Mon, 18 May 2026 23:09:27 +0100
+        d=1e100.net; s=20251104; t=1779143869; x=1779748669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=664GWszhyp31Qa0bLmQEwoNrNiUNgsJ84EqGT9xrYhg=;
+        b=LN209UUuY+6iroP9EbjwA+7dv7Sjl4nlmkLBOjfSQqym/MeDfg8BPhDE82vjUCtsGq
+         LbljuGkUNbyK4rR+FlRJBIAgNIi9BQO64YvLAUokHMvhwLbe0/alvVu0A4H6j18qaeHs
+         UxCsTjAMd6xS42QSE9NCM1XzkMghGRwmCfMA8tk9KagD/D29k/cYTEkiupvC6HoMHA5K
+         s5Co7baTobZUmKJnvSLTRRfiLiaFi72WPbGrljBvCnHv5r93A2aL2cuqUfSMVmCKtT4+
+         XUoqnwPEFQDmjFGmmSXvV+pOU/T9bF6knv+IefpZfO6A9xp1Lqst1YK2T1eTAMt7oVVz
+         byxw==
+X-Forwarded-Encrypted: i=1; AFNElJ+9STB6boi0VPsZSvOFbA5MiCWPbBYLM3tNo5FpWLvk4my5tVwyTGe5izDEeMUAy5MduWTMyzU4kgs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+4SObHRs2st+QQFaUyirvLtgyIotNnwlPcASpcCpWxTWJ/lB2
+	/jLyYbtqIVeR80gokDQnt2O8GnrPWUuGosaa2ouOrIcUs5fatBIlRRwwU6KJfmpG2CHFngrbv1q
+	d9xVwCafD2D7lge9boY9qQ7wvJy5athc=
+X-Gm-Gg: Acq92OE9Ubot/XlRQ4zjEaeZ8SJTm6P+Xm9HEZPKZDZqiBuYzwDKnkHNfQCG9Sgy/iz
+	wkDfbwiLC7kjjkyljFADFtDjXmGrDRk42AHIONdO5XjRU4oxFcRmoiNextZQ7HK9EnyumR0ibkL
+	07VZJjA3JH4MVh8kszvhwi5bMrBx/EAicM0CKAbUyPZrZgNsJ6PFXFaYRV22qST0O8qFuJeYDNc
+	BjZ5RT4DIHg7+CAsOr7ZtadNt67n/lsp47B8uA1AI8039oosKbt7nzVvKzoGRbcQPNKRmyyWhsn
+	smIjiesK/5B98ppWkxQzmWTeXuQi8aG6P63IXfCtMw==
+X-Received: by 2002:a05:600c:8210:b0:48a:5c23:cab with SMTP id
+ 5b1f17b1804b1-48fe6322447mr245539975e9.19.1779143868957; Mon, 18 May 2026
+ 15:37:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] usb: typec: add Qualcomm PMI8998 role-switch driver
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- taygoth <taygoth@gmail.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Wesley Cheng <quic_wcheng@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Casey Connolly <casey.connolly@linaro.org>,
- Luca Weiss <luca.weiss@fairphone.com>
-References: <cover.1779127507.git.taygoth@gmail.com>
- <6fedbcd344505b63de72037f69ea94f916255f03.1779127507.git.taygoth@gmail.com>
- <zm7buc6djok2743bs6ghvlr3bpc4lld4qpgs3ggwjsy45f4l75@kua4xtj6b3wd>
- <d15b138d-8c6b-430b-bfc3-f410b05e4835@linaro.org>
-Content-Language: en-US
-In-Reply-To: <d15b138d-8c6b-430b-bfc3-f410b05e4835@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+References: <20260517000145.1868817-2-eeodqql09@gmail.com> <20260517190308.1876316-1-eeodqql09@gmail.com>
+ <20260517190308.1876316-2-eeodqql09@gmail.com> <a5b4720d-e91b-4a81-b2b6-e04835e1826b@rowland.harvard.edu>
+In-Reply-To: <a5b4720d-e91b-4a81-b2b6-e04835e1826b@rowland.harvard.edu>
+From: Seungjin Bae <eeodqql09@gmail.com>
+Date: Mon, 18 May 2026 18:37:12 -0400
+X-Gm-Features: AVHnY4K5frEosx4V9e-Ua__o05JMJ_e9AfAIbG5Aep1mC8J9uH3JNwsoUzOpqw4
+Message-ID: <CAAsoPpUjCeMoPdDd_CiP6j-Cnfx7kpWAvZHU_kme7tVCgcKgVg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] usb: host: max3421: Reject hub port requests for
+ non-existent ports
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>, 
+	Kees Cook <kees@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	David Mosberger <davidm@egauge.net>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37644-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[oss.qualcomm.com,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com,quicinc.com,linuxfoundation.org,linux.intel.com,linaro.org,fairphone.com];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37645-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bryan.odonoghue@linaro.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,linaro.org:mid,linaro.org:dkim]
-X-Rspamd-Queue-Id: A85AA5744DE
+	FROM_NEQ_ENVFROM(0.00)[eeodqql09@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid]
+X-Rspamd-Queue-Id: EE97E574A66
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 18/05/2026 23:07, Bryan O'Donoghue wrote:
-> along side the pmi8998 logic.
+2026=EB=85=84 5=EC=9B=94 18=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 5:54, A=
+lan Stern <stern@rowland.harvard.edu>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On Sun, May 17, 2026 at 03:03:08PM -0400, pip-izony wrote:
+> > From: Seungjin Bae <eeodqql09@gmail.com>
+> >
+> > The `max3421_hub_control()` function handles USB hub class requests
+> > to the virtual root hub. The `GetPortStatus` case correctly rejects
+> > requests with `index !=3D 1`, since the virtual root hub has only a
+> > single port. However, the `ClearPortFeature` and `SetPortFeature`
+> > cases lack the same check.
+> >
+> > Fix this by extending the `index !=3D 1` rejection to both cases,
+> > matching the existing behavior of `GetPortStatus`.
+> >
+> > Fixes: 2d53139f3162 ("Add support for using a MAX3421E chip as a host d=
+river.")
+> > Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Seungjin Bae <eeodqql09@gmail.com>
+> > ---
+>
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+>
+> Heh, this made me go back and look at dummy-hcd.c.  It's missing the
+> same check in the same places!
+>
+> Would you like to submit a patch to fix that driver as well?  If not,
+> I'll take care of it.
+Thanks for pointing this out.
+I'll send a separate patch for that shortly.
 
-*pm8150b
-
----
-bod
+Seungjin Bae
+>
+> Alan Stern
+>
+> >  v3: New patch in v3, suggested by Alan Stern.
+> >
+> >  drivers/usb/host/max3421-hcd.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-=
+hcd.c
+> > index 3d6b351dcb1a..73e76d0e6973 100644
+> > --- a/drivers/usb/host/max3421-hcd.c
+> > +++ b/drivers/usb/host/max3421-hcd.c
+> > @@ -1685,6 +1685,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type=
+_req, u16 value, u16 index,
+> >       case ClearHubFeature:
+> >               break;
+> >       case ClearPortFeature:
+> > +             if (index !=3D 1)
+> > +                     goto error;
+> >               switch (value) {
+> >               case USB_PORT_FEAT_SUSPEND:
+> >                       break;
+> > @@ -1728,6 +1730,8 @@ max3421_hub_control(struct usb_hcd *hcd, u16 type=
+_req, u16 value, u16 index,
+> >               break;
+> >
+> >       case SetPortFeature:
+> > +             if (index !=3D 1)
+> > +                     goto error;
+> >               switch (value) {
+> >               case USB_PORT_FEAT_LINK_STATE:
+> >               case USB_PORT_FEAT_U1_TIMEOUT:
+> > --
+> > 2.43.0
+> >
 
