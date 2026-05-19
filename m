@@ -1,175 +1,212 @@
-Return-Path: <linux-usb+bounces-37736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37737-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GAeVFF6vDGrdkwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37736-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:43:42 +0200
+	id +DuxJK/CDGqJlgUAu9opvQ
+	(envelope-from <linux-usb+bounces-37737-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 22:06:07 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 103CA583D1F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:43:42 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7F5E584776
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 22:06:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A1ED0301BA56
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 18:43:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9E1BF30E82E6
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:00:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE23369236;
-	Tue, 19 May 2026 18:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044EE3B776A;
+	Tue, 19 May 2026 20:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RcZFmlJT"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eRy4FCM0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB29E36C0CF
-	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 18:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779216218; cv=none; b=jrM9PcnSug7g314bZn5EYp+wbXtkyBQOCUzjukmYYtpYD1i4iFpwLnX/iQwNIV9R1HMzdxRHxEBOqkFIVBtEcIL2qFsEcT1Lgh8s6J6OVO4ux4gsxVvLFEwqGeUMSG9puHzL4F4f5uT+rxoqQvRnzu4F/i7+O9iFSjn4sDTUGsY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779216218; c=relaxed/simple;
-	bh=OYD+G3JKh9xKEFU/1ziTQUOPFP8sCJAUzZ3VpPzzbqQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mp4R1oQcfWvLJsa9GJwcl01/3sOSZ488R971nFCdQ29mDTeOOKmMnkG8T5t2Ys2gdrgkykuf1JbJSGd2elQ/isiYLF0meDkjRDDrhFoLFXJGwEJ7sz8JX+wco8qxWRDdKf80nZspYhjNCuxmnpWhhY55EfiOu+29muoln7LmqMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RcZFmlJT; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779216217; x=1810752217;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OYD+G3JKh9xKEFU/1ziTQUOPFP8sCJAUzZ3VpPzzbqQ=;
-  b=RcZFmlJT4l293lHX5BO91RBg++0wZHssDaAPIrBDk6j4qw7QNFZvLE9E
-   Q7Ej6lIlimr2KQNqWinTAkC70PX9T492su+50BDOUqSaYnh0pnyOe8jvR
-   6b9tQpu3JJS3bsb5AguXfaEN/b6MZ8Oy8u9kDnGbx4pSFbr0+DMW4uVe0
-   U9s6Hcmb3M7DhH6i+CYq7ziN3HLZCQuWlYOrz6zZLHOjzJzMJAyx7Zn+/
-   8oz5jgjVRNGNnUZtIT4O9nBrOSc4nPA7nqLqvOFnULyihf4usl22ipWEi
-   aIHINlG6huoULQlX1WfCbtDfTOQA22GoY1iHfaY4Mp+01jjuwXBdSHhG7
-   w==;
-X-CSE-ConnectionGUID: A9k1u4fdTT+3djAUswUX/A==
-X-CSE-MsgGUID: Z1rIu6/SSiuYww/AvN9Rdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="102783848"
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="102783848"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 11:43:36 -0700
-X-CSE-ConnectionGUID: hOpqcVe9QkWS8l8Vq2gmkQ==
-X-CSE-MsgGUID: E1BsEOkkTeyd4cWbyh3CmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="263633807"
-Received: from pooja-nuc9i7qnx.fm.intel.com ([10.80.169.153])
-  by fmviesa001.fm.intel.com with ESMTP; 19 May 2026 11:43:36 -0700
-From: Pooja Katiyar <pooja.katiyar@intel.com>
-To: linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	dmitry.baryshkov@oss.qualcomm.com,
-	johan@kernel.org,
-	asutosh.pathak@intel.com,
-	heikki.krogerus@linux.intel.com,
-	Pooja Katiyar <pooja.katiyar@intel.com>
-Subject: [PATCH v8 3/3] usb: typec: ucsi: Add support for SET_PDOS command
-Date: Tue, 19 May 2026 11:45:14 -0700
-Message-ID: <e3e127122c0a6910c4840a13d5c74ab5fc4eb868.1778798352.git.pooja.katiyar@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1778798352.git.pooja.katiyar@intel.com>
-References: <cover.1778798352.git.pooja.katiyar@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F0F3B895E
+	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 20:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779220854; cv=pass; b=QE5f9ydp1HMSK2tv+zpENYnoXQuWQV4eejdy2hX1eGwGVlujtHyzkQZnEusUsWPF3Rzdbar6BR5+KghACanQjUDnpR5CzIpPI3BoWxYcjv3WpFPTmPAqfTkd19Puphb+SWMwQGEz5Gf+8LlNMkAIAYuMyCej/QkLOg33umni5hM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779220854; c=relaxed/simple;
+	bh=z7+sfmzLCX7hEqfJ1RwkmJbENGq19gZ2ufHyFzYnu30=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qEWhy6UhrsbIN9xxk1aKthSAJ4eUpSjYwr81kLaX2BlPcX91h38k8rtA/cQyelxFEb8JOiXrTgGC0xP+cRzUq4ZcFZG+alkLLEtiiI7HkU4r2+6VfKGd55u947pd8dKvbvV/OpWUTylP51gKMQqy6fNCF0XgQCsFwMg0W2QRtLM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eRy4FCM0; arc=pass smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-367c26471f5so2513521a91.1
+        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 13:00:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779220844; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Q3TrnVzAumq3gFUGKIBmzSX4qTY27iPf3O2cvE3TZHURuwjRLXGycO9013D9+UlgH2
+         udvQb5hMmMqBsrICtd8lnjJRM9S4RhO4ZUBdMfJG8ajJ9QvIdO7hkegCNeM7eYOLwIVm
+         rdvL89D8BcwivjrgqUIPMtJB5jyaPpMOH4LysMg/iA+1fyE8tLUK8ONJm3ONHarrJDcs
+         kurel7RsA92d96QP1RQ2xtDJ+iaM6DpCzUlFIzMP2WgvajBP6SM8TcUZuBNKPRDr9dQH
+         m+tWheT/nre8G4IN3PIpaiiFl9abcaDECaKUkf/hCrVeLL4KJCVLCQLUPo8KQ9R2Z7gC
+         p4/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=wbs6RKb+SG4mqMMp86P42C7RHS2rVTLotKJFep45jqk=;
+        fh=K9MJrs9X2TYMwoDP/1/J+Qo3L1qN68xjd2B288ODUQ8=;
+        b=XRKioCKiWi/jWZ47ywT0l2ZvBTam9tqLOQhBYfu14oJlp+pwVZ+Bxmp7LRhuAKkG+q
+         OQpxD7horCTacudaWie2KvRQ+mLbM7pAbHCCIZY8N8hhiSa5yKkayd63zB39btmn0VFG
+         44RJ4eBCbD5n8Px9cOeMt1VRy2OmUb/4fG40C2wTJ58UjjvOzipZ/kr4pk1bNR1kfzJP
+         c2kfQ2lnqx5s+t8n+WGLMIFp+MTzds3aqsH3TWGZ6xIsl2zLRefmPhz4RIV+pdfkW9vE
+         RPNdlBhm4NoI1S/uxtYQ5dQ6Xn8lduu5usCwk236zShmva8/fx+AeL9V9hgMFXFLhBpa
+         nLQQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1779220844; x=1779825644; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wbs6RKb+SG4mqMMp86P42C7RHS2rVTLotKJFep45jqk=;
+        b=eRy4FCM0KqVzmIKM/M6Nep7mXqnrhuJ9ymk869TNDLp58R8eL75gCFs5M91P7FyPll
+         vbKAqRj3fMByiz2hh2HqpYUXLJ8ZcW3viDryX0Upsl9sTylwHNIxnLTfiGlefFqYQ8e1
+         XA8smPA05sDKyhlf+hw0Ch25dcAgPP5BL1u3g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779220844; x=1779825644;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wbs6RKb+SG4mqMMp86P42C7RHS2rVTLotKJFep45jqk=;
+        b=VfGnk861P8teRgABfbdyUuJMlKWnE066PiwsOWWZaCJCAw4dPQ0yARyEQQH0vfniXv
+         gPp8mi3uLtUDyhPjHa+1WD7yRi31zKlsTmcclzHJGJcMr4+tqMP5J/pfnYHkoPAdhr8I
+         UQqpx4dNzWX7R3/zG34lpElfKYsInJ2ThTVZKed95hQpGZTJkt88WmzZzrJSQruiBYNU
+         Z3ALDuP1EPMv3YNL3b03MPdH3hkMrby6WyGFk7S+B9kPGfT76X5ASjOpmYyn9RQXhMSL
+         wO78vp4R7ZfJ0L9g+Y5Vf5MaPTM5CAo2lF69P5eWN+DWBdgNAkyH4+Xz2uUHBOjLTvOe
+         XIWQ==
+X-Gm-Message-State: AOJu0YyJs54kW1vdpXq87sz+RFTiLtL6Fnic3Z2VKh+8xbWlDlv7C9fU
+	UOiBBzprHy4KXa4pqSBGXGaj0IrmAI2UpGgDofxoOmiMsBS5a+30+4oU8Z4AnNwwl6XL0UBVO9V
+	CGEWZAW9uwfio52ba35aZp/NERwqtg5mEVp+OnMwJ
+X-Gm-Gg: Acq92OGumEM478um6+b4g/G8DRIuNbMH/pAFEvZUWkoe6F3b0mq9uvM6trfemdNLETK
+	TdPDT77NW0qBUm1lvxgTQ1+Z2PnKYo/nrlhOpiMeoMo/32xs38sA63ZFJSo4PPAC8dOlwBwcK7e
+	h7Dg73FuyeUa8DFMnOyZPZvlIG2Ld11cBmTzFKpXQpc0beuK1LfVDLyJczHoc7Escy5FwufxA1j
+	XX6x1gyeU6ah497SPlb11Oq+QrXnJiptAlCxnCXAzlJ7Dt6FV+LSFuwr+GEGLwietTMo0g/b4bk
+	Ls8nRkY=
+X-Received: by 2002:a17:90b:1fce:b0:368:5367:d679 with SMTP id
+ 98e67ed59e1d1-369519cb5d1mr20288945a91.9.1779220844382; Tue, 19 May 2026
+ 13:00:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <2026051347-clustered-deflected-9543@gregkh> <2026051351-truck-steadfast-df48@gregkh>
+In-Reply-To: <2026051351-truck-steadfast-df48@gregkh>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Tue, 19 May 2026 13:00:28 -0700
+X-Gm-Features: AVHnY4LM7BeF7Zv2PRjVrqlS5Ca-7qdDy18IZMI9cpTwker3DKO6PwurMNRqLGQ
+Message-ID: <CANFp7mVZ1rFkPu5wNZOxm6QBWDwcKvKeCPjYdRKdkWn2KWR5jw@mail.gmail.com>
+Subject: Re: [PATCH 8/8] usb: typec: ucsi: validate connector number in ucsi_connector_change()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Benson Leung <bleung@chromium.org>, 
+	Jameson Thies <jthies@google.com>, Nathan Rebello <nathan.c.rebello@gmail.com>, 
+	Johan Hovold <johan@kernel.org>, Pooja Katiyar <pooja.katiyar@intel.com>, 
+	Hsin-Te Yuan <yuanhsinte@chromium.org>, Abel Vesa <abelvesa@kernel.org>, 
+	stable <stable@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37736-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37737-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pooja.katiyar@intel.com,linux-usb@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linux.intel.com,chromium.org,google.com,gmail.com,kernel.org,intel.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:mid,intel.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 103CA583D1F
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[abhishekpandit@chromium.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[chromium.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,chromium.org:email,chromium.org:dkim,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: E7F5E584776
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add support for UCSI SET_PDOS command as per UCSI specification v2.1 and
-above to debugfs.
+On Wed, May 13, 2026 at 9:02=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> The connector number in a UCSI CCI notification is a 7-bit field
+> supplied by the PPM.  ucsi_connector_change() uses it to index the
+> ucsi->connector[] array without checking it against the number of
+> connectors the PPM reported at init time, so a buggy or malicious PPM
+> (EC firmware, or an I2C-attached UCSI controller on the ccg / stm32g0 /
+> glink transports) can drive schedule_work() on memory past the end of
+> the array.
+>
+> Reject connector numbers that are zero or exceed cap.num_connectors
+> before dereferencing the array.
+>
+> Assisted-by: gkh_clanker_t1000
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Jameson Thies <jthies@google.com>
+> Cc: Nathan Rebello <nathan.c.rebello@gmail.com>
+> Cc: Johan Hovold <johan@kernel.org>
+> Cc: Pooja Katiyar <pooja.katiyar@intel.com>
+> Cc: Hsin-Te Yuan <yuanhsinte@chromium.org>
+> Cc: Abel Vesa <abelvesa@kernel.org>
+> Cc: stable <stable@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
----
-Changelog v7:
-- Added changelogs.
+Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-Changelog v6:
-- Removed message_out field from UCSI structure and added it back
-  to ucsi_debugfs_entry structure.
-
-Changelog v2:
-- Send message_out data as part of ucsi_send_command.
-
- drivers/usb/typec/ucsi/debugfs.c | 5 +++++
- drivers/usb/typec/ucsi/ucsi.h    | 4 ++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-index be987e53a8bd..ff33a5e7c6b0 100644
---- a/drivers/usb/typec/ucsi/debugfs.c
-+++ b/drivers/usb/typec/ucsi/debugfs.c
-@@ -40,6 +40,11 @@ static int ucsi_cmd(void *data, u64 val)
- 	case UCSI_READ_POWER_LEVEL:
- 		ret = ucsi_send_command(ucsi, val, NULL, 0);
- 		break;
-+	case UCSI_SET_PDOS:
-+		ret = ucsi_write_message_out_command(ucsi, val, NULL, 0,
-+						     ucsi->debugfs->message_out,
-+						     UCSI_COMMAND_DATA_LEN(val));
-+		break;
- 	case UCSI_GET_CAPABILITY:
- 	case UCSI_GET_CONNECTOR_CAPABILITY:
- 	case UCSI_GET_ALTERNATE_MODES:
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 0558b4c39631..0e97bd060a63 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -138,6 +138,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_GET_PD_MESSAGE			0x15
- #define UCSI_GET_CAM_CS			0x18
- #define UCSI_SET_SINK_PATH			0x1c
-+#define UCSI_SET_PDOS				0x1d
- #define UCSI_READ_POWER_LEVEL			0x1e
- #define UCSI_SET_USB				0x21
- #define UCSI_GET_LPM_PPM_INFO			0x22
-@@ -215,6 +216,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY	4
- #define   UCSI_GET_PD_MESSAGE_TYPE_REVISION	5
- 
-+/* Data length bits */
-+#define UCSI_COMMAND_DATA_LEN(_cmd_)           (((_cmd_) >> 8) & GENMASK(7, 0))
-+
- /* -------------------------------------------------------------------------- */
- 
- /* Error information returned by PPM in response to GET_ERROR_STATUS command. */
--- 
-2.43.0
-
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.=
+c
+> index 5b7ad9e99cb9..539dc706798d 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1380,13 +1380,22 @@ static void ucsi_handle_connector_change(struct w=
+ork_struct *work)
+>   */
+>  void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+>  {
+> -       struct ucsi_connector *con =3D &ucsi->connector[num - 1];
+> +       struct ucsi_connector *con;
+>
+>         if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
+>                 dev_dbg(ucsi->dev, "Early connector change event\n");
+>                 return;
+>         }
+>
+> +       if (!num || num > ucsi->cap.num_connectors) {
+> +               dev_warn_ratelimited(ucsi->dev,
+> +                                    "Bogus connector change on %u (max %=
+u)\n",
+> +                                    num, ucsi->cap.num_connectors);
+> +               return;
+> +       }
+> +
+> +       con =3D &ucsi->connector[num - 1];
+> +
+>         if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+>                 schedule_work(&con->work);
+>  }
+> --
+> 2.54.0
+>
+>
 
