@@ -1,103 +1,103 @@
-Return-Path: <linux-usb+bounces-37715-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37716-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mML5LXdsDGpKhgUAu9opvQ
-	(envelope-from <linux-usb+bounces-37715-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 15:58:15 +0200
+	id uF0UKxFtDGpKhgUAu9opvQ
+	(envelope-from <linux-usb+bounces-37716-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 16:00:49 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CB175801DD
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 15:58:15 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF9C75802B0
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 16:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 888E63006809
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 13:57:17 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A05953029312
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 13:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D313ED3B3;
-	Tue, 19 May 2026 13:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8583F1AC5;
+	Tue, 19 May 2026 13:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l7zqt+04"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z+dbhxrZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A073D369D5D;
-	Tue, 19 May 2026 13:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11DD6340419;
+	Tue, 19 May 2026 13:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779199035; cv=none; b=NhUANRB6EQyhKEqxbkcYZUURcHh/8n8LzJQmSU3b5YK7BsiBN8GXdDQPd+VEwWgdwF7QkS6padrzWZMqdnhNvNqh2ordAsYyj4e3FsyogHtcrkKyo7dXQT9+2UWStq2/xn/Zo1pySX4sXN8TzLjWRZVvw+1JN7ZRVqyJrogWzdQ=
+	t=1779199143; cv=none; b=dJZBrUi4NPnjRxyB78J1ebHNovPEdvHYlSVmMlWhs0L7peTGKgS2sJBk2eevPNCXOXhejxkevAKRjCV3NrkLytQO7Bw2FipLUbdVv05d8HN8AV0IMZU4Moff5Vy8ITnco5H+i+wOUTU2MY+qAKvr56YdZ+7BbaAEsu/yBk7/ad0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779199035; c=relaxed/simple;
-	bh=w4ehybMAv+OD5uRAOunLamcTmTo8P2LhhYBiP6Z+ERQ=;
+	s=arc-20240116; t=1779199143; c=relaxed/simple;
+	bh=7J+DjS+s4JtM7oEcammwzMXSBRG+jIBE93+dWk29Psg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H46n5hWMfO4eazt47LpuXpyCoMa5ogKRBxf2RPMA0rV1Dj/duKgLKuyLLUY13fcQk2Kaw+bBcb2UQQ/tTQdr03O1b/EcsPFzRbsHBJetAZGf8TshIefumZUXA/pb34z+ltsEUBLnMHTu+b1DnZ/PaKKN0CGUUspIPMCxOYYUCDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l7zqt+04; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gi3Rz08ZbmQ2z+j6kDYEdZe+GzShSCY8Bm5JWG9ailHwLa32g01fMJ6tt1v7Co5ZUYhyoJRwSLT25cpP+IVsYeIzHp6M399Di+gf90otNJ8eWkeiZrEncFn1kEclZE9xK4Jw89trAwGv5HngyRem/HoV9Wk4/sgTVvpSKc1ak/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z+dbhxrZ; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779199033; x=1810735033;
+  t=1779199143; x=1810735143;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=w4ehybMAv+OD5uRAOunLamcTmTo8P2LhhYBiP6Z+ERQ=;
-  b=l7zqt+04Tsvm8sBxuUwX06JEuze6KMtDHfsAyLw1aVtuck3FmHdlE/t3
-   jGF1apABVknEt/X+6/Vcj7AJId2zldt2UoNYb1yO4ZTEASWiqFbMrZFtz
-   20h1D1P4nhSx+nw0CpqoeEl+EbZ1N5jbzITPEFxVGcql5as4WhuokFVCy
-   sznqfu4stduw+6OtoRllHIDhzDuQh4bmJjInTZBB+RKVpLyfluNWDvaSj
-   9xxRMDJrv9vojHZDez8w4BoNGw0vRsK3mUtxW9nbZMtAIJKZO7SYSGBhe
-   hxYLtHBT/KPaYFEpDVdRpaAsCm6Hl4bNzHeP7Zh7EWhgJNnsw5Ifh3mvQ
+   mime-version:in-reply-to;
+  bh=7J+DjS+s4JtM7oEcammwzMXSBRG+jIBE93+dWk29Psg=;
+  b=Z+dbhxrZ5BK2HusFlNakw4bXhN2LY1aRqljTdMZnYOyzPavpKhC7guTO
+   MWBwqYXqRffVxGxiACVj1D+9QzbV2JOuQheoq0W3YbpdQ/+ug+DlqiWNm
+   1lkvPwhdaV1KIhczXORHxSaj74imcbn9g/rDjMoQ1SDJuFwa97eFu18EB
+   H9U54UK6wqKqNHZk2AhgdHJIpTgQxdk/sdq3l6Lr038FpRHQ/31lKUAty
+   KihQKH8UAARWPAs86hDKaGRRWaxLeXS2FilVdTFDM1TBMPuA/zu0NS1Xa
+   U9C/CmhuUvi3WruCA2JQEamcRP3wXozBh3Gvn94DHaDb5DIf+FhzyG/ht
    A==;
-X-CSE-ConnectionGUID: nW7S6KuXQpeeYofQFyl1Jw==
-X-CSE-MsgGUID: 546dZ5SAQ1eQrNlo9/AWrg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="90772625"
+X-CSE-ConnectionGUID: BKxWdgeSTi+LbtHqN3J/CQ==
+X-CSE-MsgGUID: CdUTkXrvQMSEhLmhmkdosA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="102752082"
 X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="90772625"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 06:57:13 -0700
-X-CSE-ConnectionGUID: sd0VRwKrTBuDWnhPwalIUg==
-X-CSE-MsgGUID: oVq4Gk7BQzimvBHDFFDwJw==
+   d="scan'208";a="102752082"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 06:58:52 -0700
+X-CSE-ConnectionGUID: MHSmj2m9Qj+6jtl+XMsSDg==
+X-CSE-MsgGUID: 64DIVHisQimB24mqwfYlqA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="243776001"
+   d="scan'208";a="240038638"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 19 May 2026 06:57:10 -0700
+  by orviesa007.jf.intel.com with ESMTP; 19 May 2026 06:58:49 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 9FCF395; Tue, 19 May 2026 15:57:09 +0200 (CEST)
-Date: Tue, 19 May 2026 16:56:58 +0300
+	id 2A5EB95; Tue, 19 May 2026 15:58:48 +0200 (CEST)
+Date: Tue, 19 May 2026 16:58:36 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Marco Crivellari <marco.crivellari@suse.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Michal Hocko <mhocko@suse.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [RFC PATCH v2] usb: typec: ucsi: Move long delayed work on
- system_dfl_long_wq
-Message-ID: <agxsKhEjF3ygE0zs@kuha>
-References: <20260508143853.330151-1-marco.crivellari@suse.com>
- <CAAofZF5xeDSV=YBQckRSKVgiNiM5RXshnR19DVOYmwgNxncB3w@mail.gmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] USB: typec: qcom-pmic-typec: Drop redundant header
+ includes
+Message-ID: <agxsjF8SI7XDaB_j@kuha>
+References: <20260519100014.282058-3-krzysztof.kozlowski@oss.qualcomm.com>
+ <20260519100014.282058-4-krzysztof.kozlowski@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAofZF5xeDSV=YBQckRSKVgiNiM5RXshnR19DVOYmwgNxncB3w@mail.gmail.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+In-Reply-To: <20260519100014.282058-4-krzysztof.kozlowski@oss.qualcomm.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37715-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com,linutronix.de,suse.com,linuxfoundation.org];
+	TAGGED_FROM(0.00)[bounces-37716-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -109,28 +109,54 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:email,intel.com:dkim]
-X-Rspamd-Queue-Id: 5CB175801DD
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,qualcomm.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: AF9C75802B0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, May 19, 2026 at 11:01:18AM +0200, Marco Crivellari wrote:
-> On Fri, May 8, 2026 at 4:39 PM Marco Crivellari
-> <marco.crivellari@suse.com> wrote:
-> > [...]
-> >  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, May 19, 2026 at 12:00:16PM +0200, Krzysztof Kozlowski wrote:
+> Unlike other units in this module, this one does not request interrupts
+> or regulator supplies.  It does not use OF graph, USB role switching or
+> TypeC muxing APIs.  Drop redundant header includes to speed up
+> preprocessor.
 > 
-> Gentle ping.
-
-This is okay by me. FWIW:
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-thanks,
+> ---
+>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> index 3766790c1548..35320f89dad2 100644
+> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> @@ -4,19 +4,14 @@
+>   */
+>  
+>  #include <linux/err.h>
+> -#include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_graph.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> -#include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+> -#include <linux/usb/role.h>
+>  #include <linux/usb/tcpm.h>
+> -#include <linux/usb/typec_mux.h>
+>  
+>  #include <drm/bridge/aux-bridge.h>
+>  
+> -- 
+> 2.51.0
 
 -- 
 heikki
