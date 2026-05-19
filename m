@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-37690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37691-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mJj8BOVDDGr/cAUAu9opvQ
-	(envelope-from <linux-usb+bounces-37690-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 13:05:09 +0200
+	id ABAgFhdEDGrQcQUAu9opvQ
+	(envelope-from <linux-usb+bounces-37691-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 13:05:59 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8DCC57D28B
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 13:05:08 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDBBC57D2C9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 13:05:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7EEBD3054E4D
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 10:53:28 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1A664302424F
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 10:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C689D39DBC2;
-	Tue, 19 May 2026 10:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BA93F4DED;
+	Tue, 19 May 2026 10:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKPVXE0k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWz7Kx5T"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803D93F4DF1;
-	Tue, 19 May 2026 10:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A19D3F1AD0;
+	Tue, 19 May 2026 10:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779187864; cv=none; b=Rx4Mkm0GUmDi1n3iT4somzTWfU3M0bCHJTl1fjGdBPGMGdKth3XaVYR61QC8BIX/qdNfz7XoyWXY3gbuEwTkb2YKsV7XRcNkkiHFisyXoDI8XbESl43ltu4ZxGjokkeuF1IefbU4tN8hY/SJ/PApZKbNc6MLMeEZMbkCO8NrDmU=
+	t=1779187964; cv=none; b=o1uIAlss0TJbWqjCgrcHHYfWXPj1agKTV+4TMD4Z77Fb84n1nkX7uCmKH1AFtk456s8fjxuoKCJSF6/oj40E9a6LtdyJKC97mtO8l2RpI7tUexYKM/KRW0jPfUvfIZvDL11u6MBvvjwEnoTtSVxN9284HYgabcArkw1BNAsjdtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779187864; c=relaxed/simple;
-	bh=XZelrUIsw6mRLO3EbBQPPgeGG9TmcGjbNjoZX/8V70k=;
+	s=arc-20240116; t=1779187964; c=relaxed/simple;
+	bh=Cy2/bPs/rSok9uMT/gK2sDe+hS8oVGB88lo6zGkQOmc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RGSCDhQszdKFyvHmEdDodwwZDcU4smY3neZu2tWeNZGLayP9I5UyZd/PLOfINbrL800itvAdbzJxog21fVVcIPzAUTg8vhqZyAqPms53UV31I6QYpuzjUEWPI0Na9XcTl6zZo2ye4+cm/S9ncAFRvOH8Vxh5jqMDY3rfGK8PrR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKPVXE0k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D441C2BCB8;
-	Tue, 19 May 2026 10:51:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=JBhdnZ/Otf+6QzZ8FiIE+xQkreJt5gk/rVCgqFmyo1/2W8FX2izoQhmIM3b+rS8ZH96b6jjQReOh43n4g0S6UKVQBv+QGx5TrdDNi65CDLMLKzNCmGd0p3lrk5YXTuKXIRnoWC50bk8+t6FOM+5tsSyt0yoxiPsqlJuDbVZDPrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWz7Kx5T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E209C2BCC6;
+	Tue, 19 May 2026 10:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779187863;
-	bh=XZelrUIsw6mRLO3EbBQPPgeGG9TmcGjbNjoZX/8V70k=;
+	s=k20201202; t=1779187963;
+	bh=Cy2/bPs/rSok9uMT/gK2sDe+hS8oVGB88lo6zGkQOmc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eKPVXE0k6tlVcr1HQrzv8iNSED0lQYgW0TF+25DbmgXpILQInwSk55c7PbzQhVxMt
-	 gmltD6sn1yJ1RsNSYiISAyTfEqtryBHrSY5PfAOdhqMD5Qc+ECpMdu4+7DUCNHN61M
-	 OMWUwsJzDDEYoj15sNemVP+7H0dQyvnUSnAwUlB04ihL88DuCpGYJfrpmI2Jza3JhZ
-	 dRPZs2dsLvO3lQi2iWbFO0fK1OFVhuRyC/lIc6x4bnVaVW08mi8t+HA3BIaW/FI445
-	 LbDW6YI0DWlm6rARdf6mE4jS3tHxORl7y6d8sQuLheUrgy+YS99JZx63FQ++ER69VS
-	 +65qOg4VDGmxA==
-Date: Tue, 19 May 2026 12:51:01 +0200
+	b=kWz7Kx5TVLlWVu72GY9voiMhxIyEuEm9imAfQlzZYq+bxM21xfMAVwAl3zvQbZEUZ
+	 JOcHNGebtV4o6d8OG2PEuWvhTI5tMTgZywq/yvA/YTEjtAgN0I8TZinb/zOVLMpQG2
+	 lMVcdeSxgb15YzHeGfpNg63ryBWav5NmIPgdlW40YXPFmn887JvuqvtKW81x/Q7qH8
+	 8sLNVflNCsJ63BzbZQvdyIgX0SGpFFgeFrJSqSnQ6LDAAEIYKRLs/xTI+VbXMTxmc4
+	 cHwvSyDIThKz9M+NCbVJyeSKAqU1k6uh3S80K/Xa6FQDUlyp+02SWk0/ReZbfK21gW
+	 PzWbQMCgRqqWQ==
+Date: Tue, 19 May 2026 12:52:41 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: taygoth <taygoth@gmail.com>
 Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
@@ -55,11 +55,10 @@ Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
 	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
 	Konrad Dybcio <konradybcio@kernel.org>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
 	Casey Connolly <casey.connolly@linaro.org>
-Subject: Re: [PATCH 1/6] dt-bindings: regulator: qcom,usb-vbus-regulator: add
- PMI8998
-Message-ID: <20260519-spirited-vengeful-crane-dc32a0@quoll>
+Subject: Re: [PATCH 3/6] usb: typec: add Qualcomm PMI8998 role-switch driver
+Message-ID: <20260519-adaptable-beneficial-emu-00da28@quoll>
 References: <cover.1779127507.git.taygoth@gmail.com>
- <2a3c65bbfb85d944110b14b40ef375f238ca3932.1779127507.git.taygoth@gmail.com>
+ <6fedbcd344505b63de72037f69ea94f916255f03.1779127507.git.taygoth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,13 +67,13 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2a3c65bbfb85d944110b14b40ef375f238ca3932.1779127507.git.taygoth@gmail.com>
+In-Reply-To: <6fedbcd344505b63de72037f69ea94f916255f03.1779127507.git.taygoth@gmail.com>
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -83,7 +82,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37690-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37691-lists,linux-usb=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
@@ -95,29 +94,50 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com,quicinc.com,linuxfoundation.org,linux.intel.com,linaro.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: C8DCC57D28B
+X-Rspamd-Queue-Id: EDBBC57D2C9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, May 19, 2026 at 01:22:46AM +0500, taygoth wrote:
-> The Qualcomm PMI8998 PMIC integrates a USB OTG VBUS boost converter
-> inside its SMB2 charger block at offset 0x1100. The OTG control
-> register layout (CMD_OTG at +0x40, OTG_CURRENT_LIMIT_CFG at +0x52,
-> OTG_CFG at +0x53) matches the PM8150B SMB5 block, so the existing
-> qcom_usb_vbus-regulator driver can drive it without code changes via
-> compatible cascade.
+On Tue, May 19, 2026 at 01:22:48AM +0500, taygoth wrote:
+> The Qualcomm PMI8998 PMIC integrates a USB Type-C detection block in
+> its SMB2 charger USBIN region at offset 0x1300. The block performs CC
+> sensing, debounce and Rp/Rd resolution in silicon and reports role
+> changes through a single consolidated "type-c-change" interrupt.
 > 
-> Verified by inspecting the downstream qpnp-smb2 driver and reading
-> live register values on a OnePlus 6T (sdm845-oneplus-fajita) running
-> mainline Linux.
+> This driver reads TYPE_C_STATUS_4 on probe and on every interrupt,
+> decodes the hardware-detected role (host / device / none) and pushes
+> it to a usb_role_switch consumer (typically dwc3) so the controller
+> can flip between peripheral and host on cable orientation change. An
+> optional VBUS supply regulator is toggled on USB_ROLE_HOST transitions
+> so bus-powered downstream peripherals can be powered.
+> 
+> No software TCPM state machine is used because the hardware handles
+> the Type-C protocol natively, and the PMI8998 interrupt topology does
+> not expose the granular per-event signals the TCPM code path expects.
+> Power Delivery is not implemented in this driver; the PMI8998 PDPHY
+> block at offset 0x1700 (register-identical to PM8150B) can be wired
+> up by a separate driver later if PD negotiation is required.
+> 
+> This enables USB host mode on the OnePlus 6 (enchilada), OnePlus 6T
+> (fajita), Xiaomi Poco F1 (beryllium), SHIFT 6mq (axolotl) and other
+> SDM845-based phones that use the PMI8998 as their second PMIC.
 > 
 > Signed-off-by: taygoth <taygoth@gmail.com>
 
-Incomplete identity. Please use real names. We do not accept anonymous
-contributions.
+Incomplete identity.
+
+> ---
+>  drivers/usb/typec/Kconfig              |  17 ++
+>  drivers/usb/typec/Makefile             |   1 +
+>  drivers/usb/typec/qcom_pmi8998_typec.c | 213 +++++++++++++++++++++++++
+>  3 files changed, 231 insertions(+)
+>  create mode 100644 drivers/usb/typec/qcom_pmi8998_typec.c
+
+Do not mix up subsystems which take entire sets in one patchset. USB
+patches should be split.
 
 Best regards,
 Krzysztof
