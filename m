@@ -1,148 +1,188 @@
-Return-Path: <linux-usb+bounces-37727-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37728-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QLjnM0mrDGrukgUAu9opvQ
-	(envelope-from <linux-usb+bounces-37727-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:26:17 +0200
+	id WJ0CAySqDGpLkgUAu9opvQ
+	(envelope-from <linux-usb+bounces-37728-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:21:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72BCA583A12
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:26:16 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CA1458394B
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:21:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 239FF3044239
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 18:18:00 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0076E3002F45
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 18:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C8C367F22;
-	Tue, 19 May 2026 18:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A95367F25;
+	Tue, 19 May 2026 18:20:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m7KxWJhY"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="DUi6nat1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011065.outbound.protection.outlook.com [52.101.57.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4C9367B92
-	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 18:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779214678; cv=none; b=bhkdh+zQ8w0CTF19tSBZiUySgnARpqhPofUg7VqJj6cSFFjIZJPFfY5ResPDRAfI0MhP9fw27T5cvWo+kH4Vr0HnnDL155n/b7q+GSGNBfQs1pGC0o1G5L+fwsljWhw/s7b8+qaKSLukpUjeZLWLiPTYzf1/lAMzjKGBkgXbNtk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779214678; c=relaxed/simple;
-	bh=Kz3uJJtUTEetC1ZMrXtrEI7xdsXbSfvP3XEAN/lSbik=;
-	h=Message-ID:Date:From:To:Subject; b=brrYn1H8F4NUs+DBVq+qYU+GIgPZo6QQd2TFGXG6iOWl+L+Zkicbx7r0HNgmuBxzXJ6OdcyYJE4UDJ7ZYM9rO8ZdwLRjApJCa1TLZ4V3DuCnfeJfYVtrwmv52vMxKYKp4FFW/E0xGxqh6iaSQZhFqhq40PCMv9OEt2NWn6oZoBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m7KxWJhY; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-50d876329bbso39530021cf.2
-        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 11:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779214675; x=1779819475; darn=vger.kernel.org;
-        h=subject:to:from:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2FQZMXk0QGzC5x1lUQza+wKZbRqB4DE7l/FajgbpmYI=;
-        b=m7KxWJhYGBj+R9WaaIpBC7fNcUGfSEHy+BU6MthdUGREbUJhEZLFqjZ0qa0ECaZoSs
-         lGzsLlXUXZ55UeCt/q8cpYpkhCVDqA+vCjY9nDXOFHY5aX2cYRDjmT5KAbahdwggN42R
-         uJy6yu/zuMyI3bdsP7wbNMIv5uQUkYFzjsQOzxGDTtVuFNphRCDu4A6m1j36P5W9YIty
-         l03CnywQGOILxeXFV844QR6rwmTVzu1GzlBLTllezmDKQKPXcOMTZHPbz0i2hjGRrQgd
-         6cg2ezgHewrvh06L4wibmPG6DZhnv+3IUF11B7bJN8aeMEKPrJPguclFfyxAxaP0HRtd
-         kIxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779214675; x=1779819475;
-        h=subject:to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2FQZMXk0QGzC5x1lUQza+wKZbRqB4DE7l/FajgbpmYI=;
-        b=CUat7DD+/JEM8FOQ8AX0VzJrgMN8loGH972xxFr8WjU/db5SZFhtlK7BubfAbTWLJG
-         PMa1RSaWCWYLT3zafrpHnwyV/+tQg3Q1Y3Y6jD5NIcfZNQKzuyQS5KsyHEj/v7X4fpbE
-         IbaUmMWCeLqz48rc4SHfuEjTO6GUJzmpdffTQ441VIQmF/ZOE/iTFZxcKpha0xSm8T1/
-         nM8yUjdBvtjB6rFdF7vzkK1ESSQhrc4k+P5MG74YAs7cAQ7WOUzURsf9LXi+VBcji8cv
-         G3YGit2o6nXhNcrqFB7zgSvv3JbfF3TVHziovfnCurP63BKtgbhPZv4f2/DwcuEkAo5y
-         touw==
-X-Gm-Message-State: AOJu0YwK9Kv9FmP9TZQxhicP938qFRDZneuYz6WA04OGpb+8lwGbuDhP
-	KbOJK/vsnyY8n+kh4hXIa5prccf3z2a/sFjI0DFVNLT06F9yThUGM1dyJDSgthyh
-X-Gm-Gg: Acq92OFFgAs9grRq8irenTL/tpAh3kE80SQPqNKTJOCdVloYwsepkHQ1+38Tm6BZlrb
-	HInYvfNcqp68E9dBX/k2xyqpSdxk1KDhkcgTluHDycV568RkpyP6kBu93I06n+RKFi8nMq/UBmY
-	4v8mvXrB1NrWTbC2J7Q6VdMC78YIBc6UUAyAkZ5BqQMB7he1rnSbAY/tq3V5+sRUdQOpdceDUuW
-	lplcoc0pv+3ysm+1StlV/dqnIt/6kVj5cLQpqzIMh1bZtHpesqWs+WCp11TQriBAneHwyBSDlFm
-	JWbvsn+Kjrny6f4ZN61Ls5ZTO9yRcfqmBMcqyvgZjsqsk8h4KAI46Slw4E4JiMqdU+lUJobqmU5
-	6voh9QSr7drL3Y65yb5neTCrGLLKgI96q9x6tqtGOSUM3BpJ+vn9tiKzSW1aG2cz6dQXGlYZzjP
-	w4fBJs4iXCbe0nlHkoc7jt7h5zo7O+7cX2XcUJrhumoXEgSdzPtguKTgICvACtJOm+rvk+kPZBk
-	xQl9wapGhHhCl+B1NXKQiNfz29CVCM=
-X-Received: by 2002:a05:622a:1ccb:b0:50d:a3a3:e612 with SMTP id d75a77b69052e-5165a0b5e80mr301237621cf.18.1779214675444;
-        Tue, 19 May 2026 11:17:55 -0700 (PDT)
-Received: from localhost (ec2-32-196-226-111.compute-1.amazonaws.com. [32.196.226.111])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-5164585affesm170126581cf.28.2026.05.19.11.17.54
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2026 11:17:55 -0700 (PDT)
-Message-ID: <6a0ca953.212a1814.2ffb00.e2f4@mx.google.com>
-Date: Tue, 19 May 2026 11:17:55 -0700 (PDT)
-From: trishtaylor4521@gmail.com
-X-Google-Original-From: PayPal
-To: linux-usb@vger.kernel.org
-Subject: Auto Receipt Generated | $646.74 | Ref: TXN-UWJZ-1MWD-28DP
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C137935BDDF;
+	Tue, 19 May 2026 18:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779214822; cv=fail; b=UX0vnVTJ1a7xQYWCATDNg1JASQ2PGevF+ya2q+ZSokPUxzxner2dhSVwHKlUQ5RwA8nuDP9rvzYkeSCNF5g907rOVLvdWWs/khAwKsYGsn+st7WvqcPirK1yMHcLwO1MXZEhnZXAXPCAg3kzGR9rYD9///ad1MnAtx9dWntnkWE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779214822; c=relaxed/simple;
+	bh=oIhwd/Rk6HnCWuK37OqyYewmRaZcT7DqPKPynEIm1ss=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tN6TLsDd3NypBcWgMhnAs1cC1seaEQ0xtLPGjnoHuefzq3CHCwj2BE+TOF4YxnZpBt/EULAGo4+63UHy79dM5Fz0vPBBPuKz/XYt4yWd0sn1L9GRlCUedjNsy7G6CLDjvkLbunp8UMSb/ehEdeITfPfmdlVLF+zUR8pt6BaGw+g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=DUi6nat1; arc=fail smtp.client-ip=52.101.57.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jA5gpbAmuyXSXzX9daACIqAP/Ono5ogwQpHxkQnOr1pPadw8+Sb3BoUSTsEEUfkcwEgkWYx/jB9gMVPgBtDIpfVecLhrB0Kl33hVwUvx5+uoou20uauPHzGCnUqDT7qZSjBzjQ6YXIUaSnNT8iu07o7lRigMDooEMz9+gJk2wPfgl/m626am/axI+XpJM+IKTgVGU+l5weta4IUcaF4G2OZw2Fl+dC6RhFpfOJJfAwbqivw+5rdt+ujXmZ3fea/Py4mqJP819LeMvtjqTI8hZR0H9DFpR1coUf56lJUWyLjr/cptEcgDdxFSHfuALavLXy6cmyBWYhOgrYGUDyn13g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YDfJaYaCRVrLHvqTEf/m9RrUtE+c/Aw2G8D9pqmSowo=;
+ b=mO1A0D1K1vRU7wVZ2++xvgskEXbfKeLApf4eklsMvqZF6PEdF81LDanJcWwJaSgIfeg5Zq+tolD1gXtbdDxDEZ8W8cXidMWGY2gU5D54nrDlc2WXRteHn++2iJxUK0K3N2MODlP5Mj+6Qg5V7C1TPr540Az6EdVtsGwvGOyVJny/cyc2jRks9T7n4W/VQ2xSIrPVMEoUZff6PXz0zw14wQdnuZ99nDp6GkATOYclcF/iK1f2X5RLun2U2vykn57Xu7QaZ2dhk13T65JpQIujlLeeU2tsHRsze8fnCT7ZWjAECcV4JmCCYw/7fRRxbc1boCYrh9G5h4TMh5Q1XNM01Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YDfJaYaCRVrLHvqTEf/m9RrUtE+c/Aw2G8D9pqmSowo=;
+ b=DUi6nat1yfwWw+9PQypkHRRrsKRBh5e2QJ1Z9otrjBb63sMMYElf2Wpvsd0wKMjKeRouvNOFgbNS2LOoGarFNwCBTL3DA1CUh+5Z1VduAdxCmw/hbmQy9/OmDMnw/byGUHmFAz5BqGVCnteXZKt6ML5eOeMwmDA4IUVrzKeoCpI=
+Received: from BN9PR03CA0596.namprd03.prod.outlook.com (2603:10b6:408:10d::31)
+ by IA1PR12MB7541.namprd12.prod.outlook.com (2603:10b6:208:42f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.14; Tue, 19 May
+ 2026 18:20:13 +0000
+Received: from BN1PEPF00004687.namprd05.prod.outlook.com
+ (2603:10b6:408:10d:cafe::8a) by BN9PR03CA0596.outlook.office365.com
+ (2603:10b6:408:10d::31) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.14 via Frontend Transport; Tue, 19
+ May 2026 18:20:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BN1PEPF00004687.mail.protection.outlook.com (10.167.243.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.48.11 via Frontend Transport; Tue, 19 May 2026 18:20:12 +0000
+Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Tue, 19 May
+ 2026 13:20:12 -0500
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb10.amd.com
+ (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Tue, 19 May
+ 2026 13:20:11 -0500
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.41 via Frontend
+ Transport; Tue, 19 May 2026 13:20:09 -0500
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [PATCH v2 0/3] usb: typec: tipd: improve probe diagnostics and POWER_STATUS handling
+Date: Tue, 19 May 2026 23:49:53 +0530
+Message-ID: <cover.1779214249.git.radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-X-Spamd-Result: default: False [4.34 / 15.00];
-	R_BAD_CTE_7BIT(3.50)[unknown];
-	BROKEN_CONTENT_TYPE(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	SUBJECT_HAS_CURRENCY(1.00)[];
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004687:EE_|IA1PR12MB7541:EE_
+X-MS-Office365-Filtering-Correlation-Id: 75056861-91ea-48a9-2f0a-08deb5d34480
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700016|1800799024|82310400026|11063799006|18002099003|56012099003|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	67PPX/cv/d2rdW3147I7XfQGNEeY3TkISyXHHUGF4Iz/PhayukD/bKT7oQ8UmOPwDf01ROa2vw07f+I9STuLqBAfAU6LH/yGqsVKkFWmT5fknybFvPUOHA4DOFRy7BmCHd/6HrJ5h0RbpvXo4YsvVlhHMRCz2O9VtVCajV0AVK/1bYpmedhxHdDkAPFhbdWUFQ6Mbi9k8jTEoP8mA8PWX32tBTW/TmMaxpOmOJJy/Rp33Nuuhh49CbFxMkERjlbSagdlhRgCI6NvB0vydA8xxKAVFE4yBd81hjg0i9Mu36CAgftAE01WqOf1cgfW57LrcVTRQJUC2Eg0U0cgwY7MAAFZbDfJBhpOvZFLUv1+GOHrlR4r7BNB5MkmHsuPAfOCeHCVLCPcHlIdO3xMdyKYkevKs5tB5hOjfOsD1PDqMNPrzJ0wyI7JTvlCqMgeeq9Q4EJe6ubZK4aHuWccQyCwiOzRuIqp6bJsaCMh0dyKfgcFtNpnb/xDxAN8D1Mq/pDSkxuPDizgLLA9U4N0t7oaWCP6NlaGAethc+n57RkQP6V+U90qJq6bDtqyJv3kGa3e2/7Wvy7X255fscVZEsQLDVDbt6sRfQ4tOnfseuEtFvcEft36XR01NALYVhS6iccc5IXFujXqkbBsGJMIw3VvW9Dc6Db2GGg6Al8oQx2NLcTe+6RNsr+77xYQSeHmeTi9xsVhAXJ7Tu6y3CurA/tpgUTL+XCJh0wKsk2JpW6fhiA=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700016)(1800799024)(82310400026)(11063799006)(18002099003)(56012099003)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	i9GCGalELwodfyrDJELNnb7knv11eIFt74jaUn9S6si82AOYwCnifn+LlnVuBanUu1XV81plCdXouvAXf8trqU4lvMcXVsSnoRiL3ZpNx0bqJQjsOYvcNCyT2ybOvXrKtHAXgvVTSH/KlwSaulonioOiFi5r5FM4dFXUye+6pZfAh0xaB9oeGZd5HEPlRfOKjKKaFIFviXLwuNnbLZhknIN1ME5qR2mD311Q5dbdR77kus7LB6wVbBRkUd8IYvFcDvXNe+xvc+D0lpcp4FqoRHY6d3ht0ReLd29PdJOu7VkEVCwvaUewXSoQWqZ8I20WkwSUyOvM0uQtYNHrWWxBgLvgop1rkjFlwWiJ2WeTQSrVdbh51vMftubawVjxfc2jdx1zq9KWtnw8ZXAYsR1NSc6QOFKs9H7B5j29ThSrxCt5e5A7kkmw1DSGQbiSb9El
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 18:20:12.4745
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75056861-91ea-48a9-2f0a-08deb5d34480
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004687.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7541
+X-Spamd-Result: default: False [1.34 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37727-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_ONE(0.00)[1];
-	GREYLIST(0.00)[pass,body];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[trishtaylor4521@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_NONE(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NO_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,mx.google.com:mid]
-X-Rspamd-Queue-Id: 72BCA583A12
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37728-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[radhey.shyam.pandey@amd.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[amd.com:+];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:mid,amd.com:dkim,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: 0CA1458394B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Dear linux-usb,
+This series tightens TI TIPD (TPS6598x family) bring-up ergonomics and
+cleans up register bit definitions:
 
-We hope you're doing well.
+- Log vendor ID read failures with I2C return code and register value so
+  boards with wiring or address mistakes are easier to debug at probe
+  time.
 
-Attached to this message, you’ll find the documents you recently requested. If anything is unclear or you need help understanding the content, please don’t hesitate to reach out to us at 810-884-5211.
+- Treat operation without an interrupt line as a normal polling setup and
+  log at debug instead of warning.
 
-In addition, we’re happy to share some good news:
+- Name TPS_REG_POWER_STATUS connection/source-sink bit masks and use
+  them consistently with TPS_FIELD_GET (no behavior change).
 
-You’ve reached your 1-year membership anniversary with us — thank you for being a valued part of our community. We’re also celebrating 20 years as a company, and as a gesture of appreciation, we’ve applied a special renewal offer to your account.
+Changes for v2:
+- Extend commit description in 1/3 patch.
+- Move to _dbg() for missing IRQ message in 2/3 patch.
+- Add Heikki Krogerus Reviewed-by tag in 3/3 patch.
 
-Renewal Details:
-- Service: Identity Theft Protection
-- Account: linux-usb (ID: UID294495)
-- Term: 1 Year
-- Renewal Rate: 646.74 USD
+Link to v1:
+https://lore.kernel.org/all/20260513182850.165349-1-radhey.shyam.pandey@amd.com
 
-Your membership has been automatically renewed to ensure uninterrupted service and protection.
+Radhey Shyam Pandey (3):
+  usb: typec: tipd: add error message for vendor ID read failure
+  usb: typec: tipd: demote missing IRQ message to debug
+  usb: typec: tipd: name TPS_REG_POWER_STATUS field masks
 
-If you have any questions about the documents or the renewal, we're here to help. You can contact us at 810-884-5211 during regular business hours.
+ drivers/usb/typec/tipd/core.c     |  9 ++++++---
+ drivers/usb/typec/tipd/tps6598x.h | 10 +++++++---
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-Thank you again for choosing PayPal. We appreciate your trust and support.
 
-Warm regards,  
-The PayPal Team  
-3553 Londonderry Ln Roanoke Va 24018 USA
+base-commit: 1a2ab0feaa23147e347b4d4cb79cb3fc392118eb
+-- 
+2.43.0
+
 
