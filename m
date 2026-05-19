@@ -1,178 +1,268 @@
-Return-Path: <linux-usb+bounces-37739-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37740-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2MGlLjzDDGqJlgUAu9opvQ
-	(envelope-from <linux-usb+bounces-37739-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 22:08:28 +0200
+	id AHNsERfODGpMmQUAu9opvQ
+	(envelope-from <linux-usb+bounces-37740-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 22:54:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 411955847D8
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 22:08:27 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC13D584EA7
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 22:54:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1E3673090D9E
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:02:56 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CDA2D30524A9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A08293B8948;
-	Tue, 19 May 2026 20:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="b61OS4N4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7313C09F7;
+	Tue, 19 May 2026 20:54:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-oo1-f78.google.com (mail-oo1-f78.google.com [209.85.161.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2D2369D67
-	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 20:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779220974; cv=pass; b=Cb5H0kjwj8hc1HYoAv7PPCUl9QIOwf++KLK7Cnt3Sf8cKN4KYiKWooE2lJpSFdqV1pLlQiTsm0OcVACl+KYgIs8hFUXWFyt/hwseznuuFtdF4tYchGk7dJjf8ydNzEMEirW9aln2ciEu/HxLrB93e4bgRhaMCs5aNbymHmkvIz8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779220974; c=relaxed/simple;
-	bh=WIJ+j7SzrZVw+7zCthbiyNJd4eCo2uB2kaOxP5VMNhw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I9zQ7B7GzPkn4O5n11c14VRaEzixB8Nq+1h9UfpzSo4ma3OfX6sQuU1Pr/m0EgYE8/gOpJ+QbmR0qAUFuc7EkA4ImhblvGCd6RYvxZYJFI5i9vUzvzX1kB87tmgrv+OY+8qRTgjfc91kI27kzgV2XExyVDP+ZjCuKWjzz+gtV4c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=b61OS4N4; arc=pass smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-36936dcf19dso1887398a91.0
-        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 13:02:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779220972; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lQKJaMFrf1Ul1ixK5msLgKH0emZF0aLrSSuLTz4YFrumDv1Jksz8VTAcilzEmj/60w
-         YCN9hDliiGIRe/LlbSxmNNN1xK3MGY8NrfpDvPuXet/Op5a4YKrVtkrUYjvVF2SNuWoH
-         q4M8tky4cLqsSvMPtvmEPvG2hOUPJpzYWSnJhglm6B2Hr5cAh9U/N1RsBmhBs28bXrad
-         I22jH7MwsbjmmqJGCoL2fgg7nxWbwZYGLyMZpaG/FwHO3IVWI7gtzwzFWIp2JJr7Vbgo
-         g29hGwBqoF5q3qsPjSX6dJ7I+h69t3emTkt3CPg3dq+EIVSlxe9AjpyzmEweUvy2tyE5
-         W3Kg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=mqWgtavonb1xBohBQoh0lZ7/NXsbFMlc95RbQSJM8/w=;
-        fh=TdA6/7x1xdw4RBSkJtvSpojpIff9RX3pZ/ghIz+ETfA=;
-        b=MWPSbFNlodYD1z2nTRHl5+QREEZ6TxlqhTqmkhCUrjyr1nFGJkZqnm8VF9vBiJZS/U
-         QrjwiuY8oMhQcpN8HofOAVuNBC0yumG1xx0JvY5HN41H+XeFj1ubtQlC+dPa6tmR4O9s
-         K9ZTSZTU82l6B7TXmg51O+D1B1bZeORzX5UeLt3nLu9+rzMmjv9q5YC/z2i11B1e4VFV
-         HCZEBUDqeWb1J0WtkjZqYynCyLDrwMwh4d3jDN6e8k1ExEUeEP5HaXcv9Xb0mcK5xeeE
-         Z5jZSQZO1D9FbHiZ5UXLrokk53TfuZ8KFaZY9F398fxOhkV0qtZLPybjrWvv4HexyUdt
-         GdVA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1779220972; x=1779825772; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mqWgtavonb1xBohBQoh0lZ7/NXsbFMlc95RbQSJM8/w=;
-        b=b61OS4N4pMV/rljoZnPrG06Y3mSMNzgUoUPwUgVMU0ekimBfIaQVlNdMb6AVZii4Sa
-         QKN53lVcBdr2V6JXxi1X1DmmIbNvu2pR+4yRMzj8pvbPEZ/xeBixr6Hjdn3AfZVas7o7
-         B8xbOOlyfzouKY+GUaMoj2/B2OctzKsLLD9bE=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C5D3B3C00
+	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 20:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779224079; cv=none; b=iEDv8dXEIcNhigyWt89MMzStbLWW9eogqteMlgb5ePFkVIgvCnLTLJ+iOVWRbBexLWV3L4qpINCyZEJqqGZVaXiACSOTB/+11dw9BCjDM0uW7acFbGZYFTaaC3IPoT+JxOacn5OavEAt/Hi/vOJzanlyZ2clXgGPOG3FpsETzbI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779224079; c=relaxed/simple;
+	bh=5orERCPR94P4GyvdipDdT2Qc446fN78WzW8u0jBI7w8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=fWpkeI8sMYPgrnl8v6Lhf+RdoH07wJaoZs8EInsjopnm/xt+6GrXhwA+yLKpNNkUIwtL9SM2lUdv4Wu0g5K1vQeaLNyLBUqYIrzp9JuFhFOUWg8NKqpoIs/o0ZFR6CvtNv6C10MI4mpnBf6ZUVH3Og0SCVbNq8TlTMhdt66sRgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f78.google.com with SMTP id 006d021491bc7-696133ef271so11487051eaf.2
+        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 13:54:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779220972; x=1779825772;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mqWgtavonb1xBohBQoh0lZ7/NXsbFMlc95RbQSJM8/w=;
-        b=KLMgY/3HduBBbPIp5+kPReBpZjP7PzuUlw2LncBSYsLlN6M69wD8zU34PaoOAEn9db
-         vx2/hAfu9rvi6XUFETDhn7awlr+I9w4cwpD6SB4ZE7+JERmfmFoaWJEiEbQ/h2hlx1gQ
-         rZUI8DN50fXKgcMtG7KFyc+PhU/F02z88g0xD04IVyan7MV55n5YB3BRxOLGe9MB4oF1
-         gkAHRoAFM32l8jEFv7cYaGqV7diFTdHkQXJeDZZTv064Ra/GmkHyfvlMmGLAdbNksUiS
-         193Za9dTprT2SwSQlhr9ZkVmTP4fWadoPVkUNyPBRbju2LxgDNUeNV2QCznn4hIyj7zr
-         D88w==
-X-Gm-Message-State: AOJu0YxNmD3cpHrizIzBnTs7HTlk6HE4gG9+OQbzZdzc+XXECwb1qyky
-	IglEjsCn6Q61sSoMAPKd4jF3i1OcXXi+2vo+Llid1Z15rHf60hjHB6kwcOhbmYyWZ53Ts67wuop
-	Wpxi8LSB8WlYRYJCe8cyBtTqIGduINRYR4Oylxsl8
-X-Gm-Gg: Acq92OHytWt7qQoOPKXUhueq+6yoxgxEFA21IYM0mlJQqevQ5o2hJrkbmTf3LpLLUG/
-	LQnEQF1P0Pd38RdBHCu6YrPz1y0XFKkYbGehWZ/jHmJV3s0a56B8jeXKDLS1JiCNhkKlUrn3i9W
-	Z9geHwHYrnWhrf7aiRaL/AdrxuumudiDAOu1JOaeV/tpwKnu3U6tFR29JHMsNxFmxuw2puqZSMU
-	lssIB0bhL61a4g+XKpW86wCvv4HMU/KsZUEPuHKNESp22U4JwUjii5cr2LR5nqJksixxu67hpBo
-	6J5JPVU=
-X-Received: by 2002:a17:90b:1c0f:b0:366:4782:139a with SMTP id
- 98e67ed59e1d1-36951a6c339mr19943112a91.17.1779220972406; Tue, 19 May 2026
- 13:02:52 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779224077; x=1779828877;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e1EzQ7bPiZtPNkak3eNY+8iKt0ZCGNr5VRResvq9lqs=;
+        b=ni7itBp6TWGu0BJ7KmDmknmCR1EAWVf4wXtN9BJcfWPtEn5WttkhL9AR1SShmeZkie
+         kQj2x4iShyFxUyWymdC6Kc2gwCpgX2A/HsX7MsxmmUznbmjPi/ZZ/RLGTDwQrCZzR75Z
+         p6zRHUdUBUVBNK7il68UL9MXGoCbFc0D5cE/NgWVvhkj81MoUbVSjPyciMh4RKFD71ZM
+         C1OhvXrFt/QjQ9/OSUwyROeoRxbIWZxGEzDCJZSfm9vJoX0E5nHUQRbV1FQQEUaMuB5F
+         BWtfwDGssrqmBKPg4EctwdMdhf6sNj1OV8JvK7AYPwUUwnd0T9TLJJ3naGjOIB3L6yZi
+         qAug==
+X-Forwarded-Encrypted: i=1; AFNElJ/PaBB7gwUR9XXwQm7vkUpNyt80QOcq6JtIsGr6Lo2F7moqiZWtxy6NO3eFg/WBeZ+qiN7EqA+J8QI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAQuHecYpQU8xXrUKGpnVNO1gVdTq6NZqB5p/Y5DERGAUxSD8B
+	qjYOrKhSTkCcTEC+6nADJARaG9Hoq+RAflkg6ASmjrruUSdtYN47MxwPnrg/S5OKI2VMA3aWshM
+	s5yNNEjx75dmwY25K4GWlpgAWqb3FUWV7aw3C3rAtUFhEZfejprB/2JBgAOE=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2026051347-clustered-deflected-9543@gregkh> <2026051350-reacquire-sculpture-4244@gregkh>
-In-Reply-To: <2026051350-reacquire-sculpture-4244@gregkh>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Tue, 19 May 2026 13:02:36 -0700
-X-Gm-Features: AVHnY4J-uPC7UedCsxNOPs7U35wzpyG84O4lFz2Uy0n1uVoE1IldM25unTpehjE
-Message-ID: <CANFp7mWHf1TUg20KoV7QAym=LenpAUSfr=P8gyamsHJog22aig@mail.gmail.com>
-Subject: Re: [PATCH 2/8] usb: typec: altmodes/displayport: validate count
- before reading Status Update VDO
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, stable <stable@kernel.org>
+X-Received: by 2002:a05:6820:f07:b0:68a:f494:e8fc with SMTP id
+ 006d021491bc7-69c9436a217mr13168598eaf.33.1779224077508; Tue, 19 May 2026
+ 13:54:37 -0700 (PDT)
+Date: Tue, 19 May 2026 13:54:37 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a0cce0d.170a0220.3cbd30.0138.GAE@google.com>
+Subject: [syzbot] [fs?] [usb?] [input?] INFO: rcu detected stall in
+ __fsnotify_parent (3)
+From: syzbot <syzbot+27ce6cc06c1311c152f5@syzkaller.appspotmail.com>
+To: amir73il@gmail.com, jack@suse.cz, linux-fsdevel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-0.36 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=59da38148f3a3d24];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37739-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,suse.cz,vger.kernel.org,googlegroups.com];
+	TAGGED_FROM(0.00)[bounces-37740-lists,linux-usb=lfdr.de,27ce6cc06c1311c152f5];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,goo.gl:url,storage.googleapis.com:url,syzkaller.appspot.com:url,googlegroups.com:email,appspotmail.com:email];
+	REDIRECTOR_URL(0.00)[goo.gl];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[abhishekpandit@chromium.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[chromium.org:+];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:email,mail.gmail.com:mid,chromium.org:email,chromium.org:dkim]
-X-Rspamd-Queue-Id: 411955847D8
+	RCPT_COUNT_SEVEN(0.00)[7];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: DC13D584EA7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 13, 2026 at 9:14=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> A broken/malicious device can send the incorrect count for a status
-> update VDO, which will cause the kernel to read uninitialized stack data
-> and send it off elsewhere.
->
-> Fix this up by correctly verifying the count for the update object.
->
-> Assisted-by: gkh_clanker_t1000
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: stable <stable@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hello,
 
-Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+syzbot found the following issue on:
 
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
-/altmodes/displayport.c
-> index 35d9c3086990..263a89c5f324 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -405,6 +405,8 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
->                                 dp->state =3D DP_STATE_EXIT_PRIME;
->                         break;
->                 case DP_CMD_STATUS_UPDATE:
-> +                       if (count < 2)
-> +                               break;
->                         dp->data.status =3D *vdo;
->                         ret =3D dp_altmode_status_update(dp);
->                         break;
-> --
-> 2.54.0
->
->
+HEAD commit:    6916d5703ddf Merge tag 'drm-fixes-2026-05-16' of https://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13437cc8580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=59da38148f3a3d24
+dashboard link: https://syzkaller.appspot.com/bug?extid=27ce6cc06c1311c152f5
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123e8596580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/637181391a5c/disk-6916d570.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bfbefc8a3671/vmlinux-6916d570.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a419831b32a6/bzImage-6916d570.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+27ce6cc06c1311c152f5@syzkaller.appspotmail.com
+
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P4963/1:b..l
+
+rcu: 	(detected by 1, t=10506 jiffies, g=15565, q=1900 ncpus=2)
+task:acpid           state:R
+  running task     stack:22856 pid:4963  tgid:4963  ppid:1      task_flags:0x400040 flags:0x00080001
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5388 [inline]
+ __schedule+0x1295/0x67a0 kernel/sched/core.c:7189
+ preempt_schedule_irq+0x50/0x90 kernel/sched/core.c:7513
+ irqentry_exit_to_kernel_mode_preempt include/linux/irq-entry-common.h:476 [inline]
+ irqentry_exit_to_kernel_mode include/linux/irq-entry-common.h:547 [inline]
+ irqentry_exit+0x205/0x7e0 kernel/entry/common.c:164
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:lock_acquire+0x5e/0x370 kernel/locking/lockdep.c:5872
+Code: 05 3b a2 26 12 83 f8 07 0f 87 d9 02 00 00 48 0f a3 05 46 41 f3 0e 0f 82 a4 02 00 00 8b 35 ce 74 f3 0e 85 f6 0f 85 bf 00 00 00 <48> 8b 44 24 30 65 48 2b 05 dd a1 26 12 0f 85 ed 02 00 00 48 83 c4
+RSP: 0018:ffffc9000342fb30 EFLAGS: 00000206
+
+RAX: 0000000000000046 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8defcf06 RDI: ffffffff8c1c3a00
+RBP: ffffffff8e7e57a0 R08: 0000000086db7919 R09: 0000000000000007
+R10: 0000000000000200 R11: 0000000000000000 R12: 0000000000000002
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ rcu_lock_acquire include/linux/rcupdate.h:300 [inline]
+ rcu_read_lock include/linux/rcupdate.h:838 [inline]
+ dput.part.0+0x4c/0x570 fs/dcache.c:971
+ dput+0x1f/0x30 fs/dcache.c:968
+ __fsnotify_parent+0x694/0xca0 fs/notify/fsnotify.c:242
+ fsnotify_parent include/linux/fsnotify.h:96 [inline]
+ fsnotify_path include/linux/fsnotify.h:113 [inline]
+ fsnotify_file include/linux/fsnotify.h:127 [inline]
+ fsnotify_file include/linux/fsnotify.h:116 [inline]
+ fsnotify_access include/linux/fsnotify.h:425 [inline]
+ vfs_read+0x486/0xb30 fs/read_write.c:578
+ ksys_read+0x1f8/0x250 fs/read_write.c:717
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x10b/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7feac7fb3407
+RSP: 002b:00007ffc6dd51e00 EFLAGS: 00000202
+ ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00007feac7f29780 RCX: 00007feac7fb3407
+RDX: 0000000000000018 RSI: 00007ffc6dd51e50 RDI: 000000000000000b
+RBP: 00007ffc6dd51e50 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000556e2f8031e4
+R13: 0000556e4a9f2380 R14: 0000000000000007 R15: 000000000000000b
+ </TASK>
+rcu: rcu_preempt kthread starved for 4298 jiffies! g15565 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=1
+rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+rcu: RCU grace-period kthread stack dump:
+task:rcu_preempt     state:R
+  running task     stack:27992 pid:16    tgid:16    ppid:2      task_flags:0x208040 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5388 [inline]
+ __schedule+0x1295/0x67a0 kernel/sched/core.c:7189
+ __schedule_loop kernel/sched/core.c:7268 [inline]
+ schedule+0xdd/0x390 kernel/sched/core.c:7283
+ schedule_timeout+0x127/0x280 kernel/time/sleep_timeout.c:99
+ rcu_gp_fqs_loop+0x1a9/0x900 kernel/rcu/tree.c:2095
+ rcu_gp_kthread+0x179/0x230 kernel/rcu/tree.c:2297
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x72b/0xd50 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+rcu: Stack dump where RCU GP kthread last ran:
+CPU: 1 UID: 0 PID: 5978 Comm: syz.1.18 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+RIP: 0010:write_comp_data+0x40/0x90 kernel/kcov.c:246
+Code: 02 12 a9 00 01 ff 00 74 1b f6 c4 01 74 07 a9 00 00 ff 00 74 05 c3 cc cc cc cc 8b 87 d4 16 00 00 85 c0 74 f1 8b 87 b0 16 00 00 <83> f8 03 75 e6 48 8b 87 b8 16 00 00 8b bf b4 16 00 00 48 8b 30 48
+RSP: 0018:ffffc900024af648 EFLAGS: 00000246
+
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff81fc2bcd
+RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffff88805a5e0000
+RBP: ffff8880b8443320 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000003
+R13: ffffed1017088665 R14: 0000000000000001 R15: ffff8880b853c5c0
+FS:  0000000000000000(0000) GS:ffff88812446d000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f8c6e1b56e8 CR3: 0000000059a89000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ csd_lock_wait kernel/smp.c:342 [inline]
+ smp_call_function_many_cond+0x5ad/0x1700 kernel/smp.c:892
+ on_each_cpu_cond_mask+0x40/0x90 kernel/smp.c:1057
+ __flush_tlb_multi arch/x86/include/asm/paravirt.h:46 [inline]
+ flush_tlb_multi arch/x86/mm/tlb.c:1361 [inline]
+ flush_tlb_mm_range+0x45f/0x16f0 arch/x86/mm/tlb.c:1451
+ tlb_flush arch/x86/include/asm/tlb.h:23 [inline]
+ tlb_flush_mmu_tlbonly include/asm-generic/tlb.h:509 [inline]
+ tlb_flush_mmu_tlbonly include/asm-generic/tlb.h:499 [inline]
+ tlb_flush_mmu mm/mmu_gather.c:423 [inline]
+ tlb_finish_mmu+0x3fe/0x810 mm/mmu_gather.c:549
+ exit_mmap+0x454/0xa10 mm/mmap.c:1313
+ __mmput+0x12a/0x410 kernel/fork.c:1178
+ mmput+0x67/0x80 kernel/fork.c:1201
+ exit_mm kernel/exit.c:582 [inline]
+ do_exit+0x8b2/0x2af0 kernel/exit.c:964
+ do_group_exit+0xd5/0x2a0 kernel/exit.c:1119
+ get_signal+0x20ff/0x2210 kernel/signal.c:3037
+ arch_do_signal_or_restart+0x91/0x7e0 arch/x86/kernel/signal.c:337
+ __exit_to_user_mode_loop kernel/entry/common.c:64 [inline]
+ exit_to_user_mode_loop+0x8b/0x4f0 kernel/entry/common.c:98
+ __exit_to_user_mode_prepare include/linux/irq-entry-common.h:207 [inline]
+ syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:238 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:318 [inline]
+ do_syscall_64+0x706/0xf80 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f7a9eb5d68e
+Code: Unable to access opcode bytes at 0x7f7a9eb5d664.
+RSP: 002b:00007fffdcda5708 EFLAGS: 00000246
+ ORIG_RAX: 00000000000000e6
+RAX: 0000000000000000 RBX: 000055558fc36500 RCX: 00007f7a9eb5d68e
+RDX: 00007fffdcda5760 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fffdcda58b0
+R13: 00007f7a9ee15fac R14: 000000000002bbe6 R15: 00007f7a9ee15fa0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
