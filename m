@@ -1,160 +1,179 @@
-Return-Path: <linux-usb+bounces-37667-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37668-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4EEpCkQpDGq0XwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37667-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 11:11:32 +0200
+	id KOlmKCEtDGq0XwUAu9opvQ
+	(envelope-from <linux-usb+bounces-37668-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 11:28:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F3E357AFB7
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 11:11:31 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36B2157B45D
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 11:28:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 048653068F24
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 09:02:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9C7BA30C16EB
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 09:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DF483EFFDC;
-	Tue, 19 May 2026 09:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DFB838838F;
+	Tue, 19 May 2026 09:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Q9rXVWFq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjEFKy4L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55EB13EF0BB
-	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 09:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779181295; cv=pass; b=kQyETOAc4gTMZOzzbNCgbfeuGL9XwSpBc7owWonok5sY76mWw4zeuNDWbhEPHk7WL0/WZzWC/9Fe9wT697dcrx53kg343x5r+PErL+BLTIaUQ3Alid2qEodyGy2SSn0mBQ05KJjx6Tw8C+7bB7lHmfUKj6R35/gtn3uzyT1Pb2A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779181295; c=relaxed/simple;
-	bh=3MLNRSB6NxBQkDdihHMzZ+Q8AFRXQzwKZuUNMUGJ/1A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ppyWzTixk/eqUTlpiGWmfwDSI4/kmP0moAprLTnqu18vPC6efFn1DIp7tr18FEHLEasxzYdtc3kl42XSTHEIYUm3KliQdoC/wkihQk+etnh7WlSX0zQnJ/EfHTbXzick0PldfPQdlf695YkiyGZ/sfgI46E1SpEPrDwdo0MdV9k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Q9rXVWFq; arc=pass smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a88de2b52eso4444796e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 02:01:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779181292; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CBWW+ERpqlKhXtvsZw7KuS45f7D83hT4ptBayG6xtDAjQ8TyBrY0EW7UsGMJ34ZJIm
-         xicooyxPXY9CKZtBZgTkK92cUp2atBq5DLgdfJhQaAuKBPs9aYvltZJBYIYa1iQUhmnN
-         fkJxL/N4li++hjZ6TUaA75nV/P/UtdW9UOyrjdSi7wvJR4bG/HzfGXfcnghDF6rKlnIb
-         uTD7iqxZeoDaL2N6MwUiPxSrOtcGWHsD0816D+sE7QGWBE3YIvg6rmQTY4SG8rRklfPG
-         MiTdrQNpmoI1gmRFLnoMV0SeCKNb7w/IaVUHo0yEXl0G+86+acduTSh8Lzrh7STP3lIa
-         YmaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=s8DrNQfN1ThqOW342Bv7RE4jPX0CtuKlGYtp32MlFk8=;
-        fh=h58VIekmaL8rbslu4NJOnLJaWTdyIILM9E/ldynpp70=;
-        b=i1vjq+KT9j9VQI07AC+CWHt+oZKRrr+pHXADjmLU0KzwyLY8TLyyC2KW5PQLwzyhta
-         dbcah5F5VskmgTD5GAuA9ixXvN+/Nbb6vL9T729wG56hVWGiOrA8ZFEn6Dps50vVNCVD
-         fvCGOtW2JEqgcVY6vwJykaB1kJLGsXZVsnDaxt3nAaSIRmyqiwQji/pXsB6ETXq3Suic
-         iLD736rbLpSfNzsVobvgX2wGLZ6YVvJgIf0gJ/Q2S43XLPvEGsj8MuzZk4rwKEkAgH76
-         578yhq/qDpZ8T55mlRzMKLW1pzUOFEPPT5Zw99RbkjC5xf13VwlRSMVvEL5FsPsZOIwp
-         K4yg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779181292; x=1779786092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s8DrNQfN1ThqOW342Bv7RE4jPX0CtuKlGYtp32MlFk8=;
-        b=Q9rXVWFqojFhyRu8ClyisxJZfKdwcz5eGHqSeO3CzIaAgAP6BipC5M7V0u0oy1qkOF
-         wqcZGAXhZhktXxwnYl21nqppFNj44F+PRUyJRaxB6TvXp1fEouc8y5seg02876Scc8j8
-         SaNclbSiiKjnf44mq4fZTwxcitifVRbXB5eDLFUbVIh8nqZmOjh1W9rLSYbEY2EwZEP+
-         oWoCidZrlsiVy3Dflu2MzQ+N6BxQZi7+figZn0hpz72ftWfycPwVhgfvVSerYZj9B7gw
-         Ly924HDg/uFm5VbnI4z2tt9oSsKzx7H4IpuDB41DQEoqP05UPzevkBOxfO/F+vlDfgcX
-         C/3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779181292; x=1779786092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=s8DrNQfN1ThqOW342Bv7RE4jPX0CtuKlGYtp32MlFk8=;
-        b=nBokmyNG5qL8TAsRnBi71V8c5dFgnafnvIwhcO6p3ZQf2WI+1K4HN4QmXpHfq4kDpN
-         SzLiiwY9G2WxLA/qe2HeEAZbpuqikzDqNvZQhXUIp0C76xUrbQ2t5yuEQlqHGeehE1Ie
-         9AGwfec/gQKvOzKe+aoRvNedQYjP/njvcVD4NbncN8XN+77mQTmUAytk5ohyzxxFDjWa
-         4hopxsZaZ7m3yrArTUTaInT2t/TEJ21k4vPWUCjM2YFdpuzXPfc/4BO939lprrPX0iFR
-         pEXb7RWKbzB3Wt/t48sGHL7FzIAcZYXmFNgKvhJYKvvq1L+hOZFD8HPX47Sn6IaJMNpn
-         5gMw==
-X-Forwarded-Encrypted: i=1; AFNElJ9MCi7l4GEB/JB3axe+wenOp74kJGZ4yXOAhHVe1Ba0N33tpLiG2F3m1GIkCm7vkQF+yIfx0Kq1vwo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8JNTAiRhbuZJgt9VEvAjk8jjtJBPn4PY58m0hTVDlgCfQth0k
-	739SMVTnzpkQtoQeAiHi9Zx2Uv56vNe4HMuAqe5WcCpFcZ2iQ1lot7tPE0gLDQyGnm9fk4c4CZu
-	1aJ0Kh/+Xo65LK8TUG1wWzNa4iGT6YjNoOvb3EjgbJA==
-X-Gm-Gg: Acq92OHSiyLyROeoRAr+8J4/koTuwzIbcwa8aJ1gKbB2ccQACYRN+3OYwiT8jXUBZyC
-	QFOdvRhTsDsLIUNNxyLqZTx5DCXMiEoj5885HlKrvLflzBLhoxufC1FRW5ZQgcSDWZy5GIVQHI8
-	rjBadPYiJ9+opxnIDq3BwdaovDxmc37JWdMDLrFKmWbnmnGJXdLiP2zn727xIwUOXlOb98fV+5+
-	sJ3v6XitVV1V3DZzP3znSqRxSMSOnxNRCgwt4/2V+2oqOpdoWai910luWkbVLEhRZCW0VZ9gfy0
-	mgJQMkZM
-X-Received: by 2002:a05:6512:6389:b0:5aa:144e:7cb0 with SMTP id
- 2adb3069b0e04-5aa144e7d05mr3876561e87.32.1779181292516; Tue, 19 May 2026
- 02:01:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89AC63F0740
+	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 09:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779182068; cv=none; b=UbDIhb4G5+LiT5jpJD9q4utTnm4IUf8iDN94LN95Y8eLJSdQ+oJO4Evlluts6iW6Y+SWURRbEy0B49h1zmA6FXMYB4jN/CREBFLBk1sr1BfRRn5TYN14OD918ma9wjnBnM+bBstEcRfvnlqmR2c8Y103phTogKI2278Z2cYGE5k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779182068; c=relaxed/simple;
+	bh=L8sc6E9xyapZCazBMP7klCQkllhyq0Y38suBvDd5WGw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rXEsEu9Oscva9DzslPvV0YVTH6gXeAa6hmcz8QCWz9H5/l/OtBxcN9hFNyk7BDopCfg/DT4yW2KubnVRORo5cV5xA6VAh8W+0ABsDtH9G5j2IQCLDkhHKoZOmQbjvILN3vwRrm1Twuujc6LaZyNBCq9TFxfuFwpXH45D+kxeXjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjEFKy4L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 49609C2BCFA
+	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 09:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779182068;
+	bh=L8sc6E9xyapZCazBMP7klCQkllhyq0Y38suBvDd5WGw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=HjEFKy4L3kbvBhdovdBuWP3Z/SCKmcJqHilquJJ9g9b+TrHP9f8Q9HDO4MJkiLO9q
+	 FbhTbESFi2KkremxNaA9kpxIwVQPy1MHYuBLO6NepE4GuP+R3KmvpH7Zpa9/Dq/6Sw
+	 Vq21K6jcxx89Hio2cZlS23SmtWtEA2n2nmNcC1ea2CdLdEcRVLj55tqNsxeUKQifLd
+	 xVYsyriQAGnP5xL6kViUobNSSQA6PtkKysg4rWP9W6UNeMG4AOFTuTailkQnDDVHki
+	 wVprFHsKbYaeH3I+PoUeIcxpQG1zDEDzJpIxba9OMfNFJ4UKX8wmR0uOWm8W6jnX9E
+	 r9ioCzC0YXd+A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3F589C53BC5; Tue, 19 May 2026 09:14:28 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 221073] xHCI host controller dies on resume from s2idle on AMD
+ Strix Halo [1022:1587]
+Date: Tue, 19 May 2026 09:14:27 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jase_harley@protonmail.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-221073-208809-Tr6gg0LyLH@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-221073-208809@https.bugzilla.kernel.org/>
+References: <bug-221073-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260508143853.330151-1-marco.crivellari@suse.com>
-In-Reply-To: <20260508143853.330151-1-marco.crivellari@suse.com>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Tue, 19 May 2026 11:01:18 +0200
-X-Gm-Features: AVHnY4Imo4Mfyytd8umJpmcnV8TJoXQWuPt7hZ-iOMCYoIjT-4rVAWPFXj2VqMw
-Message-ID: <CAAofZF5xeDSV=YBQckRSKVgiNiM5RXshnR19DVOYmwgNxncB3w@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] usb: typec: ucsi: Move long delayed work on system_dfl_long_wq
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Michal Hocko <mhocko@suse.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37667-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linutronix.de,suse.com,linux.intel.com,linuxfoundation.org];
+	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FROM_NO_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
 	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[marco.crivellari@suse.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,suse.com:email,suse.com:dkim,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 9F3E357AFB7
+	TAGGED_FROM(0.00)[bounces-37668-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+]
+X-Rspamd-Queue-Id: 36B2157B45D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, May 8, 2026 at 4:39=E2=80=AFPM Marco Crivellari
-<marco.crivellari@suse.com> wrote:
-> [...]
->  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+https://bugzilla.kernel.org/show_bug.cgi?id=3D221073
 
-Gentle ping.
+jase_harley@protonmail.com changed:
 
-Thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jase_harley@protonmail.com
+
+--- Comment #43 from jase_harley@protonmail.com ---
+I can reproduce a very similar issue on a Lenovo ThinkPad T14 Gen 6 AMD / R=
+yzen
+AI 7 PRO 350.
+
+I do not currently have access to the device, so this is from notes/memory
+rather than freshly collected logs.
+
+Hardware:
+- Lenovo ThinkPad T14 Gen 6 AMD
+- CPU: AMD Ryzen AI 7 PRO 350
+- BIOS: 1.13
+- Internal camera: Chicony USB camera 04f2:b840
+
+Distributions/kernels where observed:
+- Ubuntu 24.04 LTS
+- Ubuntu 26.04
+- Fedora 43
+- Fedora 44
+- Kernel range observed: approximately 6.17.0 through 7.0.8
+
+Symptoms:
+- Internal Chicony USB camera 04f2:b840 disappears after suspend/resume.
+- /dev/video* disappears when the failure occurs.
+- Logs have shown USB resume failure / PM resume errors.
+- The visible symptom is the webcam disappearing, but the failure appears t=
+o be
+at the AMD xHCI / USB controller layer rather than a camera-specific issue.
+- The machine has also had hard freezes/lockups around power-management eve=
+nts.
+
+Workaround observations:
+- Unbind/rebind of the affected xHCI controller can restore the camera.
+- Forcing the AMD USB/xHCI PCI controllers to power/control=3Don before sus=
+pend
+appears to have prevented the hard freezes so far.
+- However, power/control=3Don has not fully prevented the internal webcam f=
+rom
+disappearing after resume.
+
+Affected controllers seen on this machine include:
+- 0000:c4:00.4
+- 0000:c6:00.0
+- 0000:c6:00.3
+- 0000:c6:00.4
+
+This may suggest two related behaviours:
+1. runtime PM / autosuspend seems involved in the more severe freeze/lockup
+behaviour;
+2. the remaining webcam disappearance may still match this bug=E2=80=99s su=
+spected xHCI
+resume / interrupt / MSI-X issue.
+
+I have not yet tested xhci_hcd.quirks=3D0x40. I can provide logs and test
+xhci_hcd.quirks=3D0x40 if that would help.
 
 --=20
+You may reply to this email to add a comment.
 
-Marco Crivellari
-
-SUSE Labs
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
