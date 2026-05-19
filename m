@@ -1,253 +1,178 @@
-Return-Path: <linux-usb+bounces-37973-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37722-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CPQwMtWqEWryogYAu9opvQ
-	(envelope-from <linux-usb+bounces-37973-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 15:25:41 +0200
+	id QPufEF2RDGp1jAUAu9opvQ
+	(envelope-from <linux-usb+bounces-37722-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 18:35:41 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 246A35BF07D
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 15:25:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99303582797
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 18:35:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3BC8F3016EEF
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 13:25:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AEEA6337B0C3
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 16:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F42396D14;
-	Sat, 23 May 2026 13:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C882407CC1;
+	Tue, 19 May 2026 16:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="xnydJeMP";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="dq+P+aj2"
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="e5fLmGgU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [91.198.250.236])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269C719004A;
-	Sat, 23 May 2026 13:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.198.250.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A25403EB1
+	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 16:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779542734; cv=none; b=Ajhi4kYxVcn5130zdlu1MtryYeAVJOx4X+B4DrKc8ZUtumPK/Z6PJhacNhZ+jNVTzUrDDKcHk46snROtNijYKMHW+BddxAK/e9FjK65Sp5jdYrhrD4ksHLxXi7kaCl2GIqZ/IL4a+hQN6YeaDhmF1/mLpO5FP+BobDTrxSHufF0=
+	t=1779207191; cv=none; b=ug23kkIw5U+ejy9qsiTPWxAJkW3x6ByoBxQNseZMv9mKQ1WzQ4ZST3M8zgPp8H2+Fs4X8dOz02UBHdCeXVV5qJgIMdONtyXOI4gFJtj08u+EzQgIFatdKAfUMUSuwhPg5UnUCC1nrTM7oUha7q7slAC58sb7xU13aCfw2bmK5Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779542734; c=relaxed/simple;
-	bh=NLQOYHcbX92Dt/Dad0zUJKi99mTFQaq6qBCN2CEOvt0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YaGOJ2NQ2FXz0j1fNJ1wKOSj/4BUJ8iLi80U5DNSR9oWkGfmC6E3S4SdCC7WaonEFamm/nXyLg+oWlxILmDTfmkR4Z+FFP85J6NinnrttNnikfrYO/DauEHBWezvPF+rWX1Fe/HIMBVvJ/7MCJx7AQIuL21BxF5wOj8rI5l9Y6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=xnydJeMP; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=dq+P+aj2; arc=none smtp.client-ip=91.198.250.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4gN2vY6PQnz9ygy;
-	Sat, 23 May 2026 15:25:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1779542729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tzVCnK4h+wlvOzvoQtfIVTCV8MGHm5StGNsgjrmtRbk=;
-	b=xnydJeMPTb76I9SESgJvRguAjSnaJnsOrJlKxP8cQ4r1VzieucL6/HQvzY3Iu8stTga5//
-	SCUtIMZieWKXN9csJw/3YZERCco1M8HuIycvv9u0SZFamQVWuc7pQs0wCugKCXYLvc+b+1
-	OQz2tInuiWUhE+ns5h2vAfTm81dQUIFEwnA9qrUeHKA8jlBRajHenCjRvhkNAejOUHj0k3
-	LGA5LML/am6XLCpO+fR6mA2ZO5BMYMWqDg1P6XeRf6HbEaMbPHNInhm8S5IqxbfZ1RLQo5
-	Gp0EabxDbpqsxhWGEaiYzdHsscYka8ksPrd4LbRip6qKrVDvaxbqyaAL/sDlww==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=dq+P+aj2;
-	spf=pass (outgoing_mbo_mout: domain of a0yami@mailbox.org designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=a0yami@mailbox.org
-From: Qing Ming <a0yami@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1779542728;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tzVCnK4h+wlvOzvoQtfIVTCV8MGHm5StGNsgjrmtRbk=;
-	b=dq+P+aj2E0RdVpYWi79sc7SpNR/Uz7m/o4Cfddzthw1ZwDPRTDFGDBmx3L6en3PaFTXnQT
-	U5l3CydzGCSilRmYKLYOJyDvpNSyjQ21HezP4UHdgFsd4Krh9rgfEBDxMvMCpZvc0KeLWA
-	xAP63xz46kxkLW7bkQ4y6MjO1JbuILBneYECHfDuujoUvaCHkv9ticx35TUXPwBlxIHyMa
-	tGEoNVq/F73FBYUafIfGbOFJhzH4lrItyc59d6KUwY5Un1gjHEnqkpBLK55cgTmlFN6RF4
-	qpTq1/b7NqYrlYW7kbI/gomKPmx6bLFBiEFcYCfSTcfFiXTM1OsqgS/S4abKhA==
+	s=arc-20240116; t=1779207191; c=relaxed/simple;
+	bh=Tsu5cKPksAu4kUFh/jfhEBoMEX2CMmo6MJSwHBEeyl8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MRXJZEKcgweb0CDMqcN5ERijz8eUAfzAiJMXoQ0unSJfEcFD/bNMKpqreps2Y18RmVg5E+iit7/ayQp8DxiJUrFLLLcrAH8U2DZcZ47Q1Tq++tGHLPQx9bX3pyX1FHPRD018p/8y9x480vsFy3odSQzLKlVj+2BNXyIaRphrYKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=e5fLmGgU; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so45082515e9.2
+        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 09:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1779207186; x=1779811986; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G1+0LhtkVZ2YlUVIyFVTEQ/H862T2lawBohbTrKQTc4=;
+        b=e5fLmGgU4mwwHacVX8p8DIVBpa6c5afiEBTp3I1QbjVvbsEAupcXz6NtlGyiLJ/EhB
+         ieNCaVpPvb5PRVmHBBHxoJlqzPBfgwagHDYFzDHSnNehev+EieijVdBPc5Wdjqn/Pyzs
+         WYMzCDsNE8x8FX9V0BF8u4AuiKV8wlTj5iUuMEg8s/Zphmnypp/WWDcINHx4Q/B5WcwR
+         +bTEcrmLQM0vlXeDTMyJ1Uj61HaExdYC7t9rawASscmb3sAZFdKl341mnOj9J4MphVTb
+         CBihULQpBA3KJnj8g5VlkDNnXkvwjz2Z/3JN7AuY/7xSuIk/KFzMDRoYEfxJS/y8Q7uy
+         whFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779207186; x=1779811986;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G1+0LhtkVZ2YlUVIyFVTEQ/H862T2lawBohbTrKQTc4=;
+        b=o2uZ0ywFQBiHk55aq4vHtukYxLo8zbZWHJ5edtZMDxOLF3id7auHDrCe6uranUxoJ7
+         fV4npZ2EdazjyK3plII54BD8xnwJaP03/LTINOKjJpKTgk/GTVraGmMjc0drf1tANTiy
+         LRsNhpDXf1PgSQsTlXjRvexMF2FHt/ATzOquDfEL+5U+fYjlj97OvQQA5ErlHQyAt9M8
+         MToMbvu2Muw49b7PtXJ+SgFvWXkycfVyrLak/QwXDxco2kcC/JpkqWjdZmj1j4M1Ih5t
+         Nh+DrTFV25mvSkl9ODlq9fuWNqnfadMtgKchvkf4ebu4erPU8TcOgwyT2Y1oQNaSPiCx
+         AXAQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+ODgV4lmpAyj85kx1ozNSbw9LlBx3HNmPdAdgJBn8ADw4Qm1qy8r/ukt5hGJmwR2/axnfzEH36crc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0HOBi064Rk7SaupyHnwEtTcDhjtANu1YPcw5h9NuJFZ2TTQ5W
+	e1pp93ektG/Wh8NKTwPqR9jZMyFfZslm4ZyXIZKG/mHSJfnoOkxY0aY72bTLKQztCuU=
+X-Gm-Gg: Acq92OG7FDLLNEfiqUkRHRRVH2ufGV0cTZlddhio9/esd7+P+UXFP13Mchj++V53uUj
+	0beyRH4hx0orDi5OSeWmWV7si+uukzNvx9jDvZ6NLkWODe70qShizk3m4F8kd++S/ua7L182Uol
+	8zhW0sTzcbOOilE8F0I0FjicXihgrIiGkX1gGugi41h66ADaShImiS2ZONzF5yJXurqWO2x3HDG
+	GRtIrAg469V970xt0HJvCMit+YakgE27IqaR7dWJz8QTZNXlAGykLigi1CGwEmuVx6clkEwRNYH
+	iqK7rDP5g8FHHJBkanEZuQrZse8H+WJtnYHS1jVwpQYdoOh+uYX0Z9Ze/ug2DnxAArnNU1oPYp7
+	FpriVFVSfY7RA3MlpfnmbKEBJO+RrfasWU4aCpZsSKH8YcqL66tbfHlWsP+vK0xVWuTVS6sjAO6
+	gzXFTJVd6VQqz/ROD31P+kkF+uaD0lJ9o6gUNkUHIeVNVUV6ihmBafGib3adBa3MtDQjX4Qw/HD
+	jdpuKB7Y7ybkUk=
+X-Received: by 2002:a05:6000:1ac7:b0:43b:498f:dceb with SMTP id ffacd0b85a97d-45e5c35e285mr33169620f8f.9.1779207186315;
+        Tue, 19 May 2026 09:13:06 -0700 (PDT)
+Received: from localhost (p200300f65f47db048a8dfcf61053817f.dip0.t-ipconnect.de. [2003:f6:5f47:db04:8a8d:fcf6:1053:817f])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-45da0a19c2dsm47725552f8f.21.2026.05.19.09.13.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 09:13:05 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Sumanth Gavini <sumanth.gavini@yahoo.com>,
-	Kees Cook <kees@kernel.org>,
+Cc: Vladimir Zapolskiy <vz@mleia.com>,
+	Johan Hovold <johan@kernel.org>,
 	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qing Ming <a0yami@mailbox.org>
-Subject: [PATCH] usb: gadget: uac: validate rate list length before storing
-Date: Tue, 19 May 2026 22:33:19 +0800
-Message-ID: <20260519143319.147494-1-a0yami@mailbox.org>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] usb: phy: isp1301: Use named initializers for struct i2c_device_id
+Date: Tue, 19 May 2026 18:13:00 +0200
+Message-ID: <20260519161300.1598095-2-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1761; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=Tsu5cKPksAu4kUFh/jfhEBoMEX2CMmo6MJSwHBEeyl8=; b=owGbwMvMwMXY3/A7olbonx/jabUkhiyeHh7mUq2jN3Wag/yFpkSJ+Dr+Z9WTUI7+uSf6UmC/i qEKw6xORmMWBkYuBlkxRRb7xjWZVlVykZ1r/12GGcTKBDKFgYtTACbSHMj+31NM+kHQ7I4Tl+Oe zj/22ax8os3iOd17NXdxPlw/5eL2wzmvZ3B/M41TjdbfXlQiXFVVJ7XmdbH6bxmnLr8b8s/LLt6 3LGzw1ChcLHHo0I9O/9ltXI6Ch2SYVzs6LfATZpI5bj9Bfx//+4THvkU2lr8bOHT36IimJ1hf2X 5T9BazWu0Jg+jgNW+vMWj4Pd+5rov32QPfqTM9Y9fvVWs4FrNQQKLjS4zOvsJit313Zn0SvCWZK i587JBDSkCG3KnUmfOtZ0oLrJBM+rVtwVb+2V/EWHeu32bqZRn81195Zfnu6PT0D5Fp6cX/+TMd E0wPBh36//Ls3sBq9sqIL0eWWQTfWBnlanzJ4pFAXqIFAA==
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: 71a918f51bf2c74dc4c
-X-MBO-RS-META: 85jdtzpdk3diaqma6xk1961cbbjnofu6
-X-Spamd-Result: default: False [0.34 / 15.00];
-	DATE_IN_PAST(1.00)[94];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[wanadoo.fr,yahoo.com,kernel.org,vger.kernel.org,mailbox.org];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[baylibre.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37973-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[a0yami@mailbox.org,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[mailbox.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mailbox.org:email,mailbox.org:mid,mailbox.org:dkim]
-X-Rspamd-Queue-Id: 246A35BF07D
+	TAGGED_FROM(0.00)[bounces-37722-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[baylibre.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,baylibre.com:email,baylibre.com:mid,baylibre.com:dkim]
+X-Rspamd-Queue-Id: 99303582797
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-UAC1 and UAC2 configfs rate-list attributes parse a comma-separated
-list of sampling rates and store each parsed value in fixed-size arrays.
-The arrays have UAC_MAX_RATES entries, but the store paths do not check
-that the input contains at most that many tokens before writing through
-opts->name##s[i++].
+While being less compact, using named initializers allows to more easily
+see which members of the structs are assigned which value without having
+to lookup the declaration of the struct. And it's also more robust
+against changes to the struct definition.
 
-Writing more than ten rates therefore writes past the end of the
-p_srates[] or c_srates[] array in struct f_uac1_opts or struct
-f_uac2_opts.
+This patch doesn't modify the compiled array, only its representation in
+source form benefits. The former was confirmed with x86 and arm64
+builds.
 
-With CONFIG_UBSAN_BOUNDS enabled, writing an 11-entry rate list to the
-UAC1 p_srate attribute reports:
-
-  UBSAN: array-index-out-of-bounds
-  drivers/usb/gadget/function/f_uac1.c:1669:1
-  index 10 is out of range for type 'int [10]'
-  __ubsan_handle_out_of_bounds.cold
-  f_uac1_opts_p_srate_store
-  configfs_write_iter
-  vfs_write
-  ksys_write
-  do_syscall_64
-
-The same reproducer against the UAC2 p_srate attribute reports:
-
-  UBSAN: array-index-out-of-bounds
-  drivers/usb/gadget/function/f_uac2.c:2087:1
-  index 10 is out of range for type 'int [10]'
-  __ubsan_handle_out_of_bounds.cold
-  f_uac2_opts_p_srate_store
-  configfs_write_iter
-  vfs_write
-  ksys_write
-  do_syscall_64
-
-Reject additional tokens once UAC_MAX_RATES entries have been parsed.
-Also keep the original kstrdup() pointer for kfree(), because strsep()
-advances the parsing cursor. Freeing the advanced cursor leaks the
-original buffer on successful parses and can free an interior pointer on
-some error paths.
-
-Fixes: 695d39ffc2b5 ("usb: gadget: f_uac1: Support multiple sampling rates")
-Fixes: a7339e4f5788 ("usb: gadget: f_uac2: Support multiple sampling rates")
-Signed-off-by: Qing Ming <a0yami@mailbox.org>
+Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
 ---
- drivers/usb/gadget/function/f_uac1.c | 13 +++++++++----
- drivers/usb/gadget/function/f_uac2.c | 13 +++++++++----
- 2 files changed, 18 insertions(+), 8 deletions(-)
+Hello,
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 85c502e98f57..7a81cd176abd 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -1594,7 +1594,8 @@ static ssize_t f_uac1_opts_##name##_store(struct config_item *item,	\
- 					  const char *page, size_t len)	\
- {									\
- 	struct f_uac1_opts *opts = to_f_uac1_opts(item);		\
--	char *split_page = NULL;					\
-+	char *buf = NULL;						\
-+	char *split_page;						\
- 	int ret = -EINVAL;						\
- 	char *token;							\
- 	u32 num;							\
-@@ -1608,18 +1609,22 @@ static ssize_t f_uac1_opts_##name##_store(struct config_item *item,	\
- 									\
- 	i = 0;								\
- 	memset(opts->name##s, 0x00, sizeof(opts->name##s));		\
--	split_page = kstrdup(page, GFP_KERNEL);				\
-+	buf = kstrdup(page, GFP_KERNEL);				\
-+	split_page = buf;						\
- 	while ((token = strsep(&split_page, ",")) != NULL) {		\
- 		ret = kstrtou32(token, 0, &num);			\
- 		if (ret)						\
- 			goto end;					\
--									\
-+		if (i >= UAC_MAX_RATES) {				\
-+			ret = -EINVAL;					\
-+			goto end;					\
-+		}							\
- 		opts->name##s[i++] = num;				\
- 		ret = len;						\
- 	};								\
- 									\
- end:									\
--	kfree(split_page);						\
-+	kfree(buf);							\
- 	mutex_unlock(&opts->lock);					\
- 	return ret;							\
- }									\
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 897787d0803c..d8cf710085a0 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -2012,7 +2012,8 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 					  const char *page, size_t len)	\
- {									\
- 	struct f_uac2_opts *opts = to_f_uac2_opts(item);		\
--	char *split_page = NULL;					\
-+	char *buf = NULL;						\
-+	char *split_page;						\
- 	int ret = -EINVAL;						\
- 	char *token;							\
- 	u32 num;							\
-@@ -2026,18 +2027,22 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 									\
- 	i = 0;								\
- 	memset(opts->name##s, 0x00, sizeof(opts->name##s));		\
--	split_page = kstrdup(page, GFP_KERNEL);				\
-+	buf = kstrdup(page, GFP_KERNEL);				\
-+	split_page = buf;						\
- 	while ((token = strsep(&split_page, ",")) != NULL) {		\
- 		ret = kstrtou32(token, 0, &num);			\
- 		if (ret)						\
- 			goto end;					\
--									\
-+		if (i >= UAC_MAX_RATES) {				\
-+			ret = -EINVAL;					\
-+			goto end;					\
-+		}							\
- 		opts->name##s[i++] = num;				\
- 		ret = len;						\
- 	};								\
- 									\
- end:									\
--	kfree(split_page);						\
-+	kfree(buf);							\
- 	mutex_unlock(&opts->lock);					\
- 	return ret;							\
- }									\
+this patch is part of a bigger quest to use named initializers for
+mainly struct i2c_device_id::driver_data to be able to modify
+i2c_device_id. See e.g.
+https://lore.kernel.org/all/20260518111203.639603-2-u.kleine-koenig@baylibre.com/
+for the details.
+
+This patch here isn't critical for this quest, as this driver doesn't
+make use of .driver_data, so apart from the better readability this is
+only about consistency with other subsystems.
+
+This is the only i2c driver under drivers/usb/phy, so this is the only
+patch needed to adapt the whole subsystem to the new style for
+initializing i2c_device_id arrays.
+
+Best regards
+Uwe
+
+ drivers/usb/phy/phy-isp1301.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/phy/phy-isp1301.c b/drivers/usb/phy/phy-isp1301.c
+index 2940f0c84e1b..73cc70e958de 100644
+--- a/drivers/usb/phy/phy-isp1301.c
++++ b/drivers/usb/phy/phy-isp1301.c
+@@ -25,7 +25,7 @@ struct isp1301 {
+ #define phy_to_isp(p)		(container_of((p), struct isp1301, phy))
+ 
+ static const struct i2c_device_id isp1301_id[] = {
+-	{ "isp1301" },
++	{ .name = "isp1301" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, isp1301_id);
+
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
 -- 
-2.53.0
+2.47.3
 
 
