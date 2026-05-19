@@ -1,427 +1,358 @@
-Return-Path: <linux-usb+bounces-37665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37666-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eHK6ACskDGpqXAUAu9opvQ
-	(envelope-from <linux-usb+bounces-37665-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 10:49:47 +0200
+	id eJgGFm0lDGoIXQUAu9opvQ
+	(envelope-from <linux-usb+bounces-37666-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 10:55:09 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51CA857A7D8
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 10:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC02D57A968
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 10:55:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7B98F3028B4F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 08:48:32 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 28B533006120
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 08:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD93399031;
-	Tue, 19 May 2026 08:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28503EF0D2;
+	Tue, 19 May 2026 08:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="U4rTFttS";
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="kj/uMbvn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tgq0QCxQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8EC3955F2;
-	Tue, 19 May 2026 08:47:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779180475; cv=fail; b=O+H7KeWFcdwYkcKM+LsD6/9gAmHRlNUqxD8eC9D0FDLb0BwgUxgD2AVWdAgpGBhsjwlBWxUL19+08DVPZklJYB5KjxYaJztyp7Fz/hkqu9J04asjJa6T5kBySF8V4GcQpi27QdfC6TQMAdR/NkXfpaEb0I0ZqERJNZy1+b50dFY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779180475; c=relaxed/simple;
-	bh=KvuOD/H2gtw7h9kzUts2kps7QpCypKL+OY3snoV2taE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OmPHsLVvxMs0wgsUFnQBF9gTnQ+t2WrZTbOj2bNdI9EHjb+m7wWgyu1f4mR1Z7TiAQkgkV9DrK7YI4Tkbe0WEtyA0Kxo57I+wyPyfAKJehpSOxVRTnhvoFGc4keQjk5C4G2OySo4GKlRSdSCuF48igMDgoMMXH5vmtyJDnFFXrs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=U4rTFttS; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=kj/uMbvn; arc=fail smtp.client-ip=208.86.201.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cadence.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-	by mx0b-0014ca01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64J8LD4a2478841;
-	Tue, 19 May 2026 01:47:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=proofpoint;
-	 bh=5XoWDnFGG0lUWeTCAfsJsbtdVgnbLg+swYBOmulDKmw=; b=U4rTFttSL/ue
-	LOqdrPdO75nyMIS1YO8t4Xd7gg7eqKLiHjaqkQJ/MxZ1UNaEkd0bcpdTXaGvAldM
-	n4oGLEpozwLPWX7r3P2owz4IvJvL0hIo7h9Fy5uoAESR9xuo0ZhVSUZwOuI0Yrro
-	9ArHmWoE2YtkzMGS/wP9CLcCe+Pjr8sbpgU+P6H1mNxDcfPIyCpzL0kw9ozu6gFP
-	p7mglEJ2HyOHr+1a98/43FiZ0O3ICl5jZGWo8TDispiPFwVIhVuyWhrfhn9E3wqI
-	ktRRivu0i9x+wOKybxiOnWOL89rroNbV3SmcwF+4bDdgI80//ZM118o8H5V8z4Ua
-	HeKpc8eeYg==
-Received: from cy3pr05cu001.outbound.protection.outlook.com (mail-westcentralusazon11013060.outbound.protection.outlook.com [40.93.201.60])
-	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 4e8e6whkt8-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 19 May 2026 01:47:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vD/5WOzzX/Wn0f/knblx6jTDmXg19NZebWOBKrNYNI/TKcDKgaEqlXAzA+ytNczSqKDvqlggEfuEvWbQp5pmvVXTAHaqLc4wjXj321eQOj+IG+6I3fGhR9AaJF31Zh5c08HGQb705GDdVWdtVEh/X7cN3nNCKrX1aAgCwgKfdW7Iaceco/8W/HXNKpBqTUXlQytEMbgYJRNEZVxlN2oUEcMJEgvaZXK2pOM5XxeCkmp/0bkHkx1gRWrXKkaT/foe/IVFQsjFqR4RMawjZSwtXDMy9u2CBEmLBUNty+u+LatGARULIClWhUmZXD7z+fWIcvsyUL0PbFXTSylJ8cTSsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5XoWDnFGG0lUWeTCAfsJsbtdVgnbLg+swYBOmulDKmw=;
- b=V2M0SbckwhU2LUIsHsp1T8tsVucWmAfZn6PvZoVv1LQMGIM4GA0kH5E6M21OP3umXJP4z4lRbGt4SuOXsYnrHjSG6Jg7OehlmxgLIwJQCkFqFxayDRsnf5rM+WO5ppxXh0AmnajTwL1wSSgYWvY4P2ipuyr/z5zojRdJmEIv+tbWmzALCmRPU5sOwDbIAeJHvdtGfjPOgQcoLpZAE4YlAX8u8HpPk1Ew/NAznq8RamNwG7RdRDNxclQnMAMzmWr01VLGOUipGNMYDOkDFIymSqa2/e71durHbs0DuT+3yBmr4s9SNm/YG9sD9tf5AaZBJ8LT1+DjOgn0HA6zxHFinw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5XoWDnFGG0lUWeTCAfsJsbtdVgnbLg+swYBOmulDKmw=;
- b=kj/uMbvnudJcInqgx8MCHjqBqozAh1hLCT4g7sosPl9Av3w1qAhZhU0vDBhAZ/fuaNrBUUW/Pmh7NlUsh3ZPaXaYG/aOQSXmAR/jpCvWINDYe0BioBClme7TbSApiHagdIc/s4UfKyxrBq5N6Eb+ag7wnM6zddVApGudCjsuUslAgabiSnjFsQ7qA11GS+bhFZ2+vvTi6d10rZV8U+USdWkJ73xSWb1rkcw38yzzdztdQ92Y7+nzU2dIL+EeUfWlMTXpGr7slQAm3uU+Re1nzjEfrxpJsMBDZeQhf3w5FuIP4axfXeyBv0Grdhd4wgP5N38toFT+lqzgcGBOm6u1RQ==
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
- by SN7PR07MB9749.namprd07.prod.outlook.com (2603:10b6:806:35a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.15; Tue, 19 May
- 2026 08:47:30 +0000
-Received: from PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::9088:4354:91a3:3bbe]) by PH7PR07MB9538.namprd07.prod.outlook.com
- ([fe80::9088:4354:91a3:3bbe%7]) with mapi id 15.21.0025.012; Tue, 19 May 2026
- 08:47:30 +0000
-From: Pawel Laszczak <pawell@cadence.com>
-To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>
-CC: Peter Chen <peter.chen@kernel.org>, Roger Quadros <rogerq@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v8 1/2] dt-bindings: usb: cdns3: Add cdns,cdnsp-no-drd
- compatible string
-Thread-Topic: [PATCH v8 1/2] dt-bindings: usb: cdns3: Add cdns,cdnsp-no-drd
- compatible string
-Thread-Index: AQHc5Fs8YXjvLtP6jUqxPlu/ue4fBrYPUziAgAW77GA=
-Date: Tue, 19 May 2026 08:47:30 +0000
-Message-ID:
- <PH7PR07MB9538E14BE6778498A48FECEBDD002@PH7PR07MB9538.namprd07.prod.outlook.com>
-References: <20260515-b4-no_drd_config-v8-0-75cb05317679@cadence.com>
- <20260515-b4-no_drd_config-v8-1-75cb05317679@cadence.com>
- <20260515-trinity-unthawed-c5ab5d7783f2@spud>
-In-Reply-To: <20260515-trinity-unthawed-c5ab5d7783f2@spud>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|SN7PR07MB9749:EE_
-x-ms-office365-filtering-correlation-id: 581feda5-e925-4bd4-6281-08deb583430a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700021|11063799006|56012099003|3023799003|4143699003|22082099003|18002099003;
-x-microsoft-antispam-message-info:
- G9bBsg5Xla9ijhvtIWe4VLewhMZ+j+GlB2f+/1vZgko6shqJn5odA2G1xm8SjAHAfbKkQE/D1d0eB/mxito1ryDjE0S7iD9hXI5wJJ8zGS/Mo5xjY2BumTFKIejWw81NUdcMNG4oO5MSiqaLAnjQo78XV1wQYkF2WjwSply3AGAZpvqO7AyItMH2OW2n9p7qzXoPiqIcuM1qPa2vq1SfJuNRePJZNHSZCI4DiofxAgyURjEhwfVN+dz296VKto9XbuXUuWUEMoyOZO8KsUy/u9SrNmbynmuPaAhc+13pLC7PwWXRa+HVbdYEA6qwNLPqPLoIfNt3iKmguGzh3VQY1Cmhw4GWbzlu1gnhXuPRJdh9OnYwuqhIdeCt8Hc7/RogHXutYtcDTeRQgAgvBl10AuU5Z4/1LCA46YqG1TxJtQ/kkAcveEFTy6Nc8HRnmf2lZU6wNhjXUX+DhLZduQtfHG/hSki71WP9IocXwhT5Y0S+wn6gNhM54uSeMuGX+AsTPWC63x4Ble8UVV7PfU3EpsyDF1RrEU5T3aTn3Kjt4kjz0JbWKkyCViuKDrqZGuJUGsBehX96d47IN90ym+MbeBrdUtmOk/Yo/s6eiCsLpR02hMCkHsveRnDImfBYI/4GccIpcwuDRuf9r7G4hng7OB8EVIZL91HVvQlug/+7h0cdoPAE2gB71bIK0zkRcIdi4I1mt5mRC1GdWxKThDy7SDMxhaS/N2y8rCzA0glnnZU1D3xwU74cpJljqELuoEcY
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700021)(11063799006)(56012099003)(3023799003)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?n9JWdHCj3fUd66/kMNzS1VnGPk22XJD7Po62/tFyE7obisggbO3k/Pj194e2?=
- =?us-ascii?Q?MtwXwoIlPl3+AHfhQ2r7GyE0QemVI8noyoHNhhj5UVC5LQ6+MyqFtNaBhwxs?=
- =?us-ascii?Q?NM2Cfas3aGmBf5m/6hIaDTBE2T+SLR+dij4PQRj03pYn3fjCsFlc5qn0Uw5D?=
- =?us-ascii?Q?7Zn2XPy1/h0B6JeZl4io0Gq3GO6E6S7NWfVIpeVn0hmvb8Iborf9TPr0kETj?=
- =?us-ascii?Q?dPsOOlEfnQdYOq9RDB8aCewzk1kAkKjBfoXGzuqi6zg462O9aQBbRZ07++8U?=
- =?us-ascii?Q?GH74SOeYIr5q86o4cIcJu+KnbuSdJFx5hixFmaVamev1LtxykzseAiS9AxgN?=
- =?us-ascii?Q?YC9uzV4K6CzdEbS76patWma2T1hZNx9E+b7EkE6eDWrw17c8SBtfW//kCTle?=
- =?us-ascii?Q?SFh5mp2oF8FgXfdkLlVucntmfRaV3PZv1X81aCBlpb8nwzA1atqQadJUHmiu?=
- =?us-ascii?Q?UwTAVGW5ibANFi47lEJp5qCUZJ0htTVPcJQVxsaEm5A25VaRedCkha8d1yb5?=
- =?us-ascii?Q?D4nfDF3V8huuPTf1mMcVdZASzPaYeHI7WXkpMzvc2fIRTR85VEJBS1efFTu4?=
- =?us-ascii?Q?BdluE/7MNNXh3ofwY3NYp7mgd22XEgVcW5MtDZOiZF4mIzVny/r7xBXyFfZB?=
- =?us-ascii?Q?FVEjArkCX4wMuSqY0eDZ0aEO1r4ktTQ4U984ljs1rgukGueWZZnoC79RqNo4?=
- =?us-ascii?Q?q6BEle1TLp1/i/n7+ViTcUjM/8I4HTzZ9j/q6GSSipk13v0rm7MxkXDmMoP1?=
- =?us-ascii?Q?VVKhQW/koCblyQ3K8O57xAApKJWC5B5GepW3ZkXXJ3M1muHDYSzWlZypmbjy?=
- =?us-ascii?Q?GqJKTN7k4sAXlrnYcEevkkFe6bgMf4zyjsDZz2maiYayOEwIoTBrKrDhu1SW?=
- =?us-ascii?Q?c1uFlf55caB8O7Qgq3RsFm4e06duYu/lXZni2YhAX4wrjkjl6eCUYfoVYbx6?=
- =?us-ascii?Q?Je/dvF4OSrjXB9LHhKzfefza2y/PDgs2AR7QfCam/BtLR1WZUyIagP/EleEL?=
- =?us-ascii?Q?LsdZK5MBGH0pm6jYw5LNrU8ROSvciX8wTOY2WhqEEwcB2pfpkm2fyHvELvsv?=
- =?us-ascii?Q?z2kY/cc+iQ0lsoaLca0YOHul4vcgCbe3eZu3oEaRnuq1RZVqQe506TlZx2RZ?=
- =?us-ascii?Q?CXj5sgXSJt/uVzsmPuT3h5rQxaubRy7P5JKzJlqr1MlU7mfcwNzmSHvDudv5?=
- =?us-ascii?Q?RvBXumcSLJiuuDwOKXjZs49H89eNHS0gZKGTjYIfQ95IbPEKACqFBFIhK1Kx?=
- =?us-ascii?Q?7J0tVF5GRDk3J0JUAjpkG2YMv7St6hG+HPHF8srfewPGLHpaS5VtqkDSNXo3?=
- =?us-ascii?Q?auN8ct/yg8Ox2UBHIqegBpDe1zNLOVGGt52/Q/uEOYsUsrEsVoGWx9H8T015?=
- =?us-ascii?Q?y+907/vZWjKvmn6ZTxkJ7bITA3oVomMG4cah420022TVSLZKCJ++LeYbObwm?=
- =?us-ascii?Q?q7hpTmST7wEtM0QbCHKh+oxNISbcqB7MMR5faI3PGrMEfvvkSSobC5NCqG+U?=
- =?us-ascii?Q?8PATdkpRdV5HM+2JkgGt1WPtHYL0c590e3kRAKHNINZhF3Or+2gA8TDQy3yG?=
- =?us-ascii?Q?2n5qZ172vbn3seAo/NuAvK4tbYiNri09kd9UFEGcqrlDlR2QUmr1l7H5fvaT?=
- =?us-ascii?Q?3QbLq0Ch6CYw45xmUhZ0ha2E8nDSbMsym1FB7jQ3nUmm6ekURiHBXcXR9Qpg?=
- =?us-ascii?Q?5kBbzQUjOSni9dElLrEFxnhYU3uBbIdA1zqDoxk/ljXAdjbuQrMSYABvP8Ae?=
- =?us-ascii?Q?35oz3K1vSQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4703EEAE2
+	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 08:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779180904; cv=none; b=FbGNFPZ73NZbcWqbHDDN52FGkDwz92zQ614oRbzx5dmCLgcN7Ypquk/YO3IpxPoaODx1lS5SI+qBqfhcr8YlqAKLWRu7p1G9OW0zT1HNzf++Aq8L/ARA26NfcVLNqZoeTPzJdtIhEYynxhMwoi+RKLhNfxRdpN6VAiytdAyyYLQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779180904; c=relaxed/simple;
+	bh=jL1wRQJLe5WLat50It2LrgPluh3+w7X+ACNLGMeqek0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aDhsZKGRP38x/XIIcSNR4Oe76c0fRVUh9YZw9+udmO1xIgKGkUvXBM85E5CrLkM5jgwySrxw2IDq8JjjgOJ5V/WE0EF3UsBtBcDcBkJ1FV1dulR3DC2LTZw83SIK90w02VmbLJ2b5KiXkbsakvACnwOYZz5LmgO4n+7MwQHkAT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tgq0QCxQ; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-44dd5cb0f81so2829321f8f.0
+        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 01:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779180900; x=1779785700; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ttEEnCBEgUK+wfN1BWs0jMhy7eonfn0k5yN/j3m945E=;
+        b=Tgq0QCxQIEtkik+2nZ0FmV0DuLF3e0jht2XIKHFgCs8v9P6VKVXROIRUi/zMhr6cVE
+         DTyiyPmklOx4XvwMpTgsKInax2vbsbrd8M7RiQZMrxdRvveCyCXV3TxBGwjHBbz3E672
+         NPox5wrwD8tgbLhQ0PFYJvsthYU2nXL0nbFpV0gA914pYWSsARFMgnPsxBW7E+YGIYME
+         CEv+jfBa2PMVH94COAbb8QMXC4gQWArPzDKhY1k7jnPGifbH7PoY7s65hCgqvGQTWIBz
+         ddMeBaurTR72aUiVEqr8zbRTLAabwiOSwNG03LGRXrg2vVlIssXpP2nUKZ0qHUt26qij
+         tYXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779180900; x=1779785700;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ttEEnCBEgUK+wfN1BWs0jMhy7eonfn0k5yN/j3m945E=;
+        b=PpBEcgHoxArqaLMYs8fP1xt/c70WnnYe9lujyG8gfdFmoQ/5uP4+3nFGvG/OjP1Zjf
+         4baJk49OzOxVSKULgR0pOebzHG5NlMAC1N8BuSNUlIUgOHvNLa9B6BDG+BE1MfJo6AzW
+         4Zjwq5NyTjOA9ZizGgO/QiHgbiBcO0GQm5S5qBLa/PgSoHotiAhWtEwub+12Fsv7GkJ2
+         HcuYWJe+kGlVyFAZNvO9tBA7Mud0NlinXfyvvlRBbqpzVFZm6GkoXhFul+W4rgJZF99H
+         IBXmjUPrUsJm/3lOpKiJAbH6iZtekX5LaZbtSuEdDSkdNPEejgMktn57vYN1/480Wq3N
+         /deg==
+X-Forwarded-Encrypted: i=1; AFNElJ+IU02L0agmxLp5LNEHiKVTMFuPWDJ7hkDnoh2aU6MruMKafcFbL2EQa/aE8sjNbAd99/jiqnv3xnU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxvJH2S03+ap4oEZdSNMkYaDvWzT+ZDg809Te/u1kMv9VmpLaf
+	N2P+bJS7GT9XVZc0Sbl4r6WE618Lvv2lpq3VFwiixorF6TT+5JAAztq2
+X-Gm-Gg: Acq92OHmoheXOG+g6pPwFf291pew8VpOkeuAyk7j12OSgdvj0ioWF8JvyLtoYHJuxlr
+	j/uFmRNQq0JJP4M1esttV0aZgBCIHv7gG4pGMnPh0OcKblztrHppbG1ZTrpcwaMA0S4YtndaqYi
+	+WvLPTDaCaqiKK+/EPdkQqfyIjWoet1Eq9DCHE3VAKxcCmHD/1+/Ztx9DhISWdq0eGHjx0l+Q8a
+	dWiV+lixxheqRitpEXhFfftNuH6qJtS3QBQoumfs73tHeg2oLVFs/furAMzgB9bKAMbvkLbZU7Z
+	cketmI8r25cx9eevcOzYBC694J3speh03YdhlAao7r3qWEfTPooOPSXPNlzlL0K0TOeEH5RDsk/
+	TNs/AObqsPbbRQDdtesFlmG64AA1/9GCR92fc9JlVFrobPvFcz6LUZQqQN9DV82HUgXRFgoMOZD
+	T51we19c0ZZq4pAmVILiUGSuYa4+3jDCz3TNu5Cz7jAJvBx4nG3T1NrtQQpy6QMR+OUP9k6GhYv
+	1Acz3014VowzwkIsjk35PBvPvSz1lzVwX7YtkBkVoVD5P/gVcyMH6cgX6R0O4HrVtu48Q/8c5g=
+X-Received: by 2002:a05:6000:4404:b0:448:908a:398b with SMTP id ffacd0b85a97d-45d9288b8c2mr25159333f8f.14.1779180899971;
+        Tue, 19 May 2026 01:54:59 -0700 (PDT)
+Received: from franzs-nb (248.201.173.83.static.wline.lns.sme.cust.swisscom.ch. [83.173.201.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0a17ec2sm41021489f8f.24.2026.05.19.01.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 01:54:59 -0700 (PDT)
+Date: Tue, 19 May 2026 10:54:58 +0200
+From: Franz Schnyder <fra.schnyder@gmail.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, jun.li@nxp.com, 
+	Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH v3 3/3] usb: dwc3: imx8mp: disable auto suspend for host
+ role
+Message-ID: <6btg6x2bsgu6jzzxds3koyha3ucaf37apbshhfgpu2vxdgb5oz@npvm7tkg3bxh>
+References: <20260108081433.2119328-1-xu.yang_2@nxp.com>
+ <20260108081433.2119328-3-xu.yang_2@nxp.com>
+ <k2sxmwhrv3tivustfnpz54ehuufkcrcruu2uuukuyugqtqljzl@5roxndm5fn5u>
+ <jjwlrgusucoacaye75uqfuh76a4jhdv3ivzjuemgusw3trwseb@mymuy62cptxp>
+ <hsyy2owzbt7tsljktlrz5g4bnrnecznvcyy6zxt7gfyxb4xvgi@ysko6xe6h2zm>
+ <5zz6yhc4ymoccovibmjlse2l2d6y3g3dwu5r5a677rplpfdnwu@fo2ed54hqzeh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	ARn0bIZUAGa+WL5WwkinjDt6Tz/bmhs1Bn620+9O/T0bq+gnMpSpROniEY6ui1q0AdUqXRoOurxEuJ3MlwoNM5LUKS/ECvsttWH2R/skhXdhHAzIHbA3KEATtRYO6hFJloh0l39U4o0YMZnCKvKX1yjLs/wXoTHeHIpaFLGx3EsvilXDgVPuqQmIuaxrzrizW5+LEIT6c7Z301hISISYdrFHjnJVKUk5vRfsfO5WInFpUUCEFVj08l6IvYuYEW/lVlWF2CIIHDqUOSfr++ZZlux/D1klrNkvedayXBPK6LnMjAiq+4QNTYdc1b6eDYoIbV+v3FkjQIYm8LOLMvrBlQ==
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 581feda5-e925-4bd4-6281-08deb583430a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2026 08:47:30.3137
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bgWz3QaxHxgDQMT/DYN+bhPG0EqdNSXFGqOD4GXaFprwCDr9pNscsqAKVL6LCoiklDb+bK6MSN1+eIk4HJ6pxhvnbgE3rC3f1uv98It3UyQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR07MB9749
-X-Proofpoint-ORIG-GUID: zO4zogQY86tAtm9oUWcZj6vFmDc0Nvfm
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDA4NiBTYWx0ZWRfX614/P7ykShqs
- sNEe82x5vLcJ6pgy4LkvMIN/DRZz4ahnZlbLWGqlAEOIZVeTxZddIV+rpxQ2I/nrDPBA8M6tBh+
- wmGqRL6W9EvNPNYWs5g8otzp/f3rcVr2fWK+dqmVQKmoVQM/ynqZad2jvGYVoNOpRI0Hb4W92jA
- DB8AJ0PA2VaR83poHbA0nEDzgMXCqmOX/OQEMEwwZWTr+zN16pvTmzUm9QytYm6o1N0cHI+10aH
- G3jZMTZYdpmi1XQkYnv1H/aAINpYHjZWHJL5IxaETrNAqoou0Yuj6vtuhoJFvPq6irthf7l0NK0
- T8HgovxeukAq3SLYnqEFiOkm8Bs3s3SlQEn0Le7w5vGjYL3DXCsDD2CxA08UbajidpFPDl8zrF/
- 0mFYziGJXasph3ZbXFfS2IZHF87VCPLpTmtyvvp70EHFuJRKHMC2nsPysb+QhSC6/fYD9+eM0WP
- IeManCsvjsq4L6DPNdQ==
-X-Authority-Analysis: v=2.4 cv=RfWgzVtv c=1 sm=1 tr=0 ts=6a0c23a5 cx=c_pps
- a=7wCTOXyfr6KSlQaUtw4X3A==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=NGcC8JguVDcA:10 a=Zpq2whiEiuAA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=W8fx6O4W8wtO2w6lYej3:22 a=tuMieXAyK57eGGFK7xkD:22 a=Br2UW1UjAAAA:8
- a=iDCbAsSP6ybqiK2pilAA:9 a=CjuIK1q_8ugA:10 a=WmXOPjafLNExVIMTj843:22
-X-Proofpoint-GUID: zO4zogQY86tAtm9oUWcZj6vFmDc0Nvfm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-19_02,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check
- score=0 suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 malwarescore=0
- clxscore=1011 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
- definitions=main-2605190086
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[cadence.com,reject];
-	R_DKIM_ALLOW(-0.20)[cadence.com:s=proofpoint,cadence.com:s=selector2];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5zz6yhc4ymoccovibmjlse2l2d6y3g3dwu5r5a677rplpfdnwu@fo2ed54hqzeh>
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37665-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,PH7PR07MB9538.namprd07.prod.outlook.com:mid];
+	TAGGED_FROM(0.00)[bounces-37666-lists,linux-usb=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[cadence.com:+];
-	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pawell@cadence.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[synopsys.com,linuxfoundation.org,kernel.org,pengutronix.de,gmail.com,vger.kernel.org,lists.linux.dev,lists.infradead.org,nxp.com,dolcini.it];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_NEQ_ENVFROM(0.00)[fraschnyder@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	DBL_PROHIBIT(0.00)[0.0.0.14:email];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 51CA857A7D8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,4c100000:email,2.164.186.48:email,0.0.0.52:email,4c010010:email,2.159.99.0:email,2.220.108.0:email]
+X-Rspamd-Queue-Id: EC02D57A968
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
->
->On Fri, May 15, 2026 at 01:24:38PM +0200, Pawel Laszczak via B4 Relay wrot=
-e:
->> From: Pawel Laszczak <pawell@cadence.com>
->>
->> Introduce a new compatible string 'cdns,cdnsp-no-drd' for Cadence
->> USBSS/USBSSP controllers to support hardware configurations where the
->> Dual-Role Device (DRD) register block is missing or inaccessible.
->>
->> This change follows the recommendation to imply hardware limitations
->> directly from the compatible string rather than using a dedicated
->> boolean property.
->>
->> When 'cdns,cdnsp-no-drd' is used:
->> - The 'otg' register and interrupt resources are not required.
->> - The 'reg' and 'interrupts' properties are restricted to 2 items
->>   (host and device).
->> - 'dr_mode' must be explicitly set to either 'host' or 'peripheral'.
->>
->> The standard 'cdns,usb3' compatible remains unchanged, maintaining
->> backward compatibility by requiring all 3 resource sets (otg, host, dev)=
-.
->>
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->> v8:
->> - Update commit message to reflect schema changes.
->> - Removed 'cdns,no-drd' boolean property as per Rob Herring's suggestion=
-.
->> - Introduced a new compatible string 'cdns,cdnsp-no-drd' for controller
->>   variants that lack the DRD/OTG register block.
->>
->> v7:
->> - Rename 'no_drd' to 'cdns,no-drd'.
->> - Update commit message to reflect property renaming and schema
->changes.
->> - Simplify 'reg-names' using a single enum.
->> - Revert 'interrupt-names' to a list of constants.
->> - Move 'reg' item descriptions to if/else blocks for accuracy.
->> - Clean up 'if/then' logic (remove redundant checks).
->> - Add explicit 'items' list for 'interrupt-names' in the 'else' block.
->>
->> v6:
->> - Fixed validation error for 'interrupt-names' by correcting
->>   the items definition.
->> - Adjusted 'minItems'/'maxItems' to properly support the optional
->>  'wakeup' interrupt.
->> - Fixed 'too long' schema error in examples.
->>
->> v5:
->> - Implemented strict conditional validation using if-then-else logic.
->> - Enforced 2 register/interrupt items and required 'dr_mode'
->>   (host or peripheral) when 'no_drd' is present.
->> - Enforced the standard 3 register/interrupt items (otg, host, dev)
->>   when 'no_drd' is absent to ensure backward compatibility.
->> - Updated 'reg-names' and 'interrupt-names' to use enums in the main
->>   properties section to support flexible resource ordering during
->>   validation.
->> ---
->> ---
->>  .../devicetree/bindings/usb/cdns,usb3.yaml         | 60
->++++++++++++++++++----
->>  1 file changed, 50 insertions(+), 10 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->> index 2d95fb7321af..7b0aa9c4a2bd 100644
->> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->> @@ -17,22 +17,22 @@ description:
->>
->>  properties:
->>    compatible:
->> -    const: cdns,usb3
->> +    enum:
->> +      - cdns,usb3
->> +      - cdns,cdnsp-no-drd
->
->I doubt this is what Rob meant, he asked for soc-specific compatibles
->and this is generic. A soc-specific compatible would be something like
->microchip,newsoc-usb3
+Hi Xu
 
-Hi Conor, Rob
+On Tue, May 12, 2026 at 05:53:57PM +0800, Xu Yang wrote:
+> 
+> OK. I mean, does dwc3_imx8mp_probe() still succeed after the kernel dumps
+> at the end?
+Ah yes, afterwards it still succeeds.
 
-To clarify the hardware situation: I am developing and testing this on
-an FPGA development board connected via pure PCI, without any Device Tree.
-I do not have a specific SoC platform, nor do I know what silicon target
-the end customers will use in the future.
-Introducing a fake SoC-specific compatible string just to pass the DT
-validation feels misleading and unnecessary.
+> 
+> OK. More debug information will be helpful.
+> 
 
-Since cdns,usb3 is already an established generic compatible, and we
-cannot use a generic configuration string like cdns,cdnsp-no-drd,
-the cleanest way forward is to make this resource-driven instead of
-compatible-driven.
+I've attached the logs below with and without the commit. looking at 
+what happens before the warning I think the problem is that after probe
+deferral the depopulate path races with the device link state changes 
+from the fw_devlink cycle fixup.
 
-In v9, I propose to:
- - Keep only the existing cdns,usb3 compatible.
- - Update cdns,usb3.yaml to allow minItems: 2 for reg and reg-names
-   if dr_mode is explicitly set to "host" or "peripheral" (indicating
-   that the OTG register block is absent).
- - In the driver code, determine the lack of DRD dynamically if the "otg"
-   resource/register block is missing.
+One important thing to mention is, that we build dwc3 and typec as modules.
+If I build them as built-in I can't reproduce the kernel warning so far. 
 
-This elegantly solves the issue for my PCI/FPGA platform (where I just
-won't pass the "otg" resource), complies with DT practices, and leaves
-the door open for any future customer SoC to use cdns,usb3 with
-standard dr_mode constraints.
+Logs whith commit present and when the warning appears:
 
-Does this approach look acceptable to you?
+  [    6.405710] device: '4c100000.usb': device_add
+  [    6.414620] ----- cycle: start -----
+  [    6.414626] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.414640] ----- cycle: start -----
+  [    6.414643] /soc/phy@4c1f0040: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.414661] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/phy@4c1f0040
+  [    6.414671] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.414680] ----- cycle: end -----
+  [    6.414683] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: Fixed dependency cycle(s) with /soc/usb@4c010010/usb@4c100000
+  [    6.414700] device: 'platform:4c100000.usb--i2c:1-0052': device_add
+  [    6.414783] i2c 1-0052: Linked as a sync state only consumer to 4c100000.usb
+  [    6.414790] ----- cycle: start -----
+  [    6.414793] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.414805] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.414814] ----- cycle: end -----
+  [    6.414816] /soc/usb@4c010010/usb@4c100000: Fixed dependency cycle(s) with /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.414827] ----- cycle: start -----
+  [    6.414829] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.414839] /soc/phy@4c1f0040: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.414857] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/phy@4c1f0040
+  [    6.414864] ----- cycle: end -----
+  [    6.414866] /soc/usb@4c010010/usb@4c100000: Fixed dependency cycle(s) with /soc/phy@4c1f0040
+  [    6.414880] device: 'platform:4c1f0040.phy--platform:4c100000.usb': device_add
+  [    6.414943] platform 4c100000.usb: Linked as a sync state only consumer to 4c1f0040.phy
+  [    6.414947] /soc/usb@4c010010/usb@4c100000 Dropping the fwnode link to /soc/phy@4c1f0040
+  [    6.414956] platform 4c100000.usb: Not linking /interrupt-controller@48000000 - might never become dev
+  [    6.414962] /soc/usb@4c010010/usb@4c100000 Dropping the fwnode link to /interrupt-controller@48000000
+  [    6.414979] device: 'scmi_protocol:scmi_dev.7--platform:4c100000.usb': device_add
+  [    6.415027] devices_kset: Moving 4c100000.usb to end of list
+  [    6.415032] platform 4c100000.usb: Linked as a consumer to scmi_dev.7
+  [    6.415035] /soc/usb@4c010010/usb@4c100000 Dropping the fwnode link to /firmware/scmi/protocol@14
+  [    6.416216] imx8mp-dwc3 4c010010.usb: error -EPROBE_DEFER: failed to get dwc3 platform data
+  [    6.416310] platform 4c100000.usb: Dropping the link to scmi_dev.7
+  [    6.416317] device: 'scmi_protocol:scmi_dev.7--platform:4c100000.usb': device_unregister
+  [    6.416680] platform 4c100000.usb: Dropping the link to 4c1f0040.phy
+  [    6.416687] device: 'platform:4c1f0040.phy--platform:4c100000.usb': device_unregister
+  [    6.416892] i2c 1-0052: Dropping the link to 4c100000.usb
+  [    6.416898] device: 'platform:4c100000.usb--i2c:1-0052': device_unregister
+  [    6.419266] devices_kset: Moving 4c010010.usb to end of list
+  [    6.454423] device: 'phy-4c1f0040.phy.0': device_add
+  [    6.454545] device: '4c100000.usb': device_add
+  [    6.454659] ----- cycle: start -----
+  [    6.454664] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.454680] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.454689] ----- cycle: end -----
+  [    6.454692] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: Fixed dependency cycle(s) with /soc/usb@4c010010/usb@4c100000
+  [    6.454706] device: 'platform:4c100000.usb--i2c:1-0052': device_add
+  [    6.454763] i2c 1-0052: Linked as a sync state only consumer to 4c100000.usb
+  [    6.454770] ----- cycle: start -----
+  [    6.454773] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.454786] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.454795] ----- cycle: end -----
+  [    6.454797] /soc/usb@4c010010/usb@4c100000: Fixed dependency cycle(s) with /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.455132] imx8mp-dwc3 4c010010.usb: error -EPROBE_DEFER: failed to get dwc3 platform data
+  [    6.455211] i2c 1-0052: Dropping the link to 4c100000.usb
+  [    6.455215] device: 'platform:4c100000.usb--i2c:1-0052': device_unregister
+  [    6.455831] devices_kset: Moving 4c010010.usb to end of list
+  [    6.456354] device: '4c100000.usb': device_add
+  [    6.456458] ----- cycle: start -----
+  [    6.456463] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.456479] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.456488] ----- cycle: end -----
+  [    6.456491] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: Fixed dependency cycle(s) with /soc/usb@4c010010/usb@4c100000
+  [    6.456505] device: 'platform:4c100000.usb--i2c:1-0052': device_add
+  [    6.456563] i2c 1-0052: Linked as a sync state only consumer to 4c100000.usb
+  [    6.456571] ----- cycle: start -----
+  [    6.456573] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.456586] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.456595] ----- cycle: end -----
+  [    6.456598] /soc/usb@4c010010/usb@4c100000: Fixed dependency cycle(s) with /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.456940] imx8mp-dwc3 4c010010.usb: error -EPROBE_DEFER: failed to get dwc3 platform data
+  [    6.457022] i2c 1-0052: Dropping the link to 4c100000.usb
+  [    6.457026] device: 'platform:4c100000.usb--i2c:1-0052': device_unregister
+  [    6.474614] devices_kset: Moving 4c010010.usb to end of list
+  [    6.522012] device: '4c100000.usb': device_add
+  [    6.522299] ----- cycle: start -----
+  [    6.522317] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.522335] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.522347] ----- cycle: end -----
+  [    6.522454] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: Fixed dependency cycle(s) with /soc/usb@4c010010/usb@4c100000
+  [    6.533826] device: 'platform:4c100000.usb--i2c:1-0052': device_add
+  [    6.534139] i2c 1-0052: Linked as a sync state only consumer to 4c100000.usb
+  [    6.534164] ----- cycle: start -----
+  [    6.534169] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+  [    6.534192] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.534203] ----- cycle: end -----
+  [    6.534207] /soc/usb@4c010010/usb@4c100000: Fixed dependency cycle(s) with /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.545615] device: 'regulator:regulator.4--platform:4c1f0040.phy': device_add
+  [    6.548513] devices_kset: Moving 4c1f0040.phy to end of list
+  [    6.548537] devices_kset: Moving phy-4c1f0040.phy.0 to end of list
+  [    6.548547] imx8mq-usb-phy 4c1f0040.phy: Linked as a consumer to regulator.4
+  [    6.549386] device: '4c1f0040.phy-switch': device_add
+  [    6.549395] imx8mp-dwc3 4c010010.usb: error -EPROBE_DEFER: failed to get dwc3 platform data
+  [    6.558846] /soc/phy@4c1f0040 Dropping the fwnode link to /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+  [    6.568591] imx_usb 4c200000.usb: Linked as a consumer to regulator.5
+  [    6.575430] ------------[ cut here ]------------
+  [    6.580063] WARNING: drivers/base/core.c:1640 at device_del+0x2bc/0x38c, CPU#1: kworker/u24:7/85
+  [    6.588847] Modules linked in: tcpci(+) tcpm gf128mul aead snd_soc_fsl_sai(+) fsl_imx9_ddr_perf ci_hdrc_imx(+) ina2xx(+) amc6821(+) imx_pcm_dma
+  snd_soc4
+  [    6.636591] CPU: 1 UID: 0 PID: 85 Comm: kworker/u24:7 Not tainted 7.1.0-rc4+ #14 PREEMPT
+  [    6.644767] Hardware name: Aquila iMX95 on Aquila Development Board (DT)
+  [    6.651466] Workqueue: events_unbound deferred_probe_work_func
+  [    6.657300] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  [    6.664250] pc : device_del+0x2bc/0x38c
+  [    6.668094] lr : device_del+0x18c/0x38c
+  [    6.671934] sp : ffff800080b0b9b0
+  [    6.675237] x29: ffff800080b0b9d0 x28: 0000000000000000 x27: 0000000000000000
+  [    6.682372] x26: 0000000000000000 x25: 0000000000000000 x24: ffff000086c15cc8
+  [    6.689504] x23: ffff000086c15cc0 x22: ffff000080a71010 x21: 0000000004208060
+  [    6.696637] x20: ffffd5f0e544ab58 x19: ffff000086c15c10 x18: 0000000000000000
+  [    6.703770] x17: 0000000000000000 x16: 0000000000000003 x15: 0000000000000400
+  [    6.710902] x14: ffff000081b3e7d0 x13: 0000000000000000 x12: ffff00008316d380
+  [    6.718035] x11: ffff00008012d910 x10: ffff00008316d240 x9 : 0000000000000017
+  [    6.725175] x8 : ffff800080b0b8f8 x7 : 0000000000000000 x6 : fefefefefefeff64
+  [    6.732301] x5 : 0000000000000001 x4 : 0000000000000000 x3 : ffff00008746ff00
+  [    6.739433] x2 : ffff000081b3e740 x1 : 0000000000000003 x0 : ffff000086c15800
+  [    6.746573] Call trace:
+  [    6.749024]  device_del+0x2bc/0x38c (P)
+  [    6.752857]  platform_device_del+0x2c/0x9c
+  [    6.756947]  platform_device_unregister+0x14/0x3c
+  [    6.761652]  of_platform_device_destroy+0xf0/0x100
+  [    6.766438]  device_for_each_child_reverse+0x70/0xc8
+  [    6.771402]  of_platform_depopulate+0x34/0x78
+  [    6.775761]  dwc3_imx8mp_probe+0x234/0x3c0 [dwc3_imx8mp]
+  [    6.781073]  platform_probe+0x5c/0xa4
+  [    6.784738]  really_probe+0xc0/0x3dc
+  [    6.788312]  __driver_probe_device+0x88/0x1a0
+  [    6.792663]  driver_probe_device+0x3c/0x11c
+  [    6.796840]  __device_attach_driver+0xbc/0x17c
+  [    6.801281]  bus_for_each_drv+0x88/0xe8
+  [    6.805108]  __device_attach+0x9c/0x1cc
+  [    6.808939]  device_initial_probe+0x54/0x60
+  [    6.810462] ci_hdrc ci_hdrc.0: EHCI Host Controller
+  [    6.813112]  bus_probe_device+0x34/0xa0
+  [    6.821216] ci_hdrc ci_hdrc.0: new USB bus registered, assigned bus number 1
+  [    6.821796]  deferred_probe_work_func+0xa8/0x104
+  [    6.821802]  process_one_work+0x15c/0x2a0
+  [    6.821810]  worker_thread+0x18c/0x300
+  [    6.821814]  kthread+0x118/0x124
+  [    6.821822]  ret_from_fork+0x10/0x20
+  [    6.833454] ---[ end trace 0000000000000000 ]--
 
-Thanks,
-Pawel
+Log with commit reverted:
 
->
->Thanks,
->Conor.
->
->>
->>    reg:
->> -    items:
->> -      - description: OTG controller registers
->> -      - description: XHCI Host controller registers
->> -      - description: DEVICE controller registers
->> +    minItems: 2
->> +    maxItems: 3
->>
->>    reg-names:
->> +    minItems: 2
->> +    maxItems: 3
->>      items:
->> -      - const: otg
->> -      - const: xhci
->> -      - const: dev
->> +      enum: [ otg, xhci, dev ]
->>
->>    interrupts:
->> -    minItems: 3
->> +    minItems: 2
->>      items:
->>        - description: XHCI host controller interrupt
->>        - description: Device controller interrupt
->> @@ -41,7 +41,7 @@ properties:
->>                       cleared by xhci core, this interrupt is optional
->>
->>    interrupt-names:
->> -    minItems: 3
->> +    minItems: 2
->>      items:
->>        - const: host
->>        - const: peripheral
->> @@ -93,6 +93,46 @@ allOf:
->>    - $ref: usb-drd.yaml#
->>    - $ref: usb-xhci.yaml#
->>
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          const: cdns,cdnsp-no-drd
->> +    then:
->> +      properties:
->> +        reg:
->> +          items:
->> +            - description: XHCI Host controller registers
->> +            - description: DEVICE controller registers
->> +        reg-names:
->> +          items:
->> +            - const: xhci
->> +            - const: dev
->> +        interrupts:
->> +          maxItems: 2
->> +        interrupt-names:
->> +          items:
->> +            - const: host
->> +            - const: peripheral
->> +        dr_mode:
->> +          enum: [host, peripheral]
->> +    else:
->> +      properties:
->> +        reg:
->> +          items:
->> +            - description: OTG controller registers
->> +            - description: XHCI Host controller registers
->> +            - description: DEVICE controller registers
->> +        reg-names:
->> +          items:
->> +            - const: otg
->> +            - const: xhci
->> +            - const: dev
->> +        interrupts:
->> +          minItems: 3
->> +          maxItems: 4
->> +        interrupt-names:
->> +          minItems: 3
->> +
->>  unevaluatedProperties: false
->>
->>  examples:
->>
->> --
->> 2.43.0
->>
->>
+[    6.370196] device: '4c100000.usb': device_add
+[    6.378088] ----- cycle: start -----
+[    6.378095] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+[    6.378109] ----- cycle: start -----
+[    6.378111] /soc/phy@4c1f0040: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+[    6.378129] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/phy@4c1f0040
+[    6.378138] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+[    6.378148] ----- cycle: end -----
+[    6.378151] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: Fixed dependency cycle(s) with /soc/usb@4c010010/usb@4c100000
+[    6.378166] device: 'platform:4c100000.usb--i2c:1-0052': device_add
+[    6.378233] i2c 1-0052: Linked as a sync state only consumer to 4c100000.usb
+[    6.378240] ----- cycle: start -----
+[    6.378243] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+[    6.378255] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+[    6.378265] ----- cycle: end -----
+[    6.378267] /soc/usb@4c010010/usb@4c100000: Fixed dependency cycle(s) with /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+[    6.378277] ----- cycle: start -----
+[    6.378280] /soc/bus@44000000/i2c@44350000/tcpc@52/connector: cycle: depends on /soc/usb@4c010010/usb@4c100000
+[    6.378289] /soc/phy@4c1f0040: cycle: depends on /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+[    6.378298] /soc/usb@4c010010/usb@4c100000: cycle: depends on /soc/phy@4c1f0040
+[    6.378305] ----- cycle: end -----
+[    6.378307] /soc/usb@4c010010/usb@4c100000: Fixed dependency cycle(s) with /soc/phy@4c1f0040
+[    6.378317] device: 'platform:4c1f0040.phy--platform:4c100000.usb': device_add
+[    6.378365] platform 4c100000.usb: Linked as a sync state only consumer to 4c1f0040.phy
+[    6.378369] /soc/usb@4c010010/usb@4c100000 Dropping the fwnode link to /soc/phy@4c1f0040
+[    6.378378] platform 4c100000.usb: Not linking /interrupt-controller@48000000 - might never become dev
+[    6.378383] /soc/usb@4c010010/usb@4c100000 Dropping the fwnode link to /interrupt-controller@48000000
+[    6.378402] device: 'scmi_protocol:scmi_dev.7--platform:4c100000.usb': device_add
+[    6.378448] devices_kset: Moving 4c100000.usb to end of list
+[    6.378454] platform 4c100000.usb: Linked as a consumer to scmi_dev.7
+[    6.378457] /soc/usb@4c010010/usb@4c100000 Dropping the fwnode link to /firmware/scmi/protocol@14
+[    6.412551] imx8mp-dwc3 4c010010.usb: Dropping the link to 4c1f0040.phy
+[    6.420383] device: 'platform:4c1f0040.phy--platform:4c010010.usb': device_unregister
+[    6.448740] /soc/phy@4c1f0040 Dropping the fwnode link to /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+[    6.455463] /soc/usb@4c010010/usb@4c100000 Dropping the fwnode link to /soc/bus@44000000/i2c@44350000/tcpc@52/connector
+[    6.466316] wm8904 1-001a: Linked as a consumer to regulator.2
+[    6.467099] device: 'phy-4c1f0040.phy.0': device_add
+[    6.467280] device: 'regulator:regulator.4--platform:4c1f0040.phy': device_add
+[    6.469337] devices_kset: Moving 4c1f0040.phy to end of list
+[    6.477641] devices_kset: Moving phy-4c1f0040.phy.0 to end of list
+[    6.477672] imx8mq-usb-phy 4c1f0040.phy: Linked as a consumer to regulator.4
+[    6.477755] device: '4c1f0040.phy-switch': device_add
+[    6.479392] imx_usb 4c200000.usb: Linked as a consumer to regulator.5
+[    6.653448] spi-nor spi0.0: Linked as a consumer to regulator.0
+[    6.655937] device: 'phy:phy-4c1f0040.phy.0--platform:4c100000.usb': device_add
+[    6.656027] devices_kset: Moving 4c100000.usb to end of list
+[    6.656039] dwc3 4c100000.usb: Linked as a consumer to phy-4c1f0040.phy.0
+[    6.662812] device: '4c100000.usb': device_add
+[    6.665219] device: '4c100000.usb-role-switch': device_add
+
+
+Kind regards,
+
+Franz
 
