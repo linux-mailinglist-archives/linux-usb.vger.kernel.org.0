@@ -1,175 +1,212 @@
-Return-Path: <linux-usb+bounces-37708-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37709-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CCBUJLpZDGodfwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37708-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 14:38:18 +0200
+	id EJe1OS1cDGrMgAUAu9opvQ
+	(envelope-from <linux-usb+bounces-37709-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 14:48:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B58F57ED2F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 14:38:17 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id F29A557EFE5
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 14:48:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AEDB13081409
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 12:24:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8612D300B281
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 12:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F4F4BC030;
-	Tue, 19 May 2026 12:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7064DD6F6;
+	Tue, 19 May 2026 12:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ha+rHb/0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I2LKIPrH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FE73E1203
-	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 12:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750134DC529;
+	Tue, 19 May 2026 12:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779193497; cv=none; b=c5621ANZlWOFZcsvstRMj2lduW9fL28mm+Alft4BZJh7wm8AomEizMY0eiikGtg5EyN1mA712WSuTgTak7aGt0vC1fcLoX7lgJORBKegBvSA3MnQlkvWiq6Jvy5+fCPE4hBUcFj8Y+Zf3Gp6hxAu35BqNPw0TRI7jmTtIY/iV3w=
+	t=1779194779; cv=none; b=qBHPPHp6mxnZVF7ftpM/VB7t3A9Fd2uOu+SUwvPc0cpq/ZP1VGdWkaKyjA/mlWQG70ZemzOWT9Bcofs6y/olM7cIbRL5RaaGz475lqC/CxlY/uRrChW2Xy016xHwKR69aeCkjxGMxxAnQV0L9ttiDZ+a08uEmoiNUYHhUArHmW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779193497; c=relaxed/simple;
-	bh=jZlJCIQyZrz6zZLxf1zplJW4M7AgcaLS3EMNpVbz888=;
+	s=arc-20240116; t=1779194779; c=relaxed/simple;
+	bh=p4VfnRyQf6ArpvF0K5EWCW+FTBZcNZo5QwRgwVIam/Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y3CdnHXEevGMgj+JuO305/3WqBxtC9HOpQjjUwbYRTpWLCRsUSNA4VT6IPP5bzLeVmLQ8Pm2vDvAskRmpxYH4SZzgLPCF9Om/9Jq4SjU5o6312Fw4s4u1G+WPYLVbzdPKmkhS3qbq8d53ZiWeShRJfOHe3e7qJeIyqQghB8aKe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ha+rHb/0; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779193496; x=1810729496;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jZlJCIQyZrz6zZLxf1zplJW4M7AgcaLS3EMNpVbz888=;
-  b=Ha+rHb/0HiFPTzyEyB8NIGg686AT+9u3ciMeDkIOjXD6/VN+rGqX2DMF
-   iPcl4cntoEdlwtICbWPOIkXSBXx1ySjyQEzpZ8AslhG3+Hw9jOvoIuwSK
-   vlPKWY6K7G7eOCsMs+HpslPC4zIVoAJ2W99f3UF/YT2Wi1AUyq0vW4ysa
-   myPisMKidYu+3VMaGY89CSKimS4xz7bLGmPpUlBhzi87vX7zSi6cSX9FP
-   oKVT9jpy0341fYK8kG6cArG+xmsN22Frjje0uKQfKyHktSjbWUu/gKsBB
-   t+20jRtTszmDWmt/NTSaba+TeMUwxPVaQLEIHmW2tkudN+uQoLqsW8K4L
-   g==;
-X-CSE-ConnectionGUID: yNjetmJzSAiqpGavXKw1/g==
-X-CSE-MsgGUID: srFVeLUTS/yBl9ViA5sygg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="80120097"
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="80120097"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 05:24:56 -0700
-X-CSE-ConnectionGUID: nyUZqD4hQJura1MCsoqytQ==
-X-CSE-MsgGUID: vgWf9mCqSdK4YrtBBB/FzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="277862256"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa001.jf.intel.com with ESMTP; 19 May 2026 05:24:53 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id A583895; Tue, 19 May 2026 14:24:51 +0200 (CEST)
-Date: Tue, 19 May 2026 14:24:51 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 00/10] thunderbolt: Introduce USB4STREAM
-Message-ID: <20260519122451.GC8580@black.igk.intel.com>
-References: <20260511102744.1867485-1-mika.westerberg@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CiV65S6FCld5AxoIk5gWxIfSAJTzdz5FNrmFR6Wxq3qpq9Tv+dqXmxzZQj9S2+6u97rOJjgBikGA3Ue907TVGRskS982w1bUDQrcg+m7tx8dwm+DDIGyUMQ5ax7r2VrTOn8RIFLMrukAoVYhkCvGS5Sp7kmJb4/MKp0S6GaQhNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I2LKIPrH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192D1C2BCB3;
+	Tue, 19 May 2026 12:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779194779;
+	bh=p4VfnRyQf6ArpvF0K5EWCW+FTBZcNZo5QwRgwVIam/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I2LKIPrHGnj+f8uZuSqy0ZpNMqF0I2FpDO4NSGDJTnln6V8kXPrw3RAohN3aPtgxl
+	 9v/FcnjjDFPBY218o7co0ZOurXmHTLm32aKEL1uqSXTWkorHkMav/jyzK1jUqzPHSL
+	 YW8W1vAzaYXQenbF1IbLfazvq1RL5uVrWVF1kPqyZE9DVNQMLahaDiYcBc6D3G3zXk
+	 SJ9o+BTqBMSESQvIWDh/vf558YJffLRiWvT3sfni+zrZ9oT+ZEKM3i30NutPwR4H5C
+	 qtHOuQnTaqzz3/UxF5YlqgP2GroMYuM1ule9W3e26k8M8XAl6MB4e1ZO1DLiwRWedK
+	 hbW3GanqUAsMw==
+Date: Tue, 19 May 2026 14:46:13 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Lee Jones <lee@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, 
+	Filipe =?utf-8?B?TGHDrW5z?= <lains@riseup.net>, Bastien Nocera <hadess@hadess.net>, 
+	Ping Cheng <ping.cheng@wacom.com>, Jason Gerecke <jason.gerecke@wacom.com>, 
+	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Icenowy Zheng <uwu@icenowy.me>, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev, 
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] HID: Proper fix for OOM in hid-core
+Message-ID: <agxbD6k60vQYrJ6T@beelink>
+References: <20260504-wip-fix-core-v3-0-ce1f11f4968f@kernel.org>
+ <20260506091606.GB305027@google.com>
+ <20260512101723.GU305027@google.com>
+ <20260519111723.GU305027@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260511102744.1867485-1-mika.westerberg@linux.intel.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <20260519111723.GU305027@google.com>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37708-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,wunner.de,linux.intel.com,lunn.ch,lwn.net,linuxfoundation.org,davemloft.net,google.com,kernel.org,redhat.com];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37709-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 8B58F57ED2F
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bentiss@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: F29A557EFE5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, May 11, 2026 at 12:27:34PM +0200, Mika Westerberg wrote:
-> Hi all,
+On May 19 2026, Lee Jones wrote:
+> On Tue, 12 May 2026, Lee Jones wrote:
 > 
-> This series adds support for a new protocol over USB4/Thunderbolt cable
-> called USB4STREAM. The protocol is super-simple and basically just
-> transfers raw packets from one host to another. It is documented as part of
-> the thunderbolt_stream driver.
+> > On Wed, 06 May 2026, Lee Jones wrote:
+> > 
+> > > On Mon, 04 May 2026, Benjamin Tissoires wrote:
+> > > 
+> > > > Commit 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
+> > > > bogus memset()") enforced the provided data to be at least the size of
+> > > > the declared buffer in the report descriptor to prevent a buffer
+> > > > overflow.
+> > > > 
+> > > > We only had corner cases of malicious devices exposing the OOM because
+> > > > in most cases, the buffer provided by the transport layer needs to be
+> > > > allocated at probe time and is large enough to handle all the possible
+> > > > reports.
+> > > > 
+> > > > However, the patch from above, which enforces the spec a little bit more
+> > > > introduced both regressions for devices not following the spec (not
+> > > > necesserally malicious), but also a stream of errors for those devices.
+> > > > 
+> > > > Let's revert to the old behavior by giving more information to HID core
+> > > > to be able to decide whether it can or not memset the rest of the buffer
+> > > > to 0 and continue the processing.
+> > > > 
+> > > > Note that the first commit makes an API change, but the callers are
+> > > > relatively limited, so it should be fine on its own. The second patch
+> > > > can't really make the same kind of API change because we have too many
+> > > > callers in various subsystems. We can switch them one by one to the safe
+> > > > approach when needed.
+> > > > 
+> > > > The last 2 patches are small cleanups I initially put together with the
+> > > > 2 first patches, but they can be applied on their own and don't need to
+> > > > be pulled in stable like the first 2.
+> > > > 
+> > > > Cheers,
+> > > > Benjamin
+> > > > 
+> > > > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> > > > ---
+> > > > Changes in v3:
+> > > > - fixed ghib -> ghid in greybus
+> > > > - fixed i386 size_t debug size reported by kernel-bot
+> > > > - Link to v2: https://lore.kernel.org/r/20260416-wip-fix-core-v2-0-be92570e5627@kernel.org
+> > > > 
+> > > > Changes in v2:
+> > > > - added a small blurb explaining the difference between the safe and the
+> > > >   non safe version of hid_safe_input_report
+> > > > - Link to v1: https://lore.kernel.org/r/20260415-wip-fix-core-v1-0-ed3c4c823175@kernel.org
+> > > > 
+> > > > ---
+> > > > Benjamin Tissoires (4):
+> > > >       HID: pass the buffer size to hid_report_raw_event
+> > > >       HID: core: introduce hid_safe_input_report()
+> > > >       HID: multitouch: use __free(kfree) to clean up temporary buffers
+> > > >       HID: wacom: use __free(kfree) to clean up temporary buffers
+> > > > 
+> > > >  drivers/hid/bpf/hid_bpf_dispatch.c |  6 ++--
+> > > >  drivers/hid/hid-core.c             | 67 ++++++++++++++++++++++++++++++--------
+> > > >  drivers/hid/hid-gfrm.c             |  4 +--
+> > > >  drivers/hid/hid-logitech-hidpp.c   |  2 +-
+> > > >  drivers/hid/hid-multitouch.c       | 18 ++++------
+> > > >  drivers/hid/hid-primax.c           |  2 +-
+> > > >  drivers/hid/hid-vivaldi-common.c   |  2 +-
+> > > >  drivers/hid/i2c-hid/i2c-hid-core.c |  7 ++--
+> > > >  drivers/hid/usbhid/hid-core.c      | 11 ++++---
+> > > >  drivers/hid/wacom_sys.c            | 46 +++++++++-----------------
+> > > >  drivers/staging/greybus/hid.c      |  2 +-
+> > > >  include/linux/hid.h                |  6 ++--
+> > > >  include/linux/hid_bpf.h            | 14 +++++---
+> > > >  13 files changed, 109 insertions(+), 78 deletions(-)
+> > > 
+> > > What's the plan for this set Benjamin? -rcs or -next?
+> > 
+> > Are there any updates on this set please?
+> > 
+> > FYI, this set is still important to us.
+> > 
+> > Ideally, if all is well, it would go into the -rcs for v7.1.
 > 
-> The driver exposes /dev/tbstreamX devices on each side of the link that can
-> be used to transfer data using regular filesystem operations such as
-> read(2) and write(2):
+> I'm still actively tracking these.
 > 
->   host1 # cat /dev/tbstream0
->   host2 # echo hello > /dev/tbstream0
+> It looks like Mark has been reverting them from -next and I'm getting
+> complaints from the Stable folks that they are causing build errors.
 > 
-> This can be useful in cases where network tooling is not available or just
-> for existing applications like 'dd' and 'cat' that do not support sockets.
+>   drivers/hid/hid-core.c: In function 'hid_safe_input_report':
+>   drivers/hid/hid-core.c:2195:16: error: too many arguments to function '__hid_input_report'
+>     2195 |         return __hid_input_report(hid, type, data, bufsize, size, interrupt, 0,
 > 
-> thunderbolt_stream can be used at the same time with thunderbolt_net so
-> they don't rule each other our. 
-> 
-> thunderbolt_stream allows multiple streams to be created, for example one
-> stream for control traffic and another for data (there are some limitations
-> in the core USB4/Thunderbolt driver due to dedicated flow control scheme
-> but this is likely change in the future). Each stream is bi-directional
-> tunnel over the fabric.
-> 
-> There are a couple of additional usage examples in the last patch that adds
-> the driver itself.
-> 
-> Previous version of the series is avaiable here:
->   
->    https://lore.kernel.org/linux-usb/20260428072209.3084930-1-mika.westerberg@linux.intel.com/
-> 
-> Changes from the previous version:
-> 
->   * Dropped module parameter from the network driver.
->   * Convert stream driver to use miscdevice instead.
->   * Add documentation how to use stream to admin guide.
-> 
-> Mika Westerberg (10):
->   thunderbolt: Add tb_property_merge_dir()
->   thunderbolt: Add KUnit test for tb_property_merge_dir()
->   thunderbolt: Allow service drivers to specify their own properties
->   thunderbolt / net: Move ring_frame_size() to thunderbolt.h
->   thunderbolt / net: Let the service drivers configure interrupt throttling
->   thunderbolt: Add helper to figure size of the ring
->   thunderbolt: Add tb_ring_flush()
->   thunderbolt: Add support for ConfigFS
->   thunderbolt: Add support for USB4STREAM
->   docs: admin-guide: thunderbolt: Add instructions how to use USB4STREAM
+> Are you folks still working on this set?
 
-All applied to thunderbolt.git/next.
+Well, everything is in Linus' tree:
+
+not yet in a released rc (taken yesterday by Linus directly):
+
+4d3a2a466b8d HID: core: Fix size_t specifier in hid_report_raw_event()
+
+Already in 7.1-rc4:
+
+206342541fc8 HID: core: introduce hid_safe_input_report()
+2c85c61d1332 HID: pass the buffer size to hid_report_raw_event
+
+Not sure why the patches don't apply to stable, but from an upstream
+subsystem point of view, everything is in order.
+
+I still have to resend the last 2 patches, but they are not fixing
+anything, just nice to have.
+
+Cheers,
+Benjamin
 
