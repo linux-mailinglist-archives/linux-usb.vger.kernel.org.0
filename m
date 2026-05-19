@@ -1,86 +1,77 @@
-Return-Path: <linux-usb+bounces-37732-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37733-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AIQfDNSuDGrdkwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37732-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:41:24 +0200
+	id IPb1EWevDGrdkwUAu9opvQ
+	(envelope-from <linux-usb+bounces-37733-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:43:51 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C4BD583CCE
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:41:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2C2A583D26
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 20:43:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8DD61300FC73
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 18:41:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4F554300E725
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2026 18:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC4236BCCC;
-	Tue, 19 May 2026 18:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB3736BCCA;
+	Tue, 19 May 2026 18:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLZRmr7K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z3YOCveh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55B932C957
-	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 18:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD8E31AA9B
+	for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 18:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779216072; cv=none; b=ICrGgu9F2Upgnlg7NUmXRjuz6JjuF4c/mLArUqvQllVPoRM1tpGnw/tnysGrTfxh72yZBHg8sZZtCLrK5ruSUe62m733N0sntq6Rngju/xPhudZUdN+q9Fv+pmXRAVVO/FM/uiaDenG7nG8G3ges3U8WdzmHjJWzNHn7YLPFQnM=
+	t=1779216215; cv=none; b=cd8vINQCpNeyJSKC4m6eo2410rBm4D9bMNvCCtlJuBPLoGMvqRKbTlozs4j1SMDt/Nymb2RnVunLQV6IkH1xEmRPhOVZp2oca1C6qQDrlenrebVUdRB/oEcypwFhmzrHeGCcvg6VLvRDA3PzGdgytHF5JFLSy5NjNU1QI5SPxRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779216072; c=relaxed/simple;
-	bh=5c1Apn+0X5iWHZ0FXIxTRO3d6gvYs90hLYOP2XRxv6A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rvBjsgS57gZRtGWHZZUVgnzH+7kO/LTlipJk3C82eGuyHjHNFjik9B3ihbsQo/FNJqjRHbDaAsYGSVLJFl0s9AzIi/DT/sivK/rbbUmpStE8gtVPAlJyqsj+sn7hIpsmbPwqk/hnO0WBgNuI0xVUskmKJOvihyknfepEFkHbtgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLZRmr7K; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82faf871346so3085009b3a.0
-        for <linux-usb@vger.kernel.org>; Tue, 19 May 2026 11:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779216070; x=1779820870; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=k841aqjf4cI7p/GdFm7EiqPkcmbtYc2RuSPbuNCh2AY=;
-        b=TLZRmr7KhVhYy3D2CWB1lAhHTRhbM1AT7U86b/Xsa4/BszOsjNGQrQnNTEYL98sa2i
-         ICb6d2wp1H6rzzrvdqAxBo8UbgfxvcHolOavQlYWVuOOo2I4QHoaDr9FGQeN9JxJg1xh
-         2GDKm37AhTY7QVmClqVuWCvTiAigL0YpzMlNjJt8CyAv0sBXtCkX38jljBSy5//7Lp3T
-         eoBMDbpsEZlcjk9TwganVyJXHyCpevp5P81zIPzwLdAn2c8osAH6BVflvooM6OT3wHIc
-         Fy8lVDCoDjBr8FsqBYQWoUH9cT4aWXJ+CG4ND8iYT4HdDp1g+HnHUe/ZrVstmAP3OKlh
-         GRaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779216070; x=1779820870;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k841aqjf4cI7p/GdFm7EiqPkcmbtYc2RuSPbuNCh2AY=;
-        b=kPGo0BoMeMLKfSTH8FHQtoBtqjgI0MC4UZyj4xqXc4cq8NOSo5mma44muGKIgUMcP5
-         Pdc4e0qbdUogrXPHe9gUWnK1N8Fg+7FBRLu0pIcuOYJE7kRXjeAsqzA0EakJsDUMi94N
-         ns8ji5QTTfGEWAkWCpiWrN1kjBTKA4xAxE6WI6Yoh9COGzBsXvyiDl2ciklZBJIxCEB+
-         p8ZSyJTl0qysbVj8XSyQfUG4oJ1urfpaxDqV+/b/iNXJlOsw40haZGvKFc4CBmWYfQxb
-         LHkmQzfK13o48RS4SQZrD7x+QOBDWkYGiiHe8qyyDmbABQMA7MU1bR2Xm+4Bx45BhNAU
-         w+Lg==
-X-Gm-Message-State: AOJu0YxrxS47FSGuSP3rIEe/yQzHWFZlLzp7CGZRcPPA68eIhX1/3AgE
-	9AA0lKHBU0GITC78gJCV6x82YNzPXDelDN3mJTM4MbpaE7fh3wjKjuLB
-X-Gm-Gg: Acq92OGNmfZ1dB5Eja9B2FA3NYapXLCOrNXYIodlmZGFWfsc1S5i27nlr+gICHnKcla
-	bqU/2YuHIJnkywUBRKfMII+p/MFs+/rZKLrQzfz4uXM7sd110LyP8vZ+S0BryAxU6H4t9OyNgE9
-	x2iCuHaU3E3mU6jUic02fMl9STv9juWsPaFGxrJMWH4qU0CI5t6QdBv82dJTZ1NbwoJL4JxI1+z
-	8Y8fnCcyyr6T81VhOpG8loLz1b4UYtkKRcUC2zT7snb1CK9b9TESIFRgAKhkLJb4R9+Q5l+rBil
-	bQZrjODSE/3ZQ5jpYWIAIRN3EqxZpAEBvlNx1mB44CEjim6oQP2J4bmg7/2sK6zRiWYk/3ONBPF
-	UM7529RcrIPX35H6sGn+t7HLR7bGjCekcNanhN5fmrQpGoUS6KGElcy8K/HcoyZBR51FZ4nUvRG
-	mSc3IuAlrBH0KU7DWqeck1u8+ycPlLJVMQVB6rmjo8YWiVuKuJDT/SOdN3lEc=
-X-Received: by 2002:a05:6a00:340c:b0:82c:6b46:271d with SMTP id d2e1a72fcca58-83f33d0a2e5mr21025736b3a.48.1779216069982;
-        Tue, 19 May 2026 11:41:09 -0700 (PDT)
-Received: from csl-conti-dell7858.ntu.edu.sg ([155.69.195.57])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f19661261sm23913844b3a.3.2026.05.19.11.41.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2026 11:41:09 -0700 (PDT)
-From: Maoyi Xie <maoyixie.tju@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: usb: gadget: composite: dead empty check in USB_DT_OTG handler?
-Date: Wed, 20 May 2026 02:41:06 +0800
-Message-Id: <20260519184106.2356558-1-maoyixie.tju@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1779216215; c=relaxed/simple;
+	bh=JTTNAvhgs9kj/J4KYbo9JLwQMm1WjtYwsJiTk37d8Pc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OtLJQTylCvlAKUd11Qqj1Rg44b2+xZDxiK1X8/0mqqylvjpFqKu5VT+947jFTHsAfTpkNI2Rk6ri29SbeGsNtPLCgFNCDZc0KUYpBEMnJ+Qr9xjl9cFtXGGrw8Jd0uhOJnJBrtlVQAqn+4b/rKKzxtxzHqUpGALwmRVV5nl/Sh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z3YOCveh; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779216214; x=1810752214;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JTTNAvhgs9kj/J4KYbo9JLwQMm1WjtYwsJiTk37d8Pc=;
+  b=Z3YOCveh05xnsZ5DcX84SDtK1IDbEPXbjr4zQn98utcc1XWNzz/jN66N
+   b54rK4p5XCiV4UffzHkuY9Mp4me7Tr29rVrpuX5BwPoNGAdYHW73nsVCX
+   1x4LvvS3P8CfhY5pngkebpq4V/neKrvbGuwUJeSSh/gOlXIm7zNyxuaBK
+   fNSgY6O/cvXAAl3XPjWJVmG8tlOMJ9SRptdtbEW5ExN3B7YiOqQ4nWs+J
+   Hsw9lbdKFs+Noj6MJlGtYkkmYHF23avA3x7C9erFOvHvPMOsaf0m1OiR1
+   aMZF6IvGBwuSYwCVy/FEaAst417/ZfvNaqqjoKs0wl+Bmy/zRu4MnnXO5
+   g==;
+X-CSE-ConnectionGUID: 2ZhcZGrbS1i3IITVivkqWA==
+X-CSE-MsgGUID: pL/XIJiZSqmGj3gpaOar9A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="102783835"
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="102783835"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 11:43:34 -0700
+X-CSE-ConnectionGUID: 1YNnqKNcTKqdEwGz505qkA==
+X-CSE-MsgGUID: nw89qX6kQNOsrQXa/CdvSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="263633783"
+Received: from pooja-nuc9i7qnx.fm.intel.com ([10.80.169.153])
+  by fmviesa001.fm.intel.com with ESMTP; 19 May 2026 11:43:33 -0700
+From: Pooja Katiyar <pooja.katiyar@intel.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	dmitry.baryshkov@oss.qualcomm.com,
+	johan@kernel.org,
+	asutosh.pathak@intel.com,
+	heikki.krogerus@linux.intel.com,
+	Pooja Katiyar <pooja.katiyar@intel.com>
+Subject: [PATCH v8 0/3] usb: typec: ucsi: Add support for SET_PDOS command
+Date: Tue, 19 May 2026 11:45:11 -0700
+Message-ID: <cover.1778798352.git.pooja.katiyar@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,132 +81,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	SUBJECT_ENDS_QUESTION(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37732-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37733-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
+	FROM_NEQ_ENVFROM(0.00)[pooja.katiyar@intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[maoyixietju@gmail.com,linux-usb@vger.kernel.org];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DKIM_TRACE(0.00)[intel.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,maoyixie.com:url]
-X-Rspamd-Queue-Id: 8C4BD583CCE
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:mid,intel.com:dkim]
+X-Rspamd-Queue-Id: B2C2A583D26
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+This series implements support for UCSI SET PDOS command. It provides
+interface to send message out data and update source or sink
+capabilities PDOs on a connector over debugfs interface.
 
-While auditing drivers/usb/gadget/composite.c, I noticed what
-looks like a dead empty check in the OTG branch of
-composite_setup(). I built an end to end reproducer that crashes
-the kernel under KASAN. I would appreciate it if you could take a
-look and let me know whether this is worth fixing.
+Changelog v8:
+- Rebase onto v7.1-rc3
 
-The site is composite_setup() handling USB_DT_OTG (linux-7.1-rc1,
-around line 1858):
+Pooja Katiyar (3):
+  usb: typec: ucsi: Add support for message_out data structure
+  usb: typec: ucsi: Enable debugfs for message_out data structure
+  usb: typec: ucsi: Add support for SET_PDOS command
 
-    case USB_DT_OTG:
-            if (gadget_is_otg(gadget)) {
-                    struct usb_configuration *config;
-                    int otg_desc_len = 0;
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c   |  6 ++-
+ drivers/usb/typec/ucsi/debugfs.c        | 31 +++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.c           | 52 ++++++++++++++++++++-----
+ drivers/usb/typec/ucsi/ucsi.h           | 20 +++++++++-
+ drivers/usb/typec/ucsi/ucsi_acpi.c      | 22 ++++++++++-
+ drivers/usb/typec/ucsi/ucsi_ccg.c       |  6 ++-
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c |  6 ++-
+ 7 files changed, 123 insertions(+), 20 deletions(-)
 
-                    if (cdev->config)
-                            config = cdev->config;
-                    else
-                            config = list_first_entry(
-                                            &cdev->configs,
-                                    struct usb_configuration, list);
-                    if (!config)
-                            goto done;
+-- 
+2.43.0
 
-                    ...
-
-                    value = min_t(int, w_length, otg_desc_len);
-                    memcpy(req->buf, config->descriptors[0], value);
-            }
-            break;
-
-The `if (!config) goto done;` looks like a guard for an empty
-cdev->configs. list_first_entry() never returns NULL though. It
-returns container_of(&cdev->configs, struct usb_configuration,
-list), which aliases the list head. The check is dead code.
-
-With an empty cdev->configs, config aliases &cdev->configs inside
-struct usb_composite_dev. The read of config->descriptors[0]
-fetches memory at a fixed offset from cdev. memcpy() then copies
-up to w_length bytes from that location into req->buf.
-
-Empty cdev->configs is reachable in two cases. One is a gadget
-driver that returns from composite_bind without calling
-usb_add_config(). The other is a teardown race during gadget
-unbind while a control transfer is in flight.
-
-End to end reproducer on linux-7.0 with KASAN, CONFIG_USB_GADGET
-and CONFIG_USB_DUMMY_HCD:
-
-  - g_empty.ko: minimal composite gadget. Sets gadget->is_otg in
-    bind(). Does not call usb_add_config(). cdev->configs stays
-    empty for the lifetime of the gadget.
-  - kprobe on composite_setup(): rewrites the first incoming
-    GET_DESCRIPTOR to USB_DT_OTG so the function enters the
-    vulnerable branch deterministically.
-
-KASAN report from the unpatched kernel:
-
-  [probe] composite_setup: bReq=GET_DESCRIPTOR wValue=0x0900 desc_type=9
-  [probe]   cdev=ffff8881106f5400 cdev->config=NULL configs_empty=1
-  [probe] BUG WINDOW: list_first_entry on empty configs returns
-          ffff8881106f5520 (head=ffff8881106f5558 diff=-56 bytes)
-  Oops: general protection fault, probably for non canonical address
-        0xdffffc0000000000: 0000 [#1] SMP KASAN PTI
-  KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-  RIP: 0010:composite_setup+0x38a1/0x77d0
-  Kernel panic - not syncing: Fatal exception in interrupt
-
-A candidate fix is a one liner. Replace list_first_entry with
-list_first_entry_or_null so the existing NULL guard runs:
-
-    -                       config = list_first_entry(
-    -                                       &cdev->configs,
-    -                               struct usb_configuration, list);
-    +                       config = list_first_entry_or_null(
-    +                                       &cdev->configs,
-    +                                       struct usb_configuration,
-    +                                       list);
-
-I verified the patched kernel on the same reproducer. KASAN does
-not trip. composite_setup takes the `goto done` branch cleanly.
-
-Similar dead empty checks after list_first_entry have been
-cleaned up in the same shape, for example commit fbb8bc408027
-(net: qed: Remove redundant NULL checks after list_first_entry),
-commit c708d3fad421 (crypto: atmel: use list_first_entry_or_null
-to simplify find_dev) and commit 10379171f346 (ksmbd: use
-list_first_entry_or_null for opinfo_get_list). The qed commit
-message describes the exact shape we observe here. This OTG site
-appears to be missed by those cleanups.
-
-If this is intentional or already known, please disregard.
-Otherwise I am happy to send a [PATCH] or to leave the fix to
-you.
-
-Thanks,
-Maoyi Xie
-https://maoyixie.com/
 
