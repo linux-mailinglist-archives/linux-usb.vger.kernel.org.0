@@ -1,155 +1,217 @@
-Return-Path: <linux-usb+bounces-37744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37745-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yrbfN3UODWpyswUAu9opvQ
-	(envelope-from <linux-usb+bounces-37744-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 03:29:25 +0200
+	id 8E14CGMWDWq5tAUAu9opvQ
+	(envelope-from <linux-usb+bounces-37745-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 04:03:15 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D73F586891
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 03:29:25 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65FB2586B07
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 04:03:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5287B304F305
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 01:29:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 054D6302BA4D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 02:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F202E0902;
-	Wed, 20 May 2026 01:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB4C2ECD1D;
+	Wed, 20 May 2026 02:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="gwTF78PP"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="WbV/MPMu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m155110.qiye.163.com (mail-m155110.qiye.163.com [101.71.155.110])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984EB3438A4;
-	Wed, 20 May 2026 01:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D0329CE1;
+	Wed, 20 May 2026 02:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779240561; cv=none; b=b0AH0WE1dsmvxqlFIHP0Hp4DNwOqHTfNMez2wEcZvCw5Dmp51bsjCJhjwdAu3jGpKZGXQO5myFL7FfcdhuF7EkPb2igq/MJqqjG4sPOQYpCIgBaYeRl2pMRe4rQGyOmH3YAtbIZ+z657++T6bYDsrOLzqNpozyFgOjryrV5Akus=
+	t=1779242482; cv=none; b=VKLjlB+DTo4anjGPI5HSmAk8k+VAZXy3fqKWe6Ez2njAydMjY4ahnW+mowGqmGxq6QtuCNdLMgGXDMCYdu9++8V3iTFQurfAO5tkjAFS3eSYmNvMuUCLFTGzj+304rxG+tk4IfV8orJLOJtiRnKaxMiJOx7+pYOQmfGxAb1VrU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779240561; c=relaxed/simple;
-	bh=eNY+r0g315K8v20Wzfkmq5r9clhD3MRkrGleKkpczMU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j0KKCfp1n+59klH0mHWQ6AICxsTFt7cU2/Mqb6JniS++feI4imMWFyurmP4EqwJJHfN2lBdh+eqpt3ji/YaRxAAiVvKLCoHPO9U7cLwMUcqjlRirKjgiSPn28SRsa8F+1m65p5re+UA2UVtNJ9smvRUZZWV2HoJRL1R74t1pEQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=gwTF78PP; arc=none smtp.client-ip=101.71.155.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.51] (unknown [61.154.14.86])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3f0f4bf32;
-	Wed, 20 May 2026 09:13:41 +0800 (GMT+08:00)
-Message-ID: <c0bc4796-afe5-40ff-8816-9605a6114d23@rock-chips.com>
-Date: Wed, 20 May 2026 09:13:25 +0800
+	s=arc-20240116; t=1779242482; c=relaxed/simple;
+	bh=SPIV5m5fShhlxDtmZ/Ey3UEK8WV2GV6Y2A0KZWA1tpw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=W2NA1KfI4OVtRiAI70Dpa9UC+dk/qw+NjrABTWE2/TmoZphS4CDflpwNam47pbGzTwmK3rAtAhHsX/Xcfj/nZ/9A5Q/HpN9jOznXNdnSxY1tykj0dl1YgDhEHQH9vfLKXl0yZNn++1FfaG9nBNSvmLuVZDiQCzsCGW/10jVZABQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=WbV/MPMu; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1779242477;
+	bh=Kk4mDuk1bqlhfjj6bz2g4hB4FwIz7h/oUwNv9idu2CE=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=WbV/MPMu3iCPoNjBN3QV8ZCBkgGN2jzbkZVfURuYvvWn4JYuZzyGcIvLS/Oavp/+O
+	 WxVthfEBocwEJU2xR1pHF8QC635aFAqYGaL3oJd9CspI/+qhXbnds75YwkQp+8ENVh
+	 UcOulj9Q2V8epYCcVHwuP8XBNlSzWWOV8bFKajrWGL4/OQge2oHyfuxTA159Ue5+dc
+	 VS3IRjjLQyFfkN8W94o1y78M/FiLxPFxisfKcxPLBvN/JL2/T7vvZBImjOQaur7Gd+
+	 jPv7vMbTQtrYSEva4R0DfDq1ky7PZkMRSJBXdP32HFRjs3ynRsLwgUNQFqH319NEDu
+	 H8wSd7RkWgOdw==
+Received: from [192.168.68.117] (unknown [180.150.112.11])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id AC7A260263;
+	Wed, 20 May 2026 10:01:14 +0800 (AWST)
+Message-ID: <eeadb3378066f18cf36469adfc3a70be3ad7b787.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v2] usb: gadget: aspeed_udc: avoid past-the-end iterator
+ in dequeue
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Maoyi Xie <maoyixie.tju@gmail.com>, Neal Liu <neal_liu@aspeedtech.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Benjamin Herrenschmidt
+	 <benh@kernel.crashing.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
+	 <andrew@aj.id.au>, Alan Stern <stern@rowland.harvard.edu>, 
+	linux-aspeed@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 20 May 2026 11:31:14 +0930
+In-Reply-To: <20260519080213.1932516-1-maoyixie.tju@gmail.com>
+References: <20260518073403.1285339-1-maoyi.xie@ntu.edu.sg>
+	 <20260519080213.1932516-1-maoyixie.tju@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 0/9] Add Type-C DP support for RK3399 EVB IND board
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Chaoyi Chen <kernel@airkyi.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, Hugh Cole-Baker <sigmaris@gmail.com>,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- dri-devel@lists.freedesktop.org
-References: <20260304094152.92-1-kernel@airkyi.com> <agxo8ic94e81nQRx@kuha>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <agxo8ic94e81nQRx@kuha>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9e42f214cf03abkunmde1056153a93c
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDQkoaVhhOGE9LGE9LQ01JTFYVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlNSlVKTk9VSk9VQ01ZV1kWGg8SFR0UWUFZT0tIVUpLSE
-	pPSExVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=gwTF78PPuLUm1sysWyZUVBaAIEKd3WixyNY3bmjSc5enP6t3T7LjW1vDPot1Ro5hpeJzDUUuaKmRf3Cz6DX9uu/L1JxbBv2q7RmlverbAPspYQqTopSj5X3/+EdlkoFK2PHIs+UdzLX137UjUapaHB2spXQq0d9N+RLByQu9LFk=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=Puww1BH0j/oGm+Paq7ifcsE10dx5Hg0yZyciu4GUl4o=;
-	h=date:mime-version:subject:message-id:from;
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
-	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[codeconstruct.com.au,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[codeconstruct.com.au:s=2022a];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37744-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37745-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,aspeedtech.com];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[40];
-	FREEMAIL_CC(0.00)[airkyi.com,linuxfoundation.org,oss.qualcomm.com,gmail.com,bootlin.com,kernel.org,sntech.de,rock-chips.com,intel.com,linaro.org,ideasonboard.com,kwiboo.se,linux.intel.com,suse.de,ffwll.ch,google.com,manjaro.org,cknow.org,vger.kernel.org,lists.infradead.org,lists.freedesktop.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[codeconstruct.com.au:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chaoyi.chen@rock-chips.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[rock-chips.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@codeconstruct.com.au,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,rock-chips.com:email,rock-chips.com:mid,rock-chips.com:dkim]
-X-Rspamd-Queue-Id: 2D73F586891
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,codeconstruct.com.au:mid,codeconstruct.com.au:dkim]
+X-Rspamd-Queue-Id: 65FB2586B07
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello Heikki,
+On Tue, 2026-05-19 at 16:02 +0800, Maoyi Xie wrote:
+> ast_udc_ep_dequeue() declares the loop cursor `req` outside the
+> list_for_each_entry(). After the loop it tests `&req->req !=3D _req`
+> to decide whether the request was found. If the queue holds no
+> match, `req` is past-the-end. It then aliases
+> container_of(&ep->queue, struct ast_udc_request, queue) via offset
+> cancellation. Whether that synthetic address equals `_req` depends
+> on heap layout. The function can return 0 without dequeueing
+> anything.
+>=20
+> Walk the list with a separate `iter`. Set `req` only when a
+> request matches. After the loop, `req` is NULL if nothing
+> matched.
+>=20
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Maoyi Xie <maoyixie.tju@gmail.com>
+> ---
+> v2: Switch the loop body to Alan Stern's shape: test inside
+> =C2=A0=C2=A0=C2=A0 the if, assign `req`, break. Same behaviour as v1.
+> v1: https://lore.kernel.org/linux-usb/20260518073403.1285339-1-maoyi.xie@=
+ntu.edu.sg/
+>=20
+> =C2=A0drivers/usb/gadget/udc/aspeed_udc.c | 20 ++++++++++++--------
+> =C2=A01 file changed, 12 insertions(+), 8 deletions(-)
+>=20
+> --- a/drivers/usb/gadget/udc/aspeed_udc.c	2026-05-19 15:29:28.690931576 +=
+0800
+> +++ b/drivers/usb/gadget/udc/aspeed_udc.c	2026-05-19 15:29:59.482953528 +=
+0800
+> @@ -692,26 +692,30 @@
+> =C2=A0{
+> =C2=A0	struct ast_udc_ep *ep =3D to_ast_ep(_ep);
+> =C2=A0	struct ast_udc_dev *udc =3D ep->udc;
+> -	struct ast_udc_request *req;
+> +	struct ast_udc_request *req =3D NULL, *iter;
+> =C2=A0	unsigned long flags;
+> =C2=A0	int rc =3D 0;
+> =C2=A0
+> =C2=A0	spin_lock_irqsave(&udc->lock, flags);
+> =C2=A0
+> =C2=A0	/* make sure it's actually queued on this endpoint */
+> -	list_for_each_entry(req, &ep->queue, queue) {
+> -		if (&req->req =3D=3D _req) {
+> -			list_del_init(&req->queue);
+> -			ast_udc_done(ep, req, -ESHUTDOWN);
+> -			_req->status =3D -ECONNRESET;
+> +	list_for_each_entry(iter, &ep->queue, queue) {
+> +		if (&iter->req =3D=3D _req) {
+> +			req =3D iter;
+> =C2=A0			break;
+> =C2=A0		}
+> =C2=A0	}
+> =C2=A0
+> -	/* dequeue request not found */
+> -	if (&req->req !=3D _req)
+> +	if (!req) {
+> =C2=A0		rc =3D -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	list_del_init(&req->queue);
+> +	ast_udc_done(ep, req, -ESHUTDOWN);
+> +	_req->status =3D -ECONNRESET;
+> =C2=A0
+> +out:
+> =C2=A0	spin_unlock_irqrestore(&udc->lock, flags);
+> =C2=A0
+> =C2=A0	return rc;
 
-On 5/19/2026 9:43 PM, Heikki Krogerus wrote:
-> Hi,
-> 
-> On Wed, Mar 04, 2026 at 05:41:43PM +0800, Chaoyi Chen wrote:
->> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>
->> This series focuses on adding Type-C DP support for USBDP PHY and DP
->> driver. The USBDP PHY and DP will perceive the changes in cable status
->> based on the USB PD and Type-C state machines provided by TCPM. Before
->> this, the USBDP PHY and DP controller of RK3399 sensed cable state
->> changes through extcon, and devices such as the RK3399 Gru-Chromebook
->> rely on them. This series should not break them.
-> 
-> What's the status with this series?
-> Are these inteded to go via the DRM tree?
-> 
-> thanks,
-> 
+This is a bit of a bikeshed comment and doesn't solve making the code
+similar to other cases, however: Golfing the diff a bit, perhaps we can
+start from the assumption that there isn't a match, and require the
+search disprove that. Then we don't have to test whether we saw
+something after-the-fact, and we avoid the goto as proposed above.
 
-Thank you very much for your continued attention to this series.
-The maintainers seem quite busy... Despite there being no further review
-comments, this series have yet to be merged into the DRM tree. 
+Untested:
 
-And some of my other patches are in the same situation. 
-Do you happen to know what the next steps should be? Thank you.
-
--- 
-Best, 
-Chaoyi
+   diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/ud=
+c/aspeed_udc.c
+   index 7fc6696b7694..75f9c831b21a 100644
+   --- a/drivers/usb/gadget/udc/aspeed_udc.c
+   +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+   @@ -694,7 +694,7 @@ static int ast_udc_ep_dequeue(struct usb_ep *_ep, st=
+ruct usb_request *_req)
+           struct ast_udc_dev *udc =3D ep->udc;
+           struct ast_udc_request *req;
+           unsigned long flags;
+   -       int rc =3D 0;
+   +       int rc =3D -EINVAL;
+  =20
+           spin_lock_irqsave(&udc->lock, flags);
+  =20
+   @@ -704,14 +704,11 @@ static int ast_udc_ep_dequeue(struct usb_ep *_ep, =
+struct usb_request *_req)
+                           list_del_init(&req->queue);
+                           ast_udc_done(ep, req, -ESHUTDOWN);
+                           _req->status =3D -ECONNRESET;
+   +                       rc =3D 0;
+                           break;
+                   }
+           }
+  =20
+   -       /* dequeue request not found */
+   -       if (&req->req !=3D _req)
+   -               rc =3D -EINVAL;
+   -
+           spin_unlock_irqrestore(&udc->lock, flags);
+  =20
+           return rc;
+  =20
+  =20
+  =20
 
