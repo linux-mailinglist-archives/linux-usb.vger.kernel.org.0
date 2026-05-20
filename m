@@ -1,156 +1,153 @@
-Return-Path: <linux-usb+bounces-37753-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37754-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gJ9QKw5lDWquwgUAu9opvQ
-	(envelope-from <linux-usb+bounces-37753-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:38:54 +0200
+	id OPh9EExoDWquwgUAu9opvQ
+	(envelope-from <linux-usb+bounces-37754-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:52:44 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB1E58907E
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98BB8589313
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:52:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5B5C530479CB
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 07:33:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5E97C306A9B4
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 07:47:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C854304BCB;
-	Wed, 20 May 2026 07:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05AC397E92;
+	Wed, 20 May 2026 07:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BmXjwgd4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJ5DMtMi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA22632E72F;
-	Wed, 20 May 2026 07:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B0136EAAB;
+	Wed, 20 May 2026 07:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779262391; cv=none; b=KC1L//KVoRySzpPtZGPi84yoLEhcmPDpqa6q5pZxH62/+Aq1jVsZF6FSvVoo74jrsNg2Zr4D/nmLOU9YcdIgSiu5YUuhhWJYLf3g1LSI77vVV8CXXxtGaEbcrrsmrJU2jeJ4508wXJs2w47UjNiTGI7QDKUKvpbvR+GxUQaZEbk=
+	t=1779263244; cv=none; b=ECEVlM2HudZjST1HPQEm601SKYYR9hIo2Uc3ocluoFGk7BvUPUlZ0tuXDKJtbuO6hWj1aEi66Iho3SNctqRiHyKXKezM5CGzFT1GCL3f2vpfEnfVjFvfsii9We7xjEcvfko+qQ6GF3dUQVL4rcPmb04A4rJU8tPpfTOJk0lYTZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779262391; c=relaxed/simple;
-	bh=1efeFbnUp5AtAp3mSSjrOzfID8L1uBlM5v1U4iWTNzg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VET6ma+yAgl0iX6hNZM227dbmTP4xxvtlCIIahnoBKpJLnAkVmtZfn0Wykj1lTy5uDqMMOO3MjTzT2gXmK5lKyzkvHl5JgUm0ARGfQSPIZg7wzuIUcYcUI4AXEtYVROKQPMjIbcGDp4JUbSs2e7E/2LHX2k7qfxfq+MS0HHQg9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BmXjwgd4; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B081F000E9;
-	Wed, 20 May 2026 07:33:03 +0000 (UTC)
+	s=arc-20240116; t=1779263244; c=relaxed/simple;
+	bh=iox1T+Ss2L+SOj/qCL/rI9bAf7b7woXw0NMHfdm6138=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sGuN9Ftm1wjkHx//n2KwFuSJkk3Aix2ql6suWj6QhcALMxxZCHOg8uRpq1iI2E5p682ASS1kd9NjLv5j2Xat4vmRMDfod5rPjAC7MoEAwf6VgL7ULgT1rLyJgVrMtyQdWW9P1Wuh2/xFMGAVejGYRXUB1L9LnijlcR4WLVlvWRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJ5DMtMi; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8018E1F000E9;
+	Wed, 20 May 2026 07:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779262386;
-	bh=PcVXy75goYYW/CkPoEERDevx0ZCw9tGQ2veC2FqMe44=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=BmXjwgd4xAiYfywgqlUYh1l/pgJPNcuy9Wzc78NsLIPm2nY48RZH3GhW0ujyG4bij
-	 0qXKFaV6OfRAguoE1i/XDiXygIpxzqJAO8UlOLEDuMJwdMhzECAeqESV0ByBytsE3a
-	 GyOSVBAuJd8ZyTx6dRQNejkyaSgoiy1VYrpzrW69yIbN+VB45rFzRZ6XX4cCrre5IL
-	 C0OFF6nr3j533WN6tSGGty6GxH2PA+GyaLJM5EdA38rBublWfD34yM/3GsGcLoMcBc
-	 E4exAqGhxD0Jc5BFtwL3TDUWwVaD+mwfdy0RIaaNf1G6MBztS1YnAS7TbSRea1hGMC
-	 PA3e4Sgm5RSiw==
-Message-ID: <b7311879-b4ec-4af0-98bc-cb67392eacf7@kernel.org>
-Date: Wed, 20 May 2026 09:33:00 +0200
+	s=k20260515; t=1779263240;
+	bh=ULpjYOWlk6QepvRPImnVaFE/cdv7fymMVDxSSwoizbM=;
+	h=From:To:Cc:Subject:Date;
+	b=FJ5DMtMicPY4Mw8MFe3YVJduhlX/G2wB4328Hsw+ZJJ9gKAPHV0gq8oGWf3bCKyKB
+	 X672ahBjHaYw38uiMSw9VBa2jZYAm6ZzKNr8DIeOrefyCZO8eGGYinZdwV0YmcovBb
+	 m1LOKOfdajkOfuEpzn2EG97fo10WNr7KNuDiQKDBD+4paXKxVZukCTqcHaLmPpPR4I
+	 85VtKkJy43q8FTABIaNbvS3qubih8mJAMxcXPzj76eJvMGK7lV3SELHeGE70J26PNe
+	 qRyCaLX/gUzRYYGScoXh3keAAfDg2MLlX59yD5jVpTORj2z0ithGcGPW7liMtX9nis
+	 U4O3qkJ7CBoNA==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1wPbe9-00000002gSN-4A9P;
+	Wed, 20 May 2026 09:47:18 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] USB: serial: digi_acceleport: fix memory corruption with small endpoints
+Date: Wed, 20 May 2026 09:46:53 +0200
+Message-ID: <20260520074653.639831-1-johan@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] dt-bindings: usb: richtek,rt1711h: add missing
- 'port' property
-To: Akash Sukhavasi <akash.sukhavasi@gmail.com>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, gene_chen@richtek.com,
- gregkh@linuxfoundation.org, krzk+dt@kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, robh@kernel.org
-References: <20260519-quixotic-lobster-of-experience-b894cb@quoll>
- <20260520045334.159097-1-akash.sukhavasi@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260520045334.159097-1-akash.sukhavasi@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37753-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37754-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 2BB1E58907E
+X-Rspamd-Queue-Id: 98BB8589313
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 20/05/2026 06:53, Akash Sukhavasi wrote:
-> 
-> Dropping patch 2/2 from this series.
-> 
-> Can patch 1/2 (.txt removal) be applied independently with your Reviewed-by?
-> 
+Add the missing bulk-out buffer size sanity checks to avoid
+out-of-bounds memory accesses or slab corruption should a malicious
+device report smaller buffers than expected.
 
-You should rather send a v2, with only the first patch and with my tag.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/digi_acceleport.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/usb/serial/digi_acceleport.c b/drivers/usb/serial/digi_acceleport.c
+index d515df045c4c..c481208255eb 100644
+--- a/drivers/usb/serial/digi_acceleport.c
++++ b/drivers/usb/serial/digi_acceleport.c
+@@ -1229,15 +1229,34 @@ static int digi_port_init(struct usb_serial_port *port, unsigned port_num)
+ static int digi_startup(struct usb_serial *serial)
+ {
+ 	struct digi_serial *serial_priv;
++	int oob_port_num;
+ 	int ret;
++	int i;
++
++	/*
++	 * The port bulk-out buffers must be large enough for header and
++	 * buffered data.
++	 */
++	for (i = 0; i < serial->type->num_ports; i++) {
++		if (serial->port[i]->bulk_out_size < DIGI_OUT_BUF_SIZE + 2)
++			return -EINVAL;
++	}
++
++	/*
++	 * The OOB port bulk-out buffer must be large enough for the two
++	 * commands in digi_set_modem_signals().
++	 */
++	oob_port_num = serial->type->num_ports;
++	if (serial->port[oob_port_num]->bulk_out_size < 8)
++		return -EINVAL;
+ 
+ 	serial_priv = kzalloc_obj(*serial_priv);
+ 	if (!serial_priv)
+ 		return -ENOMEM;
+ 
+ 	spin_lock_init(&serial_priv->ds_serial_lock);
+-	serial_priv->ds_oob_port_num = serial->type->num_ports;
+-	serial_priv->ds_oob_port = serial->port[serial_priv->ds_oob_port_num];
++	serial_priv->ds_oob_port_num = oob_port_num;
++	serial_priv->ds_oob_port = serial->port[oob_port_num];
+ 
+ 	ret = digi_port_init(serial_priv->ds_oob_port,
+ 						serial_priv->ds_oob_port_num);
+-- 
+2.53.0
 
-Best regards,
-Krzysztof
 
