@@ -1,171 +1,227 @@
-Return-Path: <linux-usb+bounces-37774-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37775-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QG4qHWiXDWoMzwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37774-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:13:44 +0200
+	id 0CYrM/iYDWoMzwUAu9opvQ
+	(envelope-from <linux-usb+bounces-37775-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:20:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5633758C2A9
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:13:44 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A09958C42B
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:20:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 61ABB302FC3C
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:13:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A931A30E7EDA
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CEE3DB30B;
-	Wed, 20 May 2026 11:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC00237187E;
+	Wed, 20 May 2026 11:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="UIMfPi0n"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kQKhyyiH";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="hRfPS8Wn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CE93D7D9E;
-	Wed, 20 May 2026 11:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E306C35200C
+	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 11:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779275612; cv=none; b=czRRWWA2y9ezmJMaW02VH9Hiz1WtODnYrprXkv9RqpjfU2rAAEITIlufIrSCcutGmeRArpDC0q57TeWMu5SqbKL6/J08OgobXcxF93h6coahXADEZhOYxBjNVvsMs3fhXm/NA2BbKlEoi7yF/ctgu6uSTPKEZ/vWOLBn8wWfVhs=
+	t=1779275715; cv=none; b=m3P6lRbIo9dBXNot+jxSjPS6ZXGw/KfFN6PxzFX+C/GIUtgD1Rc3Ppc6KViLUDcv7BZUAhURM0MvI4vTv/jaRRGCtktetr5gxFi8sYks+8mzAkHShvNa2AkibnMkJH9IELfcqNqi1n2ZMdy3UXPZM+R88zNDiqifqCNDEu9V+IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779275612; c=relaxed/simple;
-	bh=JRJUo4PXuYN1XhJVP15C+J6R1n1WzcWxMs+6lKcGyXw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GnOu/2lB6/l5BBG4titUuNsvHqU8YgV5xd3DxnyUuGJESR5Xy1nJ2mlecE/3W7mqHGgCqpiRHTbUOoqhRAIWDCwmyhPU+j3skvTvx3VOv/Muh5whLeXk/3t0G4XCAGXa0nlsoaqkOYPhTOtWoQu+bDwRAzfydqGd5Qo7uRHfExM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=UIMfPi0n; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=JRJUo4PXuYN1XhJVP15C+J6R1n1WzcWxMs+6lKcGyXw=; b=UIMfPi0n+2sixL8bSd9VaSky4K
-	RHWEU0+Im4DinWDobN+TIklEhd6YinjY5ra47zGedlGtmCK3VcLA4SdnC/T9Wz+xbv787uc9NCmur
-	oE/Pb9YEfcxcHLNfgJgespEqEWtw4n5OmHUUJpLH4OusgknEWNuQPRuBNqljFKhUo5+wDF9F6HKDp
-	7be2MVHEYOcgda44vWIrGG8KrxbAhoTugxFAOK6tqo9T6Y/e1aUu/oa9ixbiz6AQcrrmBIpaKFezU
-	Ywj+BMGYYbwcxGr5YO+NvKrymVGhCxN9ndMlH+BhpCaopR6UWjmoW1Bez1Zy8MLmFiEb1e5C3LRV6
-	xx0+IXow==;
-From: Heiko Stuebner <heiko@sntech.de>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Sandy Huang <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, Hugh Cole-Baker <sigmaris@gmail.com>,
- Chaoyi Chen <kernel@airkyi.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- dri-devel@lists.freedesktop.org, Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Subject:
- Re: [PATCH v15 7/9] drm/rockchip: cdn-dp: Add multiple bridges to support PHY
- port selection
-Date: Wed, 20 May 2026 13:12:49 +0200
-Message-ID: <12511061.0AQdONaE2F@phil>
-In-Reply-To: <20260304094152.92-8-kernel@airkyi.com>
-References:
- <20260304094152.92-1-kernel@airkyi.com>
- <20260304094152.92-8-kernel@airkyi.com>
+	s=arc-20240116; t=1779275715; c=relaxed/simple;
+	bh=DQn5wkZ5evtF2xsA7fVKvrXRFubdEbruQnpuwMWCwRo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MBaPRowuNpNE91KwwGlWz6KTz+4Ze/xqyxvCVPY9003QkkJydonrzVz2vamYmAOMafwnebzzuMtahsymIrJSr08X6vyKMWbPyq0emL5Qtaliac1YaMGCZfzgiP1syqwcEqiOT/n4xjoafQF3Gud7nZbUodzRTKMRYdW0bJKnEnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kQKhyyiH; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=hRfPS8Wn; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64K78x6K1725401
+	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 11:15:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	K9ZCGpGKO/dzQP/sIYxBMZ+crs2O49Dfxdra2zpXf84=; b=kQKhyyiHYYxQwA0R
+	6MxcmvLCW+wrwyNunAi95JsgsmC/yskTyq8Fc4ndmWBPZTftQci91VJYUANrZxoh
+	DoDGwxI+aRyuZSqtuolycTVrvhxBhsSwjB3SEhRkE7fH+ywAN90XlNZAMiPqHwoQ
+	5tjGyFaT7ooXp+Xpe/Md/YV0wjITc807WSyFvIhmLYgucXTSaLW7ytG9aLV8xOWE
+	6PQf1CsfXHUnFGvVg0gSDSV0OqI86Sn9ORUaRf1nsMEKZTMpjIYXCyA8yDKZFUS6
+	weJ3hiqFCuoChdQcDO0mfC11lG/Bv9ycsoNjlqubR8cljrFA7UFZP6SL4W6ou7TZ
+	PvnfMQ==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e8t3qmf2m-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 11:15:13 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-90fcac6c56fso96176185a.0
+        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 04:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1779275712; x=1779880512; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K9ZCGpGKO/dzQP/sIYxBMZ+crs2O49Dfxdra2zpXf84=;
+        b=hRfPS8Wnkl0IW12xTK0Ctgzo5CV8WUjgBFEf4G6TQSjOyFakUWA8ngs/2YXrjNyd0P
+         8bAjPvJCOTfh36mW0+dBXGNcnBWw/4xjSjhtO+/tuBgfhCd33oVGk6dJ5+5rGspRmxYM
+         Z9LqKE9mhNWBeqYP9wJttjpGLWQuqG9Lfs9lm1k0/6XZzytpuC6J1jOozyVQ1DMC3URF
+         sE/DpLdYqi2IZZOzl8sihGVlaJKxb7wTa0GFanAfTqZYth1xN5YEsZLHhrwWpE+/vhnk
+         i8fGCbjUxkoxap5+DKV1qCJkwHWe+phOrmZoH54QYjGZnlBCD1E3fHvKnoQ+GPnXzOZ7
+         IY4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779275712; x=1779880512;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K9ZCGpGKO/dzQP/sIYxBMZ+crs2O49Dfxdra2zpXf84=;
+        b=DaX5evM4nIG/rExr1Fj8rnudhRA7pAsePTnzgbb3awUzOBK4TWbULdK+oUD9LeMA3o
+         1OTW21pW1L7XO13fQwdnYaDsXabU3WUAzMAgF546uUGif8A92f+gSEcO9dE1lWXG4hkM
+         Mk19+v8s8nQ0cdR5bfklPw91uzr3qE2MvLkrYKvNLkJ3WuTxQp2z32A2RLrbt0mBRPRy
+         xr7V5Z4N4LsgrRXvIJOHNf+gkvt233cDpjPKQc8cZzY51HQ6xUv5XB5NzbNIYDk+QtiR
+         28tOSpNfhtuy5HpvkEDMlm7dQiJmS5BAzaaDKHDE01ClGQlWjs5WfpaiXd9mgZ4WSecu
+         X3ng==
+X-Gm-Message-State: AOJu0YzhGzBVwcB7KdYxWhfGcOblHJ3+SehhWYwt8AgdJt20xqiRSYLj
+	VCMQDp71nVsE8NbCkrvWC/R2ns10lgD8XujVOKOqC6jaT4eef2AF6v7M5dFfquzqMBmCKGjA4jq
+	6wyf5tuQot2q7YEUY8tX3fXbGDi4RkPP2QvbPOm/+RxxiTXqVi6DmcbhBAI3Ey2U=
+X-Gm-Gg: Acq92OE+tb260n0fJoSEyLzBTqKe42wkXr3cDiKwxnvWZQnm+yzv2OG8UWCLzh/if61
+	xpReeoH6XZBp9Lvc0ImbAeyg4EKCPinuvN4Aq4bzT3eLqJANkzahtIHko2XGNhpw+J8XLqP01Je
+	uOOVqKXVUPa+CVUnDzQkamy3ecMpvm5rNP/bEHyWMylD4z9sE3kAAYV4XvAlzJjxyVAFr0yOowj
+	7oyO/oSa8IwFOiYdJhsv3TmiNV0/0HehPZStxrb5GYFFpdNJ1EW6N05lNs42OcbZS7g7Pf0cR3G
+	S8eZDQI51Mvpyhpt4Y7OcM/B3saM9i9ZxMBi1DOR7CMZwvHI2/W+pFNczQrHJ9BOGQlbuyR4Gyj
+	Or65K/botqietjZnErDBdhRX2XjN5R250fK6Zp3l9L7l8wf1Bo14b2ieN1UEVm3CNj8IW+TZJmZ
+	C6ecsROoHnBFZRrw==
+X-Received: by 2002:a05:620a:17a3:b0:8d7:a89d:958a with SMTP id af79cd13be357-911d05967b6mr2361725985a.6.1779275711997;
+        Wed, 20 May 2026 04:15:11 -0700 (PDT)
+X-Received: by 2002:a05:620a:17a3:b0:8d7:a89d:958a with SMTP id af79cd13be357-911d05967b6mr2361721785a.6.1779275711450;
+        Wed, 20 May 2026 04:15:11 -0700 (PDT)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bd4f4bd1124sm850249666b.1.2026.05.20.04.15.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 May 2026 04:15:10 -0700 (PDT)
+Message-ID: <d20ed9b8-18aa-4901-ba49-f24e3c79e36d@oss.qualcomm.com>
+Date: Wed, 20 May 2026 13:15:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: monaco-monza-som: Enable USB0 DRD
+ mode
+To: Akash Kumar <akash.kumar@oss.qualcomm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20260520093902.2064730-1-akash.kumar@oss.qualcomm.com>
+ <20260520093902.2064730-3-akash.kumar@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260520093902.2064730-3-akash.kumar@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDEwOCBTYWx0ZWRfX1jhcantH+syu
+ zgSfcKHZZYsdr0719ms4pl19djOPbbMRGrRTGSlAUSbwlgbbkRi/lP/V0U2dQaQmo6qXHX5ENCF
+ 75DAki2LeUxyVj03he8ULqgWAaPy3Nz1taASUkyEoyKeEl5dgTHLXHRU8Vgf5mvAnRH+ahuD0J+
+ 654i63sPTxAZb6eYX4Klg73KkiKqPDOJqOkme9tiF1sV4E5T3gqRvLeDk86kzz095+i6wWSsSeb
+ 5Vunih4iw8FYqsszHvc3Qn8Lgkuu0qBI/fKvxh0nfxLftKnF45V8Y17DYiQPmf78nL3Xsf5BjVM
+ QpJ2dX+xrCbtjzkLK6wqRNu8iIfC7bgSYeoc7RmjDzM9OPak0BU7/KBtDVgbmQrEwg67WUXUum/
+ RFXDOr5vi7K6VdPPTWpHrmksr2r5A7VY28k2rdCqATtBZwGIsHSnsPdo/RtpbpCcSjL1x97vJbx
+ LWO3i0X2GvSp34OTnWw==
+X-Authority-Analysis: v=2.4 cv=N9cZ0W9B c=1 sm=1 tr=0 ts=6a0d97c1 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=EUspDBNiAAAA:8 a=028NdSF9W1XUqDdDnWcA:9 a=QEXdDO2ut3YA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-GUID: 1-Dq_19k6BeHSwyy_DsgdJ4osqaYorYW
+X-Proofpoint-ORIG-GUID: 1-Dq_19k6BeHSwyy_DsgdJ4osqaYorYW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-20_02,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 clxscore=1015
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605200108
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[sntech.de,quarantine];
-	R_DKIM_ALLOW(-0.20)[sntech.de:s=gloria202408];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[linux.intel.com,linuxfoundation.org,oss.qualcomm.com,gmail.com,bootlin.com,kernel.org,rock-chips.com,intel.com,linaro.org,ideasonboard.com,kwiboo.se,suse.de,ffwll.ch,google.com,manjaro.org,cknow.org,airkyi.com];
-	RCPT_COUNT_TWELVE(0.00)[40];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37774-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[sntech.de:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-37775-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heiko@sntech.de,linux-usb@vger.kernel.org];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,oss.qualcomm.com:mid,oss.qualcomm.com:dkim,qualcomm.com:email,qualcomm.com:dkim,0.0.0.8:email];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rock-chips.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 5633758C2A9
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 3A09958C42B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Am Mittwoch, 4. M=C3=A4rz 2026, 10:41:50 Mitteleurop=C3=A4ische Sommerzeit =
-schrieb Chaoyi Chen:
-> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->=20
-> The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
-> the CDN-DP can be switched to output to one of the PHYs. If both ports
-> are plugged into DP, DP will select the first port for output.
->=20
-> This patch adds support for multiple bridges, enabling users to flexibly
-> select the output port. For each PHY port, a separate encoder and bridge
-> are registered.
->=20
-> The change is based on the DRM AUX HPD bridge, rather than the
-> extcon approach. This requires the DT to correctly describe the
-> connections between the first bridge in bridge chain and DP
-> controller. For example, the bridge chain may be like this:
->=20
-> PHY aux birdge -> fsa4480 analog audio switch bridge ->
-> onnn,nb7vpq904m USB reminder bridge -> USB-C controller AUX HPD bridge
->=20
-> In this case, the connection relationships among the PHY aux bridge
-> and the DP contorller need to be described in DT.
->=20
-> In addition, the cdn_dp_parse_next_bridge_dt() will parses it and
-> determines whether to register one or two bridges.
->=20
-> Since there is only one DP controller, only one of the PHY ports can
-> output at a time. The key is how to switch between different PHYs,
-> which is handled by cdn_dp_switch_port() and cdn_dp_enable().
->=20
-> There are two cases:
->=20
-> 1. Neither bridge is enabled. In this case, both bridges can
-> independently read the EDID, and the PHY port may switch before
-> reading the EDID.
->=20
-> 2. One bridge is already enabled. In this case, other bridges are not
-> allowed to read the EDID. So we will try to return the cached EDID.
->=20
-> Since the scenario of two ports plug in at the same time is rare,
-> I don't have a board which support two TypeC connector to test this.
-> Therefore, I tested forced switching on a single PHY port, as well as
-> output using a fake PHY port alongside a real PHY port.
->=20
-> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+On 5/20/26 11:37 AM, Akash Kumar wrote:
+> Enable USB0 dual-role mode on monza SOM using the Cypress CYPD6129 UCSI
+> controller.
+> 
+> Switch the controller node to I2C12, configure the required pinctrl and
+> interrupt settings, and wire the USB2/USB3 endpoints for the USB-C
+> connector.
+> 
+> Signed-off-by: Akash Kumar <akash.kumar@oss.qualcomm.com>
+> ---
+>  .../arm64/boot/dts/qcom/monaco-monza-som.dtsi | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi b/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
+> index 9b5ed55939b8..8e3af6018dfc 100644
+> --- a/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
+> @@ -194,6 +194,52 @@ &iris {
+>  	status = "okay";
+>  };
+>  
+> +&i2c12 {
+> +	pinctrl-0 = <&qup_i2c12_data_clk>, <&usb0_intr_state>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Let's keep a \n before 'status'
 
+> +
+> +	typec@8 {
+> +		compatible = "cypress,cypd6129";
+> +		reg = <0x08>;
+> +		interrupt-parent = <&tlmm>;
+> +		interrupts = < 3 IRQ_TYPE_LEVEL_LOW>;
 
+interrupts-extended = <&tlmm 3 IRQ..>
+
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		status = "okay";
+
+This is unnecessary, nodes are enabled by default
+
+Konrad
 
