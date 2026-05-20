@@ -1,186 +1,170 @@
-Return-Path: <linux-usb+bounces-37784-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37785-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GCEaDPqcDWoS0AUAu9opvQ
-	(envelope-from <linux-usb+bounces-37784-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:37:30 +0200
+	id YINgIFahDWq10QUAu9opvQ
+	(envelope-from <linux-usb+bounces-37785-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:56:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89BEE58CB18
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:37:29 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7DBD58D0F0
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:56:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1B5773092398
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:31:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EFEE831B3726
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D143DF00B;
-	Wed, 20 May 2026 11:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 384C63E1717;
+	Wed, 20 May 2026 11:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mf/ic+Hd"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BfHMfKdM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1863A450A;
-	Wed, 20 May 2026 11:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74D03E00BD;
+	Wed, 20 May 2026 11:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779276129; cv=none; b=MIaMjWlJ1y+SrmU1JgLsfpgKdAiaTAsFxAsYT3dzGPgTyB8n2fbWGgIscONIkgjT4q11wyK6iL5PrXxkgz54D1qnJdMysSNY+dyriFzy+ZpZrEZWtGpxbvzMffaAeV4yuXiWaSfPM5NliFRPzptEjgOcI8IL5AEmpgfQSxr3T64=
+	t=1779276131; cv=none; b=M9mh9CI7SBsYNn2BPTKmCFFhB4Tncx9Pd9IeAHSRlgNpHjZ393bkq/rVNGbrDnpEPbIjpJuGrredv4xIzl4vLsxD7PohHJoh10c5Ay1rbMM1kc2GE73hBW2tw5/wIHgUb3p0h+oCUzGhG0MTEZI7h0Gt7fSydQgxWmZAQNOt7Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779276129; c=relaxed/simple;
-	bh=QNpq3Jj9DzkYTI0WUypOaSJkFwfZPIxLJFJsu0s/HQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GkJPa7X/821pR/sDhFoApPFP5sMqahL1TFDOxsktLxNymGAgnAAFL2gINX4bziacf0AcUzAC6jGS2HmWKToinDKOXb4PCeOSBSUzqJYX5mCTuab9ruTvmSAKd+64RbrdPDgYdmIbXgI7cs7VRYXaY1y7TSvkkAhth5DQKNu7ukg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mf/ic+Hd; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C5141F000E9;
-	Wed, 20 May 2026 11:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779276127;
-	bh=G2CsxJ/VImy8jJ3Owd0aWo2po2plOLiVms9IwK9U6Ww=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Mf/ic+HdvlYcafQx6VesOvz1OWBkukK5u2WTc156tHJYlsfP/9G7XNdkzspwwHyE2
-	 jHXNqvJtJCWXYDpSZsarWQzO4ReszCDcAtWdy0BVK/WENOCn+WjkonJxj1qlxW0e5L
-	 wSebxGFqthbAStpIfXZ59wQnbVtSqvDN9BeixQoCqNl1RVvwPtxAh7j6TybRLTYk6C
-	 l7eUuwnAABHWAGbspYXBXOP/4E1K1QCa6gXPBQ1NFTe792EHEvCanzQhPG39KbjO6+
-	 Vkfjk6Jr+A/NQFsHovMt6CiMnvleIpELY3V9+0A0kkfUxf+CvkkGKzy0G0xuagOjW1
-	 sWtNKan7qXxBw==
-Message-ID: <4a61c0e2-5e35-4d58-9977-d9984bbfb6cc@kernel.org>
-Date: Wed, 20 May 2026 13:22:03 +0200
+	s=arc-20240116; t=1779276131; c=relaxed/simple;
+	bh=zk2Iw3Wl4zYFrHHU3GmkWDTPU1oghjF8ogBbMZFd2ug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sAlrzoaWRPQxqkxqJoenkgGDTNuI+4UnR2/88ZVreOz++PUBU1AMolN9aA4RPQTK5Adlxr7h2dkLHMX65oehGpDGtCR95aRJMJ7j+sNjJdPQw5KbQbfxlL/4J4fp7J5LLd5Pe7H3+i+7sikAsD+dZs8SjdOJ4efKWV/XqvkmM0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BfHMfKdM; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06DDE1F00893;
+	Wed, 20 May 2026 11:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1779276129;
+	bh=QdZXzviRwIlOT/I3quW66KDWDnjoybexsNxJThgjKCk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=BfHMfKdMQnUjNLNJ9UBu+LQ8GAUZr6bEON5Xp1ca52hV3lUEumcK+wej2wW2gNs+y
+	 9phlv+FGUcxfN9ecKZs4oXMa6bHWiQGo4NVNjU2oOGqYczgne7lkKLikipXZhFdYGY
+	 ciP6+PNX3yT6367J9f+qIVzgs1PFU9EZEPDtfYW0=
+Date: Wed, 20 May 2026 13:22:12 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Umang Jain <uajain@igalia.com>
+Cc: Lucas De Marchi <demarchi@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+Subject: Re: [PATCH] usb: early: xhci-dbc: Ensure correct memory size for
+ early_ioremap()
+Message-ID: <2026052001-ruined-pesticide-9de7@gregkh>
+References: <20260520094804.2981960-1-uajain@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: monaco-monza-som: Enable USB0 DRD
- mode
-To: Akash Kumar <akash.kumar@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20260520093902.2064730-1-akash.kumar@oss.qualcomm.com>
- <20260520093902.2064730-3-akash.kumar@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260520093902.2064730-3-akash.kumar@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260520094804.2981960-1-uajain@igalia.com>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37784-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-37785-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,0.0.0.8:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 89BEE58CB18
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,igalia.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: D7DBD58D0F0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 20/05/2026 11:37, Akash Kumar wrote:
-> Enable USB0 dual-role mode on monza SOM using the Cypress CYPD6129 UCSI
-> controller.
+On Wed, May 20, 2026 at 03:18:04PM +0530, Umang Jain wrote:
+> early_ioremap() checks and fail, if the memory size exceeds the fixed
+> boot-time mappings (dictated by NR_FIX_BTMAPS macro). We should ensure
+> the correct maximum memory size is passed to early_ioremap() in the
+> driver.
 > 
-> Switch the controller node to I2C12, configure the required pinctrl and
-> interrupt settings, and wire the USB2/USB3 endpoints for the USB-C
-> connector.
+> Without this check and page size being 4K(4096), enabling xhci-dbc
+> on steamdeck seems to issue the warning:
 > 
-> Signed-off-by: Akash Kumar <akash.kumar@oss.qualcomm.com>
+> steamdeck kernel: xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+> steamdeck kernel: ------------[ cut here ]------------
+> ay 19 13:42:57 steamdeck kernel: WARNING: CPU: 0 PID: 0 at mm/early_ioremap.c:139 __early_ioremap+0xae/0x180
+> steamdeck kernel: Modules linked in:
+> steamdeck kernel: CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.18.25-valve1-gcab630e7af50 #13 PREEMPT(undef)  4b70872d9de6788b7f2d10dce46ada89e6cd177b
+> steamdeck kernel: RIP: 0010:__early_ioremap+0xae/0x180
+> steamdeck kernel: Code: 60 ba 3f a0 4c 89 ca 48 81 e3 00 f0 ff ff 48 81 e2 00 f0 ff ff 48 29 d3 48 89 14 24 48 89 da 48 c1 ea 0c 89 d5 83 fa 40 76 04 <0f> 0b eb a2 6b c0 c0 4d 89 ce 41 81 e6 ff 0f 00 00 44 8d b8 ff 05
+> steamdeck kernel: RSP: 0000:ffffffff9fa03cb8 EFLAGS: 00010006 ORIG_RAX: 0000000000000000
+> steamdeck kernel: RAX: 0000000000000000 RBX: 0000000000100000 RCX: 0000000000100000
+> steamdeck kernel: RDX: 0000000000000100 RSI: 0000000000100000 RDI: 0000000080200000
+> steamdeck kernel: RBP: 0000000000000100 R08: 0000000000000000 R09: 0000000080200000
+> steamdeck kernel: R10: 0000000000000004 R11: ffffffff9fa03ad0 R12: 8000000000000163
+> steamdeck kernel: R13: 0000000000000000 R14: 0000000080200000 R15: 0000000000000000
+> steamdeck kernel: FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
+> steamdeck kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> steamdeck kernel: CR2: ffff888000000413 CR3: 000000020ed02000 CR4: 00000000000000b0
+> steamdeck kernel: Call Trace:
+> steamdeck kernel:  <TASK>
+> steamdeck kernel:  ? early_xdbc_parse_parameter+0x32c/0x360
+> steamdeck kernel:  ? setup_early_printk+0x4f5/0x520
+> steamdeck kernel:  ? do_early_param+0x44/0x70
+> steamdeck kernel:  ? parse_args+0x233/0x420
+> steamdeck kernel:  ? __pfx_do_early_param+0x10/0x10
+> steamdeck kernel:  ? parse_early_options+0x29/0x30
+> steamdeck kernel:  ? __pfx_do_early_param+0x10/0x10
+> steamdeck kernel:  ? parse_early_param+0x64/0xc0
+> steamdeck kernel:  ? setup_arch+0x542/0xbc0
+> steamdeck kernel:  ? _printk+0x6b/0x90
+> steamdeck kernel:  ? start_kernel+0x66/0x9a0
+> steamdeck kernel:  ? x86_64_start_reservations+0x24/0x30
+> steamdeck kernel:  ? x86_64_start_kernel+0xcc/0xd0
+> steamdeck kernel:  ? common_startup_64+0x13e/0x141
+> steamdeck kernel:  </TASK>
+> steamdeck kernel: ---[ end trace 0000000000000000 ]---
+> 
+> Signed-off-by: Umang Jain <uajain@igalia.com>
 > ---
->  .../arm64/boot/dts/qcom/monaco-monza-som.dtsi | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
+>  drivers/usb/early/xhci-dbc.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi b/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
-> index 9b5ed55939b8..8e3af6018dfc 100644
-> --- a/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
-> @@ -194,6 +194,52 @@ &iris {
->  	status = "okay";
->  };
+> diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+> index 41118bba9197..699a9ac6d6c3 100644
+> --- a/drivers/usb/early/xhci-dbc.c
+> +++ b/drivers/usb/early/xhci-dbc.c
+> @@ -76,6 +76,14 @@ static void __iomem * __init xdbc_map_pci_mmio(u32 bus, u32 dev, u32 func)
 >  
-> +&i2c12 {
-> +	pinctrl-0 = <&qup_i2c12_data_clk>, <&usb0_intr_state>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	typec@8 {
-> +		compatible = "cypress,cypd6129";
-> +		reg = <0x08>;
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = < 3 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		status = "okay";
+>  	sz64 = 1ULL << __ffs64(sz64);
+>  
+> +	/*
+> +	 * Check that size does not exceed fixed boot-time mappings
+> +	 * dictated by NR_FIX_BTMAPS. early_ioremap() will WARN_ON()
+> +	 * and not map memory in those cases.
+> +	 */
+> +	if (sz64 > (NR_FIX_BTMAPS << PAGE_SHIFT))
+> +		sz64 = NR_FIX_BTMAPS << PAGE_SHIFT;
 
-Why do you need to enable it? Who disabled this node?
+You are bounding the size here, but does this mean that the hardware
+itself is just broken and should be fixed up to properly report the
+correct size?  Does this hardware actually have a debug controller?
 
-Best regards,
-Krzysztof
+And what changed to cause this to start complaining?  Does it fix a
+specific commit?  This hardware has been around for a long time, did we
+mess something up in the kernel for it recently?
+
+thanks,
+
+greg k-h
 
