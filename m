@@ -1,248 +1,259 @@
-Return-Path: <linux-usb+bounces-37807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37808-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kEL2E5YIDmrY5gUAu9opvQ
-	(envelope-from <linux-usb+bounces-37807-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 21:16:38 +0200
+	id yNDpNgExDmrj7wUAu9opvQ
+	(envelope-from <linux-usb+bounces-37808-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 00:09:05 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CBAB5980F9
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 21:16:37 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59D7159BC84
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 00:09:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8904032464D1
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 18:59:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3BF88301C92A
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 22:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19B873FC5D7;
-	Wed, 20 May 2026 18:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F6143BAD92;
+	Wed, 20 May 2026 22:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C3HYJyk5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sQEbojIv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4F32701C4;
-	Wed, 20 May 2026 18:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141DF35AC01
+	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 22:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779303538; cv=none; b=XRUAvRA7r8baIvOIiH/I09tw2S6LPD6vrpA4Ag/CGaJwn8dovxlr5Idjaz/jWvvRKVjcWO8eyURc0Vq5C/3Df8qHYHYruk+HJV2zaoD/+1Tstjr3mssbvix/qpaFvlCzWiG3b2ysxwuE6BvFr1dXVUWHD5NHmK1+4iOHCZw+WGM=
+	t=1779314938; cv=none; b=FS+EhXKdAROha6ItGRBtlxtkAEuPPSSBtmoodgbsIZ+TzeG7T3xoi9az/XPG4wOI6hd4w/0d5YeETTj2ZADWTJd3LYmmhlpUII44Rhsx1RjbkDKm+lC6UYMaTt8i8HKUL/d+k+6/CdXz9edklMJqwni1MiyvOu2cq6yWty32aTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779303538; c=relaxed/simple;
-	bh=tQ2CvlZD5E4G/EoOu8BkHnDUHVLY01kjEqytn+FSuns=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RmreU9yv4a2jTlvmyry3CQRjY/N5pR05puGfbT5E6AnySJnxu5LOkqMSgVX0lLFhXYAMQ7VRoZ52iC4XvKKM9mKLvfCvxvKKvBTcuO9fblRsHBo+NB9yOez+VYe3tYa3SEAF7zEm82OoPkQ1ckojd0qi5JQskjyUfDusTBKzfGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C3HYJyk5; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779303536; x=1810839536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tQ2CvlZD5E4G/EoOu8BkHnDUHVLY01kjEqytn+FSuns=;
-  b=C3HYJyk5dFAc9JhyKoKizc2jNJtGx7EbUguzC1w8k12vNu0TIuz7WiSN
-   uO5BYrCRn5QFsxa77yB/cYVFebtzHR/V92qz+1T//1HcMp1kb8df64ZZP
-   16JQbeJHwrjXmlQyRrkjDVPkYVi7x/J6yIOIbBbCZvnmIO2+IDW9h8gfk
-   1NdORTciKRxIMtoR5y7qKZwRVVIWhvWYc9wHHU6tjuDODmkZLPGehiZO8
-   710EuOJ1ggprxZFg/J6Cjsjb7woR1HHAplC4GcpJ7Wl8ang+eoyzulhgP
-   cHHfOADuC8DklEzSJsc06K0rvRVR/scCcedHOAMgbDrZiqXOAv62JDOpk
-   g==;
-X-CSE-ConnectionGUID: VcLrXReVQ4+h+H7nXwotiA==
-X-CSE-MsgGUID: wShn7LAdS42JWRWl/JqqSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="80332753"
-X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="80332753"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2026 11:58:55 -0700
-X-CSE-ConnectionGUID: 96T3v6E8Td+OA/16PJLZpg==
-X-CSE-MsgGUID: fJPfPjFAScC0AyDkCDgYUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="245266532"
-Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 20 May 2026 11:58:54 -0700
-Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wPm7l-000000003jh-4AQk;
-	Wed, 20 May 2026 18:58:38 +0000
-Date: Thu, 21 May 2026 02:57:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: keyspan: fix missing indat transfer sanity
- check
-Message-ID: <202605210249.xpCIgp3t-lkp@intel.com>
-References: <20260520101230.657426-1-johan@kernel.org>
+	s=arc-20240116; t=1779314938; c=relaxed/simple;
+	bh=To1/Y92yUpauKoVfsnuSOUNF9V2XmtW1GFWPU+8Nbx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZFxL8cuPraDPT6L1CsKPv74QlHxoMqKeB6TRPLG4tScpCAmO+jlzvORHndp6am67An4zs+RCVJe2qD+VkimwqeD7E5TTCIpUafGuCfpBaWunCKGeSMbRuP0lC4WTJMwZzvAD2XBj19iV67B9SYRthbjRvTSi4zXgsKtXMdR3WCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sQEbojIv; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48e8132c6d0so35843455e9.1
+        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 15:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779314934; x=1779919734; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AB8Qs3mhw8ib66lsF/0B5lxpOV4wsvQJODp7uB/3aFQ=;
+        b=sQEbojIvLzpENbWVCmuVNIbbtrFskuNUTOVPVuN+ON/M28T58PI6kkQ3NUNdeBx2NC
+         nbZud/BSIAyy1/WZP4v6mcqmH7cBeSjLhL+Pf4Q+dVrzqKUALl8fZIORlbrye89OXG3U
+         YRzhbnfTxOAmSg15q1dRl3hkZpkjcYTrQSSJyJPbjuaMe/9bK+0TXaDRpi1GWXMday08
+         yq1t8m0VlBcn7+j7656oMcSuGJQa5lGLw1PFqkklwefm1uISAGbMz/X5Ll10+PZBsS7l
+         9dC/YR+fwPQ8msfWZZ2QM7zipDNnc0k3rcyTD3qJ7vrwDJelfBH9FvOOmCv5xa7KTqs2
+         Bppw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779314934; x=1779919734;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AB8Qs3mhw8ib66lsF/0B5lxpOV4wsvQJODp7uB/3aFQ=;
+        b=ePxznDUp9i4xA4OYY85+8w3HqboJdLTDChLIo/R5Bjou2v1FnMCNNEoVxPemDc4u7B
+         cS6OTM0+kAartFuAZZQsOpgvAKNFqLvBClRdckc9G8XpweCtR9SVS/Vqd6QcxcZW9334
+         9RZ35A7QmyJH2S06/ZEm8J36YEZTGltPOAZloSzz5MNnh0AG/SBI4jQNRflPV+E3+AUW
+         MCa7A+q9WAhIMasnJipsWqhrIsxbQXm9YV+8egpRY9ZYITZtJFY5wAn/yjqnF1fyb6xU
+         2aCN3dGRDyC6v8bJ8lQHIEKotqv5tw+rVUfUDqmyWsF4OnBp8/dddyFD8caIh+xxHpqU
+         ms8g==
+X-Forwarded-Encrypted: i=1; AFNElJ8GtUTL9HnVaqD+mScVEDDP/lOkNcAc+R4KJ1sUYXKpFA7ohSxruqWDBQSgIqTPTZpMvnzlKkrBdZo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN0D7PkdYdchzvfeL+uG92/J5w8tNpy4NwFNYP8Ihjgr3Mdtk0
+	0dHsj/L20N7el0RBr23ypMu5rHJxQbMwWHvahQq+KUASxmHuwslyTAJLtSxYig==
+X-Gm-Gg: Acq92OHdtJieBj+xmIMp//J0GOKcsX/STN94603KvTNhQ54j+CgaliPul+6/sBoMzme
+	JcpSOvKBSAjA3U/2nhpGqTK7lZF5nYlAP0mdof+NZ9ZBTt9VJoqGztE6VLesRdjJxDQXTIX0u67
+	/Y2VxjWKnNOSVPObF6vh9b88OKuar/wWlI0WLpghrGzepuBX6QZQz4tUz5iDSYo64RQvpUCtqbq
+	+O0sV6JW3vV2z4liybXgxPhUU++qMAMR1NyQO7yQ7XDUOMzVoPfXNtArMmFl9f7Rln71q1c+FBc
+	8+kt/7aYc6qx6ujlB6I7cCzFwzrvoA3Xc6AdSR90moh04++NvSCMA1/1sGe5bOzP4PQi6ZZmwQ6
+	Ectu4x3u219vV1nUqiBbJXWf6kLN6XkcQyg0FjipUly6zpzkvYsYPT1X0l/IdhJDaQy6/O62hc3
+	erfl/fvXO8IiXahCl9198938odiT5hqDh1
+X-Received: by 2002:a05:600c:8b77:b0:48e:82af:d9 with SMTP id 5b1f17b1804b1-490360bbdf9mr2304225e9.29.1779314933962;
+        Wed, 20 May 2026 15:08:53 -0700 (PDT)
+Received: from foxbook (bfk48.neoplus.adsl.tpnet.pl. [83.28.48.48])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49033d52c8bsm21436945e9.8.2026.05.20.15.08.52
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 20 May 2026 15:08:52 -0700 (PDT)
+Date: Thu, 21 May 2026 00:08:48 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Niklas Neronin <niklas.neronin@linux.intel.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/3] usb: xhci: allocate internal DCBAA mirror
+ dynamically
+Message-ID: <20260521000848.05cce0dd.michal.pecio@gmail.com>
+In-Reply-To: <20260507083945.959370-4-niklas.neronin@linux.intel.com>
+References: <20260507083945.959370-1-niklas.neronin@linux.intel.com>
+	<20260507083945.959370-4-niklas.neronin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260520101230.657426-1-johan@kernel.org>
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37807-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37808-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,01.org:url,git-scm.com:url,intel.com:email,intel.com:mid,intel.com:dkim]
-X-Rspamd-Queue-Id: 6CBAB5980F9
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 59D7159BC84
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Johan,
+On Thu,  7 May 2026 10:39:45 +0200, Niklas Neronin wrote:
+> Allocate the internal virtual device array dynamically based on the
+> maximum number of slots reported by the host controller. Previously,
+> the array was always allocated to the absolute maximum of 255 entries.
+> 
+> Repurpose the 'MAX_HC_SLOTS' macro to limit the number of enabled slots.
+> This mirrors how the maximum number of ports and interrupters are handled.
+> 
+> The allocation now uses kcalloc_node(), which zeroes the memory
+> automatically, making the explicit memset() call unnecessary.
+> 
+> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-kernel test robot noticed the following build errors:
+Hi,
 
-[auto build test ERROR on johan-usb-serial/usb-next]
-[also build test ERROR on usb/usb-testing usb/usb-next usb/usb-linus tty/tty-testing tty/tty-next tty/tty-linus linus/master v7.1-rc4 next-20260520]
-[cannot apply to johan-usb-serial/usb-linus]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The series looks alright, but a few small comments below:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/USB-serial-keyspan-fix-missing-indat-transfer-sanity-check/20260520-181924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20260520101230.657426-1-johan%40kernel.org
-patch subject: [PATCH] USB: serial: keyspan: fix missing indat transfer sanity check
-config: arm-randconfig-002-20260520 (https://download.01.org/0day-ci/archive/20260521/202605210249.xpCIgp3t-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605210249.xpCIgp3t-lkp@intel.com/reproduce)
+> ---
+>  drivers/usb/host/xhci-mem.c | 14 ++++++++++++--
+>  drivers/usb/host/xhci.c     |  4 +---
+>  drivers/usb/host/xhci.h     |  9 ++++++---
+>  3 files changed, 19 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index ac915dacd886..1effc9f08678 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -1953,8 +1953,11 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+>  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed command ring");
+>  	xhci_cleanup_command_queue(xhci);
+>  
+> -	for (i = xhci->max_slots; i > 0; i--)
+> -		xhci_free_virt_devices_depth_first(xhci, i);
+> +	if (xhci->devs) {
+> +		for (i = xhci->max_slots; i > 0; i--)
+> +			xhci_free_virt_devices_depth_first(xhci, i);
+> +		kfree(xhci->devs);
+> +	}
+>  
+>  	dma_pool_destroy(xhci->segment_pool);
+>  	xhci->segment_pool = NULL;
+> @@ -2011,6 +2014,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+>  	xhci->rh_bw = NULL;
+>  	xhci->port_caps = NULL;
+>  	xhci->interrupters = NULL;
+> +	xhci->devs = NULL;
+>  
+>  	xhci->usb2_rhub.bus_state.bus_suspended = 0;
+>  	xhci->usb3_rhub.bus_state.bus_suspended = 0;
+> @@ -2417,6 +2421,12 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+>  
+>  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
+>  
+> +	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating internal virtual device array");
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605210249.xpCIgp3t-lkp@intel.com/
+I don't think this is useful in any way. One look at the code makes it
+clear that this is going to happen each time this function is called.
 
-All errors (new ones prefixed by >>):
+> +	xhci->devs = kcalloc_node(xhci->max_slots + 1, sizeof(*xhci->devs), flags,
+> +				  dev_to_node(dev));
+> +	if (!xhci->devs)
+> +		goto fail;
+> +
+>  	xhci->dcbaa.ctx_array =
+>  		dma_alloc_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), xhci->max_slots + 1),
+>  				   &dcbaa->dma, flags);
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 9a471bd72265..151a759806f8 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -5460,7 +5460,7 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+>  	if (xhci->hci_version > 0x100)
+>  		xhci->hcc_params2 = readl(&xhci->cap_regs->hcc_params2);
+>  
+> -	xhci->max_slots = HCS_MAX_SLOTS(hcs_params1);
+> +	xhci->max_slots = min(HCS_MAX_SLOTS(hcs_params1), MAX_HC_SLOTS);
 
->> drivers/usb/serial/keyspan.c:1189:25: error: incompatible pointer types passing 'struct usb_device **' to parameter of type 'const struct device *' [-Wincompatible-pointer-types]
-    1189 |                         dev_warn_ratelimited(&serial->dev, "malformed indat packet\n");
-         |                                              ^~~~~~~~~~~~
-   include/linux/dev_printk.h:227:34: note: expanded from macro 'dev_warn_ratelimited'
-     227 |         dev_level_ratelimited(dev_warn, dev, fmt, ##__VA_ARGS__)
-         |                                         ^~~
-   include/linux/dev_printk.h:215:13: note: expanded from macro 'dev_level_ratelimited'
-     215 |                 dev_level(dev, fmt, ##__VA_ARGS__);                     \
-         |                           ^~~
-   include/linux/dev_printk.h:156:49: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~
-   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                         ^~~
-   include/linux/dev_printk.h:52:37: note: passing argument to parameter 'dev' here
-      52 | void _dev_warn(const struct device *dev, const char *fmt, ...);
-         |                                     ^
-   1 error generated.
+HCSPARAMS1.MaxSlots is 8 bits wide, so it will never exceed 255.
+There is no need to add this check.
 
+And the macro seems to porperly mask out excess bits picked up from
+other fields, so no worries about that either. And if it didn't, it
+should be fixed instead of (wrongly) assuming 255 slots.
 
-vim +1189 drivers/usb/serial/keyspan.c
+>  	xhci->max_ports = min(HCS_MAX_PORTS(hcs_params1), MAX_HC_PORTS);
+>  	/* xhci-plat or xhci-pci might have set max_interrupters already */
+>  	if (!xhci->max_interrupters)
+> @@ -5533,8 +5533,6 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+>  	init_completion(&xhci->cmd_ring_stop_completion);
+>  	xhci_hcd_page_size(xhci);
+>  
+> -	memset(xhci->devs, 0, MAX_HC_SLOTS * sizeof(*xhci->devs));
+> -
+>  	/* Allocate xHCI data structures */
+>  	retval = xhci_mem_init(xhci, GFP_KERNEL);
+>  	if (retval)
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index b467b875eeba..f977c8e6a90a 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -33,8 +33,11 @@
+>  /* xHCI PCI Configuration Registers */
+>  #define XHCI_SBRN_OFFSET	(0x60)
+>  
+> -/* Max number of USB devices for any host controller - limit in section 6.1 */
+> -#define MAX_HC_SLOTS		256
+> +/*
+> + * Max number of Devices Slots. xHCI specification section 5.3.3
+> + * Valid values are in the range of 1 to 255.
+> + */
+> +#define MAX_HC_SLOTS		255
 
-  1166	
-  1167	static void usa49wg_indat_callback(struct urb *urb)
-  1168	{
-  1169		int			i, len, x, err;
-  1170		struct usb_serial	*serial;
-  1171		struct usb_serial_port	*port;
-  1172		unsigned char 		*data = urb->transfer_buffer;
-  1173		int status = urb->status;
-  1174	
-  1175		serial = urb->context;
-  1176	
-  1177		if (status) {
-  1178			dev_dbg(&urb->dev->dev, "%s - nonzero status: %d\n",
-  1179					__func__, status);
-  1180			return;
-  1181		}
-  1182	
-  1183		/* inbound data is in the form P#, len, status, data */
-  1184		i = 0;
-  1185		len = 0;
-  1186	
-  1187		while (i < urb->actual_length) {
-  1188			if (urb->actual_length - i < 3) {
-> 1189				dev_warn_ratelimited(&serial->dev, "malformed indat packet\n");
-  1190				break;
-  1191			}
-  1192	
-  1193			/* Check port number from message */
-  1194			if (data[i] >= serial->num_ports) {
-  1195				dev_dbg(&urb->dev->dev, "%s - Unexpected port number %d\n",
-  1196					__func__, data[i]);
-  1197				return;
-  1198			}
-  1199			port = serial->port[data[i++]];
-  1200			len = data[i++];
-  1201	
-  1202			/* 0x80 bit is error flag */
-  1203			if ((data[i] & 0x80) == 0) {
-  1204				/* no error on any byte */
-  1205				i++;
-  1206				for (x = 1; x < len && i < urb->actual_length; ++x)
-  1207					tty_insert_flip_char(&port->port,
-  1208							data[i++], 0);
-  1209			} else {
-  1210				/*
-  1211				 * some bytes had errors, every byte has status
-  1212				 */
-  1213				for (x = 0; x + 1 < len &&
-  1214					    i + 1 < urb->actual_length; x += 2) {
-  1215					int stat = data[i];
-  1216					int flag = TTY_NORMAL;
-  1217	
-  1218					if (stat & RXERROR_OVERRUN) {
-  1219						tty_insert_flip_char(&port->port, 0,
-  1220									TTY_OVERRUN);
-  1221					}
-  1222					/* XXX should handle break (0x10) */
-  1223					if (stat & RXERROR_PARITY)
-  1224						flag = TTY_PARITY;
-  1225					else if (stat & RXERROR_FRAMING)
-  1226						flag = TTY_FRAME;
-  1227	
-  1228					tty_insert_flip_char(&port->port, data[i+1],
-  1229							     flag);
-  1230					i += 2;
-  1231				}
-  1232			}
-  1233			tty_flip_buffer_push(&port->port);
-  1234		}
-  1235	
-  1236		/* Resubmit urb so we continue receiving */
-  1237		err = usb_submit_urb(urb, GFP_ATOMIC);
-  1238		if (err != 0)
-  1239			dev_dbg(&urb->dev->dev, "%s - resubmit read urb failed. (%d)\n", __func__, err);
-  1240	}
-  1241	
+Then if there are no other uses, this constant can simply be removed.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  /*
+>   * Max Number of Ports. xHCI specification section 5.3.3
+>   * Valid values are in the range of 1 to 255.
+> @@ -1552,7 +1555,7 @@ struct xhci_hcd {
+>  	/* these are not thread safe so use mutex */
+>  	struct mutex mutex;
+>  	/* Internal mirror of the HW's dcbaa */
+> -	struct xhci_virt_device	*devs[MAX_HC_SLOTS];
+> +	struct xhci_virt_device	**devs;
+>  	/* For keeping track of bandwidth domains per roothub. */
+>  	struct xhci_root_port_bw_info	*rh_bw;
+>  
+> -- 
+> 2.50.1
+> 
 
