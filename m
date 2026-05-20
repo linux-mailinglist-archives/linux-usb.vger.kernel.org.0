@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-37783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37784-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4KnDJSWcDWoS0AUAu9opvQ
-	(envelope-from <linux-usb+bounces-37783-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:33:57 +0200
+	id GCEaDPqcDWoS0AUAu9opvQ
+	(envelope-from <linux-usb+bounces-37784-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:37:30 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13F1558C932
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:33:56 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89BEE58CB18
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:37:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1492C30BF408
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:30:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B5773092398
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845A33DD535;
-	Wed, 20 May 2026 11:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D143DF00B;
+	Wed, 20 May 2026 11:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTsEkf2a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mf/ic+Hd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EB439658D;
-	Wed, 20 May 2026 11:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1863A450A;
+	Wed, 20 May 2026 11:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779276087; cv=none; b=DqxVreoq+KVTkswoWwM7QLJLn6Pgih1S9JLhsx3zLRIFMXLsenmqxZO0kY3F2pu6Ofp8lm76klRoSq17YkDwBRUUk+C7mG1cy0J2URJFXaa/rSceHayAMX6SS5e6rTCZzRZYzVH2UNDV8UM5ZH/R97cp2U0ZuEiqcxUFziTFIOY=
+	t=1779276129; cv=none; b=MIaMjWlJ1y+SrmU1JgLsfpgKdAiaTAsFxAsYT3dzGPgTyB8n2fbWGgIscONIkgjT4q11wyK6iL5PrXxkgz54D1qnJdMysSNY+dyriFzy+ZpZrEZWtGpxbvzMffaAeV4yuXiWaSfPM5NliFRPzptEjgOcI8IL5AEmpgfQSxr3T64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779276087; c=relaxed/simple;
-	bh=TIct65M6X6jxjQEZvIpCh3pktYk8EaQuFdSv9SgRjE8=;
+	s=arc-20240116; t=1779276129; c=relaxed/simple;
+	bh=QNpq3Jj9DzkYTI0WUypOaSJkFwfZPIxLJFJsu0s/HQk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=htx63mJz/iFNXf1dzNXb6YqfLqOkvvv8s103K3gnUYkU+SvLjGJctY9RU3BP2xUMhkiB+BMxNys7cvWc+jrRMDAHbPQ5+ac/e0j+U0dCv4ET0/qhKRyR0xUQtKEl/LoTxbAjiKJITneyqUzbSjJDvMMzWu8eIn7ZPwm7jkoTJr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cTsEkf2a; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 626511F000E9;
-	Wed, 20 May 2026 11:21:23 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=GkJPa7X/821pR/sDhFoApPFP5sMqahL1TFDOxsktLxNymGAgnAAFL2gINX4bziacf0AcUzAC6jGS2HmWKToinDKOXb4PCeOSBSUzqJYX5mCTuab9ruTvmSAKd+64RbrdPDgYdmIbXgI7cs7VRYXaY1y7TSvkkAhth5DQKNu7ukg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mf/ic+Hd; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C5141F000E9;
+	Wed, 20 May 2026 11:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779276086;
-	bh=/NNdlSCSm2zV6hkoaa7Oskxt5n0mdM0O824jQTIg7Lg=;
+	s=k20260515; t=1779276127;
+	bh=G2CsxJ/VImy8jJ3Owd0aWo2po2plOLiVms9IwK9U6Ww=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=cTsEkf2ahPMvKI7eOBiGZNsXqBG/pnaoRftnzxiuc2xeKBcu44F891ORyi4tCKmPL
-	 CKKaOi+bcGTSwFNX9tD74DgWlrfR95Aybor1MWCLvYZDM57/mS4lTBbY5phBymfjLa
-	 bwYgvcNMiwY9wiON6kWojIhsjTLBc8tcYsLGfVXHK2Fm9Tb7umiiLOoUFwzg93+VR+
-	 Z5x/ywq4lo/d5royHWa74YBTl2fRAwGQToPN3neGLkL1PrHCsXeG8y8wHG1XaELy4r
-	 IWyDVjoS1SktQhDzE6uMK0OUGQP3lf5De8KfO6MqkYd78pC130E/nC7OS4UJ3CH/+L
-	 iXG2oNGP4FnAw==
-Message-ID: <d6ad8b4c-5a48-452d-a070-921feda15125@kernel.org>
-Date: Wed, 20 May 2026 13:21:22 +0200
+	b=Mf/ic+HdvlYcafQx6VesOvz1OWBkukK5u2WTc156tHJYlsfP/9G7XNdkzspwwHyE2
+	 jHXNqvJtJCWXYDpSZsarWQzO4ReszCDcAtWdy0BVK/WENOCn+WjkonJxj1qlxW0e5L
+	 wSebxGFqthbAStpIfXZ59wQnbVtSqvDN9BeixQoCqNl1RVvwPtxAh7j6TybRLTYk6C
+	 l7eUuwnAABHWAGbspYXBXOP/4E1K1QCa6gXPBQ1NFTe792EHEvCanzQhPG39KbjO6+
+	 Vkfjk6Jr+A/NQFsHovMt6CiMnvleIpELY3V9+0A0kkfUxf+CvkkGKzy0G0xuagOjW1
+	 sWtNKan7qXxBw==
+Message-ID: <4a61c0e2-5e35-4d58-9977-d9984bbfb6cc@kernel.org>
+Date: Wed, 20 May 2026 13:22:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: usb: typec: Add Cypress CYPD6129 UCSI
- controller compatible
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: monaco-monza-som: Enable USB0 DRD
+ mode
 To: Akash Kumar <akash.kumar@oss.qualcomm.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -64,7 +64,7 @@ To: Akash Kumar <akash.kumar@oss.qualcomm.com>,
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
 References: <20260520093902.2064730-1-akash.kumar@oss.qualcomm.com>
- <20260520093902.2064730-2-akash.kumar@oss.qualcomm.com>
+ <20260520093902.2064730-3-akash.kumar@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,26 +110,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260520093902.2064730-2-akash.kumar@oss.qualcomm.com>
+In-Reply-To: <20260520093902.2064730-3-akash.kumar@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37783-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37784-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[12];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
@@ -138,63 +138,48 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,qualcomm.com:email]
-X-Rspamd-Queue-Id: 13F1558C932
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,0.0.0.8:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 89BEE58CB18
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 On 20/05/2026 11:37, Akash Kumar wrote:
-> Document the "cypress,cypd6129" compatible string for the Cypress/Infineon
-> EZ-PD CCGx UCSI controller.
+> Enable USB0 dual-role mode on monza SOM using the Cypress CYPD6129 UCSI
+> controller.
 > 
-> The CYPD6129 is compatible with the existing CCGx binding, so allow it as a
-
-Device can be compatible with a device, not with a binding.
-
-And explain WHY it is compatible.
-
-> valid compatible and permit the existing "cypress,cypd4226" fallback where
-> appropriate.
+> Switch the controller node to I2C12, configure the required pinctrl and
+> interrupt settings, and wire the USB2/USB3 endpoints for the USB-C
+> connector.
 > 
 > Signed-off-by: Akash Kumar <akash.kumar@oss.qualcomm.com>
 > ---
->  .../bindings/usb/cypress,cypd4226.yaml        | 73 ++++++++++++++-----
->  1 file changed, 55 insertions(+), 18 deletions(-)
+>  .../arm64/boot/dts/qcom/monaco-monza-som.dtsi | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> index 0620d82508c1..90769c43ac95 100644
-> --- a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> @@ -15,7 +15,13 @@ description:
+> diff --git a/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi b/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
+> index 9b5ed55939b8..8e3af6018dfc 100644
+> --- a/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/monaco-monza-som.dtsi
+> @@ -194,6 +194,52 @@ &iris {
+>  	status = "okay";
+>  };
 >  
->  properties:
->    compatible:
-> -    const: cypress,cypd4226
-> +    oneOf:
-> +      - enum:
-> +          - cypress,cypd6129
-> +          - cypress,cypd4226
-> +      - items:
-> +          - const: cypress,cypd6129
-> +          - const: cypress,cypd4226
+> +&i2c12 {
+> +	pinctrl-0 = <&qup_i2c12_data_clk>, <&usb0_intr_state>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +
+> +	typec@8 {
+> +		compatible = "cypress,cypd6129";
+> +		reg = <0x08>;
+> +		interrupt-parent = <&tlmm>;
+> +		interrupts = < 3 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		status = "okay";
 
-Hm? This makes no sense.
-
-
->  
->    '#address-cells':
->      const: 1
-> @@ -63,10 +69,42 @@ examples:
->    - |
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->      i2c {
-> -      #address-cells = <1>;
-> -      #size-cells = <0>;
-
-What is happening here?
-
-You are making random changes to the binding. No, don't.
-
+Why do you need to enable it? Who disabled this node?
 
 Best regards,
 Krzysztof
