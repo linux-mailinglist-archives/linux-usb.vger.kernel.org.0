@@ -1,389 +1,174 @@
-Return-Path: <linux-usb+bounces-37780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37782-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4NgBCYKaDWoMzwUAu9opvQ
-	(envelope-from <linux-usb+bounces-37780-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:26:58 +0200
+	id 4NXxKsWeDWqC0AUAu9opvQ
+	(envelope-from <linux-usb+bounces-37782-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:45:09 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA55A58C66E
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:26:57 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54E3F58CDD4
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 13:45:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C13CC3061D63
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:22:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9E35130A54EB
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 11:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FED3E5A13;
-	Wed, 20 May 2026 11:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E49C3FC5A2;
+	Wed, 20 May 2026 11:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fpJCoZl2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MZS+aJ/j"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B787F3E0C4D;
-	Wed, 20 May 2026 11:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753F63FA5F1;
+	Wed, 20 May 2026 11:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779276019; cv=none; b=l3b4S5z6wqrTIVGafxeeY6cW2yR9xUMf59yDGHNcmWh94kBuC+wh6DrjJjhnDScVUp3nervXfjxQhWCA97u0Pcxg7GijcL5sTN9Uhp968hynAp1FWrTwHx/zRdrrOxhayVSLpxuqnG3xiRkl9zU6jJ4/wsfYtDqDwvrttiySYLA=
+	t=1779276064; cv=none; b=Mfd/cZED1xxDka7AXgchjIxerxf9AA+axSjwKUH9resJ7tehNcIlzDoL9XQ+FybtxV7Vi+2R83dbmD8fMXokhcrDHHmvgPuO+nG/1daDliPxw1wadChC4ZB27f5iG0W2teRkFhey0D8/1B7V1kFrxQGAk7A0rdGbGr5Gs2r5Ejc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779276019; c=relaxed/simple;
-	bh=Zn4J0fHdy3xfzUz38tOmseZcZesPxgZvA1MCNOqyk+A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lDSD9tmgrETvVKsmVw1OcqcY7LH5fKZ+WO4jNRiz5B7Np8Fem3kYXQuxrEzP/ISCngw0/FYTjfvf9zL61xaEnmmKMYQ/NOEZc38GUjRdND9z5OHsdJMLAeYKkockhApL8KhnKl8IF32yFUXxB3pk0NV4R+qXOnlvwxZLifNs3Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fpJCoZl2; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A1B1F00893;
-	Wed, 20 May 2026 11:20:12 +0000 (UTC)
+	s=arc-20240116; t=1779276064; c=relaxed/simple;
+	bh=tYPEqdSnUVxxo361DloJlvFccbzYEDXXyqer7BF08PE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SRjw+l8dfge4o5vAbahuNP5AfDFBOXVGL2t3B3b8kD8zohWr8kw7kFCMTagip3xv7WoAhYh4nyI9hwCxY6rBnZ+r/H/b+UOkPZz69s7AAMrI6sZ3VWIPuGQD9i6NkWBQ5uki8vsGlradQMNWP27d5JhDa0NDxj48BzmKRsCnkZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MZS+aJ/j; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C64241F000E9;
+	Wed, 20 May 2026 11:21:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779276014;
-	bh=XALIm2Iuwc7MsCYWith74rhgd3QLLhfXeWK1lqtsaxQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fpJCoZl2QBrLX0Z4G5TJF6nsQz3aN2V0gZIooY6tB+/ID+nOnClLOWYdWjN02RZOF
-	 kgI83q3GWGM25cVcXBCYaffMNANArdcSPG6iXt16KV0M6Xm180F6SRM0ejrAcLf9g3
-	 PRpa64sj2l5pchHx5ds52LMrsg/ACnbsZCXw8JHMXrj62xVjAdRw6lTowDHd4ZuPfi
-	 bZkK3Bz0DDOMmhCv9tGPd3hRo7/9Dlmd1zgO2vbP4i3zfemRCSjxn/FVREjCh1s9nz
-	 a0EMd+oAotqj5cHSHR5vChpHoTvHjri5J8EGi8VV5RUdx03gzs4VzJ3YdfXjCILEiv
-	 O6oskaVgLZ9bw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Aleksander Jan Bajkowski <olek2@wp.pl>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Birger Koblitz <mail@birger-koblitz.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-5.15] net: usb: r8152: add TRENDnet TUC-ET2G v2.0
-Date: Wed, 20 May 2026 07:18:52 -0400
-Message-ID: <20260520111944.3424570-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260520111944.3424570-1-sashal@kernel.org>
-References: <20260520111944.3424570-1-sashal@kernel.org>
+	s=k20260515; t=1779276063;
+	bh=yxIaDyMCO5AP2ujL4CK9wc5FbJ1c3rTDitcbDCzLI7A=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=MZS+aJ/j3cHtKES59/bRpyEGDi3b2VhLD7oAzzEqGjeH3jz5+QVtsOYpzSUhlrNTD
+	 ve0gxIvH8tqZdmiBX2zSNcpMOlMunjULu5WCYjmSGc3ORSrwJE4O94EkvDz5jSULfo
+	 27OFquF/cxqu+Z/srYR1krWATHuYNj+xrH//Ws+RzgTuWTapWDcKja5KOwKAJuo0Kh
+	 soXJIOOYS1HFfOUc2AfKe5KHevn1Sp4Y2pTxotRDehz4sAB+K3GX/6CbmgaJl2vyyb
+	 CTXrdBpeu5wgjYA8XxyRF/4/YwzO8qnTVdtRXfOBcvvRqr/+BdWDZs4iAox4euKWjW
+	 2LJsJ4u0IomqA==
+Message-ID: <44894052-4b29-40e2-96d7-2b1d19f7c849@kernel.org>
+Date: Wed, 20 May 2026 13:20:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 7.0.9
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] usb: ucsi: ccg: Add support for CYPD6129 (CCG6)
+To: Akash Kumar <akash.kumar@oss.qualcomm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20260520093902.2064730-1-akash.kumar@oss.qualcomm.com>
+ <20260520093902.2064730-4-akash.kumar@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260520093902.2064730-4-akash.kumar@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37780-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37782-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[wp.pl,lunn.ch,birger-koblitz.de,kernel.org,davemloft.net,google.com,redhat.com,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lunn.ch:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,birger-koblitz.de:email,wp.pl:email,msgid.link:url]
-X-Rspamd-Queue-Id: BA55A58C66E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 54E3F58CDD4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Aleksander Jan Bajkowski <olek2@wp.pl>
+On 20/05/2026 11:37, Akash Kumar wrote:
+> Add "cypress,cypd6129" to the UCSI CCG driver match table so the driver
+> can bind to CCG6-based platforms using this controller.
+> 
+> This is required for monza SOM USB-C support.
 
-[ Upstream commit f93836b236773862e9ee268a82e3614caf77ea01 ]
+Pointless statement. What is "monza SOM"? Who could guess it in open
+source community?
 
-The TRENDnet TUC-ET2G V2.0 is an RTL8156B based 2.5G Ethernet controller.
+> 
+> Signed-off-by: Akash Kumar <akash.kumar@oss.qualcomm.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 199799b319c2..0695ce348135 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -1520,6 +1520,7 @@ static void ucsi_ccg_remove(struct i2c_client *client)
+>  
+>  static const struct of_device_id ucsi_ccg_of_match_table[] = {
+>  		{ .compatible = "cypress,cypd4226", },
+> +		{ .compatible = "cypress,cypd6129", },
 
-Add the vendor and product ID values to the driver. This makes Ethernet
-work with the adapter.
+NAK. You just said they are compatible!
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Birger Koblitz <mail@birger-koblitz.de>
-Link: https://patch.msgid.link/20260430213435.21821-1-olek2@wp.pl
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-## Phase 1: Commit Message Forensics
-Step 1.1 Record: Subsystem `net: usb: r8152`; action verb `add`; claimed
-intent: add TRENDnet TUC-ET2G v2.0 USB device ID so the existing `r8152`
-driver binds to the adapter.
-
-Step 1.2 Record: Tags present:
-- `Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>`
-- `Reviewed-by: Andrew Lunn <andrew@lunn.ch>`
-- `Reviewed-by: Birger Koblitz <mail@birger-koblitz.de>`
-- `Link: https://patch.msgid.link/20260430213435.21821-1-olek2@wp.pl`
-- `Signed-off-by: Jakub Kicinski <kuba@kernel.org>`
-
-No `Fixes:`, `Reported-by:`, `Tested-by:`, or `Cc:
-stable@vger.kernel.org` tag was present. Absence of those tags is not a
-negative signal here.
-
-Step 1.3 Record: The body describes a real hardware support failure:
-TRENDnet TUC-ET2G V2.0 is RTL8156B-based, but without its USB
-vendor/product ID in `rtl8152_table`, Ethernet does not work with that
-adapter. No affected kernel versions are named.
-
-Step 1.4 Record: This is not a hidden memory/synchronization bug. It is
-an explicit new USB device ID addition to an existing driver, which is a
-stable exception category.
-
-## Phase 2: Diff Analysis
-Step 2.1 Record: One file changed: `drivers/net/usb/r8152.c`, `+1/-0`.
-No function body changed. The modified object is `rtl8152_table`. Scope:
-single-file surgical device-ID addition.
-
-Step 2.2 Record: Before the change, the table contained TRENDnet
-`0xe02b` but not `0xe02c`, so USB matching would not select `r8152` for
-`20f4:e02c`. After the change, `USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c)`
-is matched by the driver table used by both `rtl8152_driver.id_table`
-and `rtl8152_cfgselector_driver.id_table`.
-
-Step 2.3 Record: Bug category is hardware enablement / USB device ID
-addition. It does not touch error paths, locking, reference counts,
-memory safety, or public APIs.
-
-Step 2.4 Record: The fix is obviously correct if the ID maps to RTL8156B
-hardware. I verified the device identity externally: WikiDevi lists TUC-
-ET2G v2.0R as USB ID `20f4:e02c` with Realtek RTL8156B, and TRENDnet’s
-own support page confirms the TUC-ET2G v2 product. Regression risk is
-very low; existing devices are unaffected unless another incompatible
-device uses the same exact USB ID.
-
-## Phase 3: Git History Investigation
-Step 3.1 Record: `git blame` around the table showed the existing
-TRENDnet `0xe02b` entry came from `15fba71533bc` and the new `0xe02c`
-line comes from `f93836b23677`. The table terminator dates back to
-`ac718b69301c`. The “bug” is not introduced by a code commit; it is the
-absence of a product-specific ID for existing supported silicon.
-
-Step 3.2 Record: No `Fixes:` tag, so there is no introducing commit to
-follow.
-
-Step 3.3 Record: Recent related history includes `15fba71533bc` adding
-the first TRENDnet TUC-ET2G ID and `dc9c67820f81` adding a TP-Link ID.
-The candidate is standalone on trees that already have
-`VENDOR_ID_TRENDNET`.
-
-Step 3.4 Record: The author has at least one prior `r8152` device-ID
-commit, `848b09d53d92` for Dell Alienware AW1022z. The patch was
-reviewed by Andrew Lunn and Birger Koblitz and applied by Jakub
-Kicinski.
-
-Step 3.5 Record: Dependency found: `VENDOR_ID_TRENDNET` was introduced
-by `15fba71533bc`, and `git merge-base --is-ancestor` confirms that
-commit is an ancestor of `f93836b23677`. Mainline release tags `v5.15`,
-`v6.1`, `v6.6`, `v6.12`, and `v6.19` lack `VENDOR_ID_TRENDNET`, while
-`v7.0-rc3` has it. Older stable backports therefore need either
-`15fba71533bc` first or a small backport adjustment adding `#define
-VENDOR_ID_TRENDNET 0x20f4`.
-
-## Phase 4: Mailing List And External Research
-Step 4.1 Record: `b4 dig -c f93836b23677` found the original patch
-submission by patch-id. `b4 dig -a` reported the accepted one-patch
-submission at `20260430213435.21821-1-olek2@wp.pl`; `b4` also found an
-earlier identical submission from
-`20260426214909.3426105-1-olek2@wp.pl`. The earlier thread had Andrew
-Lunn asking for repost after netdev opened and giving his `Reviewed-by`.
-No NAK or technical objection found.
-
-Step 4.2 Record: `b4 dig -w` showed the patch was sent to netdev
-maintainers/lists and USB networking lists, including Andrew Lunn, David
-Miller, Eric Dumazet, Jakub Kicinski, Paolo Abeni, Realtek contacts,
-`linux-usb`, `netdev`, and `linux-kernel`. `MAINTAINERS` confirms those
-netdev maintainers for `NETWORKING DRIVERS`, and `drivers/net/usb/` is
-under `USB NETWORKING DRIVERS`.
-
-Step 4.3 Record: No separate bug report or `Reported-by` tag. External
-hardware verification found TUC-ET2G v2.0R as `20f4:e02c` / RTL8156B.
-
-Step 4.4 Record: This is a single-patch submission, not a multi-patch
-fix series. The only practical dependency for older trees is the
-TRENDnet vendor define from the prior TUC-ET2G ID commit.
-
-Step 4.5 Record: WebFetch to lore was blocked by Anubis. WebSearch did
-not find stable-specific discussion for `f93836b23677` or the patch
-message ID. No stable objection found.
-
-## Phase 5: Code Semantic Analysis
-Step 5.1 Record: No functions modified. Modified data structure:
-`rtl8152_table`.
-
-Step 5.2 Record: `rtl8152_table` is referenced by
-`MODULE_DEVICE_TABLE(usb, rtl8152_table)`, `rtl8152_driver.id_table`,
-and `rtl8152_cfgselector_driver.id_table`. Matching devices enter the
-normal USB probe path via `rtl8152_probe`.
-
-Step 5.3 Record: The relevant probe path checks vendor-specific
-interface class, `rtl_check_vendor_ok`, `rtl8152_get_version`, then
-calls `rtl8152_probe_once`. The config selector uses `__rtl_get_hw_ver`.
-This patch adds no new calls.
-
-Step 5.4 Record: Reachability is USB device enumeration: plugging in or
-booting with the adapter attached. It is not a remote or syscall-
-triggered security issue.
-
-Step 5.5 Record: Similar pattern exists throughout the same table for
-Realtek, Lenovo, TP-Link, D-Link, Dell, ASUS, and earlier TRENDnet IDs.
-`git log -S'0xe02c'` found no prior `0xe02c` entry in the checked
-history.
-
-## Phase 6: Stable Tree Analysis
-Step 6.1 Record: Checked mainline release tags `v5.15`, `v6.1`, `v6.6`,
-`v6.12`, and `v6.19`: all contain `0x8156` and RTL8156B version
-handling, but not the TRENDnet `0xe02c` ID. This means the supported
-chipset path exists in those releases, but the product-specific match is
-missing.
-
-Step 6.2 Record: Backport difficulty is low. It applies cleanly to trees
-with `VENDOR_ID_TRENDNET` / `0xe02b`; older bases need a minor
-context/define adjustment or the prior TRENDnet ID patch.
-
-Step 6.3 Record: No alternate local fix for `0xe02c` was found. No
-stable-specific replacement fix was verified.
-
-## Phase 7: Subsystem And Maintainer Context
-Step 7.1 Record: Subsystem is `drivers/net/usb`, USB Ethernet networking
-driver. Criticality: driver-specific, important for users of this
-hardware, not core-kernel-wide.
-
-Step 7.2 Record: The file is active, with recent `r8152` feature and fix
-commits, but this change is isolated to the USB ID table and does not
-depend on recent functional refactoring except the vendor
-define/backport context noted above.
-
-## Phase 8: Impact And Risk
-Step 8.1 Record: Affected users are systems with TRENDnet TUC-ET2G V2.0
-and `CONFIG_USB_RTL8152`.
-
-Step 8.2 Record: Trigger is common for affected users: adapter insertion
-or boot with the adapter connected. Not remotely triggerable; physical
-USB access is needed.
-
-Step 8.3 Record: Failure mode is device non-binding / Ethernet
-unavailable. Severity is not crash/security-critical, but it is a real
-user-visible hardware functionality failure.
-
-Step 8.4 Record: Benefit is high for affected stable users because it
-makes the adapter work with an already-supported RTL8156B driver. Risk
-is very low: one table entry, no behavior change for existing IDs.
-
-## Phase 9: Final Synthesis
-Evidence for backporting:
-- New USB device ID for existing driver and already-supported RTL8156B
-  silicon.
-- Fixes a real user-visible failure: Ethernet does not work with this
-  adapter.
-- One-line, single-file, no API or behavior change for existing
-  hardware.
-- Reviewed by Andrew Lunn and Birger Koblitz; applied by Jakub Kicinski.
-- Hardware identity verified as TRENDnet `20f4:e02c` / RTL8156B.
-
-Evidence against backporting:
-- Not a crash, data corruption, security, or deadlock fix.
-- Older stable bases may need the prior `VENDOR_ID_TRENDNET` definition
-  or a tiny backport adjustment.
-
-Unresolved:
-- I did not verify every active stable branch state directly; I verified
-  mainline release tags and the dependency relationship. Lore WebFetch
-  was blocked, but `b4` successfully fetched the thread.
-
-Stable rules checklist:
-1. Obviously correct and tested? Yes, one matching-table entry;
-   reviewed; hardware ID verified.
-2. Fixes a real bug affecting users? Yes, adapter does not bind/work
-   without the ID.
-3. Important issue? Yes under the stable “new device IDs” exception,
-   though not crash/security.
-4. Small and contained? Yes, one insertion in one file.
-5. No new features/APIs? Yes, no API or behavioral change except
-   matching this USB device.
-6. Can apply to stable trees? Yes with low difficulty; older trees may
-   need `VENDOR_ID_TRENDNET`.
-
-Exception category: New USB device ID for an existing driver. This is a
-standard stable-appropriate exception.
-
-## Verification
-- [Phase 1] Parsed commit `f93836b236773862e9ee268a82e3614caf77ea01`
-  with `git show`; confirmed subject, body, tags, and `+1/-0` diff.
-- [Phase 2] Compared `git diff f938^..f938`; confirmed only `{
-  USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c) }` is added.
-- [Phase 3] Ran `git blame` around `rtl8152_table`; confirmed existing
-  `0xe02b` from `15fba71533bc` and new `0xe02c` from `f93836b23677`.
-- [Phase 3] Ran `git merge-base --is-ancestor 15fba71533bc
-  f93836b23677`; confirmed the vendor define dependency is in the
-  candidate’s ancestry.
-- [Phase 3] Checked release tags `v5.15`, `v6.1`, `v6.6`, `v6.12`,
-  `v6.19`, `v7.0-rc3`, `v7.1-rc3`; confirmed older release tags have
-  RTL8156/RTL_VER_13 support but lack TRENDnet IDs until `v7.0-rc3`.
-- [Phase 4] Ran `b4 dig -c`, `b4 dig -a`, and `b4 dig -w`; confirmed
-  patch-id match, one-patch submission, recipients, and
-  review/application thread.
-- [Phase 4] Read full `b4 mbox` threads; confirmed Andrew Lunn review on
-  repost request, Birger Koblitz review, and patchwork notification that
-  Jakub applied it.
-- [Phase 4] WebFetch to lore was blocked by Anubis; external GitHub
-  commit fetch confirmed the commit metadata and diff.
-- [Phase 4] WebFetch of WikiDevi and TRENDnet pages verified TUC-ET2G v2
-  hardware identity; WikiDevi specifically listed USB ID `20f4:e02c` and
-  RTL8156B.
-- [Phase 5] Searched `rtl8152_table` references; confirmed use by
-  `MODULE_DEVICE_TABLE`, `rtl8152_driver.id_table`, and
-  `rtl8152_cfgselector_driver.id_table`.
-- [Phase 5] Read `rtl8152_probe` and config selector code; confirmed
-  affected path is USB enumeration/probe, with no changed runtime logic.
-- [Phase 7] Checked `MAINTAINERS`; confirmed netdev maintainers and
-  `drivers/net/usb/` list coverage.
-- [Phase 8] Checked `drivers/net/usb/Kconfig`; confirmed affected
-  configuration is `CONFIG_USB_RTL8152`.
-
-This is exactly the kind of low-risk new USB ID addition stable trees
-normally take.
-
-**YES**
-
- drivers/net/usb/r8152.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 0c83bbbea2e7c..0ac2b079e435c 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -10055,6 +10055,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_DELL,    0xb097) },
- 	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
- 	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02b) },
-+	{ USB_DEVICE(VENDOR_ID_TRENDNET, 0xe02c) },
- 	{}
- };
- 
--- 
-2.53.0
-
+Best regards,
+Krzysztof
 
