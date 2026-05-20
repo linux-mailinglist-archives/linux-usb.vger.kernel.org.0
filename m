@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-37752-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37753-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6AerFPFcDWpLwgUAu9opvQ
-	(envelope-from <linux-usb+bounces-37752-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:04:17 +0200
+	id gJ9QKw5lDWquwgUAu9opvQ
+	(envelope-from <linux-usb+bounces-37753-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:38:54 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EA625889F8
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:04:16 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BB1E58907E
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 09:38:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A995D30607F0
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 06:57:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5B5C530479CB
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 07:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAB8366DA4;
-	Wed, 20 May 2026 06:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C854304BCB;
+	Wed, 20 May 2026 07:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3la4JHZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BmXjwgd4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC67325742F;
-	Wed, 20 May 2026 06:57:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA22632E72F;
+	Wed, 20 May 2026 07:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779260259; cv=none; b=OHnTw0vuVg1RfYvkSFC2wbk6TnSBkcLrhZzwbj8dxbW6GVwlHWWRzuxbfemzX4aeGb5LPNtR+M6SMHdiI3BwBpK9iGGkRtDPZRdR7+JYqqfzy34EBBejPIOYa548vF9bHjTvLdFJS5M7dkWk47wX+1j7C41qfKtn9cSCw2goH3k=
+	t=1779262391; cv=none; b=KC1L//KVoRySzpPtZGPi84yoLEhcmPDpqa6q5pZxH62/+Aq1jVsZF6FSvVoo74jrsNg2Zr4D/nmLOU9YcdIgSiu5YUuhhWJYLf3g1LSI77vVV8CXXxtGaEbcrrsmrJU2jeJ4508wXJs2w47UjNiTGI7QDKUKvpbvR+GxUQaZEbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779260259; c=relaxed/simple;
-	bh=1RftdqEDanCNcGRn7uep4DjhhgkSgW1Pfa0PIoZHE6k=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mAgVksd4aoBbmFeco33bxoYRf5yjZ6Oy5ihWbmPogKkxcWntF1sHhcRCzNAMEWnmBlCZ9oOfSXGj7mMuPPmZRkL3PKa5dCSw3vxaOLr/K4GN+kX2TSrefGsp+3Ybmzx1BJCFWBiFbq+RXVih/+ioOblEEfKgDDQIiKuo0tPffNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3la4JHZ; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 792B01F000E9;
-	Wed, 20 May 2026 06:57:36 +0000 (UTC)
+	s=arc-20240116; t=1779262391; c=relaxed/simple;
+	bh=1efeFbnUp5AtAp3mSSjrOzfID8L1uBlM5v1U4iWTNzg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VET6ma+yAgl0iX6hNZM227dbmTP4xxvtlCIIahnoBKpJLnAkVmtZfn0Wykj1lTy5uDqMMOO3MjTzT2gXmK5lKyzkvHl5JgUm0ARGfQSPIZg7wzuIUcYcUI4AXEtYVROKQPMjIbcGDp4JUbSs2e7E/2LHX2k7qfxfq+MS0HHQg9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BmXjwgd4; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B081F000E9;
+	Wed, 20 May 2026 07:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779260257;
-	bh=r5UT/v/jwP+5XTbMh1trVgtULaJMxPVMpC6kN5XpHRQ=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To;
-	b=g3la4JHZgVqmxgse1VG9x40JyjNuLk/M5BcUVOJUiMYlUXZ/2Mb/21pReOVt5rMd0
-	 avv4n3i0o7TyvD7Aeo+1DzFyyVOLzoTQsdH7iGRvBKKtqLb+1Z4mAxWVTZ3KqEx/Md
-	 SKnMWrJEWg0ZnEnPbsR9f7CSeQs1oas0W3HZtn2Cy1bbJDZYtx1Xe6PCelaT24TD9j
-	 lpTrwY00ujNLJHVvqv3FzeNR1ofl1czy+Nl4EC7KoC/fZ0BJZdRPNA3vhZuL79ipph
-	 dPyJvp7M6JoPZ+blnb4cZ0poMoGS5D/JtRWIu/BFX04kAw9HZtc+TKhwUpNWHx79Zf
-	 4h+ao0s3EePGg==
-Message-ID: <f202c8ae-554f-49de-a9d1-add337e28515@kernel.org>
-Date: Wed, 20 May 2026 08:57:35 +0200
+	s=k20260515; t=1779262386;
+	bh=PcVXy75goYYW/CkPoEERDevx0ZCw9tGQ2veC2FqMe44=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=BmXjwgd4xAiYfywgqlUYh1l/pgJPNcuy9Wzc78NsLIPm2nY48RZH3GhW0ujyG4bij
+	 0qXKFaV6OfRAguoE1i/XDiXygIpxzqJAO8UlOLEDuMJwdMhzECAeqESV0ByBytsE3a
+	 GyOSVBAuJd8ZyTx6dRQNejkyaSgoiy1VYrpzrW69yIbN+VB45rFzRZ6XX4cCrre5IL
+	 C0OFF6nr3j533WN6tSGGty6GxH2PA+GyaLJM5EdA38rBublWfD34yM/3GsGcLoMcBc
+	 E4exAqGhxD0Jc5BFtwL3TDUWwVaD+mwfdy0RIaaNf1G6MBztS1YnAS7TbSRea1hGMC
+	 PA3e4Sgm5RSiw==
+Message-ID: <b7311879-b4ec-4af0-98bc-cb67392eacf7@kernel.org>
+Date: Wed, 20 May 2026 09:33:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,108 +53,104 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Hans Verkuil <hverkuil+cisco@kernel.org>
-Subject: Re: [PATCH] media: airspy: Guard stop_streaming() against
- disconnected device
-To: Valery Borovsky <vebohr@gmail.com>, linux-media@vger.kernel.org,
- mchehab@kernel.org
-Cc: stable@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20260513052617.140688-1-vebohr@gmail.com>
-Content-Language: en-US, nl
-In-Reply-To: <20260513052617.140688-1-vebohr@gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: richtek,rt1711h: add missing
+ 'port' property
+To: Akash Sukhavasi <akash.sukhavasi@gmail.com>
+Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, gene_chen@richtek.com,
+ gregkh@linuxfoundation.org, krzk+dt@kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, robh@kernel.org
+References: <20260519-quixotic-lobster-of-experience-b894cb@quoll>
+ <20260520045334.159097-1-akash.sukhavasi@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <20260520045334.159097-1-akash.sukhavasi@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org,kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37752-lists,linux-usb=lfdr.de,cisco];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37753-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hverkuil@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 9EA625889F8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 2BB1E58907E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 13/05/2026 07:26, Valery Borovsky wrote:
-> airspy_disconnect() clears s->udev under v4l2_lock, but
-> airspy_stop_streaming() unconditionally calls airspy_ctrl_msg() and
-> airspy_free_stream_bufs() afterwards. If a streaming user closes the
-> device after disconnect, stop_streaming() runs and dereferences the
-> NULL s->udev:
+On 20/05/2026 06:53, Akash Sukhavasi wrote:
 > 
->   airspy_stop_streaming()
->     airspy_ctrl_msg(s, CMD_RECEIVER_MODE, 0, 0, NULL, 0)
->       usb_sndctrlpipe(s->udev, 0)         /* NULL deref */
->     airspy_free_stream_bufs(s)
->       usb_free_coherent(s->udev, ...)     /* NULL deref */
+> Dropping patch 2/2 from this series.
 > 
-> Mirror the precedent set by sibling SDR drivers msi2500 and pwc, which
-> already guard their hardware teardown block with an "if (udev)" check.
-> The queued-buffer drain via airspy_cleanup_queued_bufs() must still
-> run unconditionally so vb2 sees its buffers returned.
+> Can patch 1/2 (.txt removal) be applied independently with your Reviewed-by?
 > 
-> Issue identified by automated review of the INV-003 series at
-> https://sashiko.dev/
-> 
-> Fixes: 634fe5033951 ("[media] airspy: AirSpy SDR driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Valery Borovsky <vebohr@gmail.com>
-> ---
->  drivers/media/usb/airspy/airspy.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/media/usb/airspy/airspy.c b/drivers/media/usb/airspy/airspy.c
-> index 8f6b721ba107..50db02d35213 100644
-> --- a/drivers/media/usb/airspy/airspy.c
-> +++ b/drivers/media/usb/airspy/airspy.c
-> @@ -584,12 +584,14 @@ static void airspy_stop_streaming(struct vb2_queue *vq)
->  
->  	mutex_lock(&s->v4l2_lock);
->  
-> -	/* stop hardware streaming */
-> -	airspy_ctrl_msg(s, CMD_RECEIVER_MODE, 0, 0, NULL, 0);
-> +	if (s->udev) {
-> +		/* stop hardware streaming */
-> +		airspy_ctrl_msg(s, CMD_RECEIVER_MODE, 0, 0, NULL, 0);
->  
-> -	airspy_kill_urbs(s);
-> -	airspy_free_urbs(s);
-> -	airspy_free_stream_bufs(s);
-> +		airspy_kill_urbs(s);
-> +		airspy_free_urbs(s);
-> +		airspy_free_stream_bufs(s);
-> +	}
->  
->  	airspy_cleanup_queued_bufs(s);
->  
 
-Here too it is better to replace video_unregister_device(&dev->vdev);
-by vb2_video_unregister_device(&dev->vdev);
+You should rather send a v2, with only the first patch and with my tag.
 
-Similar to what I suggested for rtl2832_sdr.
 
-Regards,
-
-	Hans
+Best regards,
+Krzysztof
 
