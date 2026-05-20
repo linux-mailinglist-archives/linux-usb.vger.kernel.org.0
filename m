@@ -1,206 +1,214 @@
-Return-Path: <linux-usb+bounces-37804-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37805-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YLdSEyr1DWoz5AUAu9opvQ
-	(envelope-from <linux-usb+bounces-37804-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 19:53:46 +0200
+	id eFCtEZb1DWoz5AUAu9opvQ
+	(envelope-from <linux-usb+bounces-37805-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 19:55:34 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76A3E594DCB
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 19:53:45 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 668F7594ECB
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 19:55:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 99931307F689
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 17:06:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2A41B314A112
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 17:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24123E3C62;
-	Wed, 20 May 2026 17:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC403F88B5;
+	Wed, 20 May 2026 17:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XmJs9NaI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k+NaWKSC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E381369D78
-	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 17:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605133F20FF
+	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 17:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779296696; cv=none; b=QzOAXtBTOirxcins78XU8fpsgmmsA3C8HRL0TbHEbDduHzFcyjiVooDRN5abactwfifruaQmSM4ceFNAFOZWmBsFTdAWAeEIQWpjeXPmcy1BJAD0WEmnqeRAhj247/RCcO6cjAImFUxXJ+b61a/k6oOlGSKQJDUzE4+rroSoyZE=
+	t=1779296755; cv=none; b=MNrVuazzzNWcn3HBm7entzwW/fGnxdMB39+j4l5gIOv3eKz2ApmmN6D28xOewjiAew7/E5TmPfa3ET0D9n78/paEHYyY3MzxYNz9bew+PV8O9QioJgnpnGztZ96t6WO7DTL1eofrJsT454T6Jcak1Uy5+4garrAy9rgPh9P6edg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779296696; c=relaxed/simple;
-	bh=FLqUIX428NcdVXqPQ2yfeTF+6utbR8zEMIS+77WHeGE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fNBd92vwxJgaKb6vhtd8tSNw5eFJ4dCWv4T2kxpwDjKYRuJTjYG3CcHEA5/bPPHH8MNDe7Nxobb2COC5iZcEFjLNVDqmBLaJWVaQ4e4CEDkfaXhRSHM36l8BTpccgICyEWvULES+vuCviL5K2O69vWYHY7N+6/UVf3oVvXhE2MI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XmJs9NaI; arc=none smtp.client-ip=209.85.128.171
+	s=arc-20240116; t=1779296755; c=relaxed/simple;
+	bh=1SCzkgF9PvsHxjb9lyI9BlvsZWUVe3Upe8UmE5OIpIM=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=WQ/KKHbz1x//XQE+CNjNj5YK0hnfIqxrn7YiLiY3/eeULT3Aopxyr7kKWZtHCRphTfMYwMirL9g7wmWH608Az+eIzqe7Hi5OkGnFlv1FXDM45dUUMkGpMHPtQfTSoJa07gGn5CXlK31QUtwpE9elzPMgmZE65uzGk+IuI/k1BRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k+NaWKSC; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7c23248f3a3so52429557b3.1
-        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 10:04:53 -0700 (PDT)
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-304106b1204so1591433eec.0
+        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 10:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779296693; x=1779901493; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Geiy5fyM7q9u/Ph5RCzfpkeFo9yFSQlzm5rQUMnd6z0=;
-        b=XmJs9NaIioj6M2fCHZYqyj76Ogm8Uxt3zm6SDj4JZeQRgf+aBW8krHfIWxkuJB19N1
-         qnEskcx2EWpkMcA7kRLLFhk5akAmjD8VGBIXCFKHANCbc9R1eQphwsi25YIFb9j48pe/
-         kKER3XzozT5ikU3qGFRyuwnzJxnsaFldx6VOhmJoPW0TdVhtfPDoZd4iteq1tRnjI9nZ
-         tY8OCbkJiepGf2G6ENLOV/msx5uN/2xb0OgDLFDQ9IGGIHwcBX2jikBX/PUpOCGUcI+G
-         wCv4Acur0BFv2pvOtoTbOQ52qNTT8rDmHTxnlzauxOQlnltzCUxqiOy+ARhffx6DyvJb
-         9R1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779296693; x=1779901493;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779296753; x=1779901553; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Geiy5fyM7q9u/Ph5RCzfpkeFo9yFSQlzm5rQUMnd6z0=;
-        b=hqh2K+P+aH/o6fdSAPrDT16Qy6Q6WAp1K8VPV0TlWP7rE4HG+9pm7v0UpikXg16z9e
-         70PypwiOtFf5czGMzoeLU8w6rdnbWN9ND/1eaZWgkB6f2+KcphBwhbyWEiUzgJeGtixf
-         Kdpom9mPxJUe6D41v4b60Q8JItP7ZIXaSfPACJ6hMPtQNvRveaGYDqbFmkTX7rMojoZh
-         6abINyx+bVhceo0Mfehfei95nqFhvX2JAGBl1417JtyH3beLk7DBK30Molraq+2Zqbd0
-         9git4WwTsV0fV9LoaA/RVYLBAWfni5pj5ScdPx9suZY96uC5hcexbmuELEsjBhdEM3y1
-         lT8g==
-X-Forwarded-Encrypted: i=1; AFNElJ8XTp9j56OyouVPeemlOTpI06WwcYB42ZJ0tpxCqhNWlAOO/qO7IcwPO6Cqef0rr6ScDxHogqu6dYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS1twtdDZDwe84HU7E6OiEstkqvh+nR4lQ2ogk42hqYlmCiLF2
-	dBLnfDcCUbz1Mgq2D27SCE2M/lg5HGB62D5qNsuztotCcSuB7Q5lrt0l
-X-Gm-Gg: Acq92OG0Y79Km6vLEr21/HSdnEyIig4irNgK4D4uuOB2hNDn4Gghn+Z4H5D0QouWWz1
-	mroWy61vo3lJtlFE4cdI2+S3hZKs8ZGmTYVM70S3BZtW8vylpRlzihHHCkPlBtKdFmxrAsUWMxi
-	zymvFsdauXzpfQzEpO0xH67vbcKwNwy+WE4RKNkEJUBgy4IajHrC0T3gdvPKaa2nilqxKmEL+ou
-	y9CbXUdHUKpWPkS+YoEovA/nyM6E30c4N8sWWtgcRtLjS536JS7YF/MMJRDcqhwHSQARpGW6yUK
-	TqNzCDue6Jt90u4c3u4ECbpLWRBovTI9x0gqXs45Ia0R1o/S9yu1vxmL3k97ckCj7cCHA5Y6mut
-	vvKnBar+B927ngthLdf5k9/KKytGn9IFDK+3yplxNo7ylglO8Wv0KDAhWysid48CRPL/EHL54Rj
-	OHXk70jEP7C6RjJfyQsj+of18awGuBsKPxj7Bjall2oQ==
-X-Received: by 2002:a05:690c:7341:b0:7bd:7039:f30a with SMTP id 00721157ae682-7c95d2d6960mr254992827b3.48.1779296693004;
-        Wed, 20 May 2026 10:04:53 -0700 (PDT)
-Received: from fsh.attlocal.net ([2600:1702:56e9:4b40:ed8c:6b8b:1fa3:d14b])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cd0bfdc094sm51144937b3.32.2026.05.20.10.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 10:04:52 -0700 (PDT)
-From: Akash Sukhavasi <akash.sukhavasi@gmail.com>
-To: krzk+dt@kernel.org
-Cc: robh@kernel.org,
-	conor+dt@kernel.org,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH v3] dt-bindings: usb: richtek,rt1711h: remove deprecated .txt file
-Date: Wed, 20 May 2026 12:04:51 -0500
-Message-ID: <20260520170451.2403-1-akash.sukhavasi@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        bh=sdTK9o9VO0ImBsZXUTs441nhBkuew2OXcA3OSkDKtdM=;
+        b=k+NaWKSCh6pnbmfynib3aCB6b9N/ooxUFKJJWcbvGeJZ6QLUZAjcJtCiXLmo5/n5sP
+         l23C52dy72uTU5K9oV5SBlOtP4RuvL4jyDiqUz6o082VEOtN8KfkMOxWJULvJhKfP7M1
+         ZGQW/+cfwwjfqBEHa86RnmZkHSoRBktLQY40+crDbcVSlWLdFqgbcu/1bk6AnS9Q1Qhn
+         nJar0LDcnbeGoehJSlgehhuclPUW2ce14eaZXSdV1nVZRmch+wcIMz0DhVNW4W6UFpJB
+         SMTjvs/zoAuf9mKc2Wxq0WKyM0fn9UtsO8RMr2e2gm2fiFH+SJmd/xkHtgkwoL1eQ594
+         qZUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779296753; x=1779901553;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sdTK9o9VO0ImBsZXUTs441nhBkuew2OXcA3OSkDKtdM=;
+        b=KqmyF5jkQGsXbglJy37r0qBbD+swVI9ykAqZ7fu+bQpBQ9lqYmQ1MO6szUo3kN8BVZ
+         +CYzWK3y/PtfVCFfxCbtXD/osCkO7yFIJF3msXsH3J8GWDMaRwaf4Rypb4KLDCGpLpVa
+         +SVwFbUDcYfivA20OTGXYYNBSkakSmupbx9F9xhfJq4PjUdTQ5G1kf9EWK4gEdanzDsf
+         w2W7JtveB7n/qWH44NMYBC/n2pfdhpgs+FPGqd+leQK+W9lyAiBpKMtgOUS9mgfUwK8D
+         D0bqBA+ux6nwtIx6yazk+XPsbJksvSRl2vmnqY3u0kEy95Lzp2VXVbNeCCrr0RW9H+Nf
+         GVew==
+X-Gm-Message-State: AOJu0YzE6EQofo4VW7Eo599ilRJbm0W9QNHJMza/z1UisG4pnlZ1DHLQ
+	0T5KVzLbYdI7mJ21Ie+FLYh3QC9VmDTpPMtrDUBME6dZ/YNoqnrEEGvYEdXFKurx
+X-Gm-Gg: Acq92OFPLKQp3xzWh2HvnmKwKGri6XT9hbD0vE98Rt+edNA+GSiq+AjDm3yY7lQO6dU
+	+3fQBVBICGqaiqwYOLpSmMBcj3zHiwZt8ndRENWygqzJaHDKs8/rdiDfvLpBRvJncv6PZjVVSTl
+	y8XiVFqGEb7XMXYh0hKwB2SFjnIojTRYG+uc3+t9fU8iiWVA5CpblXEhMMr8gTN4DlIdapz6btR
+	nKYNSt/uGSCIafoQzyWEvwHveWfTy2DxMTpnUIbHso09OoO9UowDNhat15KXZoIz3ivtv/eXM7v
+	s6xTBR5f7tK7QOrMMPlrijGOR1nAI3d9qtfPuwHInf6jWvQl3U+GLVX1M7saBSWrHuF+zYMBv4y
+	YxjNBQg8Z+d0oVLw/UstWohvyVj2YIjpRkFLrdpdLan8TNHQaI6Qd4yDNAO6dNGCtRMSscOMcWy
+	usxF4tYQii+fq1VP68G6ckgDDRj7Lvq+V9AhF5TAWSgPXFKr7IzNleyQ8=
+X-Received: by 2002:a05:7300:4307:b0:2ea:4228:ab11 with SMTP id 5a478bee46e88-3039818ef2emr10819087eec.3.1779296753450;
+        Wed, 20 May 2026 10:05:53 -0700 (PDT)
+Received: from smtpclient.apple ([2601:644:601:140:8505:5f30:f1:866b])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302977a9474sm19275583eec.25.2026.05.20.10.05.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 May 2026 10:05:53 -0700 (PDT)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.4\))
+Subject: Re: [PATCH] USB: EHCI: inflate max_tt_usecs and implement sitd
+ backpointers
+From: Brent Page <brentfpage@gmail.com>
+In-Reply-To: <4C69D317-184B-470E-87E9-4337547C78DD@gmail.com>
+Date: Wed, 20 May 2026 10:05:39 -0700
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ Michal Pecio <michal.pecio@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <705CFCA1-92BF-40E8-B036-3ECBD4F557F6@gmail.com>
+References: <35666FD0-D108-41FD-8CE4-CD8F0DD87472@gmail.com>
+ <4C69D317-184B-470E-87E9-4337547C78DD@gmail.com>
+To: linux-usb@vger.kernel.org
+X-Mailer: Apple Mail (2.3826.700.81.1.4)
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37804-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[rowland.harvard.edu,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[akashsukhavasi@gmail.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37805-lists,linux-usb=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[brentfpage@gmail.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.1:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,qualcomm.com:email]
-X-Rspamd-Queue-Id: 76A3E594DCB
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 668F7594ECB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Remove the deprecated .txt binding for richtek,rt1711h. It was
-superseded by the YAML schema added in commit a72095ed8e65
-("dt-bindings usb: typec: rt1711h: Add binding for Richtek RT1711H").
 
-Signed-off-by: Akash Sukhavasi <akash.sukhavasi@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+OK, a coherent set of additions/edits to the patch:
 ---
-Changes in v3:
-- Dropped patch 2/2 per Krzysztof's review. Resending patch 1 only.
-- Added Reviewed-by tag to patch 1.
+diff --git a/drivers/usb/host/ehci-sched.c =
+b/drivers/usb/host/ehci-sched.c
+index 7c2f2125d..04cf55484 100644
+--- a/drivers/usb/host/ehci-sched.c
++++ b/drivers/usb/host/ehci-sched.c
+@@ -1478,7 +1478,7 @@ sitd_slot_ok(
+  } while (uframe < EHCI_BANDWIDTH_SIZE);
+   stream->ps.cs_mask =3D mask;
+- stream->ps.c_mask2 =3D c_mask2;
++ stream->ps.c_mask2 =3D c_mask2 << 8;
+  stream->splits =3D cpu_to_hc32(ehci, stream->ps.cs_mask);
+  stream->c_splits2 =3D cpu_to_hc32(ehci, stream->ps.c_mask2);
+  return 1;
+@@ -2242,7 +2242,14 @@ static void sitd_link_urb(
+  sitd->stream =3D stream;
+  sitd->urb =3D urb;
+ - sitd_patch(ehci, stream, sitd, sched, i);
++       if(stream->ps.c_mask2 && (stream->ps.period!=3D1)) {
++           packet =3D i/2;
++           sitd->last_in_urb =3D i=3D=3D(2*urb->number_of_packets - 1);
++       } else {
++           packet =3D i;
++           sitd->last_in_urb =3D i=3D=3D(urb->number_of_packets-1);
++       }
++ sitd_patch(ehci, stream, sitd, sched, packet);
+  sitd_link(ehci, (next_uframe >> 3) & (ehci->periodic_size - 1),
+  sitd);
+ @@ -2291,13 +2298,17 @@ static bool sitd_complete(struct ehci_hcd =
+*ehci, struct ehci_sitd *sitd)
+  int urb_index;
+  struct ehci_iso_stream *stream =3D sitd->stream;
+  bool retval =3D false;
++ bool                 has_ssplits;
+   urb_index =3D sitd->index;
+  desc =3D &urb->iso_frame_desc[urb_index];
+  t =3D hc32_to_cpup(ehci, &sitd->hw_results);
++ has_ssplits =3D hc32_to_cpu(ehci, sitd->hw_uframe) & 0x00ff;
+   /* report transfer status */
+- if (unlikely(t & SITD_ERRS)) {
++ if(!has_ssplits) { /* just contains frame-hopping CSPLITS */
++    desc->status =3D 0; /* actual completion status reported by =
+previous sitd */
++ } else if (unlikely(t & SITD_ERRS)) {
+  urb->error_count++;
+  if (t & SITD_STS_DBE)
+  desc->status =3D usb_pipein(urb->pipe)
+@@ -2317,7 +2328,7 @@ static bool sitd_complete(struct ehci_hcd *ehci, =
+struct ehci_sitd *sitd)
+  }
+   /* handle completion now? */
+- if ((urb_index + 1) !=3D urb->number_of_packets)
++ if (!sitd->last_in_urb)
+  goto done;
+   /*
+diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+index c1c006bd3..6c9b6f390 100644
+--- a/drivers/usb/host/ehci.h
++++ b/drivers/usb/host/ehci.h
+@@ -583,6 +583,7 @@ struct ehci_sitd {
+  dma_addr_t sitd_dma;
+  dma_addr_t backpointer_sitd_dma;
+  union ehci_shadow sitd_next; /* ptr to periodic q entry */
++   bool             last_in_urb;
+   struct urb *urb;
+  struct ehci_iso_stream *stream; /* endpoint's queue */
+---
 
-Changes in v2:
-- Patch 1: No changes.
-- Patch 2: Fix port node indentation in example; port is now correctly
-  placed as a sibling of connector under rt1711h@4e.
-v2: https://lore.kernel.org/all/20260518162014.18251-1-akash.sukhavasi@gmail.com/ 
+I configured my 1023-byte-endpoint peripheral to have a bInterval of 2 =
+so that I could test the patch's period!=3D1 code.  The patch appeared =
+to perform well for this case.  That said, the peripheral's endpoint is =
+actually not that demanding because the number of data bytes per frame =
+is only ~750.  It just has to set wMaxPacketSize to 1023 due to hardware =
+limitations and the fact that 750>512.  So, I plan to conduct some more =
+intensive tests requiring closer to 1023 iso-in data bytes and maybe a =
+few interrupt bytes for good measure.
 
-v1: https://lore.kernel.org/all/20260518142901.1747-1-akash.sukhavasi@gmail.com/ 
-
- .../bindings/usb/richtek,rt1711h.txt          | 44 -------------------
- 1 file changed, 44 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-
-diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt b/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-deleted file mode 100644
-index 6f8115db2..000000000
---- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-+++ /dev/null
-@@ -1,44 +0,0 @@
--Richtek RT1711H TypeC PD Controller.
--
--Required properties:
-- - compatible : Must be "richtek,rt1711h".
-- - reg : Must be 0x4e, it's slave address of RT1711H.
-- - interrupts : <a b> where a is the interrupt number and b represents an
--   encoding of the sense and level information for the interrupt.
--
--Required sub-node:
--- connector: The "usb-c-connector" attached to the tcpci chip, the bindings
--  of connector node are specified in
--  Documentation/devicetree/bindings/connector/usb-connector.yaml
--
--Example :
--rt1711h@4e {
--	compatible = "richtek,rt1711h";
--	reg = <0x4e>;
--	interrupt-parent = <&gpio26>;
--	interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
--
--	usb_con: connector {
--		compatible = "usb-c-connector";
--		label = "USB-C";
--		data-role = "dual";
--		power-role = "dual";
--		try-power-role = "sink";
--		source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)>;
--		sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
--			     PDO_VAR(5000, 12000, 2000)>;
--		op-sink-microwatt = <10000000>;
--
--		ports {
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--			port@1 {
--				reg = <1>;
--				usb_con_ss: endpoint {
--					remote-endpoint = <&usb3_data_ss>;
--				};
--			};
--		};
--	};
--};
--- 
-2.54.0
+From,
+Brent Page
 
 
