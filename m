@@ -1,63 +1,101 @@
-Return-Path: <linux-usb+bounces-37796-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37797-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YE+fEALBDWr32wUAu9opvQ
-	(envelope-from <linux-usb+bounces-37796-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 16:11:14 +0200
+	id kHghNaPHDWr93AUAu9opvQ
+	(envelope-from <linux-usb+bounces-37797-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 16:39:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7182158F5BE
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 16:11:13 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 885C758FCC9
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 16:39:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id CDD643059E20
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 14:01:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B57A2326CB67
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 14:19:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968C13E5EF2;
-	Wed, 20 May 2026 14:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00043EC2CD;
+	Wed, 20 May 2026 14:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZcOfMHO/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DSkLvI7b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312E21E98EF;
-	Wed, 20 May 2026 14:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C95231B114
+	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 14:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779285685; cv=none; b=i9+E2eT+r7U6IgZ/bMaBasdO+O+fJxNoIJ3YIfKdgRdkYBw31AiG+d9LXoO9t2CViC1m+pHeKT0WkCS1MgQanIkTcsCYNullsfXlipQJfW+au0w14HNqUsqrUMBYrfVpvL/LJoMbMSGmqAFm6yi+EJGJwAxt8D3n72JfscTxLrc=
+	t=1779286739; cv=none; b=SyE3vI+ndnYUEj0blUdv9r0MlfT2O0QSMlap+gGsS3aCWhe5tB8SxJrtDIN+8rQ9ZgWn+JMxQse9FvmFYcqz45pLNjcKK7eoZYLRxgXBZAVgW2aT5mHv4UsEyY2VfRRToV1Oi2ngneG2vg9ME1VOyN/G38LRoD6kEcsVfMI2TNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779285685; c=relaxed/simple;
-	bh=wKK0Wrbgy4JXaxSTsV126sf0+qlWK17VZao9y951WYE=;
+	s=arc-20240116; t=1779286739; c=relaxed/simple;
+	bh=SVbGfRf42/YpRtOvkubvp4anUHrMvLtMBHhgTtWQnfQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eKQvVv85HySPrF4LidZXLSMikM0MuCHLScoh8Ir5Ni0e3DylhhLROXpM/rs1KfIYAhF2kRSpm8Wk2hjUVIaHTlcttudgBkmvT+VFEbRGzlYBlbBtxM0HKQmbWGSwFDJPoL9EAJtC/Hu/3nVbBsq9BQ4TyXUnU3IAeP7Qdp9XfrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZcOfMHO/; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA30B1F000E9;
-	Wed, 20 May 2026 14:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779285682;
-	bh=260mtSoIvf3fImaRDam0Pe5yLIS8ERuEV3CX2QQ6MGY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZcOfMHO/0TCan5B9Rr2Chgu4mkBpIOiYteEIn9MPHwcVjQYJfzdPbCrcVXih3yGgu
-	 xKwkPb6zNmTGIe8gGMA4hVHZ8ruORDzfdWt8RsS2JsHpy5v+geXHbC6+YMZccpoKhK
-	 zstc/QQP1KkFoUN/O+0B0QbdPspKwaeep9Jzw0mKrs58hj9DskBxSIwUeA7iSxHSbV
-	 BEGqm7VXJh5KABWuYcCuJsuIYnmrdnlhL8dHv2WHsdnjod1xB2/rtxwAL8je5maKab
-	 ij7b3gcC1aIRftptjWY97xzXOxyrKsScBpMwBInzTFWaLSy22HImgY0aIg1be+5bDc
-	 dy1kkYcgnGOrQ==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wPhU8-00000002pbn-1gtj;
-	Wed, 20 May 2026 16:01:20 +0200
-Date: Wed, 20 May 2026 16:01:20 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Johan Hovold <johan@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oBAXP7itAIbdSvTE1s33BABI9tTtIoXWJLs20LR1fBtfoPysDMb3+mCNxoT3Z/9BffyjPXQG0dfPxbwfQL1jYmrlQabnMEKrWhaawslM4Cx6pn+NZSxHlGYli9L5Z7HZ4lBV/FcDLVK5ZGjlJd7uviOr31mKiP79i7gUzwdSBhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DSkLvI7b; arc=none smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2f0ad52830cso6247848eec.1
+        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 07:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779286731; x=1779891531; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vyw5z+cwPwEeTdxGP1e0+U+3uquisZZyqDCM4ankidw=;
+        b=DSkLvI7b6i2vq92PSx5mKBVTl8Bw01nseMkFEzZBH0bQG3nBoP/mJ+FmhlUJGQcuGc
+         LsjTwrT7XJfof/GCQQ5inuAJ5/XkEvS0aqmr5mf7Cyzy6NV/8BpR5cb5/xvHlIedMG6G
+         GkzRPFh93zmlpW/w5bML8E9OPpgU17+HBN0a4otD9x8LMIe/WBJgRLhyCTt65p+YYTsb
+         uCQ2bz6bEepWi6iUcdakskDhjCj0OVFtZhOfODcp9I1QObK7GvXN0Vl+czerxIPQoE6w
+         xJPqUSX7Su2kFY2/O/Fdqqh32uISEAe9J+fnoJkoxKg7ZvlwemkZJuQ13JmR8d/vjoqC
+         7GGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779286731; x=1779891531;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Vyw5z+cwPwEeTdxGP1e0+U+3uquisZZyqDCM4ankidw=;
+        b=V8Z8Bfvyhav2TKhlUleLCXJoPPm1RTEfKNG/gQWD48A1n7TXrLrLopkGD3x8QxBGWF
+         cCVboT/1/qalqGhISRq5GIrHU40r0+Z93/rthdvSUy2OpIlgGCClbQT0SYzi6AGWmzHl
+         eWY1efBDBltVzQ5JsxE2hYNQyeHL+96Ja6b6sk1FdWRmezw/TMMb+iZGy9h3dNbc4Ajm
+         E19MYnyv+Fb+LFbYmRwO3Mc2ZxILWLA9ZpWM8i8fPgpjxjAvex7jWNYQVdW9wFTjlaY/
+         GZ9zZ11y459EFORnSpMYf4BEt+OxuXkaCuU6T4kzZkdVzouX00w2lap48L39BkRCrl4j
+         r8RQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/QyDfeUp6Tp++qZvMKVDX/fFBIol9ALMWOrEhYkY87B+bTd9zIZ9x58Bo2UXW8osLrovMbztkAtkI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykZgHKLoXL6gixlOXV/W2h0oBxaYl1gUeb2Eg1HH/l9utnsk+B
+	ML9+LacU/tjPJa91fCpzmwlI9X0Sb1pqkklyCgbSsjnc+YpCZ2lql7Nn
+X-Gm-Gg: Acq92OEW9ehN3yk81yhi/skxc/rdq5RNfYZHoE27MhnP6jT3Farn1hffcHmCO9QE5vr
+	Zkuzqw+jv/ytScQlZKpN+yM9OuCkFYv4PWhhd7eN4HtGtICmoQyRHYGXWrAxyJc7pm8iBzc5D6b
+	6gdms5OHWRt4mswxz2omY/S3ELNJ95KJjU0vNEvLAd1P6qlxSeDa4nKNk0PH9YKpyTP3qootsRB
+	mljjwu6hgrO1H/735OUxeQ263va52frtlFaG95mrQYLqaA3TVOMqRAZ0kADmxv16Ac1V06Kw3ns
+	9LXGdywE6bnp0H/mp7DoAD1si+irloTWW1/FJH6UDrWyCBzbb5kOJphY52EdGeAL5bG7PjPdlLJ
+	V9UnTsMnPDSbv1ysYvk4HpXMRny2k2g+O+8kqglm3bMT4NinmzLRHQ2/fs/DQklza/b+eS2H5lt
+	iWqBlhALEiZJQQ4tCRxKyTYFJh2z3+qIAN3FB8
+X-Received: by 2002:a05:7300:a94b:b0:2ed:a64:a457 with SMTP id 5a478bee46e88-303986552f6mr11202553eec.20.1779286731120;
+        Wed, 20 May 2026 07:18:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6adsm21432427eec.15.2026.05.20.07.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 07:18:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 20 May 2026 07:18:49 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jihong Min <hurryman2212@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: keyspan: fix missing indat transfer sanity
- check
-Message-ID: <ag2-sCZWeaJJ5bSc@hovoldconsulting.com>
-References: <20260520101230.657426-1-johan@kernel.org>
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	Michal Pecio <michal.pecio@gmail.com>,
+	Mario Limonciello <superm1@kernel.org>,
+	Yaroslav Isakov <yaroslav.isakov@gmail.com>,
+	linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
+Message-ID: <06236462-6c4f-413d-8324-537fb8f743d9@roeck-us.net>
+References: <20260519000732.2334711-1-hurryman2212@gmail.com>
+ <20260519000732.2334711-2-hurryman2212@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,70 +104,72 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260520101230.657426-1-johan@kernel.org>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <20260519000732.2334711-2-hurryman2212@gmail.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37796-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37797-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
+	DMARC_NA(0.00)[roeck-us.net];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,intel.com,lwn.net,amd.com,gmail.com,kernel.org,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,hovoldconsulting.com:mid]
-X-Rspamd-Queue-Id: 7182158F5BE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,roeck-us.net:mid,roeck-us.net:email]
+X-Rspamd-Queue-Id: 885C758FCC9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 20, 2026 at 12:12:30PM +0200, Johan Hovold wrote:
-> Add the missing sanity check on the size of usa49wg indat transfers to
-> avoid parsing stale or uninitialised slab data.
+On Tue, May 19, 2026 at 09:07:31AM +0900, Jihong Min wrote:
+> AMD Promontory 21 (PROM21) xHCI PCI functions use the common xhci-pci
+> core for USB operation, but also expose controller-specific sensor data.
+> Add a small PROM21 PCI glue driver for AMD 1022:43fc and 1022:43fd
+> controllers.
 > 
-> Fixes: 0ca1268e109a ("USB Serial Keyspan: add support for USA-49WG & USA-28XG")
-> Cc: stable@vger.kernel.org	# 2.6.23
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/keyspan.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> The glue delegates USB host operation to the common xhci-pci core and
+> publishes a "hwmon" auxiliary device with parent-provided MMIO data.
+> Auxiliary device creation failure is logged but does not fail the xHCI
+> probe.
 > 
-> diff --git a/drivers/usb/serial/keyspan.c b/drivers/usb/serial/keyspan.c
-> index 46448843541a..a267bc51afc1 100644
-> --- a/drivers/usb/serial/keyspan.c
-> +++ b/drivers/usb/serial/keyspan.c
-> @@ -1187,6 +1187,10 @@ static void usa49wg_indat_callback(struct urb *urb)
->  	len = 0;
->  
->  	while (i < urb->actual_length) {
-> +		if (urb->actual_length - i < 3) {
-> +			dev_warn_ratelimited(&serial->dev, "malformed indat packet\n");
+> Make the PROM21 glue a hidden Kconfig tristate driven by the user-visible
+> SENSORS_PROM21_XHCI option. If sensor support is disabled, generic
+> xhci-pci binds PROM21 controllers normally. If sensor support is enabled,
+> the glue follows USB_XHCI_PCI.
+> 
+> This keeps the auxiliary device available for a modular sensor driver while
+> avoiding a built-in xhci-pci core handing PROM21 controllers to a glue
+> driver that is only available as a module during initramfs.
+> 
+> Assisted-by: Codex:gpt-5.5
+> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> Tested-by: Yaroslav Isakov <yaroslav.isakov@gmail.com>
 
-This dev_printk was a last minute addition before submitting which I
-apparently failed to compile test. This should have been
-&serial->interface->dev (or &urb->dev->dev).
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Will fix up when applying.
+The two patches should be applied together. For now I will assume that
+they will both be applied through a usb tree since this patch touches
+common usb code.
 
-> +			break;
-> +		}
->  
->  		/* Check port number from message */
->  		if (data[i] >= serial->num_ports) {
-
-Johan
+Thanks,
+Guenter
 
