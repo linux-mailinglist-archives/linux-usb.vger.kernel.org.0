@@ -1,201 +1,206 @@
-Return-Path: <linux-usb+bounces-37803-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37804-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GBO7N1PoDWrM4gUAu9opvQ
-	(envelope-from <linux-usb+bounces-37803-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 18:58:59 +0200
+	id YLdSEyr1DWoz5AUAu9opvQ
+	(envelope-from <linux-usb+bounces-37804-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 19:53:46 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AFA1592BE8
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 18:58:59 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76A3E594DCB
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 19:53:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5BF4735984CD
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 16:02:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 99931307F689
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2026 17:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41C6332ECB;
-	Wed, 20 May 2026 16:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24123E3C62;
+	Wed, 20 May 2026 17:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X/usQ1Qw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XmJs9NaI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AF133A9CF
-	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 16:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E381369D78
+	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 17:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779292883; cv=none; b=BS/6eFQmAFiGqBYoVYe1h/Ya1AIVJNLtuQwaTHiikJjgWjej1PTc+Olb4RNvZeS63YXKowMsQLbSQy9AoEGHYE8x84Z0QM//+G+aPrnIxhNPoLtae7mdq5PqKpvJqt896bgfq53Y2Hqdc5gDaCDXMR6AoDiVOVAnLPBqth6WaCs=
+	t=1779296696; cv=none; b=QzOAXtBTOirxcins78XU8fpsgmmsA3C8HRL0TbHEbDduHzFcyjiVooDRN5abactwfifruaQmSM4ceFNAFOZWmBsFTdAWAeEIQWpjeXPmcy1BJAD0WEmnqeRAhj247/RCcO6cjAImFUxXJ+b61a/k6oOlGSKQJDUzE4+rroSoyZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779292883; c=relaxed/simple;
-	bh=Qyg/N0RPWRdjh49dRdZFz6LZc2ehONUDsrWnJo4MvBA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D2DEzCSCMWAJvQH3Wpr1o/Xqm1+eQwj58SIEQWBl7aa7KFp4TCHdVZrqsV0ragA1t1hwu+lksxay0L4L7G6+gaAnYEcbNsWUsH4ZQgbkCImfN0axI/KKykdoZh7dD3ddRmmfX34lua9j6MiiqpPYOLUAlER0pKS5N9/XjOOCvVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X/usQ1Qw; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE6BB1F00899
-	for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 16:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779292881;
-	bh=Qyg/N0RPWRdjh49dRdZFz6LZc2ehONUDsrWnJo4MvBA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=X/usQ1QwCSwG8o7OoxDK5LlZCyymqvRBUw8VjlJEpylcAPKlZoQfiVF/O/h2zPIGs
-	 81394m/ZfWr/Q4J/Mckik9lffmjvezKZSSTV13Y5ku+1oojI0BrlX4qiRKcsTOqyAi
-	 jm2K5SNkl582Ua8XlCTjdEjJHrq14kKlmo+M1+Jg/4PXBM/eoutf1TpHIJEfGVSvP5
-	 xJ5BgDhwVVGW+Wy8Hj6YGEnP0Im6y6spd+XOU/zoaiWcm9S6aZiGTrYZaxAwOQ2HqB
-	 7C5A6/UaBuQI+L4YwWae5GXBJopsbclqgjNJA5pslY7juhn7ldrephedFNMRwwGcQm
-	 5RkqtAalGKwsA==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-38e7c3a2deaso47405931fa.2
-        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 09:01:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+F/0A1WQHkRyAnFZUbIwA1oTkgqeZ90+GYSNq/YYvfJA++xJ9EBSMENiLOISPS6Nw5Cwq15rwOdpE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWU52yW8hwgigFfJ71GCPJG0CuLd9EZsHKKPkXuthvOPbjwXvk
-	gyxzkHtSWQhtZbSG1Poc5+66CazmHY70pUzS4I/LzCc0HzgxxkO5lFvMMaaiUIWI6gva4cqh3Zu
-	PD7cg2XtdgzinIpXKaNlDwUVwhuGnCrKSi0MLRbLO/Q==
-X-Received: by 2002:a2e:be8b:0:b0:394:1b05:4554 with SMTP id
- 38308e7fff4ca-395619eff61mr78938081fa.4.1779292880531; Wed, 20 May 2026
- 09:01:20 -0700 (PDT)
+	s=arc-20240116; t=1779296696; c=relaxed/simple;
+	bh=FLqUIX428NcdVXqPQ2yfeTF+6utbR8zEMIS+77WHeGE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fNBd92vwxJgaKb6vhtd8tSNw5eFJ4dCWv4T2kxpwDjKYRuJTjYG3CcHEA5/bPPHH8MNDe7Nxobb2COC5iZcEFjLNVDqmBLaJWVaQ4e4CEDkfaXhRSHM36l8BTpccgICyEWvULES+vuCviL5K2O69vWYHY7N+6/UVf3oVvXhE2MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XmJs9NaI; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7c23248f3a3so52429557b3.1
+        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 10:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779296693; x=1779901493; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Geiy5fyM7q9u/Ph5RCzfpkeFo9yFSQlzm5rQUMnd6z0=;
+        b=XmJs9NaIioj6M2fCHZYqyj76Ogm8Uxt3zm6SDj4JZeQRgf+aBW8krHfIWxkuJB19N1
+         qnEskcx2EWpkMcA7kRLLFhk5akAmjD8VGBIXCFKHANCbc9R1eQphwsi25YIFb9j48pe/
+         kKER3XzozT5ikU3qGFRyuwnzJxnsaFldx6VOhmJoPW0TdVhtfPDoZd4iteq1tRnjI9nZ
+         tY8OCbkJiepGf2G6ENLOV/msx5uN/2xb0OgDLFDQ9IGGIHwcBX2jikBX/PUpOCGUcI+G
+         wCv4Acur0BFv2pvOtoTbOQ52qNTT8rDmHTxnlzauxOQlnltzCUxqiOy+ARhffx6DyvJb
+         9R1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779296693; x=1779901493;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Geiy5fyM7q9u/Ph5RCzfpkeFo9yFSQlzm5rQUMnd6z0=;
+        b=hqh2K+P+aH/o6fdSAPrDT16Qy6Q6WAp1K8VPV0TlWP7rE4HG+9pm7v0UpikXg16z9e
+         70PypwiOtFf5czGMzoeLU8w6rdnbWN9ND/1eaZWgkB6f2+KcphBwhbyWEiUzgJeGtixf
+         Kdpom9mPxJUe6D41v4b60Q8JItP7ZIXaSfPACJ6hMPtQNvRveaGYDqbFmkTX7rMojoZh
+         6abINyx+bVhceo0Mfehfei95nqFhvX2JAGBl1417JtyH3beLk7DBK30Molraq+2Zqbd0
+         9git4WwTsV0fV9LoaA/RVYLBAWfni5pj5ScdPx9suZY96uC5hcexbmuELEsjBhdEM3y1
+         lT8g==
+X-Forwarded-Encrypted: i=1; AFNElJ8XTp9j56OyouVPeemlOTpI06WwcYB42ZJ0tpxCqhNWlAOO/qO7IcwPO6Cqef0rr6ScDxHogqu6dYg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyS1twtdDZDwe84HU7E6OiEstkqvh+nR4lQ2ogk42hqYlmCiLF2
+	dBLnfDcCUbz1Mgq2D27SCE2M/lg5HGB62D5qNsuztotCcSuB7Q5lrt0l
+X-Gm-Gg: Acq92OG0Y79Km6vLEr21/HSdnEyIig4irNgK4D4uuOB2hNDn4Gghn+Z4H5D0QouWWz1
+	mroWy61vo3lJtlFE4cdI2+S3hZKs8ZGmTYVM70S3BZtW8vylpRlzihHHCkPlBtKdFmxrAsUWMxi
+	zymvFsdauXzpfQzEpO0xH67vbcKwNwy+WE4RKNkEJUBgy4IajHrC0T3gdvPKaa2nilqxKmEL+ou
+	y9CbXUdHUKpWPkS+YoEovA/nyM6E30c4N8sWWtgcRtLjS536JS7YF/MMJRDcqhwHSQARpGW6yUK
+	TqNzCDue6Jt90u4c3u4ECbpLWRBovTI9x0gqXs45Ia0R1o/S9yu1vxmL3k97ckCj7cCHA5Y6mut
+	vvKnBar+B927ngthLdf5k9/KKytGn9IFDK+3yplxNo7ylglO8Wv0KDAhWysid48CRPL/EHL54Rj
+	OHXk70jEP7C6RjJfyQsj+of18awGuBsKPxj7Bjall2oQ==
+X-Received: by 2002:a05:690c:7341:b0:7bd:7039:f30a with SMTP id 00721157ae682-7c95d2d6960mr254992827b3.48.1779296693004;
+        Wed, 20 May 2026 10:04:53 -0700 (PDT)
+Received: from fsh.attlocal.net ([2600:1702:56e9:4b40:ed8c:6b8b:1fa3:d14b])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cd0bfdc094sm51144937b3.32.2026.05.20.10.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 10:04:52 -0700 (PDT)
+From: Akash Sukhavasi <akash.sukhavasi@gmail.com>
+To: krzk+dt@kernel.org
+Cc: robh@kernel.org,
+	conor+dt@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: [PATCH v3] dt-bindings: usb: richtek,rt1711h: remove deprecated .txt file
+Date: Wed, 20 May 2026 12:04:51 -0500
+Message-ID: <20260520170451.2403-1-akash.sukhavasi@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515090149.3169406-1-wenst@chromium.org>
-In-Reply-To: <20260515090149.3169406-1-wenst@chromium.org>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Wed, 20 May 2026 18:01:08 +0200
-X-Gmail-Original-Message-ID: <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
-X-Gm-Features: AVHnY4JiBPEmzMVtIpn3-9v_DqTGvSLjQ-NfRiMDk-zVR0iQCEFF2AVZFIteHmE
-Message-ID: <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/12] arm64: mediatek: Add M.2 E-key slot on Chromebooks
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37803-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
-	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37804-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[akashsukhavasi@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,chromium.org:email,x:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 3AFA1592BE8
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.1:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,qualcomm.com:email]
+X-Rspamd-Queue-Id: 76A3E594DCB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, May 15, 2026 at 11:02=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> =
-wrote:
->
-> Hi everyone,
->
-> This series is my attempt at enabling power sequencing for USB to support
-> the USB connection on M.2 E-key slots. M.2 E-key was enabled in v7.1-rc1
-> with just PCIe and UART supported [1].
->
-> Most of the series is based on next-20260508, while the DT changes also
-> depend on some other DT cleanup patches I sent [2][3].
->
->
-> Patch 1 reworks the power sequencing framework to allow matching against
-> different USB ports. The consumer API gains an "index" parameter (which
-> is the USB port number on the hub), while the provider API is reworked
-> to pass the index to the matching function of the providing driver.
->
+Remove the deprecated .txt binding for richtek,rt1711h. It was
+superseded by the YAML schema added in commit a72095ed8e65
+("dt-bindings usb: typec: rt1711h: Add binding for Richtek RT1711H").
 
-Sigh... I would really prefer to avoid going in this direction. IMO
-it's not very clear what this index actually refers to in generic
-terms, given that pwrseq is flexible on purpose and there's no
-specific, well-defined DT property which could have an "index".
+Signed-off-by: Akash Sukhavasi <akash.sukhavasi@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+---
+Changes in v3:
+- Dropped patch 2/2 per Krzysztof's review. Resending patch 1 only.
+- Added Reviewed-by tag to patch 1.
 
-> Patch 2 implements the index matching in the pcie-m2 driver. Matching
-> only happens when a valid (>=3D 0) index is given.
->
-> Patch 3 reworks the power sequencing targets for the E-key connector in
-> the pcie-m2 driver to add targets for USB and SDIO. The former is used
-> later on in this series.
->
-> Patch 4 reworks the USB hub driver to return the actual error code from
-> hub_configure() in hub_probe(). This is needed in the next patch to
-> correctly return -EPROBE_DEFER.
->
-> Patch 5 lets the USB hub driver look for power sequencers for each port.
-> Currently this only works for M.2 E-key connections, but it could be
-> extended to cover other cases. It should also make port reset via turning
-> off the port VBUS work, even when VBUS is not directly controlled by the
-> hub.
->
-> I expect some discussion on this patch, because a) it adds some
-> OF-specific code into an otherwise generic (core) driver, and
-> b) it doesn't yet handle USB 2.0 / 3.x shared ports; it ends up powering
-> on the port twice, which negates the port reset part.
->
+Changes in v2:
+- Patch 1: No changes.
+- Patch 2: Fix port node indentation in example; port is now correctly
+  placed as a sibling of connector under rt1711h@4e.
+v2: https://lore.kernel.org/all/20260518162014.18251-1-akash.sukhavasi@gmail.com/ 
 
-I understand that you do this because the port device has no OF node
-assigned. If we wanted to call pwrseq_get() for the port device, is
-there really no other way to associate it with the correct pwrseq
-provider?
+v1: https://lore.kernel.org/all/20260518142901.1747-1-akash.sukhavasi@gmail.com/ 
 
-Does the child index in hub_configure() relate to the port index as
-defined by the unit address of the port DT node? I'm talking about the
-X in port@X?
+ .../bindings/usb/richtek,rt1711h.txt          | 44 -------------------
+ 1 file changed, 44 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
 
-> Patch 6 reverts an incorrectly modeled OF graph connection for the
-> MediaTek XHCI controller.
->
-> Patch 7 then adds a proper representation.
->
-> Patches 8 through 12 enable the M.2 E-key slots (used for WiFi/BT) and
-> USB type-A connectors found on MediaTek-based Chromebooks. These are
-> provided in this series for reference. The USB type-A connector changes,
-> while not directly related, have overlapping context, and was easier to
-> include. They were also used to test some extra local changes I tried
-> to convert the USB A connector from an onboard USB device to a power
-> sequencing provider.
->
->
-> As this series changes existing power sequencing API, and also uses the
-> changed API in subsequent patches, I think the best way to merge this
-> is for Bartosz to take the power sequencing patches and provide an
-> immutable tag for Greg to merge and then merge the USB patches.
->
-> The DT patches can go through the soc tree once all the driver and DT
-> binding changes are merged.
->
->
-> Thanks
-> ChenYu
->
-> P.S. I'll be at Embedded Recipes if anyone wants to discuss details.
->
+diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt b/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
+deleted file mode 100644
+index 6f8115db2..000000000
+--- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
++++ /dev/null
+@@ -1,44 +0,0 @@
+-Richtek RT1711H TypeC PD Controller.
+-
+-Required properties:
+- - compatible : Must be "richtek,rt1711h".
+- - reg : Must be 0x4e, it's slave address of RT1711H.
+- - interrupts : <a b> where a is the interrupt number and b represents an
+-   encoding of the sense and level information for the interrupt.
+-
+-Required sub-node:
+-- connector: The "usb-c-connector" attached to the tcpci chip, the bindings
+-  of connector node are specified in
+-  Documentation/devicetree/bindings/connector/usb-connector.yaml
+-
+-Example :
+-rt1711h@4e {
+-	compatible = "richtek,rt1711h";
+-	reg = <0x4e>;
+-	interrupt-parent = <&gpio26>;
+-	interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+-
+-	usb_con: connector {
+-		compatible = "usb-c-connector";
+-		label = "USB-C";
+-		data-role = "dual";
+-		power-role = "dual";
+-		try-power-role = "sink";
+-		source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)>;
+-		sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
+-			     PDO_VAR(5000, 12000, 2000)>;
+-		op-sink-microwatt = <10000000>;
+-
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			port@1 {
+-				reg = <1>;
+-				usb_con_ss: endpoint {
+-					remote-endpoint = <&usb3_data_ss>;
+-				};
+-			};
+-		};
+-	};
+-};
+-- 
+2.54.0
 
-I'll be there too! Or should i say "here"? I live here after all. :) Let's =
-talk!
-
-Bart
 
