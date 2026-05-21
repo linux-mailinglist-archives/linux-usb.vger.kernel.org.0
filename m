@@ -1,42 +1,42 @@
-Return-Path: <linux-usb+bounces-37861-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37873-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kDUxDvvZDmrPCgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37861-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:10:03 +0200
+	id WE/qHVnoDmqmDAYAu9opvQ
+	(envelope-from <linux-usb+bounces-37873-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 13:11:21 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6E975A2FC8
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:10:02 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24C1F5A3C77
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 13:11:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 72D0830CA0E8
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:01:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D85FB301957C
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 11:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428F738331D;
-	Thu, 21 May 2026 10:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ECC53BB674;
+	Thu, 21 May 2026 11:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="EmtF/eKu"
+	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="NsL0sQYb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m4921.qiye.163.com (mail-m4921.qiye.163.com [45.254.49.21])
+Received: from mail-m15596.qiye.163.com (mail-m15596.qiye.163.com [101.71.155.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7069A37B003;
-	Thu, 21 May 2026 10:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5873BBA01;
+	Thu, 21 May 2026 11:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.96
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779357648; cv=none; b=joPD3rhyNE5AHYV4x3m06jvDLCUBRdnRLgp6I7rTcf/EAZ0Rk3m3rwJnXqZ62KeNRZfjQdUUlW0ToaMPHEpVgZqjFfnh/u8l1gZbnKbMK4EoPQHTSi+9yCVB6uYh+uxOFHNjDgYdWUXeyndVnRrSpF9ls4OrZN3hQsvO9VhdF+g=
+	t=1779361873; cv=none; b=dbSA4ZWjHDTfQjtWjuVdI1nlAZru/2sYl2VSMMpDNqE3P8DD/IXVh26DSkudb1wHWUYZDu4k8kcUqZiBcD7pN4Rmxqs5sFHk1jFaguQLPGSzOra0cEjLjSbCuGrAx6KKEJBGFVrtMKDwSdq/yRireqhByfTA5muBTa63LWtjCsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779357648; c=relaxed/simple;
-	bh=HNQWpbf4cbXJz7/W6BdxmCblV6XwVbVysp29yiAy5cU=;
+	s=arc-20240116; t=1779361873; c=relaxed/simple;
+	bh=nEizRqeXluCVUQM9u3qdq+vo/vPc9q9dTmEXn8d2qLY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tu7EW76+/pjTmkOLYKkXbHkqMW5zjiQzoAffY8dhcRzZ/y50tsrKGPmLFEGqXxznAx2ST027ohSJdmhXfPN6nqg296jzx4XMuMmpZYwUbfIwg83ZFoXl2wedFmlMSFLqiusFxg5ccR+LwT5a2UYisQy5SXMRjSqJ084SO9fO/iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=EmtF/eKu; arc=none smtp.client-ip=45.254.49.21
+	 MIME-Version:Content-Type; b=dLAxA7NX5TwgW3MvjUBPGkDko38Joo03lPUvx5qPoNDXykW4jMZvsOlFxvkSqr8hWyD7tu8XT01x5/eqm5qCFz5qzL4esi8XIAtgr+CyVSP9SB3Ma45KMyxdcgjyxamS5Zj2g8mgsGoFMlYwWG5+iEQ+98PQH6gzVprdRm4SKSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=NsL0sQYb; arc=none smtp.client-ip=101.71.155.96
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
 Received: from server001 (unknown [222.130.22.242])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3f4cebb04;
-	Thu, 21 May 2026 17:55:23 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 3f4cebb0a;
+	Thu, 21 May 2026 17:55:24 +0800 (GMT+08:00)
 From: Kefan Bai <baikefan@leap-io-kernel.com>
 To: linux-usb@vger.kernel.org,
 	si.yanteng@linux.dev
@@ -48,9 +48,9 @@ Cc: gregkh@linuxfoundation.org,
 	skhan@linuxfoundation.org,
 	linux-doc@vger.kernel.org,
 	doubled@leap-io-kernel.com
-Subject: [PATCH v7 6/8] docs/zh_CN: Add ehci.rst translation
-Date: Thu, 21 May 2026 17:55:11 +0800
-Message-ID: <7323e9def418415c3eab67bc539ceec0e986f3cb.1779355170.git.baikefan@leap-io-kernel.com>
+Subject: [PATCH v7 7/8] docs/zh_CN: Add usbmon.rst translation
+Date: Thu, 21 May 2026 17:55:12 +0800
+Message-ID: <f81ab69649d6cc2b0481db6eb73978e725005f3a.1779355170.git.baikefan@leap-io-kernel.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1779355170.git.baikefan@leap-io-kernel.com>
 References: <cover.1779355170.git.baikefan@leap-io-kernel.com>
@@ -62,21 +62,21 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e49f610ad09d5kunm49815c9e65ca3
+X-HM-Tid: 0a9e49f6147a09d5kunm49815c9e65cae
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaQhpPVhkdQxpCTEpCSkhIH1YVFA
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDGh4fVh5JGkofQkgfHxhKTVYVFA
 	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
-	tJQkNDTFVKS0tVS1kG
+	tISk5MTlVKS0tVSkJLS1kG
 DKIM-Signature: a=rsa-sha256;
-	b=EmtF/eKu/CGd3wpAfjt0W7xhHuKgWeO8hmJzpb5QOi9IQnKDsQkVKRUHX2iS/ohp5yES2CrYeObRvsApa96kihf0lHToN7p3I1HcRVSM6j198TLlBHVc25hT4NqZ3Z878ZiDR9ykIfKJ4b7TjSQexiHGBo3MfRZDEoOA40zco5Z6gYdpMvAWhsVzCtQtvBkPbuBSVgkmbEIGy15LJ4ES2mlZiw3BrVCd5u53fIJCayAzEy0aYH8P2BA4jXi41rDwAw8s4l2lMPWnROBhr9vA7HvRRmt2xNQIHDU0MTwdT5N+ZV1I1Us6MBQaJdOuUebH7N2VsUC1oCUyZp8MKkDspQ==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
-	bh=xCE4LoNkAitoS2FVynFdoZJsPCQT9AHeGzmLQoCb1Cs=;
+	b=NsL0sQYbmuxgwg3cH0GZfsFai8vzsEWTwP8HIQH4lQKEQjDYrzgZ//1RqKonDoNCR9IFo4GM0tQSiEBpjH5fwbN2qFzXRp+b+Lnac0gyHdxm43ODwFmJHk3KM60IKZDhJ+i9HCM1J7bJ6lFYC7BngzCpfRufo/Lckwe5e8G2LFNkFm2lqH/Zds6CWSxeLTbAT8ya8EFfpqTsxEHoFD1If/y3wNOQ2rNdO8pfMZg6tQmgqXyYXgG5wK9Ri/1ygi0LOHvba/XdOAYSG9cOg58NH94k/q6txCswRMIn5hLgkClQ9eXoW/ZISn3UpZuZw2tmF8Mjj8BalKYgE+FeJL33KQ==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
+	bh=TuEIxnaaHRDhlSmZEuSyJgDXE2hR4yof4XxQIVt+zg0=;
 	h=date:mime-version:subject:message-id:from;
 X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -85,10 +85,10 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,kernel.org,hust.edu.cn,lwn.net,vger.kernel.org,leap-io-kernel.com];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-37861-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37873-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[baikefan@leap-io-kernel.com,linux-usb@vger.kernel.org];
@@ -97,34 +97,50 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: D6E975A2FC8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 24C1F5A3C77
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Translate .../usb/ehci.rst into Chinese
+Translate .../usb/usbmon.rst into Chinese
 
-Update the translation through commit 570eb861243c
-("docs: usb: replace some characters")
+Update the translation through commit 788183a6e8b0
+("docs: usb: fix literal block marker in usbmon verification example")
 
 Reviewed-by: Yanteng Si <siyanteng@cqsoftware.com.cn>
 Signed-off-by: Kefan Bai <baikefan@leap-io-kernel.com>
 ---
- Documentation/translations/zh_CN/usb/ehci.rst | 261 ++++++++++++++++++
  .../translations/zh_CN/usb/index.rst          |   2 +-
- 2 files changed, 262 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/usb/ehci.rst
+ .../translations/zh_CN/usb/usbmon.rst         | 427 ++++++++++++++++++
+ 2 files changed, 428 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/usb/usbmon.rst
 
-diff --git a/Documentation/translations/zh_CN/usb/ehci.rst b/Documentation/translations/zh_CN/usb/ehci.rst
+diff --git a/Documentation/translations/zh_CN/usb/index.rst b/Documentation/translations/zh_CN/usb/index.rst
+index 8c6b26912320..eb5aca0c13ec 100644
+--- a/Documentation/translations/zh_CN/usb/index.rst
++++ b/Documentation/translations/zh_CN/usb/index.rst
+@@ -22,10 +22,10 @@ USB 支持
+     chipidea
+     dwc3
+     ehci
++    usbmon
+
+ Todolist:
+
+-* usbmon
+ * functionfs
+ * functionfs-desc
+ * gadget_configfs
+diff --git a/Documentation/translations/zh_CN/usb/usbmon.rst b/Documentation/translations/zh_CN/usb/usbmon.rst
 new file mode 100644
-index 000000000000..e05e493a30d3
+index 000000000000..11b6d5b59dce
 --- /dev/null
-+++ b/Documentation/translations/zh_CN/usb/ehci.rst
-@@ -0,0 +1,261 @@
++++ b/Documentation/translations/zh_CN/usb/usbmon.rst
+@@ -0,0 +1,427 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +.. include:: ../disclaimer-zh_CN.rst
 +
-+:Original: Documentation/usb/ehci.rst
++:Original: Documentation/usb/usbmon.rst
 +
 +:翻译:
 +
@@ -133,271 +149,421 @@ index 000000000000..e05e493a30d3
 +:校译:
 +
 +
-+=========
-+EHCI 驱动
-+=========
++======
++usbmon
++======
 +
-+2002年12月27日
-+
-+EHCI 驱动用于通过支持 USB 2.0 的主机控制器
-+硬件与高速 USB 2.0 设备通信。USB 2.0 兼容
-+USB 1.1 标准，它定义了三种传输速率：
-+
-+    - “高速”（High Speed）480 Mbit/sec（60 MByte/sec）
-+    - “全速”（Full Speed）12 Mbit/sec（1.5 MByte/sec）
-+    - “低速”（Low Speed）1.5 Mbit/sec
-+
-+USB 1.1 仅支持全速与低速。
-+高速设备可以在 USB 1.1 系统上使用，
-+但速度会降到 USB 1.1 的速率。
-+
-+USB 1.1 设备也可以在 USB 2.0 系统上使用。当它们
-+插入 EHCI 控制器时，会被交由 USB 1.1 的伴随
-+（companion）控制器处理，该控制器通常是 OHCI 或 UHCI。
-+
-+当 USB 1.1 设备插入 USB 2.0 集线器时，它们通过
-+集线器中的事务转换器（Transaction Translator，TT）
-+与 EHCI 控制器交互，该转换器将低速或全速事务转换为
-+高速分割事务，从而避免浪费传输带宽。
-+
-+截至本文撰写时，该驱动已在以下 EHCI 实现上成功运行
-+（按字母顺序）：Intel、NEC、Philips 和 VIA。
-+其他供应商的 EHCI 实现正在陆续问世；
-+预计该驱动在这些实现上也可正常运行。
-+
-+自 2001 年年中起，usb-storage 设备就已可用
-+（在 2.4 版该驱动上速度相当不错），
-+集线器则直到 2001 年底才开始可用，而其他类型的高速设备
-+似乎要等到更多系统内置 USB 2.0 后才会出现。
-+这类新系统从 2002 年初开始上市，
-+并在 2002 年下半年变得更加常见。
-+
-+注意，USB 2.0 支持并不只是 EHCI 本身。
-+它还需要对 Linux-USB 核心 API 作出其他修改，
-+包括 hub 驱动；不过这些修改并不需要真正改变
-+暴露给 USB 设备驱动的基本 ``usbcore`` API。
-+
-+- David Brownell
-+  <dbrownell@users.sourceforge.net>
-+
-+
-+功能
++简介
 +====
++小写形式的 ``usbmon`` 指的是内核中的一项功能，
++用于收集 USB 总线上的 I/O 跟踪信息。它类似于网络监控工具
++``tcpdump(1)`` 或 Ethereal 所使用的数据包套接字。
++类似地，人们希望使用 usbdump 或 USBMon
++（首字母大写）之类的工具来检查
++usbmon 生成的原始跟踪数据。
 +
-+该驱动会定期在 x86 硬件上进行测试，
-+也已在 PPC 硬件上使用，因此大小端问题应当已经解决。
-+因此可以认为，它已经处理好了所有必要的 PCI 细节，
-+所以即便在 DMA 映射有些特殊的系统上，
-+I/O 也应能正常运行。
++usbmon 报告的是各个外设驱动
++向主机控制器驱动（HCD）发出的请求。
++因此，如果 HCD 本身有 bug，那么 usbmon 报告的跟踪信息
++可能无法精确对应实际的总线事务。
++这和 tcpdump 的情况是一样的。
 +
-+传输类型
-+--------
++目前实现了两种 API: ``text`` 和 ``binary``。
++二进制 API 通过 ``/dev`` 命名空间中的字符设备提供，
++并且属于 ABI。文本 API 自内核 2.6.35 起已废弃，
++但为了方便仍然可用。
 +
-+截至本文撰写时，该驱动应当已经能够很好地处理
-+所有控制传输、批量传输和中断传输，
-+包括通过 USB 2.0 集线器中的事务转换器
-+与 USB 1.1 设备通信；但仍可能存在 bug。
++如何使用 usbmon 收集原始文本跟踪信息
++====================================
 +
-+高速等时（ISO）传输支持也已可用，但截至本文撰写时，
-+还没有 Linux 驱动使用这项支持。
++与数据包套接字不同，usbmon 提供了一种接口，
++可以输出文本格式的跟踪信息。这样做有两个目的：
++第一，在更完善的格式最终确定之前，
++它作为工具间通用的跟踪交换格式；
++第二，在不使用工具的情况下，人们也可以直接阅读这些信息。
 +
-+目前尚不支持通过事务转换器实现全速等时传输。
-+需要注意，ISO 传输的 split transaction 支持
-+与高速 ISO 传输几乎无法共用代码，
-+因为 EHCI 用不同的数据结构表示它们。
-+因此，目前大多数 USB 音频和视频设备
-+还不能通过高速总线连接使用。
++要收集原始文本跟踪信息，请按以下步骤进行操作。
 +
-+驱动行为
-+--------
++1. 准备
++-------
 +
-+所有类型的传输都可以排队。
-+这意味着来自一个接口驱动的控制传输
-+（或通过 usbfs 发出的控制传输）不会干扰
-+另一个驱动的控制传输，而且中断传输可以使用 1 帧的周期，
-+而不必担心中断处理开销导致的数据丢失。
++挂载 debugfs（内核配置中必须启用它），并加载 usbmon 模块
++（如果它是作为模块构建的）。如果 usbmon 已经编入内核，
++那么第二步可以省略。
 +
++命令示例::
 +
-+EHCI 根集线器代码会将 USB 1.1 设备移交给其伴随控制器。
-+该驱动不需要了解那些驱动的任何细节；
-+一个原本就能正常工作的 OHCI 或 UHCI 驱动，
-+并不会因为 EHCI 驱动也存在而需要更改。
++    # mount -t debugfs none_debugs /sys/kernel/debug
++    # modprobe usbmon
++    #
 +
-+电源管理方面还有一些问题；
-+当前挂起/恢复的行为还不完全正确。
++确认总线套接字是否存在::
 +
-+此外，在调度周期性事务
-+（中断和等时传输）时还采取了一些简化处理。
-+这些简化会限制可调度的周期性事务数量，
-+并且无法使用小于一帧的轮询间隔。
++    # ls /sys/kernel/debug/usb/usbmon
++    0s  0u  1s  1t  1u  2s  2t  2u  3s  3t  3u  4s  4t  4u
++    #
 +
-+使用方式
-+========
++现在，你可以选择使用 ``0u`` 捕获所有总线上的数据包，
++并跳到第 3 步；
++也可以先按第 2 步找到目标设备所在的总线。
++这样可以过滤掉那些持续输出数据的烦人设备。
 +
-+假设有一个 EHCI 控制器（位于 PCI 卡或主板上），
-+并且已将此驱动编译为模块，可这样加载::
++2. 查找目标设备连接的是哪条总线
++-------------------------------
 +
-+    # modprobe ehci-hcd
++运行 ``cat /sys/kernel/debug/usb/devices``，
++找到对应设备的 T 行。通常可以通过厂商字符串来查找。
++如果有许多类似设备，可以拔掉其中一个，
++再比较前后两次 ``/sys/kernel/debug/usb/devices``
++的输出。T 行里会包含总线编号。
 +
-+卸载方式::
++示例::
 +
-+    # rmmod ehci-hcd
++  T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=12  MxCh= 0
++  D:  Ver= 1.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 8 #Cfgs=  1
++  P:  Vendor=0557 ProdID=2004 Rev= 1.00
++  S:  Manufacturer=ATEN
++  S:  Product=UC100KM V2.00
 +
-+还应加载一个伴随控制器驱动，
-+例如 ``ohci-hcd`` 或 ``uhci-hcd``。
-+如果 EHCI 驱动出现任何问题，只需卸载它的模块，
-+随后该伴随控制器驱动就会接手
-+此前由 EHCI 驱动处理的所有设备
-+（但速度会降低）。
++``Bus=03`` 表示它位于 3 号总线上。或者，
++也可以查看 ``lsusb`` 的输出，并从对应行得到总线编号。
 +
-+模块参数（传给 ``modprobe``）包括：
++示例如下::
 +
-+    log2_irq_thresh（默认值 0）：
-+        默认中断延迟的 log2 值，单位是微帧。默认值 0 表示 1 个微帧
-+        （125 微秒）。最大值 6 表示 2^6 = 64 个微帧。
-+        该值控制 EHCI 控制器发出中断的频率。
-+
-+如果在 2.5 内核上使用此驱动，并且启用了 USB 调试支持，
-+则会在任一 EHCI 控制器的 ``sysfs`` 目录中看到三个文件：
-+
-+    ``async``
-+        转储异步调度，用于控制传输和批量传输。它会显示每个活动的 ``qh``
-+        以及待处理的 ``qtd``，通常每个 ``urb`` 对应一个 ``qtd``。
-+        （可以在 ``usb-storage`` 做磁盘 I/O 时看它；顺便观察请求队列！）
-+
-+    ``periodic``
-+        转储周期性调度，用于中断传输和等时传输。不显示 ``qtd``。
-+
-+    ``registers``
-+        显示控制器寄存器状态。
-+
-+这些文件的内容有助于定位驱动问题。
++  Bus 003 Device 002: ID 0557:2004 ATEN UC100KM V2.00
 +
 +
-+设备驱动通常不需要关心自己是否运行在 EHCI 之上，
-+但它们可能想检查
-+``usb_device->speed == USB_SPEED_HIGH``。
-+高速设备能做到全速（或低速）设备做不到的事，
-+例如高带宽的周期性传输（中断或 ISO 传输）。
-+另外，设备描述符中的某些值
-+（例如周期性传输的轮询间隔）
-+在高速模式下使用不同的编码方式。
++3. 启动 cat 命令
++----------------
 +
-+不过，一定要让设备驱动经过 USB 2.0 集线器的测试。
-+当使用事务转换器时，这些集线器报告某些故障
-+（例如断开连接）的方式会不同；
-+已经见过一些驱动在遇到与 OHCI 或 UHCI
-+所报告的不同故障时表现不佳。
++如果只监听单条总线，可执行::
 +
-+性能
-+====
++    # cat /sys/kernel/debug/usb/usbmon/3u > /tmp/1.mon.out
 +
-+USB 2.0 吞吐量主要受两个因素制约：
-+主机控制器处理请求的速度，以及设备响应这些请求的速度。
-+480 Mbit/sec 的“原始传输率”对所有设备都成立，
-+但总吞吐量还会受到诸如单个高速包之间的延迟、
-+驱动是否足够聪明，以及系统整体负载等因素的影响。
-+延迟也是性能考量因素。
++否则，如果要监听所有总线，则执行::
 +
-+批量传输最常用于关注吞吐量的场景。
-+需要记住的是，批量传输总是以 512 字节包为单位，
-+而一个 USB 2.0 微帧中最多只能容纳 13 个这样的包。
-+8 个 USB 2.0 微帧构成一个 USB 1.1 帧；
-+一个微帧的时长是 1 毫秒 / 8 = 125 微秒。
++    # cat /sys/kernel/debug/usb/usbmon/0u > /tmp/1.mon.out
 +
-+因此，只要硬件和设备驱动软件都允许，
-+批量传输可提供超过 50 MByte/sec 的带宽。
-+周期性传输模式（等时和中断）允许使用更大的包大小，
-+从而可以逼近所宣称的 480 Mbit/sec 传输率。
-+
-+硬件性能
-+--------
-+
-+截至本文撰写时，单个 USB 2.0 设备的最大传输速率
-+通常约为 20 MByte/sec。
-+这当然会随着时间改变：一些设备现在更快，一些更慢。
-+
-+第一代 NEC EHCI 实现似乎存在
-+大约 28 MByte/sec 的硬件瓶颈。
-+虽然这对单个 20 MByte/sec 的设备显然已经够用，
-+但把三个这样的设备挂到同一总线上，
-+并不能得到 60 MByte/sec。
-+问题似乎在于控制器硬件无法并发进行 USB 与 PCI 访问，
-+因此它每个微帧只会尝试 6 次（也许是 7 次）
-+USB 事务，而不是 13 次。
-+（对一个比其他产品早上市一年的芯片来说，
-+这是个合理的妥协！）
++此进程会一直读取，直到被终止。
++由于输出通常会很长，因此更推荐将输出重定向到某个位置。
 +
 +
-+预计较新的实现会在这方面做得更好，
-+通过投入更多芯片面积来解决这个问题，
-+使新的主板芯片组更接近 60 MByte/sec 的目标。
-+这既包括 NEC 的更新实现，也包括其他厂商的芯片。
++4. 在 USB 总线上执行期望的操作
++------------------------------
++
++此处需要执行一些会产生 USB 流量的动作，
++比如插入 U 盘、拷贝文件、操作摄像头等。
 +
 +
-+主机从 EHCI 控制器收到“请求已完成”中断的最小延迟
-+为一个微帧（125 微秒）。该延迟可以调节；
-+驱动提供了一个模块选项。默认情况下，
-+``ehci-hcd`` 使用最小延迟，这意味着当发出一个控制
-+或批量请求时，通常可以在不到 250 微秒内得知它已完成
-+（具体取决于传输大小）。
++5. 停止 cat
++-----------
 +
-+软件性能
-+--------
++这一步通常通过键盘中断（Control-C）完成。
 +
-+即便只是要达到 20 MByte/sec 的传输速率，
-+Linux-USB 设备驱动也必须让 EHCI 队列始终保持满载。
-+这意味着要发出较大的请求，
-+或者在需要发出一连串小请求时使用批量请求排队。
-+如果驱动未做到这一点，那么会直接从性能结果上表现出来。
++此时输出文件（本例中为 ``/tmp/1.mon.out``）
++可以保存、通过电子邮件发送，或使用文本编辑器查看。
++如果使用最后一种方式，请确保文件不会大到编辑器无法打开。
 +
 +
-+在典型情况下，使用 ``usb_bulk_msg()``
-+以 4 KB 块循环写出，
-+会浪费超过一半的 USB 2.0 带宽。
-+I/O 完成与驱动发出下一次请求之间的延迟，
-+通常会比一次 I/O 本身耗时更长。
-+如果同样的循环改用 16 KB 块，会好一些；
-+若使用一连串 128 KB 块，则浪费会少得多。
++原始文本数据格式
++================
++
++目前支持两种格式：原始格式，也就是 ``1t`` 格式，
++以及 ``1u`` 格式。``1t`` 格式在内核 2.6.21 中已被废弃。
++``1u`` 格式增加了一些字段，例如 ISO 帧描述符、
++``interval`` 等。它生成的行会稍长一些，
++但在其他方面是 ``1t`` 格式的完整超集。
++
++如果程序需要区分上述两种格式，
++可以查看 ``address`` 字段（见下文）。
++如果其中有两个冒号，就是 ``1t`` 格式；
++否则是 ``1u`` 格式。
++
++任何文本格式的数据由一系列事件组成，
++如 URB 提交、URB 回调、提交错误等。
++每个事件对应单独的一行文本，
++由使用空白符间隔的若干字段组成。
++字段的数量与位置可能取决于事件类型，
++但以下字段对所有类型都通用：
++
++下面按从左到右的顺序列出这些共有字段：
++
++- URB Tag。用于标识 URB，通常是 URB 结构体在内核中的地址
++  （以十六进制表示），
++  但也可能是序号或其他合理的唯一字符串。
++
++- 时间戳（微秒），十进制数字。
++  时间戳的精度取决于可用时钟，
++  因此可能远差于
++  1 微秒（例如实现使用的是 jiffies）。
++
++- 事件类型。它表示的是事件的格式，而不是 URB 的类型。
++  可用值为：``S`` 表示提交，``C`` 表示回调，``E`` 表示提交错误。
++
++- ``Address`` 字段（以前称作 ``pipe``）。
++  它包含四个由冒号分隔的字段：
++  URB 类型及方向、总线号、设备地址和端点号。类型与方向的编码如下：
++
++    == ==   ==========================
++    Ci Co   控制输入和输出
++    Zi Zo   等时输入和输出
++    Ii Io   中断输入和输出
++    Bi Bo   批量输入和输出
++    == ==   ==========================
++
++  总线号、设备地址和端点号使用十进制，但可能有前导零。
++
++- URB 状态字段。这个字段要么是一个字母，
++  要么是几个由冒号分隔的数字：
++  URB 状态、``interval``、``start frame`` 和 ``error count``。
++  与 ``address`` 字段不同，除了状态外，其余字段都是可选的。
++  ``interval`` 只会为中断和等时 URB 打印；``start frame`` 只会为
++  等时 URB 打印；错误计数只会在等时回调事件中打印。
++
++  状态字段是一个十进制数字，有时为负数，
++  对应 URB 的 ``status`` 字段。
++  对于提交事件，这个字段本身没有实际意义，
++  但为了便于脚本解析，它仍然存在。
++  当发生错误时，该字段包含错误码。
++
++  在提交控制包时，这个字段包含的是 ``Setup Tag``，
++  而不是一组数字。
++  判断 ``Setup Tag`` 是否存在很容易，因为它从来不是数字。
++  因此，如果脚本在这个字段里发现的是一组数字，
++  就会继续读取数据长度（等时 URB 除外）。
++  如果发现的是其他内容，比如一个字母，
++  那么脚本会先读取 ``Setup`` 包，再读取数据长度或等时描述符。
++
++- ``Setup`` 包由 5 个字段组成：
++  ``bmRequestType``、``bRequest``、``wValue``、
++  ``wIndex`` 和 ``wLength``。这些字段由 USB 2.0 规范定义。
++  如果 ``Setup Tag`` 为 ``s``，就可以安全地解码这些字段。
++  否则，说明 Setup 包虽然存在，但并未被捕获，此时各字段中会填入占位内容。
++
++- 等时传输帧描述符的数量及其内容：
++  如果一个等时传输事件带有一组描述符，首先打印该 URB 中描述符的总数，
++  然后为每个描述符打印一个字段，最多打印 5 个字段。
++  每个字段由三个用冒号分隔的十进制数字组成，
++  分别表示状态（status）、偏移（offset）和长度（length）。
++  对于提交（submission），报告的是初始长度；
++  对于回调（callback），报告的是实际长度。
++
++- 数据长度：
++  对于提交，表示请求的长度；对于回调，表示实际传输的长度。
++
++- 数据标签：
++  即使数据长度非零，usbmon 也不一定会捕获数据。
++  仅当标签为 ``=`` 时，才会有数据字段。
++
++- 数据字段：
++  以大端十六进制格式显示。注意，这些并不是真正的机器字，
++  而只是把字节流拆成若干“字”以便阅读。因此最后一个字可能只包含
++  1 到 4 个字节。
++  收集的数据长度是有限的，可能小于数据长度字段中报告的值。
++  因为数据长度字段只统计实际接收到的字节，而数据字段包含整个传输缓冲区，
++  所以，在等时输入（Zi）完成且缓冲区中接收到的数据稀疏的情况下，
++  收集的数据长度可能大于数据长度字段的值。
 +
 +
-+但与其依赖这么大的 I/O 缓冲区来让同步 I/O 高效，
-+不如直接向主机控制器排入多个（批量）请求，
-+然后等待它们全部完成（或在出错时取消）。
-+这种 URB 排队方式对所有 USB 1.1
-+主机控制器驱动也同样适用。
++
++示例：
++
++获取端口状态的输入控制传输::
++
++    d5ea89a0 3575914555 S Ci:1:001:0 s a3 00 0000 0003 0004 4 <
++    d5ea89a0 3575914560 C Ci:1:001:0 0 4 = 01050000
++
++向地址为 5 的存储设备发送
++31 字节 Bulk 包装的 SCSI 命令 ``0x28``
++（``READ_10``）的输出批量传输::
++
++    dd65f0e8 4128379752 S Bo:1:005:2 -115 31 = 55534243 ad000000 00800000 80010a28 20000000 20000040 00000000 000000
++    dd65f0e8 4128379808 C Bo:1:005:2 0 31 >
++
++原始二进制格式与 API
++====================
++API 的整体架构与前文大体相同，只是事件以二进制格式传递。
++每个事件都通过下面的结构发送
++（这个名字是为了叙述方便而虚构的）::
 +
 +
-+在 Linux 2.5 内核中，定义了新的 ``usb_sg_*()`` API；
-+它们会把 scatterlist 中的所有缓冲区都排入队列。
-+它们还使用 scatterlist 的 DMA 映射
-+（其中可能应用 IOMMU）并减少中断次数，
-+这些都有助于让高速传输尽可能快地运行。
++  struct usbmon_packet {
++	u64 id;			/*  0: URB ID - 从提交到回调 */
++	unsigned char type;	/*  8: 与文本相同；可扩展 */
++	unsigned char xfer_type; /*    ISO (0)、中断、控制、批量 (3) */
++	unsigned char epnum;	/*     端点号和传输方向 */
++	unsigned char devnum;	/*     设备地址 */
++	u16 busnum;		/* 12: 总线号 */
++	char flag_setup;	/* 14: 与文本相同 */
++	char flag_data;		/* 15: 与文本相同；二进制零也可 */
++	s64 ts_sec;		/* 16: gettimeofday */
++	s32 ts_usec;		/* 24: gettimeofday */
++	int status;		/* 28: */
++	unsigned int length;	/* 32: 数据长度（提交或实际） */
++	unsigned int len_cap;	/* 36: 已捕获的数据长度 */
++	union {			/* 40: */
++		unsigned char setup[SETUP_LEN];	/* 仅用于控制类 S 事件 */
++		struct iso_rec {		/* 仅用于 ISO */
++			int error_count;
++			int numdesc;
++		} iso;
++	} s;
++	int interval;		/* 48: 仅用于中断和 ISO */
++	int start_frame;	/* 52: 仅用于 ISO */
++	unsigned int xfer_flags; /* 56: URB 的 transfer_flags 副本 */
++	unsigned int ndesc;	/* 60: 实际 ISO 描述符数量 */
++  };				/* 64 总长度 */
 +
-+待办：
-+   中断传输和等时（ISO）传输的性能问题。
-+   这些周期性传输都是完全调度的，因此，主要问题可能在于如何触发高带宽模式。
++可以用 ``read(2)``、``ioctl(2)``，
++或者通过 ``mmap`` 访问缓冲区，
++从字符设备接收这些事件。
++不过，出于兼容性原因，``read(2)``
++只返回前 48 个字节。
 +
-+待办：
-+   通过 ``sysfs`` 中的 ``uframe_periodic_max`` 参数，
-+   可以分配超过标准 80% 的周期性带宽。
-+   后续将对此进行说明。
-diff --git a/Documentation/translations/zh_CN/usb/index.rst b/Documentation/translations/zh_CN/usb/index.rst
-index 7c739627077b..8c6b26912320 100644
---- a/Documentation/translations/zh_CN/usb/index.rst
-+++ b/Documentation/translations/zh_CN/usb/index.rst
-@@ -21,10 +21,10 @@ USB 支持
-     authorization
-     chipidea
-     dwc3
-+    ehci
-
- Todolist:
-
--* ehci
- * usbmon
- * functionfs
- * functionfs-desc
++字符设备通常命名为 ``/dev/usbmonN``，
++其中 ``N`` 是 USB 总线号。
++编号为零的设备（``/dev/usbmon0``）比较特殊，
++表示“所有总线”。
++请注意，具体命名策略由 Linux 发行版决定。
++
++如果你手动创建 ``/dev/usbmon0``，
++请确保它归 root 所有，并且权限为 ``0600``。
++否则，非特权用户将能够窃听键盘流量。
++
++以下 ``MON_IOC_MAGIC`` 为 ``0x92`` 的 ioctl 调用可用：
++
++``MON_IOCQ_URB_LEN``，定义为 ``_IO(MON_IOC_MAGIC, 1)``
++
++该调用返回下一个事件的数据长度。
++注意大多数事件不包含数据，
++因此如果该调用返回零，并不意味着没有事件。
++
++``MON_IOCG_STATS``，定义为
++``_IOR(MON_IOC_MAGIC, 3, struct mon_bin_stats)``
++
++参数是指向以下结构的指针::
++
++  struct mon_bin_stats {
++	u32 queued;
++	u32 dropped;
++  };
++
++成员 ``queued`` 表示当前缓冲区中已经排队的事件数量，
++而不是自上次重置以来处理过的事件数量。
++
++成员 ``dropped`` 表示自上次调用
++``MON_IOCG_STATS`` 以来丢失的事件数量。
++
++``MON_IOCT_RING_SIZE``，定义为 ``_IO(MON_IOC_MAGIC, 4)``
++
++此调用设置缓冲区大小。参数为以字节为单位的缓冲区大小。
++大小可能会向下取整到下一个块（或页）。
++如果请求的大小超出该内核的 [未指定] 范围，
++则调用会失败并返回 ``-EINVAL``。
++
++``MON_IOCQ_RING_SIZE``，定义为 ``_IO(MON_IOC_MAGIC, 5)``
++
++该调用返回缓冲区当前大小（以字节为单位）。
++
++``MON_IOCX_GET``，定义为
++``_IOW(MON_IOC_MAGIC, 6, struct mon_get_arg)``
++``MON_IOCX_GETX``，定义为
++``_IOW(MON_IOC_MAGIC, 10, struct mon_get_arg)``
++
++如果内核缓冲区中没有事件，
++这些调用就会一直等待，直到有事件到达，
++然后返回第一个事件。
++参数是指向以下结构的指针::
++
++  struct mon_get_arg {
++	struct usbmon_packet *hdr;
++	void *data;
++	size_t alloc;		/* 数据长度可以为零 */
++  };
++
++
++调用前，应填好 ``hdr``、``data`` 和 ``alloc``。
++调用返回后，``hdr`` 指向的区域中包含下一个事件的结构；
++如果存在数据，那么数据缓冲区中也会包含相应数据。
++该事件会从内核缓冲区中移除。
++
++``MON_IOCX_GET`` 会将 48 字节的数据复制到 ``hdr`` 区域，
++``MON_IOCX_GETX`` 会复制 64 字节。
++
++``MON_IOCX_MFETCH``，定义为
++``_IOWR(MON_IOC_MAGIC, 7, struct mon_mfetch_arg)``
++
++当应用程序通过 ``mmap(2)`` 访问缓冲区时，
++主要使用这个 ioctl。
++其参数是指向以下结构的指针::
++
++  struct mon_mfetch_arg {
++	uint32_t *offvec;	/* 获取的事件偏移向量 */
++	uint32_t nfetch;	/* 要获取的事件数量（输出：已获取） */
++	uint32_t nflush;	/* 要刷新的事件数量 */
++  };
++
++
++该 ioctl 的操作分为三个阶段：
++
++首先，从内核缓冲区移除并丢弃最多 ``nflush`` 个事件。
++实际丢弃的事件数量会写回 ``nflush``。
++
++其次，除非伪设备以 ``O_NONBLOCK`` 打开，否则会一直等待，
++直到缓冲区中出现事件。
++
++第三，将最多 ``nfetch`` 个偏移量提取到 mmap
++缓冲区，并存入 ``offvec`` 中。
++实际提取到的事件偏移数量会存回 ``nfetch``。
++
++``MON_IOCH_MFLUSH``，定义为 ``_IO(MON_IOC_MAGIC, 8)``
++
++此调用从内核缓冲区移除若干事件。
++其参数为要移除的事件数量。
++如果缓冲区中的事件少于请求数量，
++则移除所有事件，且不报告错误。
++当没有事件时也可使用。
++
++``FIONBIO``
++
++如果有需要，将来可能会实现 ``FIONBIO`` ioctl。
++
++除了 ``ioctl(2)`` 和 ``read(2)`` 之外，
++二进制 API 的特殊文件也可以用 ``select(2)`` 和
++``poll(2)`` 轮询。
++但 ``lseek(2)`` 不起作用。
++
++* 二进制 API 的内核缓冲区内存映射访问
++
++基本思想很简单：
++
++准备时，先获取当前大小，再用 ``mmap(2)`` 映射缓冲区。
++然后执行类似下面伪代码的循环::
++
++   struct mon_mfetch_arg fetch;
++   struct usbmon_packet *hdr;
++   int nflush = 0;
++   for (;;) {
++      fetch.offvec = vec; // 有 N 个 32 位字
++      fetch.nfetch = N;   // 或者少于 N
++      fetch.nflush = nflush;
++      ioctl(fd, MON_IOCX_MFETCH, &fetch);   // 同时处理错误
++      nflush = fetch.nfetch;       // 完成后要刷新这么多包
++      for (i = 0; i < nflush; i++) {
++         hdr = (struct ubsmon_packet *) &mmap_area[vec[i]];
++         if (hdr->type == '@')     // 填充包
++            continue;
++         caddr_t data = &mmap_area[vec[i]] + 64;
++         process_packet(hdr, data);
++      }
++   }
++
++
++
++因此，主要思想是每 N 个事件只执行一次 ioctl。
++
++虽然缓冲区是环形的，但返回的头和数据不会跨越缓冲区末端，
++因此上面的伪代码无需任何合并操作。
 --
 2.54.0
 
