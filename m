@@ -1,195 +1,238 @@
-Return-Path: <linux-usb+bounces-37817-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37818-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QKmCJXGtDmr6AwYAu9opvQ
-	(envelope-from <linux-usb+bounces-37817-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:00:01 +0200
+	id CD3yNuy4DmrBBgYAu9opvQ
+	(envelope-from <linux-usb+bounces-37818-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:49:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0096559FCBA
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:00:00 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E6405A05AA
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:48:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CDB7A303FAA5
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 06:54:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A59A6302E0D2
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 07:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B5BA394463;
-	Thu, 21 May 2026 06:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A46394797;
+	Thu, 21 May 2026 07:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8ojeRhn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bATpnu04"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD84385D93
-	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 06:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC00362137
+	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 07:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779346475; cv=none; b=KEazWGlOGHfskFdw/SteDvj76hoCe5UvX1g8CRWE2Lz2ylfsE+bwZpEH132luqJnyodZfzUskwtyTYMQLm25QRO3EpthE9YHomo8SlMVaMzw/PmCEDxUjg7hEPEpSOtCBqzZ9iAvkd29hq9mlpXdW4stI3v0rfRbNkgH74K0oBM=
+	t=1779349450; cv=none; b=aTRrwcWJIhsDvrAivdAuq3uJlGPi1qQtIVs1RsKLD+8LisMU9yQmmqzMOopH5gyPpdcSw9RvF5DiDK860+bb1A6rloXhxJLGN74DudLFKn+x3Pf3QezmycK6fvqf7ckSUuUS+VcXtA1LMa0lX2RTgwDnXmvISLgCabXP7qu7p7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779346475; c=relaxed/simple;
-	bh=+jL4BkhdXzQXOi9JnNezDMwiYi2z52EuoWjOv6Hx23k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mAu4kjQal1I2S7qBPIZRObnYLMJ9LhJs8bjq/oRlE1E4dbJJaZVL5QohtjdSFnPwUD4UpmaTZ0nUMxcee49IyA6Cd7NYbRBAh9tCGi6DODI09Yt7JTK7HF8pg7qFm8Y9cVzVXKpwM+Jjh0cZdSTWUVc0S4mEwHXESnR0NtsVNOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8ojeRhn; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ba4a1a0325so36263655ad.0
-        for <linux-usb@vger.kernel.org>; Wed, 20 May 2026 23:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779346474; x=1779951274; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AaciwSm1L46TIODxCA9aHpcFSHmqvrXKCz/1wzRVFx0=;
-        b=V8ojeRhnlUw393LuaiTwxVG71C6IjoXIH2QW+Ml8rSeUrkpnyCDYx65eKAY4ZUnNP0
-         gk2IgdCMwu67nTVBRFwYZyufJ8rLE893QtAGmPCMsztb3651zOa42oZDxlEJIhJY6tWt
-         PRRUg0JC1K4W0wweYZnS18f6jIvXYicmo5nZet7U6h8o+tvXdqfzYTfN9QTlFzfp5vLg
-         XyoP/5IiI0HZzNdxfbcX0tx/apCV9EMVJqTxLgsZ5nvsGB4XSipJzL1UBClIqy96g1EI
-         4Kl6ORFgwl3ohOtrJutVLGjW4CO+5/wqQADXssksjOrlnLyiypnlX9Se3EXvTR6t83L/
-         kGQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779346474; x=1779951274;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AaciwSm1L46TIODxCA9aHpcFSHmqvrXKCz/1wzRVFx0=;
-        b=M872nE/JT8n4mgN4x3+K9rzYFSkFfyHlMLhxJUKDFOIavoSZgaIrWVEqy4qickZYa4
-         D3ozf0amAVKUwDYMowO1uS1PmWscvQQKTe55m4u9ycNTX6OhpGSUgFt6eLFXNZdT+1eE
-         DMSCbycGUSVN7cs1RrDi7km96RjnJj0MOl3SdkdsIml3V814uPIk4jO/tUWcW37NUrYL
-         QMTn7D3nb93//8Osxq7UbHqEwxa6mli8Hy/EISHeBrGLrHnk+geg4zfGpBIT8D5ZGjRQ
-         MF0a3XUCnUB/9udQfwpQ3PtPo7ToIWVZjnxBdLFv+Ph/EvyQ2FzeFgWUPX4AhzUhksIi
-         Wofw==
-X-Forwarded-Encrypted: i=1; AFNElJ9zF+QvhtKuZ8DE8Pi2IA7c5HDi35oGpbQzHVHwV0bBp3AXYcqVW4TmyixiSrBGfJmvOggPOTdMMAE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDMjWsj2LS3sw0MFonHHNmt3U67i5rSeNXmdIyHki/MqA9qMT8
-	KIZMtw3xLJRICGYJva+qmlJ5QrFAztphsuMrEUcI8VHNI4H7zvccg0Ac
-X-Gm-Gg: Acq92OEp2s0D52n0HMcbWCyi0zt0/xUMC0tMFS5VcEEcD4hsJ0Lm/UsvtMXoP1rp+KJ
-	j2OL9JTz411hSVzVluD3qAmv/ucQ+GzZJKh9zCybWniswG/9Al6hOE6z17ydG27Vss7cjg5E4VB
-	fWIijQ8KvyFt3cVPSRb/aAVdNIOrBqrO5U0UylvvyHicx1uzwXtuP3bPAmGOZzObbrsJygZESyD
-	HTxPLIiNf1mRIz4qZJkN71DjsyNfqqAweHNza7Yf1yGw2o98k+8LDbTmtySgXPZbuQuVbxuFg7i
-	8h+IP2yAbxRf/u95TQrSZzYU1k/W1cRA3u8cf4CDEslyV3jGN58IqcdZVvzB3PX9TeZJ1QE4VKw
-	LAoNVZFcod1Xlfn47motuaC9cJwov0Ooyqsyw8FH55Cu0lUXKj0ZqP8m0kTX+AySwlqo0ev+Qxw
-	hThH8F1ArBFpPFuAXe+YY8vxPCUgttEPLcbfacihDpLS3y6ZM4
-X-Received: by 2002:a17:902:e750:b0:2bc:8ebd:af76 with SMTP id d9443c01a7336-2bea2fb709dmr15581365ad.0.1779346473759;
-        Wed, 20 May 2026 23:54:33 -0700 (PDT)
-Received: from csl-conti-dell7858.ntu.edu.sg ([155.69.195.57])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d0fd384sm241757715ad.65.2026.05.20.23.54.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 23:54:33 -0700 (PDT)
-From: Maoyi Xie <maoyixie.tju@gmail.com>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Neal Liu <neal_liu@aspeedtech.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	linux-aspeed@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: gadget: aspeed_udc: avoid past-the-end iterator in dequeue
-Date: Thu, 21 May 2026 14:54:28 +0800
-Message-Id: <20260521065428.3261238-1-maoyixie.tju@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260519080213.1932516-1-maoyixie.tju@gmail.com>
-References: <20260519080213.1932516-1-maoyixie.tju@gmail.com>
+	s=arc-20240116; t=1779349450; c=relaxed/simple;
+	bh=xlkMVMF/0GjqTldlC/Pq9fJEbzwnuJN1fTlwrLtq4Fg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kxjjJgvOL0LZAs8wl/HKPaFr63XNVUgf9RopEE0dkCVqxIpFU905meH1m3VWEizHZZ3yj04RSUaq7aFF3Wkc4lrImmnhrvySAXH8m4i57/+iJGdWdscEcG1IiDzLnzk9goAap4xezWp9iPb27JlVBTCWQBEj7Ra4JbkhHmpyWNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bATpnu04; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779349448; x=1810885448;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xlkMVMF/0GjqTldlC/Pq9fJEbzwnuJN1fTlwrLtq4Fg=;
+  b=bATpnu04jfb6IHx9K2zxqYnH8FJLv7u07iyZJGJMq1/bo9BpYw98Dptf
+   MFDS4sSKIhSG6ufGHG+pdEJOXconwNIE+GoVkNI1Hok5WUnyDP/1swhqG
+   XhZmMitPRl9QsP3NA6OsP11RQZ1Ht3SsjAvdqGKcduV0OSlMycjpxQ9aQ
+   9OcJfB1D8bwnoraFoctMM0waBrRPgeC0ArRlRorF5eIIAuxTBZEskuH6Y
+   A6h685RmfpGvkiiPjUtCO1RXZKHrn9lFi2/enML38IsAVzG70yAS3C4fB
+   Ei08JVT185O6jz0ptgvpDHcXvBggJiHnFgGXt+WQDmGSVvzGfjRtwAEiC
+   g==;
+X-CSE-ConnectionGUID: WWkFhOBYTaawzltz4JEJQQ==
+X-CSE-MsgGUID: UHzvfvJjTI6O9Pu7jsKDbA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="79411784"
+X-IronPort-AV: E=Sophos;i="6.23,245,1770624000"; 
+   d="scan'208";a="79411784"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 00:44:08 -0700
+X-CSE-ConnectionGUID: m6G0ucjcQUW62KUMHYHrHg==
+X-CSE-MsgGUID: VYh98qCUQRCh/rXcGFgZ1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,245,1770624000"; 
+   d="scan'208";a="244752441"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.94.250.191]) ([10.94.250.191])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 00:44:07 -0700
+Message-ID: <8d73cfd4-96c7-42d5-a5ff-fc47c53b5338@linux.intel.com>
+Date: Thu, 21 May 2026 10:43:52 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.66 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] usb: xhci: allocate internal DCBAA mirror dynamically
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+References: <20260507083945.959370-1-niklas.neronin@linux.intel.com>
+ <20260507083945.959370-4-niklas.neronin@linux.intel.com>
+ <20260521000848.05cce0dd.michal.pecio@gmail.com>
+Content-Language: en-US
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+In-Reply-To: <20260521000848.05cce0dd.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37818-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37817-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[maoyixietju@gmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,codeconstruct.com.au:email,harvard.edu:email]
-X-Rspamd-Queue-Id: 0096559FCBA
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:dkim]
+X-Rspamd-Queue-Id: 2E6405A05AA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-ast_udc_ep_dequeue() declares the loop cursor `req` outside the
-list_for_each_entry(). After the loop it tests `&req->req != _req`
-to decide whether the request was found. If the queue holds no
-match, `req` is past-the-end. It then aliases
-container_of(&ep->queue, struct ast_udc_request, queue) via offset
-cancellation. Whether that synthetic address equals `_req` depends
-on heap layout. The function can return 0 without dequeueing
-anything.
 
-Default `rc` to -EINVAL and set it to 0 only inside the match
-branch. `req` is no longer read after the loop, so the past-the-end
-dereference goes away. No extra cursor variable or post-loop test
-is needed.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Suggested-by: Andrew Jeffery <andrew@codeconstruct.com.au>
-Signed-off-by: Maoyi Xie <maoyixie.tju@gmail.com>
----
-v3: Switch to Andrew Jeffery's shape: default rc to -EINVAL, set
-    rc=0 inside the match branch, drop the post-loop check. Smaller
-    diff, no extra cursor variable, no goto. Same semantic fix as v2.
-v2: https://lore.kernel.org/linux-usb/20260519080213.1932516-1-maoyixie.tju@gmail.com/
-v1: https://lore.kernel.org/linux-usb/20260518073403.1285339-1-maoyi.xie@ntu.edu.sg/
+On 21/05/2026 1.08, Michal Pecio wrote:
+>>
+>> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+>> index ac915dacd886..1effc9f08678 100644
+>> --- a/drivers/usb/host/xhci-mem.c
+>> +++ b/drivers/usb/host/xhci-mem.c
+>> @@ -1953,8 +1953,11 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+>>  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed command ring");
+>>  	xhci_cleanup_command_queue(xhci);
+>>  
+>> -	for (i = xhci->max_slots; i > 0; i--)
+>> -		xhci_free_virt_devices_depth_first(xhci, i);
+>> +	if (xhci->devs) {
+>> +		for (i = xhci->max_slots; i > 0; i--)
+>> +			xhci_free_virt_devices_depth_first(xhci, i);
+>> +		kfree(xhci->devs);
+>> +	}
+>>  
+>>  	dma_pool_destroy(xhci->segment_pool);
+>>  	xhci->segment_pool = NULL;
+>> @@ -2011,6 +2014,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+>>  	xhci->rh_bw = NULL;
+>>  	xhci->port_caps = NULL;
+>>  	xhci->interrupters = NULL;
+>> +	xhci->devs = NULL;
+>>  
+>>  	xhci->usb2_rhub.bus_state.bus_suspended = 0;
+>>  	xhci->usb3_rhub.bus_state.bus_suspended = 0;
+>> @@ -2417,6 +2421,12 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+>>  
+>>  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
+>>  
+>> +	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating internal virtual device array");
+> 
+> I don't think this is useful in any way. One look at the code makes it
+> clear that this is going to happen each time this function is called.
 
- drivers/usb/gadget/udc/aspeed_udc.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+I'll remove the debug message.
 
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-index 7fc6696b7694..75f9c831b21a 100644
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -694,7 +694,7 @@ static int ast_udc_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
- 	struct ast_udc_dev *udc = ep->udc;
- 	struct ast_udc_request *req;
- 	unsigned long flags;
--	int rc = 0;
-+	int rc = -EINVAL;
- 
- 	spin_lock_irqsave(&udc->lock, flags);
- 
-@@ -704,14 +704,11 @@ static int ast_udc_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
- 			list_del_init(&req->queue);
- 			ast_udc_done(ep, req, -ESHUTDOWN);
- 			_req->status = -ECONNRESET;
-+			rc = 0;
- 			break;
- 		}
- 	}
- 
--	/* dequeue request not found */
--	if (&req->req != _req)
--		rc = -EINVAL;
--
- 	spin_unlock_irqrestore(&udc->lock, flags);
- 
- 	return rc;
--- 
-2.34.1
+> 
+>> +	xhci->devs = kcalloc_node(xhci->max_slots + 1, sizeof(*xhci->devs), flags,
+>> +				  dev_to_node(dev));
+>> +	if (!xhci->devs)
+>> +		goto fail;
+>> +
+>>  	xhci->dcbaa.ctx_array =
+>>  		dma_alloc_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), xhci->max_slots + 1),
+>>  				   &dcbaa->dma, flags);
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index 9a471bd72265..151a759806f8 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -5460,7 +5460,7 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+>>  	if (xhci->hci_version > 0x100)
+>>  		xhci->hcc_params2 = readl(&xhci->cap_regs->hcc_params2);
+>>  
+>> -	xhci->max_slots = HCS_MAX_SLOTS(hcs_params1);
+>> +	xhci->max_slots = min(HCS_MAX_SLOTS(hcs_params1), MAX_HC_SLOTS);
+> 
+> HCSPARAMS1.MaxSlots is 8 bits wide, so it will never exceed 255.
+> There is no need to add this check.
+
+The 'MAX_HC_SLOTS' macro is intended to be user configurable, allowing
+a custom upper bound to be set, similarly to max ports and max interrupts.
+
+Given its niche purpose, its prior existence, and its alignment with
+related HCSPARAMS1 max values, I chose to keep it.
+
+Additionally, this check is only performed once during initialization,
+so the overhead is negligible.
+
+> 
+> And the macro seems to porperly mask out excess bits picked up from
+> other fields, so no worries about that either. And if it didn't, it
+> should be fixed instead of (wrongly) assuming 255 slots.
+> 
+>>  	xhci->max_ports = min(HCS_MAX_PORTS(hcs_params1), MAX_HC_PORTS);
+>>  	/* xhci-plat or xhci-pci might have set max_interrupters already */
+>>  	if (!xhci->max_interrupters)
+>> @@ -5533,8 +5533,6 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+>>  	init_completion(&xhci->cmd_ring_stop_completion);
+>>  	xhci_hcd_page_size(xhci);
+>>  
+>> -	memset(xhci->devs, 0, MAX_HC_SLOTS * sizeof(*xhci->devs));
+>> -
+>>  	/* Allocate xHCI data structures */
+>>  	retval = xhci_mem_init(xhci, GFP_KERNEL);
+>>  	if (retval)
+>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>> index b467b875eeba..f977c8e6a90a 100644
+>> --- a/drivers/usb/host/xhci.h
+>> +++ b/drivers/usb/host/xhci.h
+>> @@ -33,8 +33,11 @@
+>>  /* xHCI PCI Configuration Registers */
+>>  #define XHCI_SBRN_OFFSET	(0x60)
+>>  
+>> -/* Max number of USB devices for any host controller - limit in section 6.1 */
+>> -#define MAX_HC_SLOTS		256
+>> +/*
+>> + * Max number of Devices Slots. xHCI specification section 5.3.3
+>> + * Valid values are in the range of 1 to 255.
+>> + */
+>> +#define MAX_HC_SLOTS		255
+> 
+> Then if there are no other uses, this constant can simply be removed.
+> 
+>>  /*
+>>   * Max Number of Ports. xHCI specification section 5.3.3
+>>   * Valid values are in the range of 1 to 255.
+>> @@ -1552,7 +1555,7 @@ struct xhci_hcd {
+>>  	/* these are not thread safe so use mutex */
+>>  	struct mutex mutex;
+>>  	/* Internal mirror of the HW's dcbaa */
+>> -	struct xhci_virt_device	*devs[MAX_HC_SLOTS];
+>> +	struct xhci_virt_device	**devs;
+>>  	/* For keeping track of bandwidth domains per roothub. */
+>>  	struct xhci_root_port_bw_info	*rh_bw;
+>>  
+>> -- 
+>> 2.50.1
+>>
 
 
