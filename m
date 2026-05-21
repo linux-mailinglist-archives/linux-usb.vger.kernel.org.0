@@ -1,215 +1,194 @@
-Return-Path: <linux-usb+bounces-37819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37821-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id INnpOny5DmrBBgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37819-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:51:24 +0200
+	id YDlsJ/m6DmrBBgYAu9opvQ
+	(envelope-from <linux-usb+bounces-37821-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:57:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 641875A05F6
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:51:24 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43A575A0837
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:57:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 70BC23066BFA
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 07:47:39 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 87BEC3017454
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 07:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5449345CAB;
-	Thu, 21 May 2026 07:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6B239B962;
+	Thu, 21 May 2026 07:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnVHFdnu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQOH2x0O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCE833AD9D;
-	Thu, 21 May 2026 07:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D0A397AE4
+	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 07:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779349654; cv=none; b=uSQedzPZLql+UK2Fc31IH4Md9PnbGQRLFVSiujLl02n66Bk2rpmm0O2kKgY4X+HdQ0S5OjHsXLNNI6McUKw9r4Lk33dTYKLZk3ZlBX8VBi23QiMgoNCT52EVqJVIzZ9eGkpiu6uW36HVGjlBio4/rAL03nWevD071LL69Wkl7zM=
+	t=1779350258; cv=none; b=UGBQnblQIhrI9TjgQNODACF+/f6eaVlpfQ+/MosCsbMbDduJrdvXSAvU5RXXBCR900EmZE0sq7YvjV/cqIsDRlOAtAqYwdMKr6740qLxqkKAKJqtSEr57ozxoIEt9ZtNRjGqOC9F9cmO4IP81xg4CkZSPuxixtHI9THeJD7imdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779349654; c=relaxed/simple;
-	bh=uF97CAtH11NgQX2cMKMa/FkrzejTk64QapAv+7JBuig=;
+	s=arc-20240116; t=1779350258; c=relaxed/simple;
+	bh=01uWqmyLFzd8H4CBvINTSYaToSHFeAsBFz1Y1xtMczw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o4RNJm9M9jhq2VGke9HnziKQ6cQdo2krh3H5CeqIXsuUpYeIHovh1FP0UkQmwCuUGbrJIrDLP1X99bVc7KQYXq5D1eeDyxEyTt5j3SuuFFd/6HeLgjzvCuVidJe6giHaCH2oeGittRRKJacmkiUHf1tqeKEVH0IQGrYsddz45NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnVHFdnu; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D8C1F00A3B;
-	Thu, 21 May 2026 07:47:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779349652;
-	bh=UczfSrk2FCod7H4rifpa1n/f+nsCfH/NDhquQgw9qmA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lnVHFdnu4MxoKkNgwK7y8HGU3d4DYUs+ji4ZleQUFnc7lWrFEDHl1CvxyDjdXpvgT
-	 HlnlNlFw1CQJGU4CFlK9lKXlg2BKtXCogvJzTjYP7G3AAFoqpOzNAKV5fMtUdbFfBX
-	 nhAmOBBIl9WhjiX3HqlhL1J0mtoa1LPqB1stBsH9a1oNOXiK09uHryvqmCGyaZHGUp
-	 HxYt8eE2J1iTPLWK8onPq+B79CD00dCDAvTCQEsUzlmt28kAk9Tk82+RogLNXDjd1s
-	 BdKNotWIoG5SDfjfSx8/ZcBPmf/kArJ294dCiuHk4Z9UdDQdIRaH/dsTGUrYdG1RLG
-	 +ccFkeS4sY5Rg==
-Date: Thu, 21 May 2026 09:47:29 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Adrien Grassein <adrien.grassein@gmail.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Rob Clark <robin.clark@oss.qualcomm.com>, 
-	Dmitry Baryshkov <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Pengyu Luo <mitltlatltl@gmail.com>, Nikita Travkin <nikita@trvn.ru>, 
-	Yongxing Mou <yongxing.mou@oss.qualcomm.com>, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org, 
-	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org
-Subject: Re: [PATCH RESEND v3 1/6] drm/connector: report IRQ_HPD events to
- drm_connector_oob_hotplug_event()
-Message-ID: <20260521-funny-astonishing-mackerel-cc5a01@penduick>
-References: <20260513-hpd-irq-events-v3-0-086857017f16@oss.qualcomm.com>
- <20260513-hpd-irq-events-v3-1-086857017f16@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PGIBFy921w408M3LPPvQ+K//FY53Ts0utEcgoEBttzXh9Vzm9avGlRbexuYXval2t+QYwKUsn8LeQMcQiXyMD+yLRQ0pXCKpZrHkpfH/4Qfj0aYYmvq9Q9hlbJnOgf6OCoeGqR3Z9deNUQngCM6bkrmOPp2eFL48uUgUQU6gb7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OQOH2x0O; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43d77f6092eso3327291f8f.2
+        for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 00:57:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779350253; x=1779955053; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gZORxaPdJSDOgk8ANxzTl375l5CvuQSqBLkQk79bozY=;
+        b=OQOH2x0OZmEHxHHry4BcFu9isGLq7beTOFb9yC45lwiqzRwafosbDvCQccvcpI4Hxe
+         eNbwvw1744HGpcNiJAsDBkrw0MOq6sGds1NNjqKKdU7XNpyaBOBKjmtpsUX6V4wjZR5k
+         Q6cOhRbs/2kg7mNG7JGrw5Mv0KyRQWrK0BBill59rSboOl2hNYGNkFbj5C1VgnaY/O71
+         6h9qm+zQaGuSOpXX61yXVpOm24hFxKD7lHIZx8i8qrG4CTHkTNB6DjkIkfahhE9yQYdC
+         fT/M6Md7fplyvntgzvkItb2GO0f2QUjGrMGYcskzmZdYFpJSrhLb7NDmnIMIqlEa7t0y
+         k+cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779350253; x=1779955053;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gZORxaPdJSDOgk8ANxzTl375l5CvuQSqBLkQk79bozY=;
+        b=lMFFs2Er9CkMjFAj3yFU73EPd54XCEm/bqi7t9cOgVwWTCQgFHgjm40DHiNKX5x+Sl
+         I71sLtYkfwjn7qhKO5W5XMwexmvSb3s6TCjHoTcyEFWXXuQ8RXOYQ3y8MIddE300AJry
+         lFdFXb3dB293M4/dg65Co25bvtsCwzq+T1Po51KucNG0eTNGXXIap5fYO3d2tsjbkgEr
+         uPPdy/IRXFK/qZjPsbZt8Yram0SbleJx2XOcGBqZED+770PwprTGgLdBX1uq9t4iEutk
+         jUMaYuPH4AuZolHbuSl9yJUi0e6yVqMct/TPBbyfg9OfZ9QArjihGQ1iI8dlb0NWZlG2
+         bOlg==
+X-Forwarded-Encrypted: i=1; AFNElJ9QI5Y6BOUpkFWD5MVbhUVGGHWhMBttD6vqGk5XyCytHcLH6WdVuGsAe5vcIbEH+MjScLHtpT31X+I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTzIoDiQUKD+wDfx3HPDEAAnye6F7fxwTZbf1gH74sk0GG6VD6
+	0vLRYMkv40UoroUTrOa4ZZgEbmikgPc7i/aXd9BlJwsjIfh5dEjbxyfU
+X-Gm-Gg: Acq92OGyMQi3ElypvJjU0cYsL9uZuaZC3bR3r47641GPugCLuX1hYWSmCFiTennmu2h
+	zUSM07DCN6gaU27N39mfJXQvdv7DTFwJpzf67FZ9BTculIc4tp/4no14ZJRLNRXs4TU15B8+IzH
+	/AfVxrsAvl/pjSxkZtaPgn1zGh/iJNFO9vluIsKcfTyVhREKty3C/1ypvhwdSzZrqChWRoODPt7
+	e0iORgZsTnyUkNmhqBij/lgaHtCjcwDd/tu55EzYsRp7ywW8pd6xERdIcR7GFD9oyWT0SGRm8Ui
+	IcJOO3/LHnBBfiv8OkGsXcTRw/RRXSl7OyAkR6poInQoOEGHmLUT9gZ6LB18s03FMTiomMrQi2t
+	ynLhE1hXn0CNjCn63hsI/wxsl9GzSoBzw/nKI+D2cD0LRJIHLJRP/f9EAkNf3jYk2SIP3J5ENSz
+	sYSHQzi126JoEHLUR7kWMF6hmYhlS7XwtXH5uwsySqZf9b89BFKUl8x6DqBUGA5kiEQrz4cxUuJ
+	184jwVZcJuQ9g==
+X-Received: by 2002:a05:6000:2583:b0:45d:3cb0:5ab1 with SMTP id ffacd0b85a97d-45ea4141e17mr2803411f8f.38.1779350252817;
+        Thu, 21 May 2026 00:57:32 -0700 (PDT)
+Received: from orome (p200300e41f291e00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f29:1e00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eaa7dd50asm821152f8f.15.2026.05.21.00.57.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2026 00:57:30 -0700 (PDT)
+Date: Thu, 21 May 2026 09:57:28 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Lyude Paul <lyude@redhat.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Dmitry Osipenko <digetx@gmail.com>, 
+	Thierry Reding <thierry.reding@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH 4/9] media: vde: Explicitly specify PMC instance to use
+Message-ID: <ag66qZ6rLOeUTWV7@orome>
+References: <20260506-pmc-v1-0-a6de5da7216b@nvidia.com>
+ <20260506-pmc-v1-4-a6de5da7216b@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="uipgpe3pv2bnp7vq"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ufnilbb7pbo55sdz"
 Content-Disposition: inline
-In-Reply-To: <20260513-hpd-irq-events-v3-1-086857017f16@oss.qualcomm.com>
-X-Spamd-Result: default: False [-2.26 / 15.00];
+In-Reply-To: <20260506-pmc-v1-4-a6de5da7216b@nvidia.com>
+X-Spamd-Result: default: False [-3.76 / 15.00];
 	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37819-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-37821-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[42];
-	FREEMAIL_CC(0.00)[linux.intel.com,suse.de,gmail.com,ffwll.ch,linuxfoundation.org,intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,ursulin.net,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,trvn.ru,lists.freedesktop.org,vger.kernel.org,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mripard@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_CC(0.00)[kernel.org,nvidia.com,redhat.com,linux.intel.com,suse.de,gmail.com,ffwll.ch,google.com,intel.com,linuxfoundation.org,pengutronix.de,vger.kernel.org,lists.freedesktop.org];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 641875A05F6
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thierryreding@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nvidia.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 43A575A0837
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 
---uipgpe3pv2bnp7vq
+--ufnilbb7pbo55sdz
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH RESEND v3 1/6] drm/connector: report IRQ_HPD events to
- drm_connector_oob_hotplug_event()
+Subject: Re: [PATCH 4/9] media: vde: Explicitly specify PMC instance to use
 MIME-Version: 1.0
 
-On Wed, May 13, 2026 at 09:23:21PM +0300, Dmitry Baryshkov wrote:
-> The DisplayPort standard defines a special kind of events called IRQ.
-> These events are used to notify DP Source about the events on the Sink
-> side. It is extremely important for DP MST handling, where the MST
-> events are reported through this IRQ.
+On Wed, May 06, 2026 at 03:41:55PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 >=20
-> In case of the USB-C DP AltMode there is no actual HPD pulse, but the
-> events are ported through the bits in the AltMode VDOs.
+> Currently the kernel relies on a global variable to reference the PMC
+> context. Use an explicit lookup for the PMC and pass that to the public
+> PMC APIs.
 >=20
-> Extend the drm_connector_oob_hotplug_event() interface and report IRQ
-> events to the DisplayPort Sink drivers.
->=20
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  drivers/gpu/drm/drm_connector.c          |  5 ++++-
->  drivers/usb/typec/altmodes/displayport.c | 15 +++++++++++----
->  include/drm/drm_connector.h              | 19 ++++++++++++++++++-
->  3 files changed, 33 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connec=
-tor.c
-> index 47dc53c4a738..edee9daccd51 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -3510,6 +3510,8 @@ struct drm_connector *drm_connector_find_by_fwnode(=
-struct fwnode_handle *fwnode)
->   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to=
- connector
->   * @connector_fwnode: fwnode_handle to report the event on
->   * @status: hot plug detect logical state
-> + * @extra_status: additional information provided by the sink without ch=
-anging
-> + * the HPD state (or in addition to such a change).
->   *
->   * On some hardware a hotplug event notification may come from outside t=
-he display
->   * driver / device. An example of this is some USB Type-C setups where t=
-he hardware
-> @@ -3520,7 +3522,8 @@ struct drm_connector *drm_connector_find_by_fwnode(=
-struct fwnode_handle *fwnode)
->   * a drm_connector reference through calling drm_connector_find_by_fwnod=
-e().
->   */
->  void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwn=
-ode,
-> -				     enum drm_connector_status status)
-> +				     enum drm_connector_status status,
-> +				     enum drm_connector_status_extra extra_status)
->  {
->  	struct drm_connector *connector;
-> =20
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
-/altmodes/displayport.c
-> index 35d9c3086990..7182a8e2e710 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -189,7 +189,9 @@ static int dp_altmode_status_update(struct dp_altmode=
- *dp)
->  	} else {
->  		drm_connector_oob_hotplug_event(dp->connector_fwnode,
->  						hpd ? connector_status_connected :
-> -						      connector_status_disconnected);
-> +						      connector_status_disconnected,
-> +						(hpd && irq_hpd) ? DRM_CONNECTOR_DP_IRQ_HPD :
-> +								   DRM_CONNECTOR_NO_EXTRA_STATUS);
+>  drivers/media/platform/nvidia/tegra-vde/vde.c | 15 +++++++++++----
+>  drivers/media/platform/nvidia/tegra-vde/vde.h |  1 +
+>  2 files changed, 12 insertions(+), 4 deletions(-)
 
-Since the extra status itself, and what the options mean, are DP specific, =
-do we really want to
-extend drm_connector_oob_hotplug_event()? I think I'd prefer to have a DP s=
-pecific variant, with its
-own set of parameters.
+Hi Mauro,
 
-Maxime
+would you mind providing an Acked-by on this so I can take it through
+the Tegra tree? That'd make the dependency handling a bit simpler.
 
---uipgpe3pv2bnp7vq
+Thanks,
+Thierry
+
+--ufnilbb7pbo55sdz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCag64iQAKCRAnX84Zoj2+
-dhJzAYClCMH5nftN7lNJDSZByXRPwo/xO31PTF3adTcKyfMtvVmon8CIoheOgyRx
-VwxpLvMBf0dr9uwFTrG2lPtQTFNmHOzXDF1ujEGuM3hWzigGtwt7xylrgcMlpE1b
-f9c6Uo1BbQ==
-=SGa3
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmoOuugACgkQ3SOs138+
+s6FbKQ//aRQbgwr4ztzl8XykZ3VwYpBsUA5hzUjDURQkJFNdwnkt6k1kBPuF6tMI
+joUObtuboDDZBD6T1W1CWvCKqzBPwDlmD5hdckRGlbau3ug5Z4HYFpTEoO2VPhr8
+kW6mO+oE+5Jq2I4kEfCg9WfotOOP15ehuSzn2JRbKZDLC9l8/Fyo/7nglXyjmoJk
+qgD47vfx8/zgrE/Fv9M+eGdeJzh0XxvRrqWYxe6wJqlFCETYNH38hb+CBfIWa8HR
+Tzoa0rmTS4YRP2+p6yeckAN5IWgSx7ZTbCMLLoJfyjEbCUf9Y3ymi7DNWHey2gi1
+SY1ue+l/i2UNavChYqtuBV9YOfSyM0PWRQja4YeSMSIK1M7mLfta20LOo37A112O
+BN5tR5zmtwiKW5ZnAReOMcWJFLobWu9+ZlbkiyQ4yiONh1truDHgwBOssPfCK+/Y
+ejeJGgdzWnlgonVwEp80tLQsNZN4Nccrmnn5JPaH1maEC+eJBtP1Y6V+io/28QFP
+YE+W8gXUwm2BK81TcpIw6qswfWiBu8WdGeCx9j5X+mbo/jNWboIo2l0AQxtbCyGm
+LiYJV+w1iEWO3WWQKymgmwRdhT/QfeS4VcUikTrZG/NrcIEpVwuVk4syKobUx9Cx
+DuSlIPt97hHCjwAaF6HZwg809a+jTrqXPBq4VlYvkjefZNJAiMA=
+=2vYi
 -----END PGP SIGNATURE-----
 
---uipgpe3pv2bnp7vq--
+--ufnilbb7pbo55sdz--
 
