@@ -1,195 +1,219 @@
-Return-Path: <linux-usb+bounces-37827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37828-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eN2BCm68DmrBBgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37827-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:03:58 +0200
+	id wCNDLuW8DmrXBwYAu9opvQ
+	(envelope-from <linux-usb+bounces-37828-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:05:57 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0B95A0999
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:03:57 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8E805A0A49
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:05:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1558E30568D5
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 08:01:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2E666303422B
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 08:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F06646B5;
-	Thu, 21 May 2026 08:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B2E22D4C3;
+	Thu, 21 May 2026 08:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aVVZVySJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H/4DvlvI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392F53A05C2
-	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 08:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7229439EB7C
+	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 08:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779350475; cv=none; b=HOImuN88mn/oaIbZiv9fcN8i9kaDA/Z/QPwQ6w/ggdQ3p2pvLl1HlBD0cKghucApGRySOnxjLb7s7sKV+Nqk7hMm+Ftqe9Azm8aOxyE5TQiFioM5uQ7W6WxnfRoIh0dQktpoj//erlYO7/hlgTTOHav4LVgjmMo5NXAG2KGrkuU=
+	t=1779350733; cv=none; b=jyJAoJp+85vtICu6qdwH6Ko6Zyl1QVG40l6NvA4E0ZSSkWfWJ6rts2Ny5UBAdKX9sqG8VXEGxjIwJMN8okRA2WjMbPpFiWK/zWYdQqETEpIBffWOP6q7f6zLgp5VbE9PXs/dTdOtAuAGFHBF/dpyqZtjoi+UzziBmeVPreZcdhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779350475; c=relaxed/simple;
-	bh=jyOUkIh5U4Jq5jhU7z2i3GFpsJ91ALGPm6dGho+irzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qo+v6ibhMfZZTjYonEgSY1nDiXRdm+qxle236jcnXqlDz7U98th2DmntwrgjE3MWu3woIavwwDE08MpAKl/NlF1H2XhlVNTlJJawztNyTsmUDDYmIVEd/oCkUqBpW55VVN5D5AzU2Iiy8grDGDlj9qJ6TqWpCH0kF5Y7S7sB1fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aVVZVySJ; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-449d6c68ed8so2836236f8f.0
-        for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 01:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779350473; x=1779955273; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAGm6nF0wdUN0d2423OYPWZUGqBbg4/Jc7nYqxEaHM8=;
-        b=aVVZVySJmrn+BiIUydUWCsvJnn6a2TM2YIuYb+LCOieUVpvOeb0wc/HgC4X+OOfb1l
-         4X7TvEc8NUgKRZo0/clcD4HSJqeHKAVzXEYEnBEGIQD8xVukvmQiBdZYzynxEi/pe5io
-         dkLIryFeUlDfay5yyqvkWMXfgaOFGUgnaMx41QN5ELuUSX4cah4ZRJkmD7I+RQTcpJz6
-         QXuwfYQ2viteGe7II2zP4PLcX6IYIyfbZCdcDa4AvCn9iDSzgaFloCgsYd6XLFLMYhoO
-         KZ1aQpB8kMYHpES4DrfitPYK/VocyYbb92atSwL/dHiHtSxBZadQ5T8qRHjtHe0coGmU
-         4xCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779350473; x=1779955273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CAGm6nF0wdUN0d2423OYPWZUGqBbg4/Jc7nYqxEaHM8=;
-        b=EIpMpYiVXjYT5oyPa2buTsoNfa8r3aYVwdcTixGb11YcbFrBz1aEIKbfuSqgfNfX+c
-         O4FpH9Psoe6r0riszzaTa/Rjj8S0iEBAt9H1WCdQRXclEq5FwNQB+HteDh73DDAE+EUN
-         rb2djtBfAWj3axRHb7SMYMbastNDPhN/Kdw4RAqIIFEKbiRVotKjE9sPkb8/i0eqhmld
-         fJlUbDOwAUkLyK7zXZqSGlQmmhOgEp8I5wyaX5WoKHGIBMXeQ5Wy25/CqjNpYr3n24kW
-         Oso1wTrwEGeRIkuepLauJhsPsWW0hlkritxul/mbDrFe0aUhajKJyyRyxKXnJCgn0GK8
-         50Qw==
-X-Forwarded-Encrypted: i=1; AFNElJ/PLLFVrSip6y+TDLHcZPr1Sx3mrvkmFEPTuHu5MfD/Zaw5q9e/U2VqUD6crAP0gwTJQyZ8NHuAU9U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysaXhTCkWVGwIZsbrsAuc2j2fcGA+94n8RgVmwOXhN5foyRuB6
-	9uzrbY8ulsf1gxTNoC0/HJUYyss1nh1MgcjCyzM85O/meXu9eDD/NcXj
-X-Gm-Gg: Acq92OEUb+YUU0qZLA/8w5+AmiMWd86xeIglpPYj3xh4tIMOpFzkEhLOiQo4jugaARc
-	onpzXnuWsfdtrs0mswW02woPWoFtb4QceE8EglhDKcomapB+LSq1rFNFiVUMaTaJ+WMBbwHbBTD
-	/qv9BKPFgvhrt2Qa3ssbrafQEZNFoFqpAzNAo4lE6qTl/AiGnpiaFbrCUWoR2ibhF+GWAnuUpOn
-	tQuEAbt6Z+5IiLhqNxTGaLSHNZ3OkRSoaOpZSwrHvQhLYuLubPUh2JPfG4VX0O3YfmOF6rYJnbn
-	T2gPhh+W3VSKlHnO/zN+14Z20gaGYC14O02ZmnTYz4e01VXcZKToVokk63IdNq+SNHsrekQ0IGu
-	qTyxRP7yds+NT4zxogjw4bid2jDpGAUhpGpZvsF4NboEyB2Ran7al9i3yPCYhXSvv1EeEl9Sj6+
-	21J3AZRe1hwLbvlPdGIdj43agLFYVZw1WsdtPznKRUZCLyqTPKz8X/XtMeURI5BqlUOIoEShSX4
-	KkXRk2YUq7KRvGjrgtnAVDP
-X-Received: by 2002:a05:6000:4027:b0:45e:a0ab:8bc9 with SMTP id ffacd0b85a97d-45ea3dead2amr2513624f8f.41.1779350445635;
-        Thu, 21 May 2026 01:00:45 -0700 (PDT)
-Received: from orome (p200300e41f291e00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f29:1e00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eaa7dd9e6sm857662f8f.16.2026.05.21.01.00.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2026 01:00:44 -0700 (PDT)
-Date: Thu, 21 May 2026 10:00:41 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Lyude Paul <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Mikko Perttunen <mperttunen@nvidia.com>, 
-	Dmitry Osipenko <digetx@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Mathias Nyman <mathias.nyman@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH 2/9] drm/nouveau: tegra: Explicitly specify PMC instance
- to use
-Message-ID: <ag67dmFtSDBC6aPK@orome>
-References: <20260506-pmc-v1-0-a6de5da7216b@nvidia.com>
- <20260506-pmc-v1-2-a6de5da7216b@nvidia.com>
+	s=arc-20240116; t=1779350733; c=relaxed/simple;
+	bh=J8cxFNByLTM/wgFYLAP+/4m0ceLMD2B2QqxGmKIB2ss=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MycPELwQbjFxJsiSRLu5x6GW1GifUS5L6T9P1BVMFQpYtrI4+5tjvdheAEhqPAO11XS7Y3LliB9MTTq94RSAy5vMkJeJEr9mVBBA3b1jUVGvCE8Mu/seZMwNWH09v7o0YKzSlOhVS8PV2DE5ZevwPN5KazysjxqzqlvtrmclNJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H/4DvlvI; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779350731; x=1810886731;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J8cxFNByLTM/wgFYLAP+/4m0ceLMD2B2QqxGmKIB2ss=;
+  b=H/4DvlvIN2b420TYF0lHOqC/GTNoWSg8IXaWEBOolcqpyVRGD+9wTaUf
+   6MyCXMsab3qpwR/z4FxM5q6uWW5JNlLYnOUMcjCwRVnULWzNaUWJ9RaYN
+   noBvBETYn9mZz5o8ouHxzo92zMjvMAnKYSl+sPV+ICKFzRcmFDRdQvTN0
+   /m0nd4QbXD4tfqnivEuE7X+nBhYSXb4gu9lmRMg2RCYgz3/8s84LRYqpK
+   frCWt5vcFLG8HimRXN785rMBoMpn2DlbOgAUevXxpxlm1hTis79ll/NDJ
+   6Sm3vtBndBZMhQP6r4ec4kBK0HUY8f75F8bufD2g/9srHuM2o8vee/UUN
+   w==;
+X-CSE-ConnectionGUID: xABOarM2RP6/1L45bDKmOw==
+X-CSE-MsgGUID: WLnqDsjAQ/anOF/QdRY77g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="79292191"
+X-IronPort-AV: E=Sophos;i="6.23,245,1770624000"; 
+   d="scan'208";a="79292191"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 01:05:31 -0700
+X-CSE-ConnectionGUID: MpuORh1JRT62TqzNu8f2gQ==
+X-CSE-MsgGUID: jHA06ReZRGyWYxFHbYYhHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,245,1770624000"; 
+   d="scan'208";a="244757045"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa004.jf.intel.com with ESMTP; 21 May 2026 01:05:29 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1058)
+	id E59FD95; Thu, 21 May 2026 10:05:27 +0200 (CEST)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH] usb: xhci: remove legacy 'num_trbs_free' tracking
+Date: Thu, 21 May 2026 10:04:25 +0200
+Message-ID: <20260521080426.258909-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5oal4jl4ykfwr5c4"
-Content-Disposition: inline
-In-Reply-To: <20260506-pmc-v1-2-a6de5da7216b@nvidia.com>
-X-Spamd-Result: default: False [-3.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37827-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_CC(0.00)[kernel.org,nvidia.com,suse.de,gmail.com,ffwll.ch,google.com,intel.com,linuxfoundation.org,pengutronix.de,vger.kernel.org,lists.freedesktop.org];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37828-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thierryreding@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,nvidia.com:email]
-X-Rspamd-Queue-Id: BB0B95A0999
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: A8E805A0A49
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Keeping track of free TRBs in a ring by adding and subtracting each time
+a enqueue or dequeue pointer is modified has proven to be buggy and
+complicated, especially over long periods of time.
+The xhci driver has already moved to calculating free TRBs dynamically
+based on ring size and the enqueue/dequeue positions.
 
---5oal4jl4ykfwr5c4
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 2/9] drm/nouveau: tegra: Explicitly specify PMC instance
- to use
-MIME-Version: 1.0
+The DbC path is the last user of 'num_trbs_free'. Rather than maintaining
+two separate accounting mechanisms, remove the field entirely and switch
+DbC to use xhci_num_trbs_free(). Since 'num_trbs_free' undercounts by one,
+and xhci_num_trbs_free() does not, the check for sufficient free TRBs is
+adjusted.
 
-On Wed, May 06, 2026 at 03:41:53PM +0200, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
->=20
-> Currently the kernel relies on a global variable to reference the PMC
-> context. Use an explicit lookup for the PMC and pass that to the public
-> PMC APIs.
->=20
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/gpu/drm/nouveau/include/nvkm/core/tegra.h  | 2 ++
->  drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c | 9 ++++++++-
->  2 files changed, 10 insertions(+), 1 deletion(-)
+Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+---
+ drivers/usb/host/xhci-dbgcap.c | 5 +----
+ drivers/usb/host/xhci-mem.c    | 6 ------
+ drivers/usb/host/xhci-ring.c   | 2 +-
+ drivers/usb/host/xhci.h        | 2 +-
+ 4 files changed, 3 insertions(+), 12 deletions(-)
 
-Danilo, Lyude, Maarten,
+diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+index 7e6f7d72f03e..6a9f73fecb73 100644
+--- a/drivers/usb/host/xhci-dbgcap.c
++++ b/drivers/usb/host/xhci-dbgcap.c
+@@ -275,7 +275,6 @@ xhci_dbc_queue_trb(struct xhci_ring *ring, u32 field1,
+ 	trace_xhci_dbc_gadget_ep_queue(ring, &trb->generic,
+ 				       xhci_trb_virt_to_dma(ring->enq_seg,
+ 							    ring->enqueue));
+-	ring->num_trbs_free--;
+ 	next = ++(ring->enqueue);
+ 	if (TRB_TYPE_LINK_LE32(next->link.control)) {
+ 		next->link.control ^= cpu_to_le32(TRB_CYCLE);
+@@ -296,7 +295,7 @@ static int xhci_dbc_queue_bulk_tx(struct dbc_ep *dep,
+ 
+ 	num_trbs = count_trbs(req->dma, req->length);
+ 	WARN_ON(num_trbs != 1);
+-	if (ring->num_trbs_free < num_trbs)
++	if (xhci_num_trbs_free(ring) <= num_trbs)
+ 		return -EBUSY;
+ 
+ 	addr	= req->dma;
+@@ -796,7 +795,6 @@ static void dbc_handle_xfer_event(struct xhci_dbc *dbc, union xhci_trb *event)
+ 		}
+ 		if (r->status == -COMP_STALL_ERROR) {
+ 			dev_warn(dbc->dev, "Give back stale stalled req\n");
+-			ring->num_trbs_free++;
+ 			xhci_dbc_giveback(r, 0);
+ 		}
+ 	}
+@@ -861,7 +859,6 @@ static void dbc_handle_xfer_event(struct xhci_dbc *dbc, union xhci_trb *event)
+ 		break;
+ 	}
+ 
+-	ring->num_trbs_free++;
+ 	req->actual = req->length - remain_length;
+ 	xhci_dbc_giveback(req, status);
+ }
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 997fe90f54e5..289461c06bf9 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -324,12 +324,6 @@ void xhci_initialize_ring_info(struct xhci_ring *ring)
+ 	 * handling ring expansion, set the cycle state equal to the old ring.
+ 	 */
+ 	ring->cycle_state = 1;
+-
+-	/*
+-	 * Each segment has a link TRB, and leave an extra TRB for SW
+-	 * accounting purpose
+-	 */
+-	ring->num_trbs_free = ring->num_segs * (TRBS_PER_SEGMENT - 1) - 1;
+ }
+ EXPORT_SYMBOL_GPL(xhci_initialize_ring_info);
+ 
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e47e644b296e..f62db238276d 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -340,7 +340,7 @@ static bool trb_in_td(struct xhci_td *td, dma_addr_t suspect_dma)
+  * Only for transfer and command rings where driver is the producer, not for
+  * event rings.
+  */
+-static unsigned int xhci_num_trbs_free(struct xhci_ring *ring)
++unsigned int xhci_num_trbs_free(struct xhci_ring *ring)
+ {
+ 	struct xhci_segment *enq_seg = ring->enq_seg;
+ 	union xhci_trb *enq = ring->enqueue;
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index aeecd301f207..e73c498449e8 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1376,7 +1376,6 @@ struct xhci_ring {
+ 	u32			cycle_state;
+ 	unsigned int		stream_id;
+ 	unsigned int		num_segs;
+-	unsigned int		num_trbs_free; /* used only by xhci DbC */
+ 	unsigned int		bounce_buf_len;
+ 	enum xhci_ring_type	type;
+ 	u32			old_trb_comp_code;
+@@ -1955,6 +1954,7 @@ void xhci_ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
+ void xhci_cleanup_command_queue(struct xhci_hcd *xhci);
+ void inc_deq(struct xhci_hcd *xhci, struct xhci_ring *ring);
+ unsigned int count_trbs(u64 addr, u64 len);
++unsigned int xhci_num_trbs_free(struct xhci_ring *ring);
+ int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 			    int suspend, gfp_t gfp_flags);
+ void xhci_process_cancelled_tds(struct xhci_virt_ep *ep);
+-- 
+2.50.1
 
-would any of you mind giving an Acked-by so I can pick this up into the
-Tegra tree with the rest of the series?
-
-Thanks,
-Thierry
-
---5oal4jl4ykfwr5c4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmoOu6kACgkQ3SOs138+
-s6FK8BAAgs0A7wFYJOVZxTTW6MNa4zXSjm64uXobpTYaWzKll6wOHDvn6C9dcp/v
-MLtSLfP1p1SW/dO74lgYcFcwNaDIZdDsJZmNba+3Jf6PpFLkFdvor5IxklQDCq7p
-CTff6BCXl8nTZkHm57wdzn9MMiduUUlKEc1foNpP34dKfb148QjLYdxi/2hFY/ap
-VNo3Lr54eMkr3RXicgdgDHq5TXk2gKfSdy+Tve1QiUcemkc36olxR3tcgVSLxPJC
-Q66EiKj9g3bjK+fEzB7hA/GeAQOfpuUIObaCdcASbPeCBTyZJY23WbYAF5XMMRDs
-LjCs2r/E0EtZLwKY0NGBEZjwzWxF8PddUoqi3TngTTfv/EJ4qx3QzqvAf2DIVKsA
-xJgxWd1rDD2HclOQ4GojKyO7CYLt4Xa8hWXPt4V7ajU03l8bOCvKOBNmg6hRD5jp
-vHxVRmM/KOteKe7c9VJCMmxmo1oi9lE3e6BCB/VAGm7tzXHK9/43ug3tlh4A4Yk/
-ad3eKm3kJxNa4FvJor3dadP6+6C0HUwZkk40TGgkYubsdPfR2kyGI3YZlr1J7cBI
-jdRqcYoo/S+HmsreQgBpPXcTUhKqLsTU9/eqQ7V+9SItN6mvX8pPWmUaf+UexFht
-1fkm9VtVD/H5bQ0QeOiRpJMXOe/ozNGH0hUKOEywfy7W8syQACc=
-=YTdM
------END PGP SIGNATURE-----
-
---5oal4jl4ykfwr5c4--
 
