@@ -1,125 +1,194 @@
-Return-Path: <linux-usb+bounces-37822-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37823-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eAA9GKi7DmrBBgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37822-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:00:40 +0200
+	id SIIzOZi8DmrLBwYAu9opvQ
+	(envelope-from <linux-usb+bounces-37823-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:04:40 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8339F5A08D8
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:00:39 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F4A15A09DF
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:04:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4B4DA30450BF
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 07:58:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 36E3630DE598
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 07:59:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EB69395AFB;
-	Thu, 21 May 2026 07:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42FA399D08;
+	Thu, 21 May 2026 07:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yt19zBoH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tCpNOv5A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932FE377EBF;
-	Thu, 21 May 2026 07:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E235523D297
+	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 07:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779350308; cv=none; b=SNdtiXQ8RouJweKxQoTOXB4lTXm+pyyuv1uOwF+8iH3NdqG/TgYP2EN7MjOLo0cqFTa+8RyBci5T4hIMEpfHHRhSsJUgqKm0pT6aQyH5ms1XiHTip5oJnFUaO+XZtZMm+Ov7DNhBTn9ZlcDYaTQlZFY+qo+0aQWYvsYJGhjUKWA=
+	t=1779350356; cv=none; b=L8ILyZDhrJ6h2zEFiewOOlMFLyPvujjTk7KrWSmcAddk87wP3OV1AW+doHvw0NRNXCQi4lGt08TRj8tl0GOymtL1HdbqBmjucWOhyK5oSJ+gmG52F/0AzrD3LNhqZh6rXqY2vORAo0ov4+i2ebzKNHRMd3LKNbYYpAAC2iexuSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779350308; c=relaxed/simple;
-	bh=nZOk2k8R+NIh9xUYxK9J1XqMp5bYirsBOdG6ifKziYI=;
+	s=arc-20240116; t=1779350356; c=relaxed/simple;
+	bh=/1x4coy+EhRxr4G74Byh3jOJGsE6QncBFV+p/Hi25m4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IyCyw9PkQt8a7hcnBZxa+4pmcs9ekWMvIsC8wmM//uaPJajH7LfNoLxNSG+xygGK9T/FrASjnNfJfOkXhYch3tYGNGYE+cjDtU3nnmXssf2qXD5kH28A74S34RxhaPm+J8lDHCvlQXu3X/QDYQvetbyHKf/F67hZ/ze8ikC/alw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yt19zBoH; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A58E1F000E9;
-	Thu, 21 May 2026 07:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779350306;
-	bh=85oIQuLoThsXhNF76XjJLp/k+dFrF+C3BWhgBYJ7kqc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Yt19zBoHnCk7VGBh3019EcYIFEByB5XKm7XMoqnnKKIU05NbZTF8ZBc4Y858ekpFh
-	 bA0SdpUySThN8ylkwI7BMQAhOekmJYqtvCB+eRRjmoLsyH5GkqSwLt39pBMKO368Dp
-	 5S/sCKpGa+EfZi+CpeO72QRnECxRJOwnw1xWAC3id2qlv6JA8rWzaCTZX2Qy8vNwcy
-	 gmia26Ws0Irt0c0fq8MjCXko+oRcH8YhzkWueuYKyqvwoSXml6NGFDmYzlSs6wc8le
-	 MR3+qRo8F2GHyCsHYnaSVHUgmVZcpVtJtbcWbTXoLzxzRjep8P+rHzawukf2BS2kOG
-	 nJdtrrX2CpGqw==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wPyIS-00000003Nkm-0Qy4;
-	Thu, 21 May 2026 09:58:24 +0200
-Date: Thu, 21 May 2026 09:58:24 +0200
-From: Johan Hovold <johan@kernel.org>
-To: zwq2226404116@163.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wanquan Zhong <wanquan.zhong@fibocom.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] USB: serial: option: add missing RSVD(5) flag for
- Rolling RW135R-GL
-Message-ID: <ag67IE23NlLi6wcT@hovoldconsulting.com>
-References: <20260520113246.305594-1-zwq2226404116@163.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LXIXQA3/ZP9cA/oQAYe5gH129q0rw876uudJNrBwB0z5KqCPI3ayaaaP/yJvMTg97+0F3dKFDlMPFcqKnuTa0OwMjOnnwJxgduY3rRa92N+xlw9uObsggUfHBN0sb1nMHmkbs2nDgpGtWRr4BRD30+MyU2d56DeDM1xPvk3TnPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tCpNOv5A; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso60496995e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 00:59:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779350352; x=1779955152; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RfHyghQkuGkWqA8eUzVzPKJ2kyI5blFU5Z3V4gExrrw=;
+        b=tCpNOv5A8HdCnQTC2YO6ZmPUIap2OWuVg6KtEdVlpXcpKiO/YpeIEsNE09QOC0vPcp
+         mbkj5o0ucQMdZBIgSSBrhyC/5QY7B47hG7LDVU9TFDXSzpHKknB4pvMZaTz13AtS7g8D
+         BDej5suWOmQEY1V2jTm/nLuzsxDmemRcGY3F3BsoCEQm3TZqKL7//xBS/cYch4hNkR+L
+         s3pr2Vw+4nE0uzPECzfz3ZBPiU7WNMyEj6Xu711+lGijH909MMqqhvwK7DJhjsS/BZfo
+         9CNxpVPVl792FLvzHh6sTfal8LBre/LuucO8+uBxwPHGogDvoGMGQWWey9guSQZqvaI8
+         OArw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779350352; x=1779955152;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RfHyghQkuGkWqA8eUzVzPKJ2kyI5blFU5Z3V4gExrrw=;
+        b=dgxtzMuNulMG7qWCryzzkZsEPEmqC5dH2Ap4PSXbXsfdNMJFoq46hxQc5ehao9dHE3
+         OInqUSkX4HC5RstvmC2A63+OOsec/dtn19TDcL7inzneEcKSFfDIwdeWrTDVEP2s+9I5
+         9yH1Q3M3XvyLx8qx2ltkCE8YrydSYybJwPaprwHYFspSVEffvdqdTzWsLvTJ2wOPYZsD
+         h8PMy2r+5Ii339cMZykcFrZylfz+Al8xUmenP/c1MD/gMRnOv5k8smp2LOXdJXhI0jKR
+         MaVtXoxCaF9JFRT08QNaVIvky6hHyhHzWoatio+7+qLJQjgo3hmql1l81la7Kc7GHnGN
+         6TVA==
+X-Forwarded-Encrypted: i=1; AFNElJ/ilrX35q97yGN+sUTFUCQqL98D/kOghVXfslEDOfvhq4fMwN4RNUt+3uJqrOnU+3SQ817PZFzxbug=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwJi2ARB9yNlABIJEAttBzsxdfq1uauXVE2Bhx6MVVRGypOgFJ
+	1xqxYV/YmYhxrLgUCwiU6Ji34ws1l1PfIwnf7TxOPT8XziLcc7hL3OQe
+X-Gm-Gg: Acq92OFlKWTlXP/qxOmvgkEyXj0bKGMRKbVSRTHI0xsvWojQGuG78mIH1Dyoc0ePc6E
+	h1qGpl8T7UDbB/v0Su/cwy3fVAmeM5VGTLcVcOf5A8dctsp4z8msXE1sp4Oq9HdjBLkTpp0j4RA
+	9qEbKVqydYdLcmJizPb3YF6/s8mTrIZ+n6nHDBUGRoUpaUGxwsU7Do4hAVraL9H3dVUHz3e4RJX
+	bdtUe+abBTG2+kzWUOreVjTXAn8RNuFXX2M0S1D0W1sDMyW01njZLGDzNCyYo27JWu29OyJSIua
+	rvwJtXIuoVYu5DXUlANABSmGMnQ4CNXEijgFGGWxEKuNJ+RhpYBl5eBkg9DEml8pBkbvHhM+E9V
+	4EW+y0I6q9JPe9GjdezvWtVJ4qVXGdsFYNiJ5qqKuKlll8s1gj/Vsl/eKflXSGKsFoyPTB9rXzu
+	o2xZNQtsCJbqwiWVyq51DsQHOwMlBiKfpBAvyY+EnfRqxR303C9BzG6C/pjAiYpb+ZGzZfXhjh+
+	AeFF3gOM73xBA==
+X-Received: by 2002:a05:600c:30d3:b0:48f:d612:3c59 with SMTP id 5b1f17b1804b1-4903605d86bmr12514805e9.9.1779350351689;
+        Thu, 21 May 2026 00:59:11 -0700 (PDT)
+Received: from orome (p200300e41f291e00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f29:1e00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490387d16basm5521255e9.35.2026.05.21.00.59.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2026 00:59:09 -0700 (PDT)
+Date: Thu, 21 May 2026 09:59:06 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Lyude Paul <lyude@redhat.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Dmitry Osipenko <digetx@gmail.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH 6/9] usb: xhci: tegra: Explicitly specify PMC instance to
+ use
+Message-ID: <ag67FStKnQcvNOrP@orome>
+References: <20260506-pmc-v1-0-a6de5da7216b@nvidia.com>
+ <20260506-pmc-v1-6-a6de5da7216b@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="o4bqtknoba4e2ooc"
 Content-Disposition: inline
-In-Reply-To: <20260520113246.305594-1-zwq2226404116@163.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <20260506-pmc-v1-6-a6de5da7216b@nvidia.com>
+X-Spamd-Result: default: False [-3.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37822-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,nvidia.com,redhat.com,linux.intel.com,suse.de,gmail.com,ffwll.ch,google.com,pengutronix.de,vger.kernel.org,lists.freedesktop.org];
+	TAGGED_FROM(0.00)[bounces-37823-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[163.com];
-	MIME_TRACE(0.00)[0:+];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[thierryreding@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[hovoldconsulting.com:mid,fibocom.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 8339F5A08D8
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 3F4A15A09DF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 20, 2026 at 07:32:45PM +0800, zwq2226404116@163.com wrote:
-> From: Wanquan Zhong <wanquan.zhong@fibocom.com>
-> 
-> The RW135R-GL entry added in commit 01e8d0f74222 ("USB: serial: option:
-> add support for Rolling Wireless RW135R-GL") was missing the
-> .driver_info = RSVD(5) flag used by other Rolling Wireless MBIM laptop
-> modules (e.g. RW135-GL and RW350-GL).
-> 
-> Without this flag, the option driver incorrectly binds to the reserved
-> ADB interface (If#5) in multi-interface USB modes, causing AT/MBIM
-> communication failures after mode switching. This matches the handling
-> of other Rolling Wireless MBIM devices.
 
-> Fixes: 01e8d0f74222 ("USB: serial: option: add support for Rolling Wireless RW135R-GL")
-> Signed-off-by: Wanquan Zhong <wanquan.zhong@fibocom.com>
-> Cc: stable@vger.kernel.org
+--o4bqtknoba4e2ooc
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 6/9] usb: xhci: tegra: Explicitly specify PMC instance to
+ use
+MIME-Version: 1.0
+
+On Wed, May 06, 2026 at 03:41:57PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+>=20
+> Currently the kernel relies on a global variable to reference the PMC
+> context. Use an explicit lookup for the PMC and pass that to the public
+> PMC APIs.
+>=20
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
-> v4 -> v5: Use 12-char commit id and correct Fixes tag summary; move
-> changelog below --- separator; restore usb-devices output
-> v3 -> v4: Device table entry formatting aligned with existing pattern
+>  drivers/usb/host/xhci-tegra.c | 38 ++++++++++++++++++++++++++------------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
 
-Thanks for the update. Now applied.
+Mathias, Greg,
 
-Johan
+can you ack this so I can pick it up into the Tegra tree for simple
+dependency resolution?
+
+Thanks,
+Thierry
+
+--o4bqtknoba4e2ooc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmoOu0oACgkQ3SOs138+
+s6HRkRAAqo5/UZ1fUVfF67PnLxU9m4v7JcLF4Ytf/Z7v087AEjfB1FXekO/SfEUl
+dvex3+uqG9CIaSIQtQ8rxWgfEyOZeFirJloIENzJtaXACdsld465AHpQKBNbI5xU
+/euNFiOwGTIgOHGhhxAIurS7F5Ag0WgWOTDN2uBlYGiDeuZShkW3Ek3M1WHSF2ey
+Ai6uDC6tf03sgZla9uXS+eOZHkVaTx9pRDE1oxxHHLMtwgfkkl9BEHKxJ4ZqTYk8
+6G5Bdz88LVtn4VWK2v/B+E6LiY5FJWuS2bM0PeRI2KpkB3F1jUy0rnC3OjdcMBjE
+zyezSJsdMXkgODfA1zpIjGaAWjJ/wkU3ptsQ2EHq2+uTAji5OBUP/fquL+uOI+xH
+WIHngd8r7BaBvygQpvVPl3YAC26qyRDmRqptWTXY/uISmcwmRZ6BaQTBsx1WOPmM
+mFdZE0rVwRSfMws0GpPu6Atz++gerVHz/2EAFKPrntor6zUjSTbF3B42XCtIwpyO
+T1Wmpfdvpt02fe1SjJvhkFCHzCv2sHvUqshC79KoN0gavq9732DOpJdn8aN8YTfe
+GK4ekoKpjRZr5MUhTWGmRL0wrDNysBgOur97daSMrtrJNs+s8wlXA+9CP9nyICzs
+2bbPfHWWQ78FiSSH8IOW/xAAFxM7aEh2UcHuajcX9pBLFwOnveo=
+=ByYw
+-----END PGP SIGNATURE-----
+
+--o4bqtknoba4e2ooc--
 
