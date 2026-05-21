@@ -1,42 +1,42 @@
-Return-Path: <linux-usb+bounces-37865-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37860-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GEz6HvPgDmqnCwYAu9opvQ
-	(envelope-from <linux-usb+bounces-37865-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:39:47 +0200
+	id OIEEJMnbDmrmCgYAu9opvQ
+	(envelope-from <linux-usb+bounces-37860-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:17:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06DF55A3737
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:39:47 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A61A5A31EC
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 11F11304726B
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:11:05 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 9142530F4112
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C133806B3;
-	Thu, 21 May 2026 10:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB593384CDA;
+	Thu, 21 May 2026 10:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="EVG3QGlk"
+	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="DSgJPL8N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m1973184.qiye.163.com (mail-m1973184.qiye.163.com [220.197.31.84])
+Received: from mail-m1973187.qiye.163.com (mail-m1973187.qiye.163.com [220.197.31.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3233F3806D9;
-	Thu, 21 May 2026 10:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7FD383339;
+	Thu, 21 May 2026 10:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779358255; cv=none; b=O+2MNXqk7fxDdtXvD8owzHGiNiz8Yl/aLRQ/BRpUf7jS6QQcSiIclsZV2nU174NmgKtcgwYv1nbwUh902mPUIleGRiojgcET3B2K7gGV/lvn3Le7r1inT2e48fFOQHpEX3mlRNk0UEdd+mD610VSPK5VEP+hrACA76yMfKWrWxw=
+	t=1779357647; cv=none; b=cZ3MMI+yFE1CC4jRgF135w7PbydhkPbpLysf4pBrz6q+xAOg04qkkZiTr+zk2As+U+9+JhiS4IH8uPB7u7/b7p/xPT/zImJ1/MV3YWaEgPat6hopAUBL6q3NrwTRJXYO39nRfN6lM81LLZyTMiF7yLIh1H02he/ynDYf1nZkOrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779358255; c=relaxed/simple;
-	bh=UAv9+hfGQIf1aSwdGashyxhpMfBJSNn3lZx7r90BFXk=;
+	s=arc-20240116; t=1779357647; c=relaxed/simple;
+	bh=KRxTIOUjIexLfKP3OZOgHBgHd7PVT1QML4v8D6K1IKo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aKOeilmxdneKnCSZjSuWkieoZCbsX1XG7MvQByeCpWxrQiSDzJf2ED9FXssj3J4muu8N8ZSKfvpJp+mXQNKoAv67PzfahPCaP96MFFlxqRbVSWQVcrIJpXU5i1DZcS0uBH1SheyxlgUHqmQKz8JbKHH+wGlyW5YjpvZXcaxi1co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=EVG3QGlk; arc=none smtp.client-ip=220.197.31.84
+	 MIME-Version:Content-Type; b=O5focmGDh4uo2aH5WRzouXp37mQ6RedHdQ2w/+CTGhd/rQr7LVYErufkBWWGMV2Od4iYmzLgWpSl9ze55X0U5ctGJ428cD1wjRe2d8972DcC7+eVdzda+CyCQk4vFA6RKBY3RjL+H1IfNnGVu4eoq0t8KBTMzuWfREHfGTMbnNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=DSgJPL8N; arc=none smtp.client-ip=220.197.31.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
 Received: from server001 (unknown [222.130.22.242])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3f4cebafa;
-	Thu, 21 May 2026 17:55:21 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 3f4cebaff;
+	Thu, 21 May 2026 17:55:22 +0800 (GMT+08:00)
 From: Kefan Bai <baikefan@leap-io-kernel.com>
 To: linux-usb@vger.kernel.org,
 	si.yanteng@linux.dev
@@ -48,9 +48,9 @@ Cc: gregkh@linuxfoundation.org,
 	skhan@linuxfoundation.org,
 	linux-doc@vger.kernel.org,
 	doubled@leap-io-kernel.com
-Subject: [PATCH v7 4/8] docs/zh_CN: Add chipidea.rst translation
-Date: Thu, 21 May 2026 17:55:09 +0800
-Message-ID: <62f3a25c6695bb3b6ef61d430e5858ba6513939e.1779355170.git.baikefan@leap-io-kernel.com>
+Subject: [PATCH v7 5/8] docs/zh_CN: Add dwc3.rst translation
+Date: Thu, 21 May 2026 17:55:10 +0800
+Message-ID: <1fd5678e36ebeb4f37e224a59136ef4f4dcc8340.1779355170.git.baikefan@leap-io-kernel.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1779355170.git.baikefan@leap-io-kernel.com>
 References: <cover.1779355170.git.baikefan@leap-io-kernel.com>
@@ -62,21 +62,21 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e49f6096b09d5kunm49815c9e65c8f
+X-HM-Tid: 0a9e49f60d0709d5kunm49815c9e65c9a
 X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCGRlPVkMeS0sYGBlNT08ZH1YVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlLVUtVS1
-	VLWQY+
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDTBodVk5NTUNPGUwZHUMZH1YVFA
+	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
+	tISk5MTlVKS0tVSkJLS1kG
 DKIM-Signature: a=rsa-sha256;
-	b=EVG3QGlkp/9o1Vov+0s1VtElYPcpn2ER4hTq7Si4kfH3Q6udlvRofg6H2JhRvgYP2tpnO2MZLhUDtJZx9R+r737e7lBYgkV/mdUl/wPP7iBPL538x40gF7idLe2cXM4Iz/4i3CKCa+zTCwvI5jkxkf62Np5Jt+99OOvVPzNwe3iTSsRtBCh5nkjdyzkaHrxOx3zEoSNwDu7mBswjxyAZUNCJjKAA+KZtVypu4Z5hyCi6ZiXd6FHfi35L/FFFkNGO5kf2NnGsCTNud+pxJoRSlHOpWTKgSSz9HN+0o+SEG9mkAD31MP5svgMG7RfvfvKQXzZOSSH6/7JZYFPNsledHQ==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
-	bh=Aq6Rcm4DuL4H4iDByYc2d5vcpT+ZTDTJbg6OGpHEgYk=;
+	b=DSgJPL8Ni7McqUESoJw/cPXbKfVVZOSfHAIADmXRp0s4D/rO7XkJ3OURFDUV43jEt4afGOf7VMNeBlHBSsuRdMHkQGGhoD3VUwagCVrnoXI6en1GNYLATniEWotjiiT2FHD0p+/+iK8tnwJzPdJxkkUaGgz77konnuVQ4Ut++95V3xP/3kqxX2Ac5uBBzafi8HZzwPFFpbiK9W0QfWSXtReT0PzDHA21ahZ36u2TPR4mwfhalpfPEvzBp5RKJ3mhqhNDVqU50mZgWQ9i2KLH1lBeQfmuo5H9eAmV1zZlHJuHaWN5Qhb1qaXr5PuWLIUE1SMc2WL5EbReoH3oezj6kg==; c=relaxed/relaxed; s=default; d=leap-io-kernel.com; v=1;
+	bh=e9o5649fqTmSCjXx6OFnrGLYW+RiulY3hU4tzlocNKk=;
 	h=date:mime-version:subject:message-id:from;
 X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -85,10 +85,10 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	FREEMAIL_CC(0.00)[linuxfoundation.org,gmail.com,kernel.org,hust.edu.cn,lwn.net,vger.kernel.org,leap-io-kernel.com];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-37865-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37860-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[baikefan@leap-io-kernel.com,linux-usb@vger.kernel.org];
@@ -97,34 +97,34 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,cqsoftware.com.cn:email]
-X-Rspamd-Queue-Id: 06DF55A3737
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cqsoftware.com.cn:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 8A61A5A31EC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Translate .../usb/chipidea.rst into Chinese
+Translate .../usb/dwc3.rst into Chinese
 
-Update the translation through commit e4157519ad46
-("Documentation: usb: correct spelling")
+Update the translation through commit ecefae6db042
+("docs: usb: rename files to .rst and add them to drivers-api")
 
 Reviewed-by: Yanteng Si <siyanteng@cqsoftware.com.cn>
 Signed-off-by: Kefan Bai <baikefan@leap-io-kernel.com>
 ---
- .../translations/zh_CN/usb/chipidea.rst       | 150 ++++++++++++++++++
- .../translations/zh_CN/usb/index.rst          |   2 +-
- 2 files changed, 151 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/usb/chipidea.rst
+ Documentation/translations/zh_CN/usb/dwc3.rst | 63 +++++++++++++++++++
+ .../translations/zh_CN/usb/index.rst          |  2 +-
+ 2 files changed, 64 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/usb/dwc3.rst
 
-diff --git a/Documentation/translations/zh_CN/usb/chipidea.rst b/Documentation/translations/zh_CN/usb/chipidea.rst
+diff --git a/Documentation/translations/zh_CN/usb/dwc3.rst b/Documentation/translations/zh_CN/usb/dwc3.rst
 new file mode 100644
-index 000000000000..ea0dc3043189
+index 000000000000..3468ce50c5ba
 --- /dev/null
-+++ b/Documentation/translations/zh_CN/usb/chipidea.rst
-@@ -0,0 +1,150 @@
++++ b/Documentation/translations/zh_CN/usb/dwc3.rst
+@@ -0,0 +1,63 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +.. include:: ../disclaimer-zh_CN.rst
 +
-+:Original: Documentation/usb/chipidea.rst
++:Original: Documentation/usb/dwc3.rst
 +
 +:翻译:
 +
@@ -133,160 +133,73 @@ index 000000000000..ea0dc3043189
 +:校译:
 +
 +
-+=============================
-+ChipIdea 高速双角色控制器驱动
-+=============================
++=========
++DWC3 驱动
++=========
 +
-+1. 如何测试 OTG FSM（HNP 和 SRP）
-+---------------------------------
 +
-+下面以两块 Freescale i.MX6Q Sabre SD 开发板为例，
-+说明如何通过 sysfs 输入文件演示 OTG 的 HNP 和 SRP 功能。
++待办
++~~~~
 +
-+1.1 如何使能 OTG FSM
-+--------------------
++阅读时如果想顺手认领点任务，可以从下面挑一项 :)
 +
-+1.1.1 在 ``menuconfig`` 中选择 ``CONFIG_USB_OTG_FSM``，并重新编译内核
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++- 将中断处理程序改为每个端点各自使用线程化 IRQ
 +
-+重新构建内核镜像和模块。如果想查看 OTG FSM 的
-+一些内部变量，可以挂载 ``debugfs``；其中有两个文件
-+可以显示 OTG FSM 变量以及部分控制器寄存器的值::
++  事实证明，有些 DWC3 命令大约需要 ``~1 ms`` 才能完成。
++  当前代码会一直自旋等待命令完成，这种设计并不好。
 +
-+	cat /sys/kernel/debug/ci_hdrc.0/otg
-+	cat /sys/kernel/debug/ci_hdrc.0/registers
++  实现思路：
 +
-+1.1.2 在控制器节点对应的 ``dts`` 文件中添加以下条目
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  - DWC 核心实现了一个按端点对中断进行解复用的 IRQ 控制器。
++    中断号在探测（``probe``）阶段分配，并归属于该设备。
++    如果硬件通过 ``MSI`` 为每个端点提供独立中断，
++    那么这个“虚拟”IRQ 控制器就可以被真实的端点中断取代。
 +
-+::
++  - 在调用 ``usb_ep_enable()`` 时请求并分配中断资源，
++    在调用 ``usb_ep_disable()`` 时释放中断资源。
++    最坏情况下需要 32 个中断，最少是 ``ep0/1`` 的两个中断。
++  - ``dwc3_send_gadget_ep_cmd()`` 将在 ``wait_for_completion_timeout()``
++    中休眠，直到命令完成。
++  - 中断处理程序分为以下几个部分：
 +
-+	otg-rev = <0x0200>;
-+	adp-disable;
++    - 设备级主中断处理程序
++      遍历每个事件，并对其调用 ``generic_handle_irq()``。
++      从 ``generic_handle_irq()`` 返回后，确认事件计数器，使中断最终消失。
 +
-+1.2 测试步骤
-+------------
++    - 设备级线程化处理程序
++      无。
 +
-+1) 给两块 Freescale i.MX6Q Sabre SD 开发板上电，
-+   并加载 gadget 类驱动（例如 ``g_mass_storage``）。
++    - 端点中断的主处理程序
++      读取事件并尽量处理它。凡是需要睡眠的操作都交给线程处理。
++      事件保存在每个端点的数据结构中。
++      还要注意，一旦把某项工作交给线程处理，
++      就不要再在主处理程序里处理它，
++      以免出现优先级反转之类的问题。
 +
-+2) 用 USB 线连接两块开发板：
-+   一端是 micro A 插头，另一端是 micro B 插头。
++    - 端点中断的线程化处理程序
++      处理剩余的端点工作，这些工作可能会睡眠，例如等待命令完成。
 +
-+   插入 micro A 插头的一端是 A 设备，它应枚举另一端的 B 设备。
++  延迟:
 +
-+3) 角色切换
-+
-+   在 B 设备上执行::
-+
-+	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
-+
-+   B 设备应接管主机角色并枚举 A 设备。
-+
-+4) A 设备切回主机角色
-+
-+   在 B 设备上执行::
-+
-+	echo 0 > /sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
-+
-+   或者，通过引入 HNP 轮询，B 端主机可以知道
-+   A 端外设希望切换为主机角色，因此这次角色切换
-+   也可以通过 A 端外设响应 B 端主机的轮询，
-+   在 A 侧触发。
-+   这可以通过在 A 设备上执行下面的命令来完成::
-+
-+	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_req
-+
-+   A 设备应切回主机角色并枚举 B 设备。
-+
-+5) 拔掉 B 设备（拔掉 micro B 插头），
-+   并在 10 秒内重新插入；
-+   A 设备应重新枚举 B 设备。
-+
-+6) 拔掉 B 设备（拔掉 micro B 插头），
-+   并在 10 秒后重新插入；
-+   A 设备不应重新枚举 B 设备。
-+
-+   如果 A 设备希望使用总线：
-+
-+   在 A 设备上执行::
-+
-+	echo 0 > /sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_drop
-+	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_req
-+
-+   如果 B 设备希望使用总线：
-+
-+   在 B 设备上执行::
-+
-+	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
-+
-+7) A 设备关闭总线供电
-+
-+   在 A 设备上执行::
-+
-+	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_drop
-+
-+   A 设备应断开与 B 设备的连接，并关闭总线供电。
-+
-+8) B 设备发出 SRP 数据脉冲
-+
-+   在 B 设备上执行::
-+
-+	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
-+
-+   A 设备应恢复 USB 总线并枚举 B 设备。
-+
-+1.3 参考文档
-+------------
-+《On-The-Go and Embedded Host Supplement
-+to the USB Revision 2.0 Specification
-+July 27, 2012 Revision 2.0 version 1.1a》
-+
-+2. 如何将 USB 用作系统唤醒源
-+----------------------------
-+下面是在 i.MX6 平台上把 USB 用作系统唤醒源的示例。
-+
-+2.1 使能核心控制器的唤醒功能::
-+
-+	echo enabled > /sys/bus/platform/devices/ci_hdrc.0/power/wakeup
-+
-+2.2 使能 glue 层的唤醒功能::
-+
-+	echo enabled > /sys/bus/platform/devices/2184000.usb/power/wakeup
-+
-+2.3 使能 PHY 的唤醒功能（可选）::
-+
-+	echo enabled > /sys/bus/platform/devices/20c9000.usbphy/power/wakeup
-+
-+2.4 使能根集线器的唤醒功能::
-+
-+	echo enabled > /sys/bus/usb/devices/usb1/power/wakeup
-+
-+2.5 使能相关设备的唤醒功能::
-+
-+	echo enabled > /sys/bus/usb/devices/1-1/power/wakeup
-+
-+如果系统只有一个 USB 端口，
-+而你希望在该端口上启用 USB 唤醒功能，
-+可以使用下面的脚本::
-+
-+	for i in $(find /sys -name wakeup | grep usb);do echo enabled > $i;done;
++   不应增加延迟，因为中断线程具有较高优先级，
++   会在普通用户态任务之前运行
++   （除非用户更改了调度优先级）。
 diff --git a/Documentation/translations/zh_CN/usb/index.rst b/Documentation/translations/zh_CN/usb/index.rst
-index 3480966fee19..e6d0a4fceff7 100644
+index e6d0a4fceff7..7c739627077b 100644
 --- a/Documentation/translations/zh_CN/usb/index.rst
 +++ b/Documentation/translations/zh_CN/usb/index.rst
-@@ -19,10 +19,10 @@ USB 支持
-
+@@ -20,10 +20,10 @@ USB 支持
      acm
      authorization
-+    chipidea
+     chipidea
++    dwc3
 
  Todolist:
 
--* chipidea
- * dwc3
+-* dwc3
  * ehci
  * usbmon
+ * functionfs
 --
 2.54.0
 
