@@ -1,238 +1,215 @@
-Return-Path: <linux-usb+bounces-37818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37819-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CD3yNuy4DmrBBgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37818-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:49:00 +0200
+	id INnpOny5DmrBBgYAu9opvQ
+	(envelope-from <linux-usb+bounces-37819-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:51:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6405A05AA
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 641875A05F6
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 09:51:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A59A6302E0D2
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 07:44:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 70BC23066BFA
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 07:47:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A46394797;
-	Thu, 21 May 2026 07:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5449345CAB;
+	Thu, 21 May 2026 07:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bATpnu04"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnVHFdnu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC00362137
-	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 07:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCE833AD9D;
+	Thu, 21 May 2026 07:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779349450; cv=none; b=aTRrwcWJIhsDvrAivdAuq3uJlGPi1qQtIVs1RsKLD+8LisMU9yQmmqzMOopH5gyPpdcSw9RvF5DiDK860+bb1A6rloXhxJLGN74DudLFKn+x3Pf3QezmycK6fvqf7ckSUuUS+VcXtA1LMa0lX2RTgwDnXmvISLgCabXP7qu7p7E=
+	t=1779349654; cv=none; b=uSQedzPZLql+UK2Fc31IH4Md9PnbGQRLFVSiujLl02n66Bk2rpmm0O2kKgY4X+HdQ0S5OjHsXLNNI6McUKw9r4Lk33dTYKLZk3ZlBX8VBi23QiMgoNCT52EVqJVIzZ9eGkpiu6uW36HVGjlBio4/rAL03nWevD071LL69Wkl7zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779349450; c=relaxed/simple;
-	bh=xlkMVMF/0GjqTldlC/Pq9fJEbzwnuJN1fTlwrLtq4Fg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kxjjJgvOL0LZAs8wl/HKPaFr63XNVUgf9RopEE0dkCVqxIpFU905meH1m3VWEizHZZ3yj04RSUaq7aFF3Wkc4lrImmnhrvySAXH8m4i57/+iJGdWdscEcG1IiDzLnzk9goAap4xezWp9iPb27JlVBTCWQBEj7Ra4JbkhHmpyWNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bATpnu04; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779349448; x=1810885448;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xlkMVMF/0GjqTldlC/Pq9fJEbzwnuJN1fTlwrLtq4Fg=;
-  b=bATpnu04jfb6IHx9K2zxqYnH8FJLv7u07iyZJGJMq1/bo9BpYw98Dptf
-   MFDS4sSKIhSG6ufGHG+pdEJOXconwNIE+GoVkNI1Hok5WUnyDP/1swhqG
-   XhZmMitPRl9QsP3NA6OsP11RQZ1Ht3SsjAvdqGKcduV0OSlMycjpxQ9aQ
-   9OcJfB1D8bwnoraFoctMM0waBrRPgeC0ArRlRorF5eIIAuxTBZEskuH6Y
-   A6h685RmfpGvkiiPjUtCO1RXZKHrn9lFi2/enML38IsAVzG70yAS3C4fB
-   Ei08JVT185O6jz0ptgvpDHcXvBggJiHnFgGXt+WQDmGSVvzGfjRtwAEiC
-   g==;
-X-CSE-ConnectionGUID: WWkFhOBYTaawzltz4JEJQQ==
-X-CSE-MsgGUID: UHzvfvJjTI6O9Pu7jsKDbA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="79411784"
-X-IronPort-AV: E=Sophos;i="6.23,245,1770624000"; 
-   d="scan'208";a="79411784"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 00:44:08 -0700
-X-CSE-ConnectionGUID: m6G0ucjcQUW62KUMHYHrHg==
-X-CSE-MsgGUID: VYh98qCUQRCh/rXcGFgZ1Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,245,1770624000"; 
-   d="scan'208";a="244752441"
-Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.94.250.191]) ([10.94.250.191])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 00:44:07 -0700
-Message-ID: <8d73cfd4-96c7-42d5-a5ff-fc47c53b5338@linux.intel.com>
-Date: Thu, 21 May 2026 10:43:52 +0300
+	s=arc-20240116; t=1779349654; c=relaxed/simple;
+	bh=uF97CAtH11NgQX2cMKMa/FkrzejTk64QapAv+7JBuig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o4RNJm9M9jhq2VGke9HnziKQ6cQdo2krh3H5CeqIXsuUpYeIHovh1FP0UkQmwCuUGbrJIrDLP1X99bVc7KQYXq5D1eeDyxEyTt5j3SuuFFd/6HeLgjzvCuVidJe6giHaCH2oeGittRRKJacmkiUHf1tqeKEVH0IQGrYsddz45NE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnVHFdnu; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D8C1F00A3B;
+	Thu, 21 May 2026 07:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779349652;
+	bh=UczfSrk2FCod7H4rifpa1n/f+nsCfH/NDhquQgw9qmA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=lnVHFdnu4MxoKkNgwK7y8HGU3d4DYUs+ji4ZleQUFnc7lWrFEDHl1CvxyDjdXpvgT
+	 HlnlNlFw1CQJGU4CFlK9lKXlg2BKtXCogvJzTjYP7G3AAFoqpOzNAKV5fMtUdbFfBX
+	 nhAmOBBIl9WhjiX3HqlhL1J0mtoa1LPqB1stBsH9a1oNOXiK09uHryvqmCGyaZHGUp
+	 HxYt8eE2J1iTPLWK8onPq+B79CD00dCDAvTCQEsUzlmt28kAk9Tk82+RogLNXDjd1s
+	 BdKNotWIoG5SDfjfSx8/ZcBPmf/kArJ294dCiuHk4Z9UdDQdIRaH/dsTGUrYdG1RLG
+	 +ccFkeS4sY5Rg==
+Date: Thu, 21 May 2026 09:47:29 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Adrien Grassein <adrien.grassein@gmail.com>, 
+	Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Rob Clark <robin.clark@oss.qualcomm.com>, 
+	Dmitry Baryshkov <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Pengyu Luo <mitltlatltl@gmail.com>, Nikita Travkin <nikita@trvn.ru>, 
+	Yongxing Mou <yongxing.mou@oss.qualcomm.com>, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org, 
+	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org
+Subject: Re: [PATCH RESEND v3 1/6] drm/connector: report IRQ_HPD events to
+ drm_connector_oob_hotplug_event()
+Message-ID: <20260521-funny-astonishing-mackerel-cc5a01@penduick>
+References: <20260513-hpd-irq-events-v3-0-086857017f16@oss.qualcomm.com>
+ <20260513-hpd-irq-events-v3-1-086857017f16@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] usb: xhci: allocate internal DCBAA mirror dynamically
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
-References: <20260507083945.959370-1-niklas.neronin@linux.intel.com>
- <20260507083945.959370-4-niklas.neronin@linux.intel.com>
- <20260521000848.05cce0dd.michal.pecio@gmail.com>
-Content-Language: en-US
-From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
-In-Reply-To: <20260521000848.05cce0dd.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="uipgpe3pv2bnp7vq"
+Content-Disposition: inline
+In-Reply-To: <20260513-hpd-irq-events-v3-1-086857017f16@oss.qualcomm.com>
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37818-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37819-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[42];
+	FREEMAIL_CC(0.00)[linux.intel.com,suse.de,gmail.com,ffwll.ch,linuxfoundation.org,intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,ursulin.net,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,trvn.ru,lists.freedesktop.org,vger.kernel.org,lists.infradead.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mripard@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:dkim]
-X-Rspamd-Queue-Id: 2E6405A05AA
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 641875A05F6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 
+--uipgpe3pv2bnp7vq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RESEND v3 1/6] drm/connector: report IRQ_HPD events to
+ drm_connector_oob_hotplug_event()
+MIME-Version: 1.0
 
-On 21/05/2026 1.08, Michal Pecio wrote:
->>
->> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
->> index ac915dacd886..1effc9f08678 100644
->> --- a/drivers/usb/host/xhci-mem.c
->> +++ b/drivers/usb/host/xhci-mem.c
->> @@ -1953,8 +1953,11 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
->>  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed command ring");
->>  	xhci_cleanup_command_queue(xhci);
->>  
->> -	for (i = xhci->max_slots; i > 0; i--)
->> -		xhci_free_virt_devices_depth_first(xhci, i);
->> +	if (xhci->devs) {
->> +		for (i = xhci->max_slots; i > 0; i--)
->> +			xhci_free_virt_devices_depth_first(xhci, i);
->> +		kfree(xhci->devs);
->> +	}
->>  
->>  	dma_pool_destroy(xhci->segment_pool);
->>  	xhci->segment_pool = NULL;
->> @@ -2011,6 +2014,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
->>  	xhci->rh_bw = NULL;
->>  	xhci->port_caps = NULL;
->>  	xhci->interrupters = NULL;
->> +	xhci->devs = NULL;
->>  
->>  	xhci->usb2_rhub.bus_state.bus_suspended = 0;
->>  	xhci->usb3_rhub.bus_state.bus_suspended = 0;
->> @@ -2417,6 +2421,12 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
->>  
->>  	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Starting %s", __func__);
->>  
->> +	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating internal virtual device array");
-> 
-> I don't think this is useful in any way. One look at the code makes it
-> clear that this is going to happen each time this function is called.
+On Wed, May 13, 2026 at 09:23:21PM +0300, Dmitry Baryshkov wrote:
+> The DisplayPort standard defines a special kind of events called IRQ.
+> These events are used to notify DP Source about the events on the Sink
+> side. It is extremely important for DP MST handling, where the MST
+> events are reported through this IRQ.
+>=20
+> In case of the USB-C DP AltMode there is no actual HPD pulse, but the
+> events are ported through the bits in the AltMode VDOs.
+>=20
+> Extend the drm_connector_oob_hotplug_event() interface and report IRQ
+> events to the DisplayPort Sink drivers.
+>=20
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> ---
+>  drivers/gpu/drm/drm_connector.c          |  5 ++++-
+>  drivers/usb/typec/altmodes/displayport.c | 15 +++++++++++----
+>  include/drm/drm_connector.h              | 19 ++++++++++++++++++-
+>  3 files changed, 33 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connec=
+tor.c
+> index 47dc53c4a738..edee9daccd51 100644
+> --- a/drivers/gpu/drm/drm_connector.c
+> +++ b/drivers/gpu/drm/drm_connector.c
+> @@ -3510,6 +3510,8 @@ struct drm_connector *drm_connector_find_by_fwnode(=
+struct fwnode_handle *fwnode)
+>   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to=
+ connector
+>   * @connector_fwnode: fwnode_handle to report the event on
+>   * @status: hot plug detect logical state
+> + * @extra_status: additional information provided by the sink without ch=
+anging
+> + * the HPD state (or in addition to such a change).
+>   *
+>   * On some hardware a hotplug event notification may come from outside t=
+he display
+>   * driver / device. An example of this is some USB Type-C setups where t=
+he hardware
+> @@ -3520,7 +3522,8 @@ struct drm_connector *drm_connector_find_by_fwnode(=
+struct fwnode_handle *fwnode)
+>   * a drm_connector reference through calling drm_connector_find_by_fwnod=
+e().
+>   */
+>  void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwn=
+ode,
+> -				     enum drm_connector_status status)
+> +				     enum drm_connector_status status,
+> +				     enum drm_connector_status_extra extra_status)
+>  {
+>  	struct drm_connector *connector;
+> =20
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
+/altmodes/displayport.c
+> index 35d9c3086990..7182a8e2e710 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -189,7 +189,9 @@ static int dp_altmode_status_update(struct dp_altmode=
+ *dp)
+>  	} else {
+>  		drm_connector_oob_hotplug_event(dp->connector_fwnode,
+>  						hpd ? connector_status_connected :
+> -						      connector_status_disconnected);
+> +						      connector_status_disconnected,
+> +						(hpd && irq_hpd) ? DRM_CONNECTOR_DP_IRQ_HPD :
+> +								   DRM_CONNECTOR_NO_EXTRA_STATUS);
 
-I'll remove the debug message.
+Since the extra status itself, and what the options mean, are DP specific, =
+do we really want to
+extend drm_connector_oob_hotplug_event()? I think I'd prefer to have a DP s=
+pecific variant, with its
+own set of parameters.
 
-> 
->> +	xhci->devs = kcalloc_node(xhci->max_slots + 1, sizeof(*xhci->devs), flags,
->> +				  dev_to_node(dev));
->> +	if (!xhci->devs)
->> +		goto fail;
->> +
->>  	xhci->dcbaa.ctx_array =
->>  		dma_alloc_coherent(dev, array_size(sizeof(*dcbaa->ctx_array), xhci->max_slots + 1),
->>  				   &dcbaa->dma, flags);
->> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->> index 9a471bd72265..151a759806f8 100644
->> --- a/drivers/usb/host/xhci.c
->> +++ b/drivers/usb/host/xhci.c
->> @@ -5460,7 +5460,7 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
->>  	if (xhci->hci_version > 0x100)
->>  		xhci->hcc_params2 = readl(&xhci->cap_regs->hcc_params2);
->>  
->> -	xhci->max_slots = HCS_MAX_SLOTS(hcs_params1);
->> +	xhci->max_slots = min(HCS_MAX_SLOTS(hcs_params1), MAX_HC_SLOTS);
-> 
-> HCSPARAMS1.MaxSlots is 8 bits wide, so it will never exceed 255.
-> There is no need to add this check.
+Maxime
 
-The 'MAX_HC_SLOTS' macro is intended to be user configurable, allowing
-a custom upper bound to be set, similarly to max ports and max interrupts.
+--uipgpe3pv2bnp7vq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Given its niche purpose, its prior existence, and its alignment with
-related HCSPARAMS1 max values, I chose to keep it.
+-----BEGIN PGP SIGNATURE-----
 
-Additionally, this check is only performed once during initialization,
-so the overhead is negligible.
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCag64iQAKCRAnX84Zoj2+
+dhJzAYClCMH5nftN7lNJDSZByXRPwo/xO31PTF3adTcKyfMtvVmon8CIoheOgyRx
+VwxpLvMBf0dr9uwFTrG2lPtQTFNmHOzXDF1ujEGuM3hWzigGtwt7xylrgcMlpE1b
+f9c6Uo1BbQ==
+=SGa3
+-----END PGP SIGNATURE-----
 
-> 
-> And the macro seems to porperly mask out excess bits picked up from
-> other fields, so no worries about that either. And if it didn't, it
-> should be fixed instead of (wrongly) assuming 255 slots.
-> 
->>  	xhci->max_ports = min(HCS_MAX_PORTS(hcs_params1), MAX_HC_PORTS);
->>  	/* xhci-plat or xhci-pci might have set max_interrupters already */
->>  	if (!xhci->max_interrupters)
->> @@ -5533,8 +5533,6 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
->>  	init_completion(&xhci->cmd_ring_stop_completion);
->>  	xhci_hcd_page_size(xhci);
->>  
->> -	memset(xhci->devs, 0, MAX_HC_SLOTS * sizeof(*xhci->devs));
->> -
->>  	/* Allocate xHCI data structures */
->>  	retval = xhci_mem_init(xhci, GFP_KERNEL);
->>  	if (retval)
->> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
->> index b467b875eeba..f977c8e6a90a 100644
->> --- a/drivers/usb/host/xhci.h
->> +++ b/drivers/usb/host/xhci.h
->> @@ -33,8 +33,11 @@
->>  /* xHCI PCI Configuration Registers */
->>  #define XHCI_SBRN_OFFSET	(0x60)
->>  
->> -/* Max number of USB devices for any host controller - limit in section 6.1 */
->> -#define MAX_HC_SLOTS		256
->> +/*
->> + * Max number of Devices Slots. xHCI specification section 5.3.3
->> + * Valid values are in the range of 1 to 255.
->> + */
->> +#define MAX_HC_SLOTS		255
-> 
-> Then if there are no other uses, this constant can simply be removed.
-> 
->>  /*
->>   * Max Number of Ports. xHCI specification section 5.3.3
->>   * Valid values are in the range of 1 to 255.
->> @@ -1552,7 +1555,7 @@ struct xhci_hcd {
->>  	/* these are not thread safe so use mutex */
->>  	struct mutex mutex;
->>  	/* Internal mirror of the HW's dcbaa */
->> -	struct xhci_virt_device	*devs[MAX_HC_SLOTS];
->> +	struct xhci_virt_device	**devs;
->>  	/* For keeping track of bandwidth domains per roothub. */
->>  	struct xhci_root_port_bw_info	*rh_bw;
->>  
->> -- 
->> 2.50.1
->>
-
+--uipgpe3pv2bnp7vq--
 
