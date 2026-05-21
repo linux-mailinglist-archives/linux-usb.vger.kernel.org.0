@@ -1,189 +1,226 @@
-Return-Path: <linux-usb+bounces-37829-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37825-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KEFgBGjADmrXBwYAu9opvQ
-	(envelope-from <linux-usb+bounces-37829-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:20:56 +0200
+	id IPNdICK9DmrXBwYAu9opvQ
+	(envelope-from <linux-usb+bounces-37825-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:06:58 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FD85A0EFF
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B0305A0ABE
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:06:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 47F6030C188A
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 08:14:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 418C830F69FE
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 08:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1323D3A451C;
-	Thu, 21 May 2026 08:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7773A169E;
+	Thu, 21 May 2026 08:00:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPdUORPw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nuixDHT1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E56E3A254A
-	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 08:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BC51D432D;
+	Thu, 21 May 2026 08:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779351246; cv=none; b=bSdjZ1yMluCidqQ8MGIzsHgKg3lKsxhyrEm0o+CCfq6o6uzkpWqfEYne/Eb1+reZo5EGrwuhCu7Xuwmr+P13FkFCpJGCseQzr+6YLLeQgG4fJQMhw8zR4vkJs6qi0SfT2ITbe10fO6eUW1rTBI0nqMqMG24eqNNl/vqLYFpPXb4=
+	t=1779350427; cv=none; b=lwl9FP4ollBJd2ay1IwByWlrTEyL53j011MAHaEDIfUS9mjhNPanQjtCjlrtSo6TAzUwYSvm0MqJoaSQtt98ZX9e1aZgRb53aqEi/Ye/h/lDB5v7egw9EX1tQ0itBFISrCzbu30bFCMiiDhd36h3DpMwNYbU3ic+5glQ4hD8JcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779351246; c=relaxed/simple;
-	bh=YPz9Y7+DAcu/8VR5VxDC4TyzYcsWl2JqM0bjciNfHYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LZAPO+4m8fq6xnTrX6MEUoyASkUOvj97ZFX23Uyx7nmkPND9iWA6H7K3sMqVrMuaLDjqeSTSLN5qXs3nplqjopbbQDVnul4gO5OEQHEBCugnGpxSMEVz6AndBLg9trvMRG2ZUmByDtpjbwJ8L/6ifTolov4bWslHRu6Kjgv2PJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPdUORPw; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so82485085e9.2
-        for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 01:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779351242; x=1779956042; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XU27S8OkZVDk3+ckJS86aE+G8KWihq6r/BLmRcxGSd4=;
-        b=HPdUORPwnUIDPNuk1Dr/bD5rjV2u7Zlm6cpDNdpmOn6ebBOlD6eejdfKcykapJN9fz
-         NCHxyh31d2HC2eNEkj1LQGd5rwWYubWNuxI1lhndDIeCTaA3/+FuoLnYXJ7D4zcXcA7t
-         pA0RmCpa1GHh91uf+1uwLyBw7O5IC8RdudwA6AkZfxv1HTtoHCIqY4wFfcBinyIUffQz
-         wP0GBupGwCUA+xh2BPAE6+KMtAKiBRO4VYYckfDuRWR+GVDFThlQ4PSe1WI17XMZMBN0
-         t43G26B3756batk0NHRMKBxmXliQ9KNCS4w+2m/s9tXuVZXehSYNYkROBdi8BvdMUCry
-         F8oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779351242; x=1779956042;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XU27S8OkZVDk3+ckJS86aE+G8KWihq6r/BLmRcxGSd4=;
-        b=LcMMBhcCPjE0dn0FxT1B7T0fIC6Fw/y4OOABv3JNrxOenvd2LxbIQDYChc8dju9PFD
-         JUSwsvPZYuzxBVGtl7+fgtDhZG0xeepSU6yggoerU8qlTxnefd3nq1WiIZU+hG6tz2m3
-         t1rwDcQue5ceMjrlNk426CZMrX4HKVD1i8t99Snmq3WY7U9EZy9G7xNIWI1lOcXqNH2q
-         r/GsOoKCfvSLzRYIernhHdufgyfJS4SyBA+8QJ9qPoTdt/GdEYgD9xpl/bi7cWXltEc/
-         RX1frhoWxLsEkZlneYCdUu8/rroSiuc0VSjDzBlIMgYIo07OeqimLv8zhpMBvgY2HZEv
-         P0gA==
-X-Gm-Message-State: AOJu0Yy5rAYls1Uv22ZSJs8tzJSRgjEqHVvFxFaMmPgO6TN+k0tXz138
-	erpB2d5rQMPsonCKzlfP8cobPMugyRoTg+3MKwe3wAGyuff3wCJ1yn0xwqSoWg==
-X-Gm-Gg: Acq92OEVoxqZKOMaU5QViBpzAeRtbe8uYULQXpslt32EIVdDPpB9uTgsxNADB/zSiUv
-	LFWS28hHvovIRpR1fubLhjDGx8OY2yY8LqTyv0fExjX8ZghUoVQNsj4VDSaWnND4KVx5/FxQFfB
-	JYe2UXx2AdMufyiyTtL1vGYg7yTaC8tz+aNctqV7vcfpuDN+lqls7LQAdlLLTh8dihMHveGVtX6
-	BvnV3SZxHwpRRK9UxHMj7UVZ7ir5lTymGZC33gb1rNmNXMueRIH8xOCfxv3XOOdR+DoQ+zSQuah
-	4sjGODDHA3/8cQcqF4VN8us7qGMXlN4vRDLMCqzUZ9ycFYuE6ogTAFrNGrFWQrimEmoovU7R/kw
-	xB9Hij5m/6pCOz9CtfxwjWF7QMve95CK6v/xBUrwK0EZq8Nha0PT1KuXn4aZsU672Gmufqf+IYX
-	Vx457LDSVpq/QPOgr7637ejwc=
-X-Received: by 2002:a05:600c:a15:b0:490:3cef:bd90 with SMTP id 5b1f17b1804b1-4903cefbe6emr4606245e9.26.1779351241558;
-        Thu, 21 May 2026 01:14:01 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49035c42152sm10596325e9.9.2026.05.21.01.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2026 01:14:00 -0700 (PDT)
-Date: Thu, 21 May 2026 11:13:58 +0300
-From: Dan Carpenter <error27@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-usb@vger.kernel.org
-Subject: [bug report] usb: udc: pxa: remove unused platform_data
-Message-ID: <ag6-xhfFjb5NpXQz@stanley.mountain>
+	s=arc-20240116; t=1779350427; c=relaxed/simple;
+	bh=30DopE8A0+MuAJawRPhY3T0K2+zbu52aiZ71gD+Krpc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=X7AM8KHAYOYK6XBRw5qteI1onHUNZyd7nMeDV3zF7YvKQXIRYdLobgCgxENHOH3r0jqJD7Pt0URggHnzB80uMEAiqfgXJ0oBRE3YVRLZOE7joGShmGrMHG50IHDft77AC2Jj/372PZTzCuz0WITqcYV7OKSamZfTFbfbpYQ0mL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nuixDHT1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D80A0C2BCB4;
+	Thu, 21 May 2026 08:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779350426;
+	bh=30DopE8A0+MuAJawRPhY3T0K2+zbu52aiZ71gD+Krpc=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=nuixDHT1/uSAaGdJSZC5c0CMS85i/ysc/nvT83+MHuO+GSwTLCI9kPWuHKF0iYS5t
+	 rOmmSSxAZ5mgI2Y/PtweT9bTIt3FXoSm9IVVoxwkvD+dILph2MVW+6xNhRXcn0M9m8
+	 bis6+vuoiwuYAIfvzNC6ggSfg5jOtCj8N2gpDkrIPp9uPfmfL68YAiYME/VzCAd30j
+	 7gyeVPP2jgielu3bDyJGOsXfphgbyb5ERNVAIlCWJLKVHaO4j9kJ9boeri8vPEdBAS
+	 Piw2eV8btk0c8S1nwiajDjSRMLw8+KXV0OWdeS9R0ZahOhxZJIaKHSEBrrWie2q41p
+	 UX98G7aEDZW8g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4E4BCD4F5E;
+	Thu, 21 May 2026 08:00:26 +0000 (UTC)
+From: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>
+Subject: [PATCH v9 0/2] usb: cdns3: support configurations without DRD
+ block
+Date: Thu, 21 May 2026 10:16:22 +0200
+Message-Id: <20260521-no_drd_config_v9-v9-0-2512cef10104@cadence.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFa/DmoC/yXMSwqAIBRA0a3EGyfYF2wrEeLnVa+BhlYE0d6zG
+ p7BvRdEDIQRuuyCgAdF8i5B5BmYWbkJGdlkKHnZ8qYQzHlpg5XGu5EmeQimRdFopeoKNYeUrQF
+ HOr9lP/yOu17QbO8H7vsBGdalR3QAAAA=
+X-Change-ID: 20260519-no_drd_config_v9-b915baa43eb0
+To: Peter Chen <peter.chen@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, kernel test robot <lkp@intel.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779351391; l=4730;
+ i=pawell@cadence.com; h=from:subject:message-id;
+ bh=30DopE8A0+MuAJawRPhY3T0K2+zbu52aiZ71gD+Krpc=;
+ b=xppJ9QL6VhG7iLIKEfM5jdYn/SXDJLlCR+xnSokRv1ppemfH8hJTXv/HlHeVvpu6N4jcxq3E4
+ xBu2K1/+hiDCOUMPgb7vMmNPgcOZeDVfICkB7OEKOvnf7492CnfROg1
+X-Developer-Key: i=pawell@cadence.com; a=ed25519;
+ pk=EUPBvLO9CDg7j6defeDl2iqi+z5Ivqu4Z46aiqe7dYc=
+X-Endpoint-Received: by B4 Relay for pawell@cadence.com/default with
+ auth_id=707
+X-Original-From: Pawel Laszczak <pawell@cadence.com>
+Reply-To: pawell@cadence.com
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37829-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37825-lists,linux-usb=lfdr.de,pawell.cadence.com];
 	FROM_HAS_DN(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MISSING_XM_UA(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	HAS_REPLYTO(0.00)[pawell@cadence.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[error27@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 66FD85A0EFF
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cadence.com:replyto,cadence.com:mid,cadence.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 2B0305A0ABE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello Arnd Bergmann,
+This series adds support for Cadence USBSSP controllers in hardware
+layouts where the Dual-Role Device (DRD) register block is either
+missing or inaccessible.
 
-Commit 25bd55f46032 ("usb: udc: pxa: remove unused platform_data")
-from Apr 27, 2026 (linux-next), leads to the following Smatch static
-checker warning:
+In such configurations, the controller is hardwired to a single role
+(either host or device) and the driver must skip all OTG/DRD register
+accesses to avoid bus errors or incorrect role detection.
 
-	drivers/usb/gadget/udc/pxa27x_udc.c:2398 pxa_udc_probe()
-	warn: 'udc->gpiod' is not an error pointer
+The solution introduces a new 'cdns,cdnsp' compatible string
+that can be passed via DT or software nodes.
+When set, the driver:
+1. Skips DRD register mapping and IRQ requests.
+2. Uses a different BAR indexing logic for PCI-based configurations
+   (32-bit addressing layout).
+3. Hardwires the role based on 'dr_mode'.
 
-drivers/usb/gadget/udc/pxa27x_udc.c
-    2372 static int pxa_udc_probe(struct platform_device *pdev)
-    2373 {
-    2374         struct pxa_udc *udc = &memory;
-    2375         int retval = 0;
-    2376 
-    2377         udc->gpiod = devm_gpiod_get(&pdev->dev, NULL, GPIOD_ASIS);
-    2378         if (IS_ERR(udc->gpiod))
-    2379                 return PTR_ERR(udc->gpiod);
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+Note: This series is based on current linux-next. I am aware of Peter
+Chen's recent refactoring series ("usb: cdns3: plat: Expose platform
+core driver as library"). Although there is a minor conflict in
+cdns3-plat.c, Peter has already provided an Acked-by for this version.
+I am happy to provide a rebased v10 as soon as Peter's changes land in
+linux-next if required.
+---
+v9:
+- Dropped the "cdns,cdnsp-no-drd" string to avoid generic property-like 
+  naming as requested by Conor.
+- Introduced the clean generic fallback "cdns,cdnsp"
+- Updated the patch description and commit message to reflect the new naming.
 
-The error handling moved to here.
+v8:
+- Update commit message to reflect schema changes.
+- Removed 'cdns,no-drd' boolean property as per Rob Herring's suggestion.
+- Introduced a new compatible string 'cdns,cdnsp-no-drd' for controller
+  variants that lack the DRD/OTG register block.
+- Use 'cdns,cdnsp-no-drd' compatible string to trigger no-DRD logic.
+- Update PCI glue layer to inject the new compatible string.
 
-    2380 
-    2381         udc->regs = devm_platform_ioremap_resource(pdev, 0);
-    2382         if (IS_ERR(udc->regs))
-    2383                 return PTR_ERR(udc->regs);
-    2384         udc->irq = platform_get_irq(pdev, 0);
-    2385         if (udc->irq < 0)
-    2386                 return udc->irq;
-    2387 
-    2388         udc->dev = &pdev->dev;
-    2389         if (of_have_populated_dt()) {
-    2390                 udc->transceiver =
-    2391                         devm_usb_get_phy_by_phandle(udc->dev, "phys", 0);
-    2392                 if (IS_ERR(udc->transceiver))
-    2393                         return PTR_ERR(udc->transceiver);
-    2394         } else {
-    2395                 udc->transceiver = usb_get_phy(USB_PHY_TYPE_USB2);
-    2396         }
-    2397 
---> 2398         if (IS_ERR(udc->gpiod)) {
-    2399                 dev_err(&pdev->dev, "Couldn't find or request D+ gpio : %ld\n",
-    2400                         PTR_ERR(udc->gpiod));
-    2401                 return PTR_ERR(udc->gpiod);
-    2402         }
+v7:
+- Rename 'no_drd' to 'cdns,no-drd' (added vendor prefix).
+- Update commit message to reflect property renaming and schema changes.
+- Simplify 'reg-names' using a single enum for items.
+- Revert 'interrupt-names' to a list of constants for strict ordering.
+- Move 'reg' item descriptions to if/else blocks for better accuracy.
+- Clean up 'if' logic (remove redundant 'true' check and 'dr_mode'
+  requirement).
+- Add explicit 'items' list for 'interrupt-names' in the 'else' block.
+- Fix "uninitialized variable" warning in cdns_drd_host_on() by
+  initializing 'ret' to 0.
 
-This is dead code.
+v6:
+- Fixed validation error for 'interrupt-names' by correcting
+  the items definition.
+- Adjusted 'minItems'/'maxItems' to properly support the optional
+ 'wakeup' interrupt.
+- Fixed 'too long' schema error in examples.
 
-    2403         if (udc->gpiod)
-    2404                 gpiod_direction_output(udc->gpiod, 0);
+v5:
+- Implemented strict conditional validation using if-then-else logic.
+- Enforced 2 register/interrupt items and required 'dr_mode'
+  (host or peripheral) when 'no_drd' is present.
+- Enforced the standard 3 register/interrupt items (otg, host, dev)
+  when 'no_drd' is absent to ensure backward compatibility.
+- Updated 'reg-names' and 'interrupt-names' to use enums in the main
+  properties section to support flexible resource ordering during
+  validation.
 
-The comments say udc->gpiod can't be NULL either.  Was
-devm_gpiod_get_optional() intended?
+v4:
+  - Added DT binding documentation for the 'no_drd' property.
+  - Relaxed 'reg' and 'interrupts' requirements in the DT schema (minItems 2)
+    to allow configurations where the OTG/DRD register block is missing.
+  - Moved PCI_DEVICE_ID_CDNS_UDC_USBSSP from pci_ids.h to cdnsp-pci.c
+    to keep the global PCI ID list clean.
 
-    2405 
-    2406         udc->clk = devm_clk_get(&pdev->dev, NULL);
-    2407         if (IS_ERR(udc->clk))
-    2408                 return PTR_ERR(udc->clk);
-    2409 
-    2410         retval = clk_prepare(udc->clk);
-    2411         if (retval)
-    2412                 return retval;
+v3:
+  - Improved descriptions and comments for better clarity.
+  - Introduced the 'no_drd' property to indicate missing DRD register block.
+  - Added support for fixed host-only and device-only configurations.
+  - Ensured cdns_otg_disable_irq is called only when no_drd is false.
+  - Updated cdns_drd_gadget_on/off to ensure PHY mode is correctly
+    handled even if DRD is disabled.
 
-This email is a free service from the Smatch-CI project [smatch.sf.net].
+v2:
+  - Changed otg_irq to be optional.
+  - Added cdns->no_drd check in cdns_power_is_lost.
+  - Added cdns->no_drd check in cdns_get_id.
 
-regards,
-dan carpenter
+---
+Pawel Laszczak (2):
+      dt-bindings: usb: cdns3: Add cdns,cdnsp compatible string
+      usb: cdnsp: Add support for device-only configuration
+
+ .../devicetree/bindings/usb/cdns,usb3.yaml         | 63 ++++++++++++++++++----
+ drivers/usb/cdns3/cdns3-plat.c                     | 30 +++++++----
+ drivers/usb/cdns3/cdnsp-pci.c                      | 48 +++++++++++++----
+ drivers/usb/cdns3/core.c                           |  3 +-
+ drivers/usb/cdns3/core.h                           |  4 ++
+ drivers/usb/cdns3/drd.c                            | 45 ++++++++++++++--
+ 6 files changed, 159 insertions(+), 34 deletions(-)
+---
+base-commit: 80dd246accce631c328ea43294e53b2b2dd2aa32
+change-id: 20260519-no_drd_config_v9-b915baa43eb0
+
+Best regards,
+--  
+Pawel Laszczak <pawell@cadence.com>
+
+
 
