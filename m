@@ -1,435 +1,237 @@
-Return-Path: <linux-usb+bounces-37864-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37867-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QO4zESTaDmrmCgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37864-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:10:44 +0200
+	id ADmTGjDhDmqKCwYAu9opvQ
+	(envelope-from <linux-usb+bounces-37867-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:40:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB01A5A3012
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:10:43 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C09055A376F
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 12:40:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 08F04300D156
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:09:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5A8E63046DEA
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2026 10:40:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8584237F01F;
-	Thu, 21 May 2026 10:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FC63A5429;
+	Thu, 21 May 2026 10:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="DhioKkDc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICpAD/K1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF97A348C47
-	for <linux-usb@vger.kernel.org>; Thu, 21 May 2026 10:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C08385D6A;
+	Thu, 21 May 2026 10:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779358145; cv=none; b=RNKM+PH5LZyF1YdoMcl7stUjypNSzA/Py6M3jSM37A1o+VWrQZo/kgqEzwHA85O5hlkBjWCaDHiSULM8PXV7uUNfDi7zD7/MeMA1bv1ugyLRhbXRmDm0pDruVfzt3xRpuU/55CLQZSbHEQplZRzmBA5tNEVF8cm6yWFgvTDhfWw=
+	t=1779360008; cv=none; b=OPqEQstt3qC5GwWjfnrwZLIgTQBkXeLYRH7+3FO5F1jGa5M8mDPlpjsLkjbeHx8iyW966NwmCaFf0rYbVvoud0CiRCbkAvH1bnJxAjSREK25iPY/fzJtXWru3P9XqC7a2AcSHPAscgoiQMQkAXnbD8gdLYVykTPexMoS1bTfo9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779358145; c=relaxed/simple;
-	bh=QpbTOgbKf0fQku8KvlMgNtLZ34uwgtyVcZaT9xYqduo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pUaT69SAj1+FkTig4FQiEO9dhU3HZnCtp7z3Fvkk62Xq/wJ01x0O6iAmH9TUYB9cLfNoB/EMZ/q58IJ7QKM8U7d7bVHC17PL9SRK6pWsnwOfkb5Y2DkYJS4KeH+IYlPf/dWnpMrOpfiHb0Zc2OtmvZCvX7Cus8J6l8h4G+sE3gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=DhioKkDc; arc=none smtp.client-ip=212.77.101.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 2984 invoked from network); 21 May 2026 12:08:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1779358132; bh=AYozMEC2JpdzmH+IoYSkmeX90KWPa5gTLeTYLFFvrSg=;
-          h=From:To:Cc:Subject;
-          b=DhioKkDcHzMMsxWUPkubiEW9ZYaLA7QIqeuDyQx0dhV14iuGGevHkSfeUx6MDrIom
-           tccFBMVlrDn5ejsC9zHH8TI5RphceCcKJ4LjBBHKN1ZLHL6iUO1DkxCyWEIDnaRwxf
-           lhu8P8WIema/hKqbGCHmaAVI/3BR6k89sWFTKgZu1OLOp/Hz6k4TgKS2IXthUlk+aD
-           TSsZRPjUFLD4sJAv4nZ9rMRV3rVsyNKXnU4SxTr092O5u9XkUnJc7mojSQj6/LMRWA
-           XdTcqRoedhwY94PphfjAsjyiBR0vFYcFTDyF+YBCWMazOsH6q9PMXEfaqv7EhDD9Lr
-           xiCdEdTyKEovw==
-Received: from 77-236-5-199.static.play.pl (HELO localhost) (stf_xl@wp.pl@[77.236.5.199])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
-          for <mfo@igalia.com>; 21 May 2026 12:08:52 +0200
-Date: Thu, 21 May 2026 12:08:46 +0200
-From: Stanislaw Gruszka <stf_xl@wp.pl>
-To: Mauricio Faria de Oliveira <mfo@igalia.com>
-Cc: Matthieu CASTET <castet.matthieu@free.fr>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	kernel-dev@igalia.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: atm: ueagle-atm: remove function entry/exit
- debug messages
-Message-ID: <20260521100846.GB38864@wp.pl>
-References: <20260520-ueagle-atm-cleanup-v1-0-010c8bc7b214@igalia.com>
- <20260520-ueagle-atm-cleanup-v1-2-010c8bc7b214@igalia.com>
+	s=arc-20240116; t=1779360008; c=relaxed/simple;
+	bh=8LfbtKGWRBChcSbvGQFQdqchAIHTB1f3HTunAm2IgHs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rmyM0+hqH1ZWNk2jnq6B5QOqHDxfjPpxseyQSgU5jeGWhtDkSTxIQFlehN6LWZ+IE+XoyBLiuH9/hQti20j78Aa3cp8lDj/GSofCKfdIYD2EOzj57S1Evp9vFY+IsEZFli3fO40rtqCz2wqiDmkqMM6NBH2k9U008MRRlFNTH8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICpAD/K1; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA1D1F000E9;
+	Thu, 21 May 2026 10:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779360006;
+	bh=81HJEY7YnDxCKfBTu/iPddG+V5kZR4kRHF3w/pF/l/g=;
+	h=From:Subject:Date:To:Cc;
+	b=ICpAD/K1HSKejTzsCaPuu4EbQjQ3NIq1wTSZp1dG/mwyhq42VDMLTWmlkaQ2Wj2kc
+	 0MwVTYGzEoDBJHSgohb0u8CZuaT3bZbaq4UpRTlnhPaTN7ujyJR4GddiqNIBNjpqsI
+	 s17Klcn8hVH0EHq4eXwRZuGxkm0DA1d0ypGmu+KA6cj2TsJksS5n53+1v18JinxFWw
+	 KB7yjQvb9mLXpr43Td7EpHmJqVCeCZIa2NDx+jKRrdFGg3KpCOdV5aw5d9OgjNuFh+
+	 vXMBzrln11sRCLS7DJQcQ5X/vkXqd6JpJfKR5N/gp/0w+L3Ds7DB2wJYr+1uWYYmjh
+	 cCGhu6yl6WP2A==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Subject: [PATCH v5 0/4] Prepwork for non-PCIe NHI/TBT hosts
+Date: Thu, 21 May 2026 12:39:59 +0200
+Message-Id: <20260521-topic-usb4_nonpcie_prepwork-v5-0-b67dbe7508e8@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260520-ueagle-atm-cleanup-v1-2-010c8bc7b214@igalia.com>
-X-WP-MailID: 86ef472dc1df47e29a5fbd61b7f01315
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [gVO0]                               
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43NS27CMBCA4asgrzHyMx6z4h4VQrFjF6sQpzYEE
+ MrdO7ChixJ1M9I/I31zJzWUFCpZL+6khDHVlHsMvVwQv2/7z0BTh00EEw2TzNJTHpKn5+rUrs/
+ 94FPYDSUMl1y+KDQAPJrGOogEBTzEdH3qH1vsfaqnXG7PZyN/bP/njpwy2lnGO9DRG6s2udbV9
+ 7k9+Hw8rnCQBz+KF6kEzJMCSaVFdLZrZDTmDSlfpOZynpRIOjBOB8Wg9e9I9ZvU86RCUnvgIA0
+ IJcMf5DRNP3ZK2vfGAQAA
+X-Change-ID: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+To: Andreas Noever <andreas.noever@gmail.com>, 
+ Mika Westerberg <westeri@kernel.org>, 
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ usb4-upstream@oss.qualcomm.com, 
+ Raghavendra Thoorpu <rthoorpu@qti.qualcomm.com>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779360003; l=4939;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=8LfbtKGWRBChcSbvGQFQdqchAIHTB1f3HTunAm2IgHs=;
+ b=40bHtw2x3PR+s8hpma6AqjFV/7mEMNbroB/6kQo7DWgMv0QiJ7F4r/RigRjnTqGcAwZ/cpZJM
+ o93p2UqbQI1C0eSE/5mdUsu/SlH+aZ5yn8Jn6L813himffyb4aNdiV6
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[wp.pl,none];
-	R_DKIM_ALLOW(-0.20)[wp.pl:s=20241105];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-37864-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[free.fr,linuxfoundation.org,igalia.com,vger.kernel.org];
-	FREEMAIL_FROM(0.00)[wp.pl];
+	TAGGED_FROM(0.00)[bounces-37867-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stf_xl@wp.pl,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[wp.pl:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[konradybcio@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,wp.pl:email,wp.pl:mid,wp.pl:dkim,igalia.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: AB01A5A3012
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,msgid.link:url]
+X-Rspamd-Queue-Id: C09055A376F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 20, 2026 at 07:32:51PM -0300, Mauricio Faria de Oliveira wrote:
-> Remove the driver-internal function entry/exit debug messages
-> in favor of existing kernel-level function tracing mechanisms.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Link: https://lore.kernel.org/all/2026051657-scruffy-embark-45ea@gregkh/
-> Signed-off-by: Mauricio Faria de Oliveira <mfo@igalia.com>
-Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+Currently, the NHI driver (and other parts of the TBT framework) make
+multiple assumptions about the host router being a PCIe device. This
+series tries to decouple them by moving the 'struct pci_device' out of
+the NHI code and introduce NHI-on-PCIe-specific abstractions where
+necessary (with no functional change).
 
-> ---
->  drivers/usb/atm/ueagle-atm.c | 56 +++++---------------------------------------
->  1 file changed, 6 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/usb/atm/ueagle-atm.c b/drivers/usb/atm/ueagle-atm.c
-> index 71559a934133a82ddb23d255e0f04d018c13c583..ed2611aacb252fce829b4a33589c47912aadbe67 100644
-> --- a/drivers/usb/atm/ueagle-atm.c
-> +++ b/drivers/usb/atm/ueagle-atm.c
-> @@ -51,12 +51,6 @@
->  				"[ueagle-atm vdbg]  " format, ##args); \
->  	} while (0)
->  
-> -#define uea_enters(usb_dev) \
-> -	uea_vdbg(usb_dev, "entering %s\n" , __func__)
-> -
-> -#define uea_leaves(usb_dev) \
-> -	uea_vdbg(usb_dev, "leaving  %s\n" , __func__)
-> -
->  #define uea_err(usb_dev, format, args...) \
->  	dev_err(&(usb_dev)->dev , "[UEAGLE-ATM] " format , ##args)
->  
-> @@ -606,7 +600,6 @@ static void uea_upload_pre_firmware(const struct firmware *fw_entry,
->  	u32 crc = 0;
->  	int ret, size;
->  
-> -	uea_enters(usb);
->  	if (!fw_entry) {
->  		uea_err(usb, "firmware is not available\n");
->  		goto err;
-> @@ -670,7 +663,6 @@ static void uea_upload_pre_firmware(const struct firmware *fw_entry,
->  	uea_err(usb, "firmware is corrupted\n");
->  err:
->  	release_firmware(fw_entry);
-> -	uea_leaves(usb);
->  }
->  
->  /*
-> @@ -681,7 +673,6 @@ static int uea_load_firmware(struct usb_device *usb, unsigned int ver)
->  	int ret;
->  	char *fw_name = EAGLE_FIRMWARE;
->  
-> -	uea_enters(usb);
->  	uea_info(usb, "pre-firmware device, uploading firmware\n");
->  
->  	switch (ver) {
-> @@ -710,7 +701,6 @@ static int uea_load_firmware(struct usb_device *usb, unsigned int ver)
->  	else
->  		uea_info(usb, "loading firmware %s\n", fw_name);
->  
-> -	uea_leaves(usb);
->  	return ret;
->  }
->  
-> @@ -1137,7 +1127,6 @@ static int uea_cmv_e1(struct uea_softc *sc,
->  	struct cmv_e1 cmv;
->  	int ret;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	uea_vdbg(INS_TO_USBDEV(sc), "Function : %d-%d, Address : %c%c%c%c, "
->  			"offset : 0x%04x, data : 0x%08x\n",
->  			E1_FUNCTION_TYPE(function),
-> @@ -1164,9 +1153,8 @@ static int uea_cmv_e1(struct uea_softc *sc,
->  							sizeof(cmv), &cmv);
->  	if (ret < 0)
->  		return ret;
-> -	ret = wait_cmv_ack(sc);
-> -	uea_leaves(INS_TO_USBDEV(sc));
-> -	return ret;
-> +
-> +	return wait_cmv_ack(sc);
->  }
->  
->  static int uea_cmv_e4(struct uea_softc *sc,
-> @@ -1175,7 +1163,6 @@ static int uea_cmv_e4(struct uea_softc *sc,
->  	struct cmv_e4 cmv;
->  	int ret;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	memset(&cmv, 0, sizeof(cmv));
->  
->  	uea_vdbg(INS_TO_USBDEV(sc), "Function : %d-%d, Group : 0x%04x, "
-> @@ -1199,9 +1186,8 @@ static int uea_cmv_e4(struct uea_softc *sc,
->  							sizeof(cmv), &cmv);
->  	if (ret < 0)
->  		return ret;
-> -	ret = wait_cmv_ack(sc);
-> -	uea_leaves(INS_TO_USBDEV(sc));
-> -	return ret;
-> +
-> +	return wait_cmv_ack(sc);
->  }
->  
->  static inline int uea_read_cmv_e1(struct uea_softc *sc,
-> @@ -1295,7 +1281,6 @@ static int uea_stat_e1(struct uea_softc *sc)
->  	u32 data;
->  	int ret;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	data = sc->stats.phy.state;
->  
->  	ret = uea_read_cmv_e1(sc, E1_SA_STAT, 0, &sc->stats.phy.state);
-> @@ -1438,7 +1423,6 @@ static int uea_stat_e4(struct uea_softc *sc)
->  	u32 tmp_arr[2];
->  	int ret;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	data = sc->stats.phy.state;
->  
->  	/* XXX only need to be done before operationnal... */
-> @@ -1805,7 +1789,6 @@ static int uea_start_reset(struct uea_softc *sc)
->  	u16 zero = 0;	/* ;-) */
->  	int ret;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	uea_info(INS_TO_USBDEV(sc), "(re)booting started\n");
->  
->  	/* mask interrupt */
-> @@ -1873,7 +1856,6 @@ static int uea_start_reset(struct uea_softc *sc)
->  		return ret;
->  
->  	sc->reset = 0;
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return ret;
->  }
->  
-> @@ -1889,7 +1871,6 @@ static int uea_kthread(void *data)
->  	int ret = -EAGAIN;
->  
->  	set_freezable();
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	while (!kthread_should_stop()) {
->  		if (ret < 0 || sc->reset)
->  			ret = uea_start_reset(sc);
-> @@ -1898,7 +1879,7 @@ static int uea_kthread(void *data)
->  		if (ret != -EAGAIN)
->  			uea_wait(sc, 0, msecs_to_jiffies(1000));
->  	}
-> -	uea_leaves(INS_TO_USBDEV(sc));
-> +
->  	return ret;
->  }
->  
-> @@ -1911,8 +1892,6 @@ static int load_XILINX_firmware(struct uea_softc *sc)
->  	u8 value;
->  	char *fw_name = FPGA930_FIRMWARE;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
-> -
->  	ret = request_firmware(&fw_entry, fw_name, &sc->usb_dev->dev);
->  	if (ret) {
->  		uea_err(INS_TO_USBDEV(sc), "firmware %s is not available\n",
-> @@ -1956,7 +1935,6 @@ static int load_XILINX_firmware(struct uea_softc *sc)
->  err1:
->  	release_firmware(fw_entry);
->  err0:
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return ret;
->  }
->  
-> @@ -1966,7 +1944,6 @@ static void uea_dispatch_cmv_e1(struct uea_softc *sc, struct intr_pkt *intr)
->  	struct cmv_dsc_e1 *dsc = &sc->cmv_dsc.e1;
->  	struct cmv_e1 *cmv = &intr->u.e1.s2.cmv;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	if (le16_to_cpu(cmv->wPreamble) != E1_PREAMBLE)
->  		goto bad1;
->  
-> @@ -1990,7 +1967,6 @@ static void uea_dispatch_cmv_e1(struct uea_softc *sc, struct intr_pkt *intr)
->  	if (cmv->bFunction == E1_MAKEFUNCTION(E1_ADSLDIRECTIVE,
->  							E1_MODEMREADY)) {
->  		wake_up_cmv_ack(sc);
-> -		uea_leaves(INS_TO_USBDEV(sc));
->  		return;
->  	}
->  
-> @@ -2004,7 +1980,6 @@ static void uea_dispatch_cmv_e1(struct uea_softc *sc, struct intr_pkt *intr)
->  	sc->data = sc->data << 16 | sc->data >> 16;
->  
->  	wake_up_cmv_ack(sc);
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return;
->  
->  bad2:
-> @@ -2012,14 +1987,12 @@ static void uea_dispatch_cmv_e1(struct uea_softc *sc, struct intr_pkt *intr)
->  			"Function : %d, Subfunction : %d\n",
->  			E1_FUNCTION_TYPE(cmv->bFunction),
->  			E1_FUNCTION_SUBTYPE(cmv->bFunction));
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return;
->  
->  bad1:
->  	uea_err(INS_TO_USBDEV(sc), "invalid cmv received, "
->  			"wPreamble %d, bDirection %d\n",
->  			le16_to_cpu(cmv->wPreamble), cmv->bDirection);
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  }
->  
->  /* The modem send us an ack. First with check if it right */
-> @@ -2028,7 +2001,6 @@ static void uea_dispatch_cmv_e4(struct uea_softc *sc, struct intr_pkt *intr)
->  	struct cmv_dsc_e4 *dsc = &sc->cmv_dsc.e4;
->  	struct cmv_e4 *cmv = &intr->u.e4.s2.cmv;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
->  	uea_dbg(INS_TO_USBDEV(sc), "cmv %x %x %x %x %x %x\n",
->  		be16_to_cpu(cmv->wGroup), be16_to_cpu(cmv->wFunction),
->  		be16_to_cpu(cmv->wOffset), be16_to_cpu(cmv->wAddress),
-> @@ -2040,7 +2012,6 @@ static void uea_dispatch_cmv_e4(struct uea_softc *sc, struct intr_pkt *intr)
->  	if (be16_to_cpu(cmv->wFunction) == E4_MAKEFUNCTION(E4_ADSLDIRECTIVE,
->  						E4_MODEMREADY, 1)) {
->  		wake_up_cmv_ack(sc);
-> -		uea_leaves(INS_TO_USBDEV(sc));
->  		return;
->  	}
->  
-> @@ -2053,7 +2024,6 @@ static void uea_dispatch_cmv_e4(struct uea_softc *sc, struct intr_pkt *intr)
->  	sc->data = be32_to_cpu(cmv->dwData[0]);
->  	sc->data1 = be32_to_cpu(cmv->dwData[1]);
->  	wake_up_cmv_ack(sc);
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return;
->  
->  bad2:
-> @@ -2061,7 +2031,6 @@ static void uea_dispatch_cmv_e4(struct uea_softc *sc, struct intr_pkt *intr)
->  			"Function : %d, Subfunction : %d\n",
->  			E4_FUNCTION_TYPE(cmv->wFunction),
->  			E4_FUNCTION_SUBTYPE(cmv->wFunction));
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return;
->  }
->  
-> @@ -2089,8 +2058,6 @@ static void uea_intr(struct urb *urb)
->  	struct intr_pkt *intr = urb->transfer_buffer;
->  	int status = urb->status;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
-> -
->  	if (unlikely(status < 0)) {
->  		uea_err(INS_TO_USBDEV(sc), "uea_intr() failed with %d\n",
->  		       status);
-> @@ -2130,8 +2097,6 @@ static int uea_boot(struct uea_softc *sc, struct usb_interface *intf)
->  	int ret = -ENOMEM;
->  	int size;
->  
-> -	uea_enters(INS_TO_USBDEV(sc));
-> -
->  	if (UEA_CHIP_VERSION(sc) == EAGLE_IV) {
->  		size = E4_INTR_PKT_SIZE;
->  		sc->dispatch_cmv = uea_dispatch_cmv_e4;
-> @@ -2188,7 +2153,6 @@ static int uea_boot(struct uea_softc *sc, struct usb_interface *intf)
->  		goto err2;
->  	}
->  
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return 0;
->  
->  err2:
-> @@ -2198,7 +2162,6 @@ static int uea_boot(struct uea_softc *sc, struct usb_interface *intf)
->  	sc->urb_int = NULL;
->  	kfree(intr);
->  err0:
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  	return ret;
->  }
->  
-> @@ -2208,7 +2171,7 @@ static int uea_boot(struct uea_softc *sc, struct usb_interface *intf)
->  static void uea_stop(struct uea_softc *sc)
->  {
->  	int ret;
-> -	uea_enters(INS_TO_USBDEV(sc));
-> +
->  	ret = kthread_stop(sc->kthread);
->  	uea_dbg(INS_TO_USBDEV(sc), "kthread finish with status %d\n", ret);
->  
-> @@ -2222,7 +2185,6 @@ static void uea_stop(struct uea_softc *sc)
->  	flush_work(&sc->task);
->  
->  	release_firmware(sc->dsp_firm);
-> -	uea_leaves(INS_TO_USBDEV(sc));
->  }
->  
->  /* syfs interface */
-> @@ -2495,8 +2457,6 @@ static int uea_bind(struct usbatm_data *usbatm, struct usb_interface *intf,
->  	int ret, ifnum = intf->altsetting->desc.bInterfaceNumber;
->  	unsigned int alt;
->  
-> -	uea_enters(usb);
-> -
->  	/* interface 0 is for firmware/monitoring */
->  	if (ifnum != UEA_INTR_IFACE_NO)
->  		return -ENODEV;
-> @@ -2589,7 +2549,6 @@ static int uea_probe(struct usb_interface *intf, const struct usb_device_id *id)
->  	struct usb_device *usb = interface_to_usbdev(intf);
->  	int ret;
->  
-> -	uea_enters(usb);
->  	uea_dbg(usb, "ADSL device found with vid (%#X) pid (%#X) Rev (%#X): %s\n",
->  		le16_to_cpu(usb->descriptor.idVendor),
->  		le16_to_cpu(usb->descriptor.idProduct),
-> @@ -2620,7 +2579,6 @@ static void uea_disconnect(struct usb_interface *intf)
->  {
->  	struct usb_device *usb = interface_to_usbdev(intf);
->  	int ifnum = intf->altsetting->desc.bInterfaceNumber;
-> -	uea_enters(usb);
->  
->  	/* ADI930 has 2 interfaces and eagle 3 interfaces.
->  	 * Pre-firmware device has one interface
-> @@ -2631,8 +2589,6 @@ static void uea_disconnect(struct usb_interface *intf)
->  		mutex_unlock(&uea_mutex);
->  		uea_info(usb, "ADSL device removed\n");
->  	}
-> -
-> -	uea_leaves(usb);
->  }
->  
->  /*
-> 
-> -- 
-> 2.51.0
-> 
+The intended usage of the new nhi_probe_common() is pretty similar to
+other bus frameworks (I2C, SPI, USB..), i.e.:
+
+static int foo_bar_probe() {
+        // get SoC-specifc resources (clks, regulators..)
+
+        // power things on
+
+        // set some implementation-specific registers
+
+        // register NHI and all the sub-devices
+        ret = nhi_probe(&my_usb4->nhi)
+        ...
+
+        // cleanup boilerplate
+}
+
+Instead of the previously-suggested aux/fauxbus, the NHI device remains
+the same 'struct dev' as the PCIe/platform/[...] device that provides
+it. This is in line with some other buses and it makes things easier
+from the PM perspective.
+
+Tested on:
+* Qualcomm X1E80100 CRD (OOT driver)
+ * USB4 (Qualcomm controller)
+ * Connected to a TBT3 ASUS ProArt 27 monitor
+ * Parade PS8830 on-board retimer
+
+Domain 0 Route 0: 0000:0000
+Domain 0 Route 2: 0031:9000 ASUS-Display PA27AC
+
+* Intel Coffee Lake NUC (NUC8i3BEK)
+ * TBT3 (Alpine Ridge 2C 2016 controller)
+ * Connected to a Dell TB16 dock (TBT active cable)
+ * S3 + S2idle sleep
+
+Domain 0 Route 0: 8086:6357 Intel Corporation NUC8BEB
+Domain 0 Route 1: 00d4:b051 Dell Dell Thunderbolt Cable
+Domain 0 Route 301: 00d4:b054 Dell Dell Thunderbolt Dock
+
+* AMD Ryzen 7 PRO 7840U-based Lenovo ThinkPad T14s Gen 4
+ * USB4 ("Pink Sardine" controller)
+ * Connected to a Lenovo ThinkPad Thunderbolt 3 Dock
+ * Parade PS8830 on-board retimer
+ * Only S2idle is present on this platform
+
+Domain 0 Route 0: 0000:0000
+Domain 1 Route 0: 0000:0000
+Domain 1 Route 2: 0108:1630 Lenovo ThinkPad Thunderbolt 3 Dock
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+---
+Changes in v5:
+- Rebase atop thunderbolt.git/next and re-test on the NUC
+- Link to v4: https://patch.msgid.link/20260515-topic-usb4_nonpcie_prepwork-v4-0-5c818378243e@oss.qualcomm.com
+
+Changes in v4:
+- Fold in Icelake support to pci.c to avoid exporting nhi_pci_xx()
+  functions and nhi_pci_ops
+- I only compile-tested this revision, since it's a purely mechanical
+  moving-around of code
+- Link to v3: https://patch.msgid.link/20260513-topic-usb4_nonpcie_prepwork-v3-0-b87b5e408ac7@oss.qualcomm.com
+
+Changes in v3:
+- Add missing/update affected kerneldoc
+- Apply naming change suggestions
+- Back out of moving tb_apple_add_links()
+- Drop error log from nhi_pci_probe() calling nhi_probe()
+- Unbreak some lines, touch up some change-adjacent whitespace
+- Rebase on next-20260508
+- Link to v2: https://lore.kernel.org/r/20260428-topic-usb4_nonpcie_prepwork-v2-0-452fb9d63f77@oss.qualcomm.com
+
+Changes in v2:
+- Make 'struct tb_nhi_pci' private, strip it of the 'struct pci_dev
+  field since it can be accessed via to_pci_dev(tb_nhi_pci->nhi.dev)
+- Thin out patch 1, move some of its prior contents to patch 2
+- Rename nhi_pci.[ch] to pci.[ch]
+- Rename nhi_probe_common() to nhi_probe()
+- Squash a number of bugs discovered at runtime on x86
+- Add a patch to make ops necessary to drop boilerplate checks
+- Reword the error messages introduced in the last patch
+- Drop RFC/RFT tags
+- Link to v1: https://lore.kernel.org/r/20260309-topic-usb4_nonpcie_prepwork-v1-0-d901d85fc794@oss.qualcomm.com
+
+To: Andreas Noever <andreas.noever@gmail.com>
+To: Mika Westerberg <westeri@kernel.org>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+---
+Konrad Dybcio (4):
+      thunderbolt: Move pci_device out of tb_nhi
+      thunderbolt: Separate out common NHI bits
+      thunderbolt: Require nhi->ops be valid
+      thunderbolt: Add some more descriptive probe error messages
+
+ drivers/thunderbolt/Makefile    |   2 +-
+ drivers/thunderbolt/acpi.c      |  14 +-
+ drivers/thunderbolt/ctl.c       |  16 +-
+ drivers/thunderbolt/domain.c    |   2 +-
+ drivers/thunderbolt/eeprom.c    |   2 +-
+ drivers/thunderbolt/icm.c       |  24 +-
+ drivers/thunderbolt/nhi.c       | 520 ++++++---------------------------
+ drivers/thunderbolt/nhi.h       |  33 ++-
+ drivers/thunderbolt/nhi_ops.c   | 185 ------------
+ drivers/thunderbolt/pci.c       | 622 ++++++++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/switch.c    |  41 +--
+ drivers/thunderbolt/tb.c        |  18 +-
+ drivers/thunderbolt/tb.h        |  10 +-
+ drivers/thunderbolt/usb4_port.c |   2 +-
+ include/linux/thunderbolt.h     |   8 +-
+ 15 files changed, 805 insertions(+), 694 deletions(-)
+---
+base-commit: e24f3c0df48378214d9a67c5048d0faca144b163
+change-id: 20260309-topic-usb4_nonpcie_prepwork-86881f769b8f
+
+Best regards,
+--  
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+
 
