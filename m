@@ -1,201 +1,140 @@
-Return-Path: <linux-usb+bounces-37921-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37923-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4Gi/JAIgEGqjTwYAu9opvQ
-	(envelope-from <linux-usb+bounces-37921-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:21:06 +0200
+	id UGkTKa8iEGqsUAYAu9opvQ
+	(envelope-from <linux-usb+bounces-37923-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:32:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1238D5B10D2
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:21:05 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 129D25B13D2
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 210E030247C8
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 09:14:35 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6AB9E3081869
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 09:25:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53ECC3A5437;
-	Fri, 22 May 2026 09:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A30E3C13E0;
+	Fri, 22 May 2026 09:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="haUkYYp+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RcS3MadN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5F61531E8
-	for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 09:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938363B7B76;
+	Fri, 22 May 2026 09:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779441273; cv=none; b=lNX5ijggojOEJ4pWmU1LvTpPVKl+IyLbS11fp4dM6jnyeKW3tPaA2sVY0o+OhCsoRiOqDXoFDBsfcA1M6u6IrqrIYRxu6v3vrue9W078F/F7oq7sBuX1MtcoFatozJGY0h5k3yDEy5gJuEeQ33lL//HeBSnmppyMySZ5ajPm2/A=
+	t=1779441816; cv=none; b=TcsJI/dEhBEpDQCWDi2vf2KEA8FPCdy7dhIwRh7p0fs81uozGY5h97SpL39EBL1147Vf6GCjRGRfPVTf5d7LgNRVtk3xMN2MNDQ2r389YBxkzASRlDaMSZykJEpCmdCZNGZMLEQHZmWIQPp2mPqoH5BaTLBJxP/gRdpmraSFh8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779441273; c=relaxed/simple;
-	bh=Cq72BMYdTaHaif3ZGyucqsxnru+OByNt0wmBp9ukVd0=;
+	s=arc-20240116; t=1779441816; c=relaxed/simple;
+	bh=m2NKcB6TLHjaSaT162xrmKpvge/X2ahpM/ak03ngy2Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oSIIZ6TWG4NDUe91W+sBSK+g8LNHyUTV9UW/vEOOahLqglWKg3La4vclgUD0yTk3ZI933bXv43rF+i3TezmVxCfzVv5X7N9zmOhxd33IU+wyqliw+RT2UkZiUCqXLVcu+vC1rX83Fa5cl2qwThxBsXYS7zZ7ulvr1F/bqd56AuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=haUkYYp+; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B65481F000E9;
-	Fri, 22 May 2026 09:14:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VUPrRJOmY75LyanwAs5agFmgAx6gjKU2p3UWvBrUflqq1/bRl8hwc2ETXXXrzsgF1Pfvo0ywTvosrLdbn/sM4e00k97NT4f/+Q08rTq3rqfnknCZREXRBC5yNoYI4MdahzCTOAnRto/4NtbkdqkemA26H+cMIrnvFmfX0qRnFZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RcS3MadN; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE4A61F000E9;
+	Fri, 22 May 2026 09:23:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1779441272;
-	bh=lBRGmhtbsXGu27q5c6zi+xL3oI1FFb+YjvdQ7+Hcj5g=;
+	s=korg; t=1779441815;
+	bh=tdP9f+4CdyupRq+vjIaYKbxnzDyQmwF7Lcej1qmpQ7o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=haUkYYp+GuosbVjVinFcGdCb+XXg96/3f/fs8Eyfnoui8JB3TBnb7aL3uhoLaydCB
-	 SdA89IHg1CBa8PUtO4mQxcJz1HY9Qv5ZjUrRbBbV7/oaOnJA9jZWr4b8spKhQQYP1f
-	 8qOQdx/a3Vjh7xTfhXXCXGslde1bamXSXCRroV0M=
-Date: Fri, 22 May 2026 11:14:35 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Giorgi Kobakhia <mrkobush@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH usb v4] usb: gadget: f_fs: fix NULL dereference in
- ffs_dmabuf_detach()
-Message-ID: <2026052222-handbag-monopoly-1468@gregkh>
-References: <20260513231041.77176-1-mrkobush@gmail.com>
+	b=RcS3MadNcqrhlsAjPOcCDdKXGN7mGmjwhPBvghAvYyOQDptxuNgWFEcnckcDad+CJ
+	 TbXnDQIKfkdF+jfJJ0rKrVAnk1GI2pMEEjZR0TTSzE3o42BVcIkwyeEAk5U1D3z3XP
+	 1zrs5PsUedLFRxOZ5At3SAk0MJK7pF0u8PpDmUzs=
+Date: Fri, 22 May 2026 11:23:38 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	George D Sworo <george.d.sworo@intel.com>,
+	Matt DeVillier <matt.devillier@gmail.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] xhci: check for a pending command completion during
+ command timeout
+Message-ID: <2026052213-deserving-oppressor-bb81@gregkh>
+References: <20260522085828.24142-2-pmenzel@molgen.mpg.de>
+ <20260522085828.24142-4-pmenzel@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260513231041.77176-1-mrkobush@gmail.com>
-X-Spamd-Result: default: False [2.34 / 15.00];
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260522085828.24142-4-pmenzel@molgen.mpg.de>
+X-Spamd-Result: default: False [3.84 / 15.00];
 	MID_END_EQ_FROM_USER_PART(4.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWO(0.00)[2];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-37921-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37923-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[intel.com,linux.intel.com,gmail.com,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.939];
+	NEURAL_HAM(-0.00)[-0.959];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linuxfoundation.org:dkim]
-X-Rspamd-Queue-Id: 1238D5B10D2
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[googlesource.com:url,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linuxfoundation.org:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 129D25B13D2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 13, 2026 at 04:10:41PM -0700, Giorgi Kobakhia wrote:
-> ffs_dmabuf_detach() dereferences ffs->gadget->dev.parent without
-> checking whether the FunctionFS instance is still bound to UDC.
+On Fri, May 22, 2026 at 10:58:27AM +0200, Paul Menzel wrote:
+> From: Mathias Nyman <mathias.nyman@linux.intel.com>
 > 
-> This can be triggered by mounting FunctionFS, binding it to UDC
-> instance. Then unbind would make ffs->gadget = NULL. Calling
-> ffs_epfile_ioctl with code FUNCTIONFS_DMABUF_DETACH ends up in
-> ffs_dmabuf_detach, dereferencing ffs->gadget.
+> It's possible a command times out even if xHC hardware already completed
+> the command. Driver is unaware of the command completion if interrupt
+> handler is blocked for a long time.
 > 
-> Crash Log:
-> Oops: general protection fault
-> KASAN: null-ptr-deref in range [0x00000000000000b0-0x00000000000000b7]
-> RIP: 0010:ffs_epfile_ioctl+0x3f1/0x25d0
+> Check if there is an unhandled command completion on the event ring during
+> command timeout.
 > 
-> Fix this by checking ffs->gadget under ffs->mutex, taking a reference
-> to the parent device before dropping the lock, and returning -ENODEV
-> if the gadget has already been removed.
+> In this case just give the command additional time to complete. There's no
+> point in aborting the command ring to move past a stuck command.
 > 
-> Fixes: 7b07a2a7ca02 ("usb: gadget: functionfs: Add DMABUF import interface")
-> Signed-off-by: Giorgi Kobakhia <mrkobush@gmail.com>
-> ---
->  drivers/usb/gadget/function/f_fs.c | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Signed-off-by: George D Sworo <george.d.sworo@intel.com>
+> Link: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/478ab723af9414b0a2a2fbc59ac34f5d319a4fc3
+> [pmenzel: one adaptation for mainline 7.1: next_trb() uses the
+>   2-argument form next_trb(&seg, &deq) — the mainline 7.1 signature
+>   dropped the xhci and ring arguments present in the 6.12 source the
+>   patch was ported from.  xhci_pending_interrupt() is used directly as
+>   it is now committed as the preceding prerequisite.]
+> Assisted-by: Claude Sonnet 4.6
+> [pmenzel: No devices with the problem available, but no regressions on
+>   Dell XPS 13 9360 and QEMU 7.2.0.
 > 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 002c3441bea3..67c8e65a5aa6 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1553,14 +1553,27 @@ static int ffs_dmabuf_detach(struct file *file, int fd)
->  {
->  	struct ffs_epfile *epfile = file->private_data;
->  	struct ffs_data *ffs = epfile->ffs;
-> -	struct device *dev = ffs->gadget->dev.parent;
-> +	struct device *dev;
->  	struct ffs_dmabuf_priv *priv, *tmp;
->  	struct dma_buf *dmabuf;
->  	int ret = -EPERM;
->  
-> +	mutex_lock(&ffs->mutex);
-> +	if (!ffs->gadget) {
-> +		mutex_unlock(&ffs->mutex);
-> +		return -ENODEV;
-> +	}
-> +	dev = get_device(ffs->gadget->dev.parent);
-> +	mutex_unlock(&ffs->mutex);
-> +
-> +	if (!dev)
-> +		return -ENODEV;
-> +
->  	dmabuf = dma_buf_get(fd);
-> -	if (IS_ERR(dmabuf))
-> -		return PTR_ERR(dmabuf);
-> +	if (IS_ERR(dmabuf)) {
-> +		ret = PTR_ERR(dmabuf);
-> +		goto out_put_dev;
-> +	}
->  
->  	mutex_lock(&epfile->dmabufs_mutex);
->  
-> @@ -1585,6 +1598,8 @@ static int ffs_dmabuf_detach(struct file *file, int fd)
->  	mutex_unlock(&epfile->dmabufs_mutex);
->  	dma_buf_put(dmabuf);
->  
-> +out_put_dev:
-> +	put_device(dev);
->  	return ret;
->  }
->  
-> -- 
-> 2.43.0
+>       qemu-system-x86_64 -enable-kvm -cpu host -m 3G -device qemu-xhci,id=xhci -device usb-storage,bus=xhci.0
 > 
+>   xHCI host controller initialised cleanly, USB 3.0 SuperSpeed root
+>   hubs and USB mass storage device enumerated without errors.
+>   The specific race (command timeout with blocked interrupt handler)
+>   cannot easily be forced in QEMU, but no regressions in the normal
+>   command path were observed.]
 
-Hi,
+What are these additions from?  Did you mean to send these out to the
+lists?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+confused,
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+greg k-h
 
