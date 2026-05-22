@@ -1,955 +1,244 @@
-Return-Path: <linux-usb+bounces-37934-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37935-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AF9dG+tmEGoKXAYAu9opvQ
-	(envelope-from <linux-usb+bounces-37934-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:23:39 +0200
+	id IAB8LC5wEGqgXQYAu9opvQ
+	(envelope-from <linux-usb+bounces-37935-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 17:03:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6D515B612B
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:23:38 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC9825B69C7
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 17:03:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 44BBF3012CAA
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 14:16:39 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A0C5C311FC47
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 14:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740FB3FFAB1;
-	Fri, 22 May 2026 14:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E34AD421F18;
+	Fri, 22 May 2026 14:19:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJerQdq3"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="flHeC5C4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f67.google.com (mail-lf1-f67.google.com [209.85.167.67])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19574028CD
-	for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 14:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779459391; cv=pass; b=ERqJ9/AFc2+0IQujrRfWirVTfbNVK9ZfwVqnlkfWrTIS9h73bmon/3U+T8lPyUvONdPmg9azsHiCbTbxBp4GaLhtpiUYiV9z3y5SNEbwdMs6ToOn8ZmPOTaj/fK3tILXWDrpruj4OF5OPKDgZCVm/e2cDJP5zf/JRwAPj4HPODo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779459391; c=relaxed/simple;
-	bh=B3EEr0gqgVtm2Kof6fjO8Fpy73P57jRMLQjJuPBbvBw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JFddqQl1UiMfbTMIHOMvMqEB4LHX3s8EC/MVI0bISKU7RJuMah7RRjS14dc4SRp2vixF4mtaOx9KY4Bjq5xybJvj1TmaymeGvg5fLlX62aKCx8cV00vzlmIbocKegQZWYMD0BpdFGwLAY6Zy7ks4TgNx4jpPkhGKlEYfgUUNHM8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJerQdq3; arc=pass smtp.client-ip=209.85.167.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f67.google.com with SMTP id 2adb3069b0e04-5a8c6fc5fd3so7802801e87.0
-        for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 07:16:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779459380; cv=none;
-        d=google.com; s=arc-20240605;
-        b=d4TrLn3YH//KRvPc6Z+ezk2eI2ZHUXZ403AmqGoBIeFzv8njsa8/RpjBwehX6ee7YM
-         N2CmxltoXKlxzUPCWD0b04LotXPZ8c1bJcRKQ3uQbeRfo1CPvQbjc2N1Ej1Gyp8Me1YB
-         Z4xvFWEk6qY4wpo6fscxjnu8s78vybSrbQioXEweTiSU++ww4UlUjlz7C+4nPM6BkQok
-         gGuOVxZI7n37n+2oAwWZmBVC7YUeZcuWyCr2jLhDH2S/HUfJjbrpC54+P4dF0h5zkxB3
-         ZqBVf/5My/EH6fFKJizUW1bIvcAXQyNPtbldqLqpzeM61hnevqxLlHkYqknHNAN+eOK1
-         nvhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3+n6Yirf0v1P3HfP/29lw8BxGZOk0s1Y9CPnglZ2k48=;
-        fh=rP3Scli/zgxQzfY2VCM1FKIkHh3MrItsAsxTelzC1io=;
-        b=b53GT3+MykdeLqlpBdhRI2eTfkw/KHQ7/GuDnqY4yI5CBbbVkv+FPgbX/sFv5Tsg/q
-         W+2ccUQP4XAHRh0c7Xh/rh2d1JIbEwKZR8Evifhqs+0mXWuTnq2jxHk3/s5vGr0kE4YP
-         tyAmzNIGuptLGl9deJNihgJq4tI7awJpipqZkFZRbVqioDx/hW5Us7BHL3st1hGNxOdW
-         tVCl9RIavjuGuXzaYDmn1wZgAFTGC6KxhfZngPQtjvvo32ddJuLDDoELAQa6Y8mPcCA1
-         3Ux7bAOzbz+CPUazSS6dONF13zaleTVfoEKayHUY798frOBvEX21FdOqL13Ya9ymN0mm
-         OpBQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545EA407CDE
+	for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 14:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779459537; cv=none; b=HLiUE1TMby4LJVZo98WIxkwJfiIO1wqIw8lNaA7s2mWgC9YJXA2QNO7okl06Sjs2hP79o3zM5deGXwB/tBGcoPrWyrHukmJHEwe9jGposERJdC1J3cl2mz/XjwgLfkNCJ4QNMmKlVCpIMw9f2BrwTd2FI1ITS9hUPSJPf+fM7jc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779459537; c=relaxed/simple;
+	bh=TmsPppVeJUDSPPyG74Tnaebarsh9dg8MdLduDKKojzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bx2ONYPIdHgcCWWPPuY+dq7p3mnGbUX7wjEYgUq/ZKRuGok7bK7oF8X8/ewubVVE3zIjzEFz4t7wn2ll0/gWKaD/HKQChce4b5m1qtUvtERd2XZ5hTrf58uJ6xb1fgWDEiLGk0SJF5nYJ2bvy+cJrTLIDWbkrUpYyXjrAmMw/wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=flHeC5C4; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-8b6dd874471so108494916d6.0
+        for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 07:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779459380; x=1780064180; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3+n6Yirf0v1P3HfP/29lw8BxGZOk0s1Y9CPnglZ2k48=;
-        b=hJerQdq3kB3JK3peb4+al0tYpI9aINllB2VwEJVkuW6uXR73zYjb3IIw5Ds8RQGSxP
-         0c9O6Pkjtg5wtoMWbYRhx7loThlhr5IXqPMhK3gnrljO/u3MhqlA5PEvHzOq0+irymT5
-         apSpg1wte+KrEg+EzEB0q6weJa8C+cVBX+8GEqv6MFr4B0lQ0j2lOh4bgbSFVw4/eoMo
-         abJmO/euithNiWrWjpYiWAdqcr9qMtPm9GyUCuq9laykAA+xQx9UZobAuJ/J001MQdBc
-         81DvaIMAX437hhTywsZKWBL3Fm2Fq4hbMtI7LVcgHuUrEA79/RiIl2AtE0lhCBFOTSIu
-         sBgg==
+        d=rowland.harvard.edu; s=google; t=1779459529; x=1780064329; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OtsoTeN8WOwBQY+NCmRzzN9MgbFzLEsOIs66Ryt4vMg=;
+        b=flHeC5C4d5y8cXAI99sdMsTr2tH1a5J+XLAI4KE9xx4ulBiqwcqQ2wGBTL+0wMbcTU
+         jsHQNpd7dVkE9zyWbRuMCo1O2ytnbJQ4GI8EAID4Hi2fXh1X4FxtfTr9QCyN/unsHcKW
+         eCFAz46mu9UGWOErSW1WSRiEOokcbhlChz261afPiF4YSehHmMnszUYffriBmroB+LbH
+         dRkK78MUAdNtTrRpJnanUi2iW8b2QmMFr3wE8L99fiQGups5doPw935Tu+jMPtIdJ5hf
+         yZHKDmLY+1KGkMtHxwAksc3kpnJOTzcvGIHPFFuPTWZpK2k+xdpUp2nIO6ZDkNuKP6Ye
+         ECog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779459380; x=1780064180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3+n6Yirf0v1P3HfP/29lw8BxGZOk0s1Y9CPnglZ2k48=;
-        b=Qwd72wLn+hQYbYaQGNzvPD5vgAKJQhlBo6VbT8OTcRNccmdhBBGfgn92NBV0o5ECho
-         Nz9hpXYL7a7PcB3P40D7DcXl/KxRFfQCpDvSbKOfMdcCytTi5t2nQqtuHHMkICOI1do+
-         86qPOja51166e4fY87ojsBZLYXONDX1ccWpxukeTOQSYGO7oNQKH7AS/5n5VhNcN1phd
-         r5uLGynGIfLY2pgf8PPaI/ObEewuxQEUIbzVutjEBz4O0O9pNshtxJM+eHJgzfvAqg+o
-         3g/lGMMQ6NuDMDjpy2M9zgdYoswBErAdpmRjqxM9xEng+98JKTLj0CTobV31E01vkgWb
-         DYFA==
-X-Forwarded-Encrypted: i=1; AFNElJ9yUK21eFB2qKQC/HCaEc7E8SKPyyVLry8AmSs/aaFyqfj6JzleDE0pM6F9Eex0YhAxbiAqhfFOa5M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX+NJo1uSirMAm0MAKVJnkFmkQ54qWQyaTcZ5GhuUfHPs8Y4Nv
-	9egkAzjJSO2dfVjwbDec7OsOdxOUriEGceBE2acZRgBA/razs804Hhi0cLZW/iG09FA2jwwzECW
-	F11pl5XFX8Wvz5K1UDaNz9od3x2//eExO/RwGpzhgP7ZvtOlNmQ==
-X-Gm-Gg: Acq92OGUbEZqFA2vS0AkfOFpTist1GUpmJvlRV/yAxnAPQOQC4Z7Ov4qzyRqsPZnKvQ
-	Tju+vhd1Y9AwV2wDzslIaN1eVtd16tjhddiWonoXHXaSK8496cPx+jX5m8t2+6c+qc1jcla1XLE
-	lYaH5D+gSatCvm/tGC26itRQKgXFximEdz991+TNaGePmyefhvQnvJgnsgmLOrbShQhLjnCVw2e
-	ZVWnkmIHnT6wE4C1vT1xWCJC9e/qaj20Cxrj0Xbk7Wf9W2KF0dGWozMBiFEOXdPCXufZ7Cn3slN
-	gXXxsu4Ui7uqDs87FKsZ6iC4qHRFpnU=
-X-Received: by 2002:a05:6512:114e:b0:5a8:7eda:7d8f with SMTP id
- 2adb3069b0e04-5aa2ba85a0cmr2795757e87.12.1779459379767; Fri, 22 May 2026
- 07:16:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779459529; x=1780064329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OtsoTeN8WOwBQY+NCmRzzN9MgbFzLEsOIs66Ryt4vMg=;
+        b=eUQc1iP6nwzw32w2vMUjb4pDJE56G5mRRzltuK6sPHl/4dttIygZ3yiz6ZJcfM5Xjo
+         Ll1I9X0PAEkrI5V4u3/Q3btfIgD910szMhhX3JRzTh1wVSOOAb85jv1IhKwSfpI2rmOq
+         o74jbV8ShDScIGS7LTgw9OMGYIBm+xrxt4UlPDdBoF968bBBVXExGI5s0VFnCaY7kgXs
+         Sk2Nu95R9NF6N6yiM34K8WDlXi7+i1O8oMNXffWVCtoNUqQyxZzybOtYNPcxTKyT28zr
+         +9NrxQW5RMvgejxsuT16yER4njZIrOyKe5CJGGeqwZYgA7287PGdRZC00vZr9JAgZTAc
+         Gsxw==
+X-Gm-Message-State: AOJu0Yw5lUcX8z24Ag+UWAFJHpJAUUNee+jcHo/H2Of7UxCXQWcEb6Pl
+	Ux6nfDYL9II/GFHCtWMBT1qK7rW0bgVQal9pskxglt8/gUWM/kDx5d8CSTN+pZamC2/Qw18/jK8
+	yDRg=
+X-Gm-Gg: Acq92OHDsl2F2h/uffLIk6vKF+WOdqipF7CqPF5z9KA9gyAK9oP5N7XwnQ06xUTL9M0
+	pdHbiw5uJbxaaXywQFOLdVBzKD4q1Gq1HzjPyXq/MqdF0OdMHw4POzGzcZle3yHUQtRmBY6CScY
+	YigFJQkDJHc/+Uj7izYZf97LrNy/CP+ZcfYypi/qE6DpLsDku/y7BAupcvDzdMOIx7eKEokcObt
+	usKfCPzkxl+bawcPP611EHCYJtxZedZcGyYwJuBHGsJtleFTRL25T8G3W0fhQH66mRhUWmA0tbf
+	BPT2+FUx6SD9n3Lu0h1G7UoLzUyaG9ea8QK4/Th937oj6MZbhPJpLBRZ1IlIX9S059sJ7BuXeEh
+	RRHs9GKC0Nv/s7lYzw6rdi4uRthLcLEl2Wf3eHBiP77WjPk4qhEkhpo60NkUdaXHi/1R2C4NPG/
+	YDcXV6HXg7moq4WSSDPXHCyvUZ3hRahMpKJzYh4cG5q5mzzAZeHj2KgBi+9r5/sglG
+X-Received: by 2002:a05:6214:450b:b0:8ac:7627:8a71 with SMTP id 6a1803df08f44-8cc7b645335mr63706716d6.49.1779459529073;
+        Fri, 22 May 2026 07:18:49 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210:d62f:1911:f952:16ba])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cc812e2018sm18901686d6.28.2026.05.22.07.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2026 07:18:48 -0700 (PDT)
+Date: Fri, 22 May 2026 10:18:45 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Brent Page <brentfpage@gmail.com>
+Cc: linux-usb@vger.kernel.org, Michal Pecio <michal.pecio@gmail.com>
+Subject: Re: [PATCH] USB: EHCI: inflate max_tt_usecs and implement sitd
+ backpointers
+Message-ID: <bfdd7729-be9a-4014-87bc-7b7a5b393980@rowland.harvard.edu>
+References: <35666FD0-D108-41FD-8CE4-CD8F0DD87472@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260522101621.927034-1-johan@kernel.org>
-In-Reply-To: <20260522101621.927034-1-johan@kernel.org>
-From: Cen Zhang <rollkingzzc@gmail.com>
-Date: Fri, 22 May 2026 22:16:07 +0800
-X-Gm-Features: AVHnY4LLi_UAUu4628kPIHkP3hsXAHdT0JF_Wlaw-QcDWkoP4pZscepPbX-GZA0
-Message-ID: <CAB7XQsFYZcNssaxjYYoBm4ROgFAAYHYOKXWzFs2YK4cLiYF0Qg@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: cypress_m8: fix memory corruption with small endpoint
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35666FD0-D108-41FD-8CE4-CD8F0DD87472@gmail.com>
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37934-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37935-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rollkingzzc@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5]
-X-Rspamd-Queue-Id: D6D515B612B
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: BC9825B69C7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Johan,
-
-I took a closer look at your patch and tested it on top of commit
-917719c412c4 with KASAN enabled.  I applied your patch, rebuilt the
-kernel, and reran the same reproducer I used for the report.
-
-The original reproducer still triggers:
-
-  BUG: KASAN: slab-out-of-bounds in cypress_read_int_callback+0x240/0x7f0
-  Read of size 1
-
-I reproduced this with the in-kernel dummy_hcd host and the raw_gadget
-interface. The emulated Earthmate-compatible device uses:
-
-idVendor =3D 0x1163
-idProduct =3D 0x0200
-interrupt-in ep =3D 0x81, wMaxPacketSize =3D 1
-interrupt-out ep =3D 0x02, wMaxPacketSize =3D 16
-
-To reproduce, boot a KASAN kernel with dummy_hcd, raw_gadget,
-usbserial, and cypress_m8 enabled, then run:
-
-  modprobe -r g_zero g_serial g_mass_storage 2>/dev/null || true
-  modprobe dummy_hcd raw_gadget usbmon usbserial cypress_m8 || true
-  gcc -Wall -Wextra -O2 -o cypress_minigadget cypress_minigadget.c
-  ./cypress_minigadget &
-  for i in $(seq 1 160); do
-          [ -e /dev/ttyUSB0 ] && break
-          sleep 0.25
-  done
-  sh -c 'exec 3<>/dev/ttyUSB0; sleep 6; exec 3>&-'
-
-The full reproducer is included below.
-
-I think the reason is that your patch rejects small interrupt-out
-endpoint sizes, but this reproducer has interrupt_out_size =3D 16, so the
-new check is not hit.  The remaining issue is on the read side:
-packet_format_1 reads data[1] before checking that urb->actual_length
-contains the two-byte header.
-
-I also tested a variant with interrupt-out wMaxPacketSize =3D 1.  Your
-patch rejects that device during port probe with -EINVAL before ttyUSB0
-is exposed, so the new check works for that endpoint-size case.
-
-Please let me know if I missed anything in the test setup or in the
-analysis above.  I am happy to help test another version, or send a
-follow-up patch for cypress_read_int_callback() using your earlier
-comments if that would be useful.
-
-Best regards,
-Zhang Cen
-
----- reproducer: cypress_minigadget.c ----
-#define _GNU_SOURCE
-
-#include <endian.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-
-#include <linux/types.h>
-#include <linux/usb/ch9.h>
-
-/*
- * Minimal Raw Gadget UAPI copied into this standalone harness so the guest
- * can compile it without depending on a matching linux-libc-dev package.
- */
-#define UDC_NAME_LENGTH_MAX 128
-#define USB_RAW_EPS_NUM_MAX 30
-#define USB_RAW_EP_NAME_MAX 16
-#define USB_RAW_EP_ADDR_ANY 0xff
-
-struct usb_raw_init {
-__u8 driver_name[UDC_NAME_LENGTH_MAX];
-__u8 device_name[UDC_NAME_LENGTH_MAX];
-__u8 speed;
-};
-
-enum usb_raw_event_type {
-USB_RAW_EVENT_INVALID =3D 0,
-USB_RAW_EVENT_CONNECT =3D 1,
-USB_RAW_EVENT_CONTROL =3D 2,
-USB_RAW_EVENT_SUSPEND =3D 3,
-USB_RAW_EVENT_RESUME =3D 4,
-USB_RAW_EVENT_RESET =3D 5,
-USB_RAW_EVENT_DISCONNECT =3D 6,
-};
-
-struct usb_raw_event {
-__u32 type;
-__u32 length;
-__u8 data[];
-};
-
-struct usb_raw_ep_io {
-__u16 ep;
-__u16 flags;
-__u32 length;
-__u8 data[];
-};
-
-struct usb_raw_ep_caps {
-__u32 type_control : 1;
-__u32 type_iso : 1;
-__u32 type_bulk : 1;
-__u32 type_int : 1;
-__u32 dir_in : 1;
-__u32 dir_out : 1;
-};
-
-struct usb_raw_ep_limits {
-__u16 maxpacket_limit;
-__u16 max_streams;
-__u32 reserved;
-};
-
-struct usb_raw_ep_info {
-__u8 name[USB_RAW_EP_NAME_MAX];
-__u32 addr;
-struct usb_raw_ep_caps caps;
-struct usb_raw_ep_limits limits;
-};
-
-struct usb_raw_eps_info {
-struct usb_raw_ep_info eps[USB_RAW_EPS_NUM_MAX];
-};
-
-#define USB_RAW_IOCTL_INIT _IOW('U', 0, struct usb_raw_init)
-#define USB_RAW_IOCTL_RUN _IO('U', 1)
-#define USB_RAW_IOCTL_EVENT_FETCH _IOR('U', 2, struct usb_raw_event)
-#define USB_RAW_IOCTL_EP0_WRITE _IOW('U', 3, struct usb_raw_ep_io)
-#define USB_RAW_IOCTL_EP0_READ _IOWR('U', 4, struct usb_raw_ep_io)
-#define USB_RAW_IOCTL_EP_ENABLE _IOW('U', 5, struct usb_endpoint_descriptor=
-)
-#define USB_RAW_IOCTL_EP_WRITE _IOW('U', 7, struct usb_raw_ep_io)
-#define USB_RAW_IOCTL_CONFIGURE _IO('U', 9)
-#define USB_RAW_IOCTL_EPS_INFO _IOR('U', 11, struct usb_raw_eps_info)
-#define USB_RAW_IOCTL_EP0_STALL _IO('U', 12)
-
-#define VENDOR_ID 0x1163
-#define PRODUCT_ID 0x0200
-#define CONFIG_VALUE 1
-#define IN_MAX_PACKET 1
-#define OUT_MAX_PACKET 16
-#define SET_REPORT 0x09
-#define GET_REPORT 0x01
-
-struct descriptor_block {
-struct usb_config_descriptor config;
-struct usb_interface_descriptor intf;
-struct usb_endpoint_descriptor ep_in;
-struct usb_endpoint_descriptor ep_out;
-} __attribute__((packed));
-
-static int raw_fd =3D -1;
-static int ep_in_handle =3D -1;
-static int ep_out_handle =3D -1;
-static uint8_t ep_in_addr =3D 0x81;
-static uint8_t ep_out_addr =3D 0x02;
-static bool endpoints_enabled;
-static bool configuration_done;
-static bool packet_sent;
-static int connect_count;
-static int disconnect_count;
-static volatile sig_atomic_t stop_requested;
-
-static void on_signal(int signo)
-{
-(void)signo;
-stop_requested =3D 1;
-}
-
-static void print_hex(const char *label, const uint8_t *buf, size_t len)
-{
-size_t i;
-
-fprintf(stderr, "%s (%zu bytes):", label, len);
-for (i =3D 0; i < len; ++i)
-fprintf(stderr, " %02x", buf[i]);
-fprintf(stderr, "\n");
-}
-
-static int do_ioctl(unsigned long request, void *arg, const char *what)
-{
-int ret =3D ioctl(raw_fd, request, arg);
-
-if (ret < 0)
-fprintf(stderr, "%s failed: %s\n", what, strerror(errno));
-return ret;
-}
-
-static int ep0_io(unsigned long request, uint8_t *buf, size_t len)
-{
-struct usb_raw_ep_io *io;
-size_t total =3D sizeof(*io) + len;
-int ret;
-
-io =3D calloc(1, total);
-if (!io)
-return -ENOMEM;
-io->length =3D len;
-if (request =3D=3D USB_RAW_IOCTL_EP0_WRITE && len)
-memcpy(io->data, buf, len);
-
-ret =3D ioctl(raw_fd, request, io);
-if (ret < 0) {
-ret =3D -errno;
-fprintf(stderr, "ep0 ioctl 0x%lx failed: %s\n",
-request, strerror(errno));
-goto out;
-}
-if (request =3D=3D USB_RAW_IOCTL_EP0_READ && ret > 0 && buf)
-memcpy(buf, io->data, ret);
-out:
-free(io);
-return ret;
-}
-
-static int ep_io(unsigned long request, uint16_t handle, uint8_t *buf,
-size_t len)
-{
-struct usb_raw_ep_io *io;
-size_t total =3D sizeof(*io) + len;
-int ret;
-
-io =3D calloc(1, total);
-if (!io)
-return -ENOMEM;
-io->ep =3D handle;
-io->length =3D len;
-if (request =3D=3D USB_RAW_IOCTL_EP_WRITE && len)
-memcpy(io->data, buf, len);
-
-ret =3D ioctl(raw_fd, request, io);
-if (ret < 0) {
-ret =3D -errno;
-fprintf(stderr, "ep ioctl 0x%lx handle %u failed: %s\n",
-request, handle, strerror(errno));
-goto out;
-}
-out:
-free(io);
-return ret;
-}
-
-static int ep0_write_bytes(const void *buf, size_t len)
-{
-return ep0_io(USB_RAW_IOCTL_EP0_WRITE, (uint8_t *)buf, len);
-}
-
-static int ep0_read_bytes(uint8_t *buf, size_t len)
-{
-return ep0_io(USB_RAW_IOCTL_EP0_READ, buf, len);
-}
-
-static int ep_write_bytes(uint16_t handle, const void *buf, size_t len)
-{
-return ep_io(USB_RAW_IOCTL_EP_WRITE, handle, (uint8_t *)buf, len);
-}
-
-static int ep0_stall(void)
-{
-if (ioctl(raw_fd, USB_RAW_IOCTL_EP0_STALL, 0) < 0) {
-fprintf(stderr, "ep0 stall failed: %s\n", strerror(errno));
-return -errno;
-}
-return 0;
-}
-
-static size_t build_string_descriptor(const char *ascii, uint8_t *out,
-size_t out_len)
-{
-size_t ascii_len =3D strlen(ascii);
-size_t needed =3D 2 + ascii_len * 2;
-size_t i;
-
-if (out_len < needed)
-return 0;
-
-out[0] =3D needed;
-out[1] =3D USB_DT_STRING;
-for (i =3D 0; i < ascii_len; ++i) {
-out[2 + i * 2] =3D (uint8_t)ascii[i];
-out[3 + i * 2] =3D 0;
-}
-
-return needed;
-}
-
-static void choose_endpoints(void)
-{
-struct usb_raw_eps_info info;
-int count;
-int i;
-bool any_in =3D false;
-bool any_out =3D false;
-
-memset(&info, 0, sizeof(info));
-count =3D do_ioctl(USB_RAW_IOCTL_EPS_INFO, &info, "USB_RAW_IOCTL_EPS_INFO")=
-;
-if (count < 0)
-exit(1);
-
-fprintf(stderr, "raw gadget reports %d endpoints\n", count);
-for (i =3D 0; i < count && i < USB_RAW_EPS_NUM_MAX; ++i) {
-char name[USB_RAW_EP_NAME_MAX + 1];
-struct usb_raw_ep_info *ep =3D &info.eps[i];
-
-memcpy(name, ep->name, USB_RAW_EP_NAME_MAX);
-name[USB_RAW_EP_NAME_MAX] =3D '\0';
-fprintf(stderr,
-"  ep[%d] name=3D%s addr=3D0x%02x int=3D%u in=3D%u out=3D%u maxpacket=3D%u\=
-n",
-i, name, ep->addr, ep->caps.type_int, ep->caps.dir_in,
-ep->caps.dir_out, ep->limits.maxpacket_limit);
-
-if (ep->caps.type_int && ep->caps.dir_in) {
-if (ep->addr =3D=3D USB_RAW_EP_ADDR_ANY)
-any_in =3D true;
-else if (!any_in && ep_in_addr =3D=3D 0x81)
-ep_in_addr =3D ep->addr;
-}
-if (ep->caps.type_int && ep->caps.dir_out) {
-if (ep->addr =3D=3D USB_RAW_EP_ADDR_ANY)
-any_out =3D true;
-else if (!any_out && ep_out_addr =3D=3D 0x02)
-ep_out_addr =3D ep->addr;
-}
-}
-
-if (any_in)
-ep_in_addr =3D 0x81;
-if (any_out)
-ep_out_addr =3D 0x02;
-
-fprintf(stderr, "using interrupt endpoints in=3D0x%02x out=3D0x%02x\n",
-ep_in_addr, ep_out_addr);
-}
-
-static struct descriptor_block make_config_block(void)
-{
-struct descriptor_block block;
-
-memset(&block, 0, sizeof(block));
-
-block.config.bLength =3D sizeof(block.config);
-block.config.bDescriptorType =3D USB_DT_CONFIG;
-block.config.wTotalLength =3D htole16(sizeof(block));
-block.config.bNumInterfaces =3D 1;
-block.config.bConfigurationValue =3D CONFIG_VALUE;
-block.config.bmAttributes =3D USB_CONFIG_ATT_ONE;
-block.config.bMaxPower =3D 1;
-
-block.intf.bLength =3D sizeof(block.intf);
-block.intf.bDescriptorType =3D USB_DT_INTERFACE;
-block.intf.bInterfaceNumber =3D 0;
-block.intf.bAlternateSetting =3D 0;
-block.intf.bNumEndpoints =3D 2;
-block.intf.bInterfaceClass =3D USB_CLASS_VENDOR_SPEC;
-block.intf.bInterfaceSubClass =3D 0;
-block.intf.bInterfaceProtocol =3D 0;
-
-block.ep_in.bLength =3D sizeof(block.ep_in);
-block.ep_in.bDescriptorType =3D USB_DT_ENDPOINT;
-block.ep_in.bEndpointAddress =3D ep_in_addr;
-block.ep_in.bmAttributes =3D USB_ENDPOINT_XFER_INT;
-block.ep_in.wMaxPacketSize =3D htole16(IN_MAX_PACKET);
-block.ep_in.bInterval =3D 1;
-
-block.ep_out.bLength =3D sizeof(block.ep_out);
-block.ep_out.bDescriptorType =3D USB_DT_ENDPOINT;
-block.ep_out.bEndpointAddress =3D ep_out_addr;
-block.ep_out.bmAttributes =3D USB_ENDPOINT_XFER_INT;
-block.ep_out.wMaxPacketSize =3D htole16(OUT_MAX_PACKET);
-block.ep_out.bInterval =3D 1;
-
-return block;
-}
-
-static int ensure_endpoints_enabled(void)
-{
-struct descriptor_block block =3D make_config_block();
-
-if (endpoints_enabled)
-return 0;
-
-ep_in_handle =3D ioctl(raw_fd, USB_RAW_IOCTL_EP_ENABLE, &block.ep_in);
-if (ep_in_handle < 0) {
-fprintf(stderr, "enable IN endpoint failed: %s\n", strerror(errno));
-return -errno;
-}
-
-ep_out_handle =3D ioctl(raw_fd, USB_RAW_IOCTL_EP_ENABLE, &block.ep_out);
-if (ep_out_handle < 0) {
-fprintf(stderr, "enable OUT endpoint failed: %s\n", strerror(errno));
-return -errno;
-}
-
-if (ioctl(raw_fd, USB_RAW_IOCTL_CONFIGURE, 0) < 0) {
-fprintf(stderr, "USB_RAW_IOCTL_CONFIGURE failed: %s\n",
-strerror(errno));
-return -errno;
-}
-
-endpoints_enabled =3D true;
-fprintf(stderr,
-"configured endpoints: in_handle=3D%d out_handle=3D%d in_addr=3D0x%02x
-out_addr=3D0x%02x\n",
-ep_in_handle, ep_out_handle, ep_in_addr, ep_out_addr);
-
-return 0;
-}
-
-static int handle_get_descriptor(uint16_t value, uint16_t length)
-{
-uint8_t desc_type =3D value >> 8;
-uint8_t desc_index =3D value & 0xff;
-uint8_t buffer[256];
-size_t send_len =3D 0;
-struct usb_device_descriptor device =3D {
-.bLength =3D USB_DT_DEVICE_SIZE,
-.bDescriptorType =3D USB_DT_DEVICE,
-.bcdUSB =3D htole16(0x0200),
-.bDeviceClass =3D USB_CLASS_PER_INTERFACE,
-.bDeviceSubClass =3D 0,
-.bDeviceProtocol =3D 0,
-.bMaxPacketSize0 =3D 64,
-.idVendor =3D htole16(VENDOR_ID),
-.idProduct =3D htole16(PRODUCT_ID),
-.bcdDevice =3D htole16(0x0001),
-.iManufacturer =3D 1,
-.iProduct =3D 2,
-.iSerialNumber =3D 3,
-.bNumConfigurations =3D 1,
-};
-struct descriptor_block config =3D make_config_block();
-
-memset(buffer, 0, sizeof(buffer));
-
-switch (desc_type) {
-case USB_DT_DEVICE:
-memcpy(buffer, &device, sizeof(device));
-send_len =3D sizeof(device);
-break;
-case USB_DT_CONFIG:
-memcpy(buffer, &config, sizeof(config));
-send_len =3D sizeof(config);
-break;
-case USB_DT_STRING:
-if (desc_index =3D=3D 0) {
-buffer[0] =3D 4;
-buffer[1] =3D USB_DT_STRING;
-buffer[2] =3D 0x09;
-buffer[3] =3D 0x04;
-send_len =3D 4;
-} else if (desc_index =3D=3D 1) {
-send_len =3D build_string_descriptor("raw-gadget", buffer,
-sizeof(buffer));
-} else if (desc_index =3D=3D 2) {
-send_len =3D build_string_descriptor("Earthmate short-header test",
-buffer, sizeof(buffer));
-} else if (desc_index =3D=3D 3) {
-send_len =3D build_string_descriptor("test-001", buffer,
-sizeof(buffer));
-}
-break;
-default:
-fprintf(stderr, "stalling unsupported descriptor type 0x%02x index %u\n",
-desc_type, desc_index);
-return ep0_stall();
-}
-
-if (send_len =3D=3D 0)
-return ep0_stall();
-
-if (length < send_len)
-send_len =3D length;
-
-print_hex("ep0 descriptor reply", buffer, send_len);
-return ep0_write_bytes(buffer, send_len);
-}
-
-static int handle_standard_request(const struct usb_ctrlrequest *ctrl)
-{
-uint16_t value =3D le16toh(ctrl->wValue);
-uint16_t index =3D le16toh(ctrl->wIndex);
-uint16_t length =3D le16toh(ctrl->wLength);
-uint8_t status[2] =3D { 0, 0 };
-uint8_t alt =3D 0;
-
-switch (ctrl->bRequest) {
-case USB_REQ_GET_DESCRIPTOR:
-return handle_get_descriptor(value, length);
-case USB_REQ_SET_ADDRESS:
-fprintf(stderr, "ack SET_ADDRESS %u\n", value);
-return ep0_read_bytes(NULL, 0);
-case USB_REQ_SET_CONFIGURATION:
-fprintf(stderr, "SET_CONFIGURATION %u\n", value);
-if (value =3D=3D CONFIG_VALUE) {
-int ret;
-
-ret =3D ep0_read_bytes(NULL, 0);
-if (ret < 0)
-return ret;
-ret =3D ensure_endpoints_enabled();
-if (ret < 0)
-return ret;
-configuration_done =3D true;
-return 0;
-}
-return ep0_read_bytes(NULL, 0);
-case USB_REQ_GET_CONFIGURATION: {
-uint8_t current_config =3D value;
-
-(void)current_config;
-current_config =3D configuration_done ? CONFIG_VALUE : 0;
-return ep0_write_bytes(&current_config, sizeof(current_config));
-}
-case USB_REQ_GET_STATUS:
-return ep0_write_bytes(status, sizeof(status));
-case USB_REQ_SET_INTERFACE:
-fprintf(stderr, "SET_INTERFACE index=3D%u alt=3D%u\n", index, value);
-return ep0_read_bytes(NULL, 0);
-case USB_REQ_GET_INTERFACE:
-return ep0_write_bytes(&alt, sizeof(alt));
-case USB_REQ_CLEAR_FEATURE:
-case USB_REQ_SET_FEATURE:
-fprintf(stderr, "ack feature request req=3D0x%02x value=3D0x%04x index=3D0x=
-%04x\n",
-ctrl->bRequest, value, index);
-return ep0_read_bytes(NULL, 0);
-default:
-fprintf(stderr, "stalling unsupported standard request 0x%02x\n",
-ctrl->bRequest);
-return ep0_stall();
-}
-}
-
-static int send_short_interrupt_packet(void)
-{
-uint8_t payload[1] =3D { 0 };
-int ret;
-
-if (packet_sent)
-return 0;
-if (!configuration_done || ep_in_handle < 0)
-return -EINVAL;
-
-fprintf(stderr,
-"queueing 1-byte interrupt-in transfer: handle=3D%d addr=3D0x%02x maxpacket=
-=3D%u\n",
-ep_in_handle, ep_in_addr, IN_MAX_PACKET);
-ret =3D ep_write_bytes(ep_in_handle, payload, sizeof(payload));
-if (ret < 0)
-return ret;
-
-packet_sent =3D true;
-fprintf(stderr, "interrupt-in transfer completed with %d byte(s)\n", ret);
-return ret;
-}
-
-static int handle_class_request(const struct usb_ctrlrequest *ctrl)
-{
-uint16_t length =3D le16toh(ctrl->wLength);
-uint8_t *buffer;
-int ret;
-
-buffer =3D calloc(1, length ? length : 1);
-if (!buffer)
-return -ENOMEM;
-
-switch (ctrl->bRequest) {
-case SET_REPORT:
-ret =3D ep0_read_bytes(buffer, length);
-if (ret >=3D 0) {
-print_hex("SET_REPORT payload", buffer, ret);
-ret =3D send_short_interrupt_packet();
-if (ret >=3D 0)
-ret =3D 0;
-}
-free(buffer);
-return ret;
-case GET_REPORT:
-memset(buffer, 0, length);
-print_hex("GET_REPORT reply", buffer, length);
-ret =3D ep0_write_bytes(buffer, length);
-free(buffer);
-return ret;
-default:
-fprintf(stderr, "stalling unsupported class request 0x%02x\n",
-ctrl->bRequest);
-free(buffer);
-return ep0_stall();
-}
-}
-
-static int handle_control_event(const struct usb_ctrlrequest *ctrl)
-{
-fprintf(stderr,
-"control request type=3D0x%02x req=3D0x%02x value=3D0x%04x index=3D0x%04x l=
-en=3D%u\n",
-ctrl->bRequestType, ctrl->bRequest, le16toh(ctrl->wValue),
-le16toh(ctrl->wIndex), le16toh(ctrl->wLength));
-
-switch (ctrl->bRequestType & USB_TYPE_MASK) {
-case USB_TYPE_STANDARD:
-return handle_standard_request(ctrl);
-case USB_TYPE_CLASS:
-return handle_class_request(ctrl);
-default:
-fprintf(stderr, "stalling request with unsupported type mask 0x%02x\n",
-ctrl->bRequestType & USB_TYPE_MASK);
-return ep0_stall();
-}
-}
-
-int main(void)
-{
-struct usb_raw_init init;
-struct {
-struct usb_raw_event event;
-uint8_t data[256];
-} event_buf;
-
-signal(SIGINT, on_signal);
-signal(SIGTERM, on_signal);
-signal(SIGALRM, on_signal);
-alarm(75);
-
-raw_fd =3D open("/dev/raw-gadget", O_RDWR);
-if (raw_fd < 0) {
-perror("open /dev/raw-gadget");
-return 1;
-}
-
-memset(&init, 0, sizeof(init));
-memcpy(init.driver_name, "dummy_udc", sizeof("dummy_udc"));
-memcpy(init.device_name, "dummy_udc.0", sizeof("dummy_udc.0"));
-init.speed =3D USB_SPEED_FULL;
-
-if (do_ioctl(USB_RAW_IOCTL_INIT, &init, "USB_RAW_IOCTL_INIT") < 0)
-return 1;
-if (do_ioctl(USB_RAW_IOCTL_RUN, NULL, "USB_RAW_IOCTL_RUN") < 0)
-return 1;
-
-fprintf(stderr,
-"raw gadget started on dummy_udc.0 for VID:PID %04x:%04x\n",
-VENDOR_ID, PRODUCT_ID);
-
-while (!stop_requested) {
-struct usb_ctrlrequest ctrl;
-int ret;
-
-memset(&event_buf, 0, sizeof(event_buf));
-event_buf.event.length =3D sizeof(event_buf.data);
-ret =3D ioctl(raw_fd, USB_RAW_IOCTL_EVENT_FETCH, &event_buf);
-if (ret < 0) {
-if (errno =3D=3D EINTR && stop_requested)
-break;
-perror("USB_RAW_IOCTL_EVENT_FETCH");
-return 1;
-}
-
-switch (event_buf.event.type) {
-case USB_RAW_EVENT_CONNECT:
-connect_count++;
-fprintf(stderr, "received CONNECT event #%d\n", connect_count);
-choose_endpoints();
-break;
-case USB_RAW_EVENT_CONTROL:
-if (event_buf.event.length !=3D sizeof(ctrl)) {
-fprintf(stderr,
-"unexpected control payload size %u\n",
-event_buf.event.length);
-return 1;
-}
-memcpy(&ctrl, event_buf.data, sizeof(ctrl));
-ret =3D handle_control_event(&ctrl);
-if (ret < 0) {
-fprintf(stderr, "control handling failed: %d\n", ret);
-return 1;
-}
-if (packet_sent) {
-fprintf(stderr, "packet sent; waiting briefly for follow-up events\n");
-sleep(2);
-return 0;
-}
-break;
-case USB_RAW_EVENT_RESET:
-fprintf(stderr, "received RESET event\n");
-break;
-case USB_RAW_EVENT_DISCONNECT:
-disconnect_count++;
-fprintf(stderr, "received DISCONNECT event #%d\n", disconnect_count);
-if (packet_sent)
-return 0;
-if (disconnect_count >=3D 4)
-return 1;
-break;
-case USB_RAW_EVENT_SUSPEND:
-fprintf(stderr, "received SUSPEND event\n");
-break;
-case USB_RAW_EVENT_RESUME:
-fprintf(stderr, "received RESUME event\n");
-break;
-default:
-fprintf(stderr, "received event type %u\n", event_buf.event.type);
-break;
-}
-}
-
-fprintf(stderr, "stop requested before packet was sent\n");
-return packet_sent ? 0 : 1;
-}
-
----- end reproducer ----
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> =E4=BA=8E2026=E5=B9=B45=E6=
-=9C=8822=E6=97=A5=E5=91=A8=E4=BA=94 19:35=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, May 22, 2026 at 12:16:21PM +0200, Johan Hovold wrote:
-> > Make sure that the interrupt-out endpoint max packet size is at least
-> > eight bytes to avoid user-controlled slab corruption or NULL-pointer
-> > dereference should a malicious device report a smaller size.
-> >
-> > Fixes: 3416eaa1f8f8 ("USB: cypress_m8: Packet format is separate from c=
-haracteristic size")
-> > Cc: stable@vger.kernel.org    # 2.6.26
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >  drivers/usb/serial/cypress_m8.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypre=
-ss_m8.c
-> > index afff1a0f4298..82ba0900b399 100644
-> > --- a/drivers/usb/serial/cypress_m8.c
-> > +++ b/drivers/usb/serial/cypress_m8.c
-> > @@ -445,6 +445,14 @@ static int cypress_generic_port_probe(struct usb_s=
-erial_port *port)
-> >               return -ENODEV;
-> >       }
-> >
-> > +     /*
-> > +      * The buffer must be large enough for the one or two-byte header=
- (and
-> > +      * following data) but assume anything smaller than eight bytes i=
-s
-> > +      * broken.
-> > +      */
-> > +     if (port->interrupt_out_size < 8)
-> > +             return -EINVAL;
-> > +
-> >       priv =3D kzalloc_obj(struct cypress_private);
-> >       if (!priv)
-> >               return -ENOMEM;
-> > --
-> > 2.53.0
-> >
-> >
->
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Johan Hovold <johan@kernel.org> =E4=BA=8E2026=E5=B9=B45=E6=9C=8822=E6=97=A5=
-=E5=91=A8=E4=BA=94 18:16=E5=86=99=E9=81=93=EF=BC=9A
->
-> Make sure that the interrupt-out endpoint max packet size is at least
-> eight bytes to avoid user-controlled slab corruption or NULL-pointer
-> dereference should a malicious device report a smaller size.
->
-> Fixes: 3416eaa1f8f8 ("USB: cypress_m8: Packet format is separate from cha=
-racteristic size")
-> Cc: stable@vger.kernel.org      # 2.6.26
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/cypress_m8.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress=
-_m8.c
-> index afff1a0f4298..82ba0900b399 100644
-> --- a/drivers/usb/serial/cypress_m8.c
-> +++ b/drivers/usb/serial/cypress_m8.c
-> @@ -445,6 +445,14 @@ static int cypress_generic_port_probe(struct usb_ser=
-ial_port *port)
->                 return -ENODEV;
->         }
->
-> +       /*
-> +        * The buffer must be large enough for the one or two-byte header=
- (and
-> +        * following data) but assume anything smaller than eight bytes i=
-s
-> +        * broken.
-> +        */
-> +       if (port->interrupt_out_size < 8)
-> +               return -EINVAL;
-> +
->         priv =3D kzalloc_obj(struct cypress_private);
->         if (!priv)
->                 return -ENOMEM;
-> --
-> 2.53.0
->
+On Sun, May 17, 2026 at 11:42:35PM -0700, Brent Page wrote:
+> This is a follow-up on 
+> https://lore.kernel.org/linux-usb/
+> B66AE752-B09C-49B3-A829-F7ABB36FB250@gmail.com/T/#u.
+> The goal is to accommodate 1023-byte-endpoint full-speed isochronous-in
+> transactions on a USB2 bus.
+
+I've been very busy and haven't had time to review this.  It would help 
+if you post your changes in their final form, and do so in a way that 
+doesn't get corrupted by your email client.
+
+> One of the main changes is
+> - max_tt_usecs[] = { 125, 125, 125, 125, 125, 125, 30, 0 };
+> + max_tt_usecs[] = { 145, 145, 145, 145, 145, 145, 35, 0 };
+
+...
+
+> I also want to make sure I understand something that line ~2197 of the patched
+> ehci-sched.c: 
+>     sitd_before = list_last_entry(&sched->td_list, struct ehci_sitd, sitd_list);
+> is based on.  Namely, in the current code, am I correct that
+> insertion of a new urb's sitds into the endpoint's td_list looks like: 
+> 
+> td_list initially (say it's loaded up with a 3-packet urb)
+> |-----|   |-----|   |-----|
+> |td0_0|-->|td0_1|-->|td0_2|
+> |-----|   |-----|   |-----|
+
+That picture is wrong, because the list is doubly linked and there is a 
+separate list head.  It actually looks like this:
+
+	+-> stream <--> td0_0 <--> td0_1 <--> td0_2 <-+
+	|					      |
+	+---------------------------------------------+
+
+> line 2090 in the genuine kernel code:
+
+Genuine as opposed to fake?  :-) Just call it the current or existing 
+code, and give the kernel version number if you want to be very 
+specific.
+
+> (executed three times for a new 3-packet urb)
+> list_add(&sitd->sitd_list, &iso_sched->td_list); 
+> 
+> |-----|   |-----|   |-----|   |-----|   |-----|   |-----|
+> |td0_0|-->|     |-->|     |-->|     |-->|td0_1|-->|td0_2|
+> |-----|   |-----|   |-----|   |-----|   |-----|   |-----|
+> 
+> ?
+
+That loop adds three new "blank" sitds to iso_sched.  At the end of 
+sitd_urb_transaction(), the picture looks like this:
+
+	+-> iso_sched <--> new2 <--> new1 <--> new0 <-+
+	|					      |
+	+---------------------------------------------+
+
+where urb->hcpriv points to iso_sched.  (The entries end up in reverse 
+order, since each one is added immediately following the head, but since 
+they are all blank this doesn't matter.)
+
+> The following later lines in stid_link_urb (again genuine kernel code) then put
+> these new sitds in their proper place I think:
+> 2177  sitd = list_entry(iso_sched->td_list.next,
+> 2178    struct ehci_itd, sitd_list);
+> 2179  list_move_tail(&sitd->sitd_list, &stream->td_list); 
+
+This loop moves the new sitds to the end of the stream's queue, and the 
+following calls to sitd_patch() and sitd_link() fill in the entries and 
+put them on the hardware schedule.  The end result is:
+
+	+-> stream <--> td0_0 <--> td0_1 <--> td0_2 <--
+	|		--> td1_0 <--> td1_1 <--> td1_2 <-+
+	|						  |
+	+-------------------------------------------------+
+
+> Lastly, I'm still a bit confused by this comment in ehci-sched.c:
+> /* special case for isoc transfers larger than 125us:
+> * the first and each subsequent fully used uframe
+> * must be empty, so as to not illegally delay
+> * already scheduled transactions
+> */
+
+That comment is from a 20-year-old patch and should be regarded as 
+somewhat out of date.  As far as I can see, there's nothing wrong with 
+allowing the first uframe to be partially occupied as long as the new 
+sitd is added to the end of the uframe's queue, so it doesn't delay the 
+sitd's already there.
+
+> To me, the main issue is that the adopted "carryover" approach to budgeting
+> doesn't take into account the fact that the TT processes the transactions
+> sequentially (at least according to all the footprints shown in the figs. in
+> EHCI1 and USB2) and doesn't, e.g., do part of transaction 1, switch to
+> transaction 2, then go back to transaction 1.  This most obviously is
+> problematic for long transactions, hence ehci-sched.c handling this case
+> separately.
+> 
+> I make a point of bringing this up because, given the inflation of the
+> max_tt_usecs values in the patch, it is actually the case that a newly budgeted
+> endpoint may "delay already scheduled transactions". For example, say there's a
+> transaction budgeted for HuFrame 1 with tt_usecs=2 us and a new device gets
+> plugged in that requires up to tt_usecs=140 us per transaction.  The new device
+> will also get budgeted for HuFrame 1.  Then, the device's transactions that
+> actually do take >125 us (due to unfavorable bit stuffing requirements) will
+> delay the 2 us transaction (it's maybe worth pointing out that this relies on
+> the fact that sitd_link in ehci-sched.c puts the newer sitds first in the
+> periodic queue for each uframe).  I don't think there's anything "illegal"
+> about this though.
+
+It's okay for sitd_link() to add new sitds to the beginning of the 
+uframe's queue, provided this doesn't push the budgeted start of the 
+last sitd in the queue beyond the 145-us limit.  But in general, things 
+will be simpler if each new sitd is always added to the end of the 
+queue.  The code should be changed to do this.
+
+Alan Stern
 
