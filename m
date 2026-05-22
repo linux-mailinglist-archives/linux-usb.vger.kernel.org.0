@@ -1,33 +1,34 @@
-Return-Path: <linux-usb+bounces-37918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37919-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kF9+ADYbEGqlTgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37918-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:00:38 +0200
+	id aL9ZBmsbEGrqTgYAu9opvQ
+	(envelope-from <linux-usb+bounces-37919-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:01:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7522C5B0CED
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:00:35 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0EB95B0D09
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 11:01:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 242EC300E025
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 09:00:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6EBFE3009E25
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 09:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6981032938D;
-	Fri, 22 May 2026 09:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D835D3B3BF2;
+	Fri, 22 May 2026 09:01:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDF73B637F;
-	Fri, 22 May 2026 09:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EF33B7B7A;
+	Fri, 22 May 2026 09:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779440429; cv=none; b=hbhLeAG422Lkl0MV2TS+/65/X6P1iDY9tRwxU8ugjB8slvmcQ1mO3aN9ga5BSQh8cmAdYKCx6WOjGUtsSsw73BOEHEWgSNei2iYUA4H6M7Cch6S1dZ3bu+Scq8APJkOdn/pyed7mNZ3oo5Js83cr/t3cdk5RSbqQkfumCK/xDWQ=
+	t=1779440468; cv=none; b=k/87aLxDevSeE4XROHoz8sh7iasD5M4MPVeRwMKM4JRkXAfMPCTWdUS27waEqNl5IsgINopNYpTaMhnkWxh4udBd+8Q38PLULPbOe+VKU5xv9d6qGsbZ7KHM1nxyawUOluRfWKRzLDfnzI1Uetyko/ZOuFxlZ4Cjw4N36mAHijc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779440429; c=relaxed/simple;
-	bh=SOTyRTtHeW9kZGm6MBkk/lUYdAmFEbmAGA/vOsy+fOo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WvdrLjYOzwXQFMwfQ+w/2yfpuHu1mD2tIJKAeqTsRiMUpQQrO9MwwLAU7LJt9z0nefxsFDT83y2ueJe+y76YDigTpFYKoakFkOAX0ruw75ScdgURxWAwSEL9Wm7kcYGov5spMquNU1XDxMD9IEZYqiYA9CMZaoZJ3hTI9xd7plc=
+	s=arc-20240116; t=1779440468; c=relaxed/simple;
+	bh=AaUjuQhlLZWOfe7Q39IOiiQkX8Iotw4lC0MNUFZ/NwE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sSMVbYA0TlzZvoOd8GK2XV0/9rPzXR4LPGQnzkGBNf2ooAT9yNLYuCOzXCuTWrefuUlU59+hcX47/Znz+z7QO8I34sJqSch06mQpHTME7woJ2LFxbIhLJTl3X2FlqkiXS5NPNTxrLXLelD+IYX0tZe6eMXuc0WlJZBN770XZZSs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
@@ -36,24 +37,23 @@ Received: from abreu.molgen.mpg.de (g42.guest.molgen.mpg.de [141.14.220.42])
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 86E504C1511A90;
-	Fri, 22 May 2026 10:59:41 +0200 (CEST)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id B8BA34C1511A93;
+	Fri, 22 May 2026 10:59:53 +0200 (CEST)
 From: Paul Menzel <pmenzel@molgen.mpg.de>
 To: Mathias Nyman <mathias.nyman@intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
 	George D Sworo <george.d.sworo@intel.com>,
-	Rajat Jain <rajatja@google.com>,
-	Sean Paul <seanpaul@chromium.org>,
-	Tzung-Bi Shih <tzungbi@chromium.org>,
 	Matt DeVillier <matt.devillier@gmail.com>,
 	Paul Menzel <pmenzel@molgen.mpg.de>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] xhci: add helper to check for pending interrupt
-Date: Fri, 22 May 2026 10:58:25 +0200
-Message-ID: <20260522085828.24142-2-pmenzel@molgen.mpg.de>
+Subject: [PATCH 2/2] xhci: check for a pending command completion during command timeout
+Date: Fri, 22 May 2026 10:58:27 +0200
+Message-ID: <20260522085828.24142-4-pmenzel@molgen.mpg.de>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260522085828.24142-2-pmenzel@molgen.mpg.de>
+References: <20260522085828.24142-2-pmenzel@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,12 +66,12 @@ X-Spamd-Result: default: False [1.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,intel.com,google.com,chromium.org,gmail.com,molgen.mpg.de,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-37918-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[linux.intel.com,intel.com,gmail.com,molgen.mpg.de,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-37919-lists,linux-usb=lfdr.de];
 	DMARC_NA(0.00)[mpg.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
@@ -80,107 +80,104 @@ X-Spamd-Result: default: False [1.04 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.977];
+	NEURAL_HAM(-0.00)[-0.986];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[pmenzel@molgen.mpg.de,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,mpg.de:email,molgen.mpg.de:mid,chromium.org:email]
-X-Rspamd-Queue-Id: 7522C5B0CED
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mpg.de:email,molgen.mpg.de:mid,googlesource.com:url,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,intel.com:email]
+X-Rspamd-Queue-Id: D0EB95B0D09
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-xhci driver needs to manually check if xHC has raised an interrupt in
-several places. Add a helper for it, use it in `xhci_pending_portevent()`.
+It's possible a command times out even if xHC hardware already completed
+the command. Driver is unaware of the command completion if interrupt
+handler is blocked for a long time.
 
-Return 1 if there is a pending interrupt, -ENODEV on error (dead device),
-0 otherwise.
+Check if there is an unhandled command completion on the event ring during
+command timeout.
+
+In this case just give the command additional time to complete. There's no
+point in aborting the command ring to move past a stuck command.
 
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-(cherry picked from commit 741aeecfd9a1b2437c5ee1d70745b1bfd90fb7d6
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git for-usb-next)
-
-[pmenzel: As of 7.1-rc4, the commit is not Linus’ master branch, so port
-  it from the ChromiumOS Linux kernel branch chromium/chromeos-6.12.]
-
-BUG=b:192925463
-TEST=Test S0ix for 500 cycles on brya.
-
 Signed-off-by: George D Sworo <george.d.sworo@intel.com>
-Change-Id: If7d584369e107a6497b10f3346c05e0c32920bcb
-Reviewed-on: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3313527
-Reviewed-by: Rajat Jain <rajatja@google.com>
-Commit-Queue: Rajat Jain <rajatja@google.com>
-Reviewed-by: Sean Paul <seanpaul@chromium.org>
-Reviewed-on: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3399807
-Tested-by: Rajat Jain <rajatja@google.com>
-
-Origin-6-6: 8651d395a93eba47285700a373c12aa53be047ea
-Signed-off-by: Tzung-Bi Shih <tzungbi@chromium.org>
-
-Link: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/9fc38e27c31ae70d7b7829ff61cfcd18c18d3514
+Link: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/478ab723af9414b0a2a2fbc59ac34f5d319a4fc3
+[pmenzel: one adaptation for mainline 7.1: next_trb() uses the
+  2-argument form next_trb(&seg, &deq) — the mainline 7.1 signature
+  dropped the xhci and ring arguments present in the 6.12 source the
+  patch was ported from.  xhci_pending_interrupt() is used directly as
+  it is now committed as the preceding prerequisite.]
 Assisted-by: Claude Sonnet 4.6
+[pmenzel: No devices with the problem available, but no regressions on
+  Dell XPS 13 9360 and QEMU 7.2.0.
+
+      qemu-system-x86_64 -enable-kvm -cpu host -m 3G -device qemu-xhci,id=xhci -device usb-storage,bus=xhci.0
+
+  xHCI host controller initialised cleanly, USB 3.0 SuperSpeed root
+  hubs and USB mass storage device enumerated without errors.
+  The specific race (command timeout with blocked interrupt handler)
+  cannot easily be forced in QEMU, but no regressions in the normal
+  command path were observed.]
 Cc: Matt DeVillier <matt.devillier@gmail.com>
 Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
 ---
- drivers/usb/host/xhci.c | 17 ++++++++++++++---
- drivers/usb/host/xhci.h |  1 +
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-ring.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index a54f5b57f205..8d4d6a524d05 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -97,6 +97,19 @@ int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us)
- 	return ret;
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e47e644b296e..7f023558af22 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1714,6 +1714,28 @@ void xhci_cleanup_command_queue(struct xhci_hcd *xhci)
+ 		xhci_complete_del_and_free_cmd(cur_cmd, COMP_COMMAND_ABORTED, 0);
  }
  
-+/* return 1 if there is a pending interrupt, -ENODEV on error, 0 otherwise */
-+int xhci_pending_interrupt(struct xhci_hcd *xhci)
++static bool xhci_pending_command_completion(struct xhci_hcd *xhci)
 +{
-+	u32 status;
++	struct xhci_segment	*seg = xhci->interrupters[0]->event_ring->deq_seg;
++	union xhci_trb		*deq = xhci->interrupters[0]->event_ring->dequeue;
++	u32			deq_flags = le32_to_cpu(deq->event_cmd.flags);
++	u32			cycle = xhci->interrupters[0]->event_ring->cycle_state;
++	int			i = 0;
 +
-+	status = readl(&xhci->op_regs->status);
-+
-+	if (status == ~(u32)0)
-+		return -ENODEV;
-+
-+	return !!(status & STS_EINT);
++	/* Check if event ring contains an unhandled command completion */
++	while ((deq_flags & TRB_CYCLE) == cycle) {
++		if ((deq_flags & TRB_TYPE_BITMASK) == TRB_TYPE(TRB_COMPLETION))
++			return true;
++		if (last_trb_on_ring(xhci->interrupters[0]->event_ring, seg, deq))
++			cycle ^= 1;
++		next_trb(&seg, &deq);
++		deq_flags = le32_to_cpu(deq->event_cmd.flags);
++		if (i++ > TRBS_PER_SEGMENT)
++			break;
++	}
++	return false;
 +}
 +
- /*
-  * Disable interrupts and begin the xHCI halting process.
-  */
-@@ -918,11 +931,9 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
+ void xhci_handle_command_timeout(struct work_struct *work)
  {
- 	struct xhci_port	**ports;
- 	int			port_index;
--	u32			status;
- 	u32			portsc;
+ 	struct xhci_hcd	*xhci;
+@@ -1736,6 +1758,14 @@ void xhci_handle_command_timeout(struct work_struct *work)
+ 		return;
+ 	}
  
--	status = readl(&xhci->op_regs->status);
--	if (status & STS_EINT)
-+	if (xhci_pending_interrupt(xhci) > 0)
- 		return true;
- 	/*
- 	 * Checking STS_EINT is not enough as there is a lag between a change
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index aeecd301f207..82a0596c0ae9 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1955,6 +1955,7 @@ void xhci_ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
- void xhci_cleanup_command_queue(struct xhci_hcd *xhci);
- void inc_deq(struct xhci_hcd *xhci, struct xhci_ring *ring);
- unsigned int count_trbs(u64 addr, u64 len);
-+int xhci_pending_interrupt(struct xhci_hcd *xhci);
- int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 			    int suspend, gfp_t gfp_flags);
- void xhci_process_cancelled_tds(struct xhci_virt_ep *ep);
++	/* Did hw complete the command but event handler was blocked? */
++	if (xhci_pending_interrupt(xhci) > 0 &&
++	    xhci_pending_command_completion(xhci)) {
++		xhci_dbg(xhci, "Command timeout with unhandled command completion\n");
++		xhci_mod_cmd_timer(xhci);
++		goto time_out_completed;
++	}
++
+ 	cmd_field3 = le32_to_cpu(xhci->current_cmd->command_trb->generic.field[3]);
+ 	usbsts = readl(&xhci->op_regs->status);
+ 	xhci_dbg(xhci, "Command timeout, USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
 -- 
 2.53.0
 
