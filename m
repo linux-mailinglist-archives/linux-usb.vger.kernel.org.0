@@ -1,140 +1,136 @@
-Return-Path: <linux-usb+bounces-37938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37939-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8KNeA/toEGpJXAYAu9opvQ
-	(envelope-from <linux-usb+bounces-37938-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:32:27 +0200
+	id iCN5HMZqEGqgXAYAu9opvQ
+	(envelope-from <linux-usb+bounces-37939-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:40:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 859D95B630C
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BAD165B64D2
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:40:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D679D3095451
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 14:23:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DFCB43112BAC
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 14:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D83742668C;
-	Fri, 22 May 2026 14:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A9236AB77;
+	Fri, 22 May 2026 14:29:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vmci/S5q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eDT5wZfc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F09421F16;
-	Fri, 22 May 2026 14:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23AC466B79;
+	Fri, 22 May 2026 14:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779459752; cv=none; b=LsFoiJ/A15RIChmVPJd6nQ4SgFYwItfui6qrDwU8uejbMWPJ+T2A0Ek9vYMMwNCD+09o56pQBchTE5BZz5GgsKlz+dD+DP54+nmm0/7xcLf9wz4ymgFX5tEb/EpsxkKdWZQDBnWswdDXnTzsu1pO0ZGZmDUB1MGgOTT07LqvKVg=
+	t=1779460138; cv=none; b=lRgsP7IedNwAI0BcZs+0qi2FsdgksDbBVuQFJlCv0mpl+ivJwiy9P0PGyb/q7rPsk9fD74XD7/FrX58pzL2E9u1uILi7SGGnNVW5hQ/AI3A+iAmkZrgU8eB6Bm4xm02hoWLfIc6dJLB5D87OgTC7IbSV9ytwo6/QmyPuWDqQRKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779459752; c=relaxed/simple;
-	bh=SmnPE+UUgKqkAGj5Fh4vh1PzGk9CDM/x9mSnHpezBMg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eJXno5Pv3Dk05jwvj2LLcgcqywS58vb6bTMmAiqiyZfzaIvG5k+Y+V3NeHxvtel1KrONeleTyzMdH/a1f2xq7tuc7kTQ2hch5IEra9ejfKyyQ/+KH9RP0m+IfSuGnfgF0Bo3DsG6RrDlbQpZNAEeDbEJeQU+AnpNH7w1KijGdMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vmci/S5q; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 247FF1F00A3D;
-	Fri, 22 May 2026 14:22:23 +0000 (UTC)
+	s=arc-20240116; t=1779460138; c=relaxed/simple;
+	bh=zpSKTJxm0NxhcKxlHV85cD94sU56IQs9PLDMXtQBFBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RhMc1KsApRCBSV0GpQfoSNhBIO9FPTLH5mZ+B7WEzB4qjqunFHTK6O1TI7ypunspB+9TaATsgGkoewLlA7v9PMarjmOsCQBu+acCFlWI3sjxGNuDH1GRmpLfkqZzMbbysqBgOBb8i4aoVxWzFmKb5V/0XlqkghjVSOjtJ1JoyVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eDT5wZfc; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 920CE1F00A3D;
+	Fri, 22 May 2026 14:28:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779459743;
-	bh=SOegj8RlYd8aMl5fWMItxIVNwvXG8Gl6pyLcTMwAtXo=;
-	h=From:To:Cc:Subject:Date;
-	b=Vmci/S5qS1Nv6tBRlfoxUjxTQZLlycIXd6yxB1llgeOd9oh1Z3vuzx6FUPbzafR2Y
-	 ZDYyFqpIoeOt/0WmTjkpTEqSbaD/pr2S0Yk3l3e4zpbvpAHWnrBOjm3dDWROO8Mvv1
-	 ztE87WxduvtYvnRwDbDa2sBpJmj0mzEsB+bNb+43672CtAAgmBkzPKtsfgD55SaBNP
-	 B40f1uDHlgV0oZhNpeelk94FZTUN3ag8kv4suxYyNRpRXEeTGaGfLuakApq0iowFgG
-	 mtUncK5FZ7d4VsduaLFwrj5gO0RmoivOZkcn4JGCpR9Lbbpstl6q1fnZnIUh78PSaV
-	 esGNT07jSJThQ==
+	s=k20260515; t=1779460132;
+	bh=oMRLdiweyomYJf4l43aIcs7znHQoZRmqYCz1TIA44x8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=eDT5wZfcvw8SmLggNp7AJCX9SCjyt60JUuHNx2V4A6L4WjvDIPZ7TkPwk2TTwnjQb
+	 JmKr3s5M95qpYxn1sCSZAWOFXmYnWEycN7jG80gcsGPfJMCHTfVdJYoSm3ySaiBMEW
+	 6DZvU0pG7O3loxSaZE2KLiszW3cKUBTIxzikmxru7rFgNGyonK9KM0xznFd9rxsrnJ
+	 gwelbQyES1tCsdSwmA/RPGe9gOSPq/BjsPrYNSemT379jJAa9W/lrbUB6rjmBFdeLo
+	 1lqAD5JcSqCk32fETSUH/+3XqwqVMg9FIXq3ypzwUrd/69ODvMkWBSneKX9fE1/Ufv
+	 e0MmbB0oYzcNA==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1wQQlZ-00000003yX4-07F8;
-	Fri, 22 May 2026 16:22:21 +0200
+	id 1wQQrq-00000003ydS-1VkW;
+	Fri, 22 May 2026 16:28:50 +0200
+Date: Fri, 22 May 2026 16:28:50 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Johan Hovold <johan@kernel.org>
+To: Cen Zhang <rollkingzzc@gmail.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH] USB: serial: safe_serial: fix memory corruption with small endpoint
-Date: Fri, 22 May 2026 16:22:18 +0200
-Message-ID: <20260522142218.947657-1-johan@kernel.org>
-X-Mailer: git-send-email 2.53.0
+Subject: Re: [PATCH] USB: serial: cypress_m8: fix memory corruption with
+ small endpoint
+Message-ID: <ahBoIngkuYZ-__QA@hovoldconsulting.com>
+References: <20260522101621.927034-1-johan@kernel.org>
+ <CAB7XQsFYZcNssaxjYYoBm4ROgFAAYHYOKXWzFs2YK4cLiYF0Qg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB7XQsFYZcNssaxjYYoBm4ROgFAAYHYOKXWzFs2YK4cLiYF0Qg@mail.gmail.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37938-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37939-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 859D95B630C
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: BAD165B64D2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Make sure that the bulk-out buffer size is at least eight bytes to avoid
-user-controlled slab corruption in "safe" mode should a malicious device
-report a smaller size.
+On Fri, May 22, 2026 at 10:16:07PM +0800, Cen Zhang wrote:
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/safe_serial.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+> I took a closer look at your patch and tested it on top of commit
+> 917719c412c4 with KASAN enabled.  I applied your patch, rebuilt the
+> kernel, and reran the same reproducer I used for the report.
+> 
+> The original reproducer still triggers:
+> 
+>   BUG: KASAN: slab-out-of-bounds in cypress_read_int_callback+0x240/0x7f0
+>   Read of size 1
 
-diff --git a/drivers/usb/serial/safe_serial.c b/drivers/usb/serial/safe_serial.c
-index 238b54993446..d267a31dcccf 100644
---- a/drivers/usb/serial/safe_serial.c
-+++ b/drivers/usb/serial/safe_serial.c
-@@ -259,6 +259,7 @@ static int safe_prepare_write_buffer(struct usb_serial_port *port,
- static int safe_startup(struct usb_serial *serial)
- {
- 	struct usb_interface_descriptor	*desc;
-+	int bulk_out_size;
+> I think the reason is that your patch rejects small interrupt-out
+> endpoint sizes, but this reproducer has interrupt_out_size = 16, so the
+> new check is not hit.  The remaining issue is on the read side:
+> packet_format_1 reads data[1] before checking that urb->actual_length
+> contains the two-byte header.
  
- 	if (serial->dev->descriptor.bDeviceClass != CDC_DEVICE_CLASS)
- 		return -ENODEV;
-@@ -279,6 +280,16 @@ static int safe_startup(struct usb_serial *serial)
- 	default:
- 		return -EINVAL;
- 	}
-+
-+	/*
-+	 * The bulk-out buffer needs to be large enough for the two-byte
-+	 * trailer in safe mode, but assume anything smaller than eight bytes
-+	 * is broken.
-+	 */
-+	bulk_out_size = serial->port[0]->bulk_out_size;
-+	if (bulk_out_size > 0 && bulk_out_size < 8)
-+		return -EINVAL;
-+
- 	return 0;
- }
- 
--- 
-2.53.0
+Sorry if it wasn't clear but my patch isn't meant to replace yours as it
+fixes a separate issue (introduced by the same commit).
 
+> I also tested a variant with interrupt-out wMaxPacketSize = 1.  Your
+> patch rejects that device during port probe with -EINVAL before ttyUSB0
+> is exposed, so the new check works for that endpoint-size case.
+
+Thanks for testing it.
+
+> Please let me know if I missed anything in the test setup or in the
+> analysis above.  I am happy to help test another version, or send a
+> follow-up patch for cypress_read_int_callback() using your earlier
+> comments if that would be useful.
+
+I'm hoping you can send me a v2 of your fix.
+
+Johan
 
