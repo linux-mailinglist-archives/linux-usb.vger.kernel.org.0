@@ -1,163 +1,198 @@
-Return-Path: <linux-usb+bounces-37940-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37941-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wAYPNG5tEGqgXAYAu9opvQ
-	(envelope-from <linux-usb+bounces-37940-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:51:26 +0200
+	id kOQ1BWFwEGqgXQYAu9opvQ
+	(envelope-from <linux-usb+bounces-37941-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 17:04:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86DF95B67B8
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 16:51:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB515B69FB
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 17:03:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CB154307EBFD
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 14:42:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8188530557F1
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2026 14:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B46744B690;
-	Fri, 22 May 2026 14:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72FE63B5F66;
+	Fri, 22 May 2026 14:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KwfIscAF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cJQcKVef"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f68.google.com (mail-lf1-f68.google.com [209.85.167.68])
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8642F3ACA4C
-	for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 14:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779460964; cv=pass; b=FV0x0EEkQQnWYyC/jCOTAEmJ168Zf4D14NvlVKXeVI6sr2AFILQB43VUksiOZzBt+cIQfoUq2ib1pKx335HwrrW38xGcMLXWw5VK1Vv3qltaaYyJz+dipUN+tgOrjA034i2M9EgmhmJDav3gmctTFnAmuIGz/SigpslvTqUYkTY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779460964; c=relaxed/simple;
-	bh=4WQ0zojNlovj8actFOIa+b2y7t+Kdrs79Zv4ubTvYmg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MwnqMHwV+IN/lAR9N4++gyIyJgsuq8gqeoZvimf5shpiU6oTnakHqT/7VCj5bCMUxZI9Ux4shO8iN5QDWHi+PBzLuucXTqN1kmNRUDwLXKIzSJBOGEiw08oo5IPbOo9iJPN9wGjXmWPgA3kEHuVnTmne61Y81/XGUx2Yjoy58fA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KwfIscAF; arc=pass smtp.client-ip=209.85.167.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EAC37DEBE
+	for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 14:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779461692; cv=none; b=BkH7F5bAEo11edqaKcwgaql56tCPKZtLY6pQM6/17/BMJ/sp+xG55WhcdlhIKNx2QcUxE7Acz7ZbAXyQMDMdNElfKaFKNdCE+omvwk4yZMRPkBok0KpL8SZf50Bd8375YEFESTxYBGiKtHwTf0e9tbWiRTDH/fixo08ahAiCSIY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779461692; c=relaxed/simple;
+	bh=5ORvQ4Ljxuc0AAPzO1bFzRwDWeXjmg28dpHZodvCjaE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oVWhH2DPeYUuSUrINTnoHUa/zh0YZGlsNqMvaOD8wYEYsqr7fNjSwZY0/WBPtmxI8tSJgs9Z5nvW4A7KDf5fEZd4Z7xOMoqIfYcHhuzhab64ancgQ3e53ryIqVkBrIEUWJQBMEPkfjfuMyN4TiUqSzPr209IWdnFh6Bg62Hp3Io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cJQcKVef; arc=none smtp.client-ip=209.85.214.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f68.google.com with SMTP id 2adb3069b0e04-5a8891febd2so10133814e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 07:42:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779460962; cv=none;
-        d=google.com; s=arc-20240605;
-        b=daFkEGT9/BMjwhiktwT10NZ6gksE2KewFazCC+AE+4m5ArEYUNJWDxBOtMIFhjAyX1
-         ucwE3da43KLuYmWVE5ydZTKZZL7m3QKvf3m00gdTN7wYWb8WvzeACUoj3NfSHc+0rqgE
-         MK5ZIfb2wcE2zdDmxBy/l983/WndOzI0Mn+/Apbmq/l/9+s0QhKeEyZuskMQ7mLTjcko
-         j0KKN03acCYVx4YULTekiHYOjLsuhxlLSUNEkYTztAvX4bFi0qd7Owh/htC2b88ckYh5
-         NMfm3iKj/8rjtxyr5TGqjzsbnnPtw2m0Q+M3F1ydga28HMTCQc3ZRz8g0xZm+bTwhNg1
-         eDvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4WQ0zojNlovj8actFOIa+b2y7t+Kdrs79Zv4ubTvYmg=;
-        fh=Nda8iNE3JTJDhi8LI2ezkM9jbUYmgw0tqyGuIL0x57c=;
-        b=Z/AFmZc6N/IvkprugeSw/Ik8iyoBOU4QghPkIguWLFZuyBBBaKeIDLdx7++6AKfOPc
-         An2V4RF+Jfdh0Kz7NEYlU0zd7rMGeWzyU3Nl6WP/ZiVLcMMTeZVGBhBpHK8pGIWooGU6
-         G6lwhfZv1UUvSOkivZHWhA1P3xXz46M7PXNDNWH9eEyh8f0pSQxsipoeYfUBH2N9aajK
-         XwqrIv2EhgwwBasR1usvqhA96ddVwjS0JajWYzyLu8hdapDNiQbV/w+LKFsO1F7PCduf
-         u3Vno1dNwqwFipxuRXUcoghXCAZigTBJiRM64iFpPd5foCc+5as+n3T/2V11zRbzooiY
-         s2cA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2ba17c8cfacso74380595ad.2
+        for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 07:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779460962; x=1780065762; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4WQ0zojNlovj8actFOIa+b2y7t+Kdrs79Zv4ubTvYmg=;
-        b=KwfIscAF0SBVVcFSZ31UUXfYpqur49PAluOKqtQyuKQM2+tIX5JnfOM5sFRd9fV9gU
-         VV00Ut1waIMK3AQfUOsjBfHmR4YtA6KMiQ1o5Xbr+7bN2ksMg2XOMhiIIQFF3gNk/D69
-         /eAa6NZCZWra9sxFksYL5b2wXr6N0Ig3KBoy4JDe3w1tATpn0IsnhazWwNPC0d5YJGj6
-         seU2gM4Epug1tBlohpaRbdbOB74tvRASJ2zkxKd+1Y+E3PVnk3LG0HFKTtz1NmRIci5Y
-         Zx0T7FTO7y9HEwKoNfZnIweSqjlzSVzWzOCTNYl6Q2JFVf3Ug2iPl0p7hD9Y1uG8O9jZ
-         jTxw==
+        d=gmail.com; s=20251104; t=1779461690; x=1780066490; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vGx1H6sqJFRxmUcSTd3T7v7p1m8D3Mdv113iiWsjIvw=;
+        b=cJQcKVefd6aWnQjGOE6XdA34ACvYV4E4JEioXFL+QQbQQZki7cfNMVm9EPAB0/vp1c
+         Hcta5hjbPJuHhIJlRrDkTAGrdAA4YRM9d1/7MaRtaiyRDnUNYgfxx1lTQPC+/RmH7/fn
+         PbHjDgXUQFMEyewiKUI5X8F2xDvJl9hZ36deQ2qogSAc+rnWQ6S7q8lsmIbhjnkfcqVM
+         jyVup5Wymo1BurNE5sYlzvUH73z5srDJF1AOwG3Wom3j2tujfCPiPp/IJgpQTaYXG91Z
+         n15Lk9Xr/Ks2/QPbYFMPYSjX82bszwSjQgdfxJ/BocOMuMhjdb0cspm6oiwZC31qlAvq
+         j1Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779460962; x=1780065762;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4WQ0zojNlovj8actFOIa+b2y7t+Kdrs79Zv4ubTvYmg=;
-        b=ZHdn7BKqocZgD91Wzj290/HP2x9ZT+Q2bjWgWxZONEQmWDFYaCUkgmdtbMJXpz0OPo
-         R72wxx1GfAYKqsJJ9RyuPImAWAKFOlekVB3B7pmmKpfs1X9Uwgp9rKbLC33G7Fa/xWBR
-         nT7vEDLDoJfxMzz3wPnhel7dsAiDKGSzBmfveOhqfmed1xbZcKTvgswJZTUs2p0zsLIT
-         noeSQefDholTJQHqjlProeUitncKWLDc8z5FwFCKMbWysAgfxMXXH2BiyAAj0WoxqFHW
-         6QPRh89LYPrHhEjWTc9rVYXgKGzmOz1h1mnXGxRWOJLDlim+tV6cxR9fBqzv9jsG9MiU
-         ToSw==
-X-Forwarded-Encrypted: i=1; AFNElJ/SRD/spo8/wXa4EGGqoQEk9kEYg+8bcYOsRtW3cIOKJ7Yi6n9UiV7FMs3+wmWECIPIR9cUmeUu/CA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycNEtpvlDeOyr/UH3r4KWvn0mvRjFtNYTadFHSUwJayI6AiR5h
-	Vv7oc2ZTDAjUjUkJYH0VU9eT+s1wk2tSRQmc2CO633ZJyIAHahQG9s5E9WBGR2r0fqVDAYBHVZS
-	ntXDU6m0XRgs+cU5CqXkBAfsQkMupDVQ=
-X-Gm-Gg: Acq92OG2r/m4sZN72rtYVUWtrWhvdgNp7hsJgbt+XTdsKADgkklagJwZ1XnGB0M/Kck
-	Rs7zK685UVGDrTXNMEBpi6eOjAp9tZetNgBgAiOsiwG/hb97Iwdn6U0HwUK9kyABhrC9uvEcANT
-	bH3X7iRA86KbmXHYvUHYbxgWhu4U+FrjSbF/iTYeoEuniD5VDZMIUp9SK6eo6SVsmAjNXQk+ZXg
-	M/gMdOQhjBWcB4HmK4BVnEPXz2yTQek3/vhjXE8XhO4tSFhxGo/DdD2oi+BD5PTcyNr78G5Km1J
-	qHR2LWVrCA4MVntq35ZB
-X-Received: by 2002:a05:6512:2349:b0:5aa:106b:45e5 with SMTP id
- 2adb3069b0e04-5aa3230f6f4mr1707893e87.0.1779460961419; Fri, 22 May 2026
- 07:42:41 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779461690; x=1780066490;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vGx1H6sqJFRxmUcSTd3T7v7p1m8D3Mdv113iiWsjIvw=;
+        b=CGEmUHRr2aC6acitmAeDGd4XAtHLCvraiRYBIHUyt9s879b00tlmXYnMSpWOvXv+Ma
+         wbJiQ4L02FsywamU7cKxUVRO8UeSxaIDxvtRkqRPGMtvYcMnKvnuoaj0nZvWueS5YSTl
+         O/0q6IDs/FWZIHMcM7n0Ply4UB4JftxChxjvLUv2IYBa+jLlhduDogVkLySk16s3GdQV
+         GU7M0M1eYMHlBV6dUhRk2+OWLSD8VNWiGH+4N/No3CzME6C/d1Ncd2BZtKqz9+NB3rME
+         OQJ+LNGKymPiF1D7rz+vG4JfcEhht27QDbDNUGa47KMcTPzEwq8Q1HIq9RPdydzdROgh
+         DqSQ==
+X-Gm-Message-State: AOJu0YwMQ0AY/xNhBp40cw7H0unKc9mSRoCn9z7mueLvqcTRPbDFOAwh
+	XkUWoaoAxlieJFyDakeZryju6Nd4y4tdjkiZ8Fpru5Kra9uz6yQA4bm2
+X-Gm-Gg: Acq92OEkJmFfAbSr9fil6C9MWPD+hhMoEVT3wNi5vizgGWPTk9dtTWcwwX91gZvxXbS
+	fSYBOGG17enihyXF2bJPPqlp7MqSbYsunE3M2l0hFGbfEQE0zj2aTfDBlusoLgCX9XZqMJStpk5
+	nlPFOXC1vAwbRQXeG5dNNxsxziNOzbHYcOv5Q1VSfTSTvNKOmFc+588BC2lmaQE5AhivNtveA4I
+	XS/x1MZ5mPfadpLw0IgxSzjznrdB1OZ3k+UiZg4XX4HLxJup/qnksKzUij9FDATRXmGOx6Q/NFX
+	iZY1OHBpF9/PwknNAlCwTAGJW9uoSHbm1hhNyEkirIMf4eox+B1GBN0ODEf4Nm8aSg/6e89eKEM
+	GztwZAVnf2sW3qSxSc0cDr772CTr4+c1j/KOSg2hnfC7DvnZKIcoxuLppemdXUPSr5cYBkaoUmx
+	mVI3y1ON4cDerAVx4hQWQJxUm0u+u3WAA=
+X-Received: by 2002:a17:903:3c63:b0:2ba:85:5827 with SMTP id d9443c01a7336-2beb05ff545mr53402765ad.26.1779461689768;
+        Fri, 22 May 2026 07:54:49 -0700 (PDT)
+Received: from localhost ([111.228.63.84])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb56958d3sm17634645ad.12.2026.05.22.07.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2026 07:54:49 -0700 (PDT)
+From: Zhang Cen <rollkingzzc@gmail.com>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zerocling0077@gmail.com,
+	2045gemini@gmail.com,
+	Zhang Cen <rollkingzzc@gmail.com>
+Subject: [PATCH v2] USB: serial: cypress_m8: validate interrupt packet headers
+Date: Fri, 22 May 2026 22:54:42 +0800
+Message-Id: <20260522145442.2868601-1-rollkingzzc@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260522101621.927034-1-johan@kernel.org> <CAB7XQsFYZcNssaxjYYoBm4ROgFAAYHYOKXWzFs2YK4cLiYF0Qg@mail.gmail.com>
- <ahBoIngkuYZ-__QA@hovoldconsulting.com>
-In-Reply-To: <ahBoIngkuYZ-__QA@hovoldconsulting.com>
-From: Cen Zhang <rollkingzzc@gmail.com>
-Date: Fri, 22 May 2026 22:42:28 +0800
-X-Gm-Features: AVHnY4J4ZNzDXAIPG3CnV51Uy8t2SP_8h8xVFK7JMWLA9NVGioxlJnoJglCqk5M
-Message-ID: <CAB7XQsH+VsFF9zxNKGRDJ=-_n3_JaJWhp9Mho5P1xzUQVB2KqA@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: cypress_m8: fix memory corruption with small endpoint
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37940-lists,linux-usb=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37941-lists,linux-usb=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[rollkingzzc@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 86DF95B67B8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 6CB515B69FB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Johan,
+cypress_read_int_callback() parses the interrupt-in buffer according to
+the selected Cypress packet format. Format 1 has a two-byte status/count
+header and format 2 has a one-byte combined status/count header. The
+usb-serial core sizes the interrupt-in buffer from the endpoint
+descriptor's wMaxPacketSize, and successful interrupt transfers can
+complete short when URB_SHORT_NOT_OK is not set.
 
-> Sorry if it wasn't clear but my patch isn't meant to replace yours as it
-> fixes a separate issue (introduced by the same commit).
+Check that the completed packet contains the selected header before
+reading it. Malformed short reports are ignored and the interrupt URB is
+resubmitted through the existing retry path, preventing out-of-bounds
+header-byte reads.
 
-Sorry for the misunderstanding regarding the intent of your patch.
+KASAN report as below:
+KASAN slab-out-of-bounds in cypress_read_int_callback+0x240/0x7f0
+Read of size 1
+Call trace:
+  cypress_read_int_callback() (drivers/usb/serial/cypress_m8.c:1009)
+  __usb_hcd_giveback_urb()
+  dummy_timer()
 
-> I'm hoping you can send me a v2 of your fix.
->
-> Johan
+Fixes: 3416eaa1f8f8 ("USB: cypress_m8: Packet format is separate from characteristic size")
+Assisted-by: Codex:gpt-5.5
+Signed-off-by: Zhang Cen <rollkingzzc@gmail.com>
+---
+v2:
+Check only urb->actual_length before reading the packet-format header.
+Reuse the existing i header-length variable instead of adding a new one.
+Shorten the KASAN trace in the commit message.
 
-I=E2=80=99ll work on a v2 of my fix and send it as soon as possible.
+ drivers/usb/serial/cypress_m8.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-Thanks a lot for your guidance.
-
-Best regards,
-Zhang Cen
+diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
+index afff1a0f4298b..49c0f3e379bd0 100644
+--- a/drivers/usb/serial/cypress_m8.c
++++ b/drivers/usb/serial/cypress_m8.c
+@@ -1060,18 +1060,27 @@ static void cypress_read_int_callback(struct urb *urb)
+ 	default:
+ 	case packet_format_1:
+ 		/* This is for the CY7C64013... */
+-		priv->current_status = data[0] & 0xF8;
+-		bytes = data[1] + 2;
+ 		i = 2;
++		if (result < i)
++			break;
++		priv->current_status = data[0] & 0xF8;
++		bytes = data[1] + i;
+ 		break;
+ 	case packet_format_2:
+ 		/* This is for the CY7C63743... */
++		i = 1;
++		if (result < i)
++			break;
+ 		priv->current_status = data[0] & 0xF8;
+ 		bytes = (data[0] & 0x07) + 1;
+-		i = 1;
+ 		break;
+ 	}
+ 	spin_unlock_irqrestore(&priv->lock, flags);
++	if (result < i) {
++		dev_dbg(dev, "%s - short packet received: %d bytes\n",
++			__func__, result);
++		goto continue_read;
++	}
+ 	if (result < bytes) {
+ 		dev_dbg(dev,
+ 			"%s - wrong packet size - received %d bytes but packet said %d bytes\n",
+-- 
+2.43.0
 
