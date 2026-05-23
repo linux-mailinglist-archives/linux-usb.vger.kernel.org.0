@@ -1,163 +1,219 @@
-Return-Path: <linux-usb+bounces-37961-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37962-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gBJYOBRcEWollAYAu9opvQ
-	(envelope-from <linux-usb+bounces-37961-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 09:49:40 +0200
+	id 4N+ELk5lEWr7lQYAu9opvQ
+	(envelope-from <linux-usb+bounces-37962-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:29:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 645105BDC79
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 09:49:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B0585BDDB0
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:29:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6195D3019152
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 07:49:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B43530214F7
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 08:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A06733DEE1;
-	Sat, 23 May 2026 07:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36B63502B8;
+	Sat, 23 May 2026 08:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fAHhULNt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HfkhPQr/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA13119EED0;
-	Sat, 23 May 2026 07:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58C13542D1
+	for <linux-usb@vger.kernel.org>; Sat, 23 May 2026 08:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779522577; cv=none; b=qE4Bgo3lferQ09LT06Q/VhvR/5KuQs3iMMHkfQmlCdq+PcjlDLFsHRoCeyShk53jGK+ZXXhevbckIUM/m8o23uJeYPmW74aN6LOxOVzXH8E1cAcmZqAB+UgXSfoGF+Jp4hO14ngXZJKJg24BEJU+1I2kEQsr21iG59K7zvg/L84=
+	t=1779524904; cv=none; b=cILfyK0NXDrya64KqUtjIaBkWia6K6Ot88NOZtEVnRixjTu9xymtCH9GksGYUV4Yb1Rb4IYi2e86efS5giCHsqvEc2M4GVR/zdrFmAJOjx66kddP5ACn6labO9Seu5ul6g9IbyMZBetxuHkLqQkEU9fF4vGs9ixJIz6wSq509Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779522577; c=relaxed/simple;
-	bh=BudDFIonwz5iOAPz+CsP8DY0Iz7zBglB7zg4r6MSA5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P2f1U/uNU4Jg8D7YQm5uajILQ9dIagXPCn0HsLA4oYD47hsHEYw845JI1GZIyMoJTcJdLCzvpKSpc/fNS/gx2imECIr8IhsmO4JOLW75ywZs45fNnpm+NBrxmdnMlqHaPuzdL/KVvlJ8UWe30sCTYfIEOQpP/gHrME4TWGkFbt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fAHhULNt; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9827C1F000E9;
-	Sat, 23 May 2026 07:49:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779522576;
-	bh=mEjUWYqrEz6avjsHRkM4qm3AHXovNIrrVSRcYajq8pA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fAHhULNtZvLDCE+pFsDVoskh7uMqnOi1OOgO93RuQZ1iHnq2NCWtCC/fNPaURF5t2
-	 v9+7ZPCKbj0vBYeTK1KFp81G0/if7qYj3y/0f2rIiMdsf2Z4DRN5IREykF1wxccYzp
-	 0LORHfefqutMUde6LbOLaYVPPf2fFrdxpBuf13xOXrsAA6PiTDAAj9vQCbcajS/vZa
-	 SxjH0XcDRjLBhiZ/cO3Ws7tzV5zgAYgzzdvnsSgK3RiywCvutBHNnvE+jhPrnhh5r4
-	 Xnd0c/qxMuAnDjFzRV7pUoIdyM1E+1RWGXpAXrKPYMJdkNsbXLT3sW5MJCdcEpBjId
-	 36lVeCCvTBViQ==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wQh70-000000045nJ-0mAp;
-	Sat, 23 May 2026 09:49:34 +0200
-Date: Sat, 23 May 2026 09:49:34 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Zhang Cen <rollkingzzc@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	zerocling0077@gmail.com, 2045gemini@gmail.com
-Subject: Re: [PATCH v2] USB: serial: cypress_m8: validate interrupt packet
- headers
-Message-ID: <ahFcDudL4N01Fycs@hovoldconsulting.com>
-References: <20260522145442.2868601-1-rollkingzzc@gmail.com>
+	s=arc-20240116; t=1779524904; c=relaxed/simple;
+	bh=SJYthm/hJjyvZnHoxcP0FN011OD9BRe6ay27b+7gC+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jiXAhbWs0V3Jd4QQCPuZ2rIh+C5JMrRjpqRvFV7VD8suYGajfD0AA2nF3TmuyIRr0uvQNbc0eujUsgZ739fJqwpvO37y3QuIXkSqg4Fw8/siTEgtit7WHs+uTCPeShcfWv5QyDJwDPZnBGk5IaK7f1PXV/clsQEuP+BnsE+B5+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HfkhPQr/; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5a8d1f43432so13283529e87.3
+        for <linux-usb@vger.kernel.org>; Sat, 23 May 2026 01:28:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779524901; x=1780129701; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EhmWhWD9464Uoh3KFvCuWff7V4Zp2a8qUYWAxJoJ59c=;
+        b=HfkhPQr/smgQ0JTETyFkjiCEB5kJoXcBpyiy/8c58BQPRHfZ56uC5Afv9aSLcdlk7l
+         qgCahylv+/WUSGOrrAGwuSEhKgWhbqlfQfEn29B+5K90EymTLQCcbdujzBxHzMiwKaN5
+         8mKWSnJNXr/c7tQ/gbAOm8vrAs4uiVwBalq5Sz2BSoe3WcqxUpzIgsr/tljV682k08ug
+         UiML6DUfxehgEo2bjKvnylPIqBWvSJy1CJCa2g6gVk41bwN2nrYKZPuYWxQ+474I0Luz
+         gteiU5XXn+4jhBYRMaENtrUxm8ZjwWZLt06sypgyTE703erJAl/8ynM3c8twBiuiAUd9
+         kBgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779524901; x=1780129701;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EhmWhWD9464Uoh3KFvCuWff7V4Zp2a8qUYWAxJoJ59c=;
+        b=srwameWv33XDetTl8yxft0ytl3VHyLkQ/AZAzgLKMm+mNirzILHDRBUyWOTfpRv41I
+         BiyVYATGJahw2z0tIs12zFQhRY1jCBAvaM1ghuMANMTboi7GviG8460YV37ZpAVH40R8
+         hZ2S3TNYh1+pgPrOshIOmOIJaXZ+XncdxMY3Zvo/mGX5bDVAt6ALTLqzVDuSSKCqwJaW
+         n2XupAPk0xooJxoA1qw05iHl26ojxz+h+lYohq1WqII9oWJAPoqZRuWr6CONP4kuCSxT
+         KmIocbHYJmibC6cz6ND0mYT3poOS0x3WMbg3BOqkuUZkLJs2o4ZRkMZTADHifsYUnZbK
+         zWrg==
+X-Forwarded-Encrypted: i=1; AFNElJ/BLA21f53RLLxIwBQNeb24XrU0Foa+R8c86be4J75WnP4WyAhQeOICxIqkwqDPrGmi+o5Ed9t9mBE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbCeHXTc6dZU1JWOdFOAK2T1i0MIBXAslI+Qt2CeIzu3CUZdQr
+	YVeCvP5CXnW/3gOwlZeaz0O6fsXRM7gi7+3wRAct2EaSiBz77fqloGzN
+X-Gm-Gg: Acq92OGOAKT6a8RGDJSbfmkJXX45eVYyf8mK7pxJrjY4Bu6DQvmaxbZ/OtWHyuheSWY
+	JvaDMhQI8l0/ppUpJX1pNWWYBFmkWOJFbJK9fJFAC3d/YPtdmr8fj4PMEMQIHq5CK+gua7qqv1G
+	Ylpu3znUhrWh9/KjcPn9BMmHaq8K8+4JgzLAGJewkCJ+r3VB57yS22KL1tR3+JS6/xP6LOtr3AF
+	qPtyqM6UNOx7zCwL898wDLuPmxr6TsRHgrFYld2NfGtsUWxQncobuM9sqRhsEoLWsw9AiZymWPD
+	N9mW+gYa1HVVFY5cbkQYR2nRTKktSaBLmxwU92o/DJgiBgYD0j2E92xAyWPgzSbQLX/Fg+CCq8T
+	+SJKJFFPZmPjd0Dm/oBE1D+/a7MStSxrhSiO3tE7oi7W4Rjc8TJ5kKdDWqcVv7GBRezt9LckChz
+	lRmcDDkXy8Ox+IBh6/0eixdJMW00bIQm5R
+X-Received: by 2002:ac2:5446:0:b0:5aa:126b:4504 with SMTP id 2adb3069b0e04-5aa323c4508mr1870160e87.23.1779524900655;
+        Sat, 23 May 2026 01:28:20 -0700 (PDT)
+Received: from foxbook (bfk48.neoplus.adsl.tpnet.pl. [83.28.48.48])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa32ceb27dsm995789e87.45.2026.05.23.01.28.19
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 23 May 2026 01:28:20 -0700 (PDT)
+Date: Sat, 23 May 2026 10:28:15 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Desnes Nunes <desnesn@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ gregkh@linuxfoundation.org, mathias.nyman@intel.com, stable@vger.kernel.org
+Subject: Re: [PATCH RFT RFC] usb: xhci: Kill hosts with HCE or HSE on
+ command timeout
+Message-ID: <20260523102815.5c05c70a.michal.pecio@gmail.com>
+In-Reply-To: <CACaw+exPdwXVsJc5Xr=vN1WJt8XR46=X0-8PP=+5dWY5zUrKeQ@mail.gmail.com>
+References: <20260430014817.2006885-1-desnesn@redhat.com>
+	<CACaw+ewwM_5eqyGW5=+THwHsYPs7u3NT096AFQdt6x4E6HcWtA@mail.gmail.com>
+	<20260502114644.76e6b5a3.michal.pecio@gmail.com>
+	<CACaw+eyKh7buHDoDyTOe8O65FP5cSXYdzCcQvwqKw=1DwX26oA@mail.gmail.com>
+	<20260502235517.089ba5bf.michal.pecio@gmail.com>
+	<CACaw+ewOTVh49tnkz+cRr0SD_Z-LmYrMWhFUrsik6YF83mPBtA@mail.gmail.com>
+	<20260503071749.6abda137.michal.pecio@gmail.com>
+	<CACaw+ew8uV5g1G-6qZGtVBEYZ3k+fvFrOq3XMyq-Nuhbq5mdnA@mail.gmail.com>
+	<20260503213111.117db3a1.michal.pecio@gmail.com>
+	<20260504093118.615ff480.michal.pecio@gmail.com>
+	<20260518083339.507e24bd.michal.pecio@gmail.com>
+	<CACaw+ewSWTo72fSk2Q7ZzCM8pNuyrX5ua+qA=SZOQuNNMKSA5Q@mail.gmail.com>
+	<20260522110328.0d3eecd8.michal.pecio@gmail.com>
+	<CACaw+ezqEO_PgjGeYCLq5hA2eKczFXgmZLa8qjPtVJZCGwsdsg@mail.gmail.com>
+	<20260523022944.59799d83.michal.pecio@gmail.com>
+	<CACaw+exPdwXVsJc5Xr=vN1WJt8XR46=X0-8PP=+5dWY5zUrKeQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260522145442.2868601-1-rollkingzzc@gmail.com>
+Content-Type: multipart/mixed; boundary="MP_/8AsFH90U3UhJQJ44ORrK+_/"
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-37961-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37962-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	HAS_ATTACHMENT(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,hovoldconsulting.com:mid]
-X-Rspamd-Queue-Id: 645105BDC79
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 9B0585BDDB0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, May 22, 2026 at 10:54:42PM +0800, Zhang Cen wrote:
-> cypress_read_int_callback() parses the interrupt-in buffer according to
-> the selected Cypress packet format. Format 1 has a two-byte status/count
-> header and format 2 has a one-byte combined status/count header. The
-> usb-serial core sizes the interrupt-in buffer from the endpoint
-> descriptor's wMaxPacketSize, and successful interrupt transfers can
-> complete short when URB_SHORT_NOT_OK is not set.
-> 
-> Check that the completed packet contains the selected header before
-> reading it. Malformed short reports are ignored and the interrupt URB is
-> resubmitted through the existing retry path, preventing out-of-bounds
-> header-byte reads.
-> 
-> KASAN report as below:
-> KASAN slab-out-of-bounds in cypress_read_int_callback+0x240/0x7f0
-> Read of size 1
-> Call trace:
->   cypress_read_int_callback() (drivers/usb/serial/cypress_m8.c:1009)
->   __usb_hcd_giveback_urb()
->   dummy_timer()
-> 
-> Fixes: 3416eaa1f8f8 ("USB: cypress_m8: Packet format is separate from characteristic size")
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Zhang Cen <rollkingzzc@gmail.com>
-> ---
-> v2:
-> Check only urb->actual_length before reading the packet-format header.
-> Reuse the existing i header-length variable instead of adding a new one.
-> Shorten the KASAN trace in the commit message.
+--MP_/8AsFH90U3UhJQJ44ORrK+_/
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 
-Thanks for the v2.
+On Sat, 23 May 2026 00:47:28 -0300, Desnes Nunes wrote:
+> Hello Michal,
+>=20
+> On Fri, May 22, 2026 at 9:29=E2=80=AFPM Michal Pecio <michal.pecio@gmail.=
+com> wrote:
+> > Sorry, I forgot about the most important thing: crash kernel log,
+> > or at least the IOMMU fault message showing the bad address. =20
+>
+> I was indeed intrigued and almost sent it without you asking for it :-)
+>=20
+> The crashkernel's fault address is shown latter on down below, but now
+> I have attached the full kexec dmesg too.
+>=20
+> PS: Note that the debugfs file 'memory' from before contains the
+> addresses of the main kernel, not crashkernel's addresses:
+>     - From main dmesg:
+> [    6.728105] xhci_hcd 0000:80:14.0: Device context base array
+> address =3D 0x000000010a958000 (DMA), 00000000f542e3ba (virt)
+> [    6.737602] xhci_hcd 0000:80:14.0: ERST deq =3D 64'h10a95a000
 
->  drivers/usb/serial/cypress_m8.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
-> index afff1a0f4298b..49c0f3e379bd0 100644
-> --- a/drivers/usb/serial/cypress_m8.c
-> +++ b/drivers/usb/serial/cypress_m8.c
-> @@ -1060,18 +1060,27 @@ static void cypress_read_int_callback(struct urb *urb)
->  	default:
->  	case packet_format_1:
->  		/* This is for the CY7C64013... */
-> -		priv->current_status = data[0] & 0xF8;
-> -		bytes = data[1] + 2;
->  		i = 2;
-> +		if (result < i)
-> +			break;
-> +		priv->current_status = data[0] & 0xF8;
-> +		bytes = data[1] + i;
->  		break;
+Neither debugfs dump corresponds to this dmesg, addresses don't match.
+And it doesn't look like the guard pages patch is working here.=20
 
-I know I asked you to move the initialisation of i (the header length),
-but when applying I ended up changing this so that the sanity checks use
-constants instead, which I found more readable.
+But maybe it doesn't matter. Your "memory" files show a clear pattern
+of consecutive page-sized allocations (example from after.zip):
 
-The end result is here:
+102fb6000 DCBAA
+102fb7000 CR
+102fb8000 ER segmnet 0
+102fb9000 ER segment 1
+102fba000 ERST=20
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=9f9bfc80c67f35a275820da7e83a35dface08281
+We can make a guess that the faulting address is the ERST, which
+definitely should be accessible to the host controller.
 
-Johan
+This simple patch logs ERST allocation and freeing; as far as I see
+nothing else touches that mapping.
+
+If the ERST is somehow freed before starting the HC, that's a bug.
+Otherwise, it seems you were right that you have some IOMMU problem.
+
+Regards,
+Michal
+
+--MP_/8AsFH90U3UhJQJ44ORrK+_/
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=xhci-erst-alloc.patch
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index e76e321e119f..3f1e25bcb7ee 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1815,6 +1815,7 @@ static int xhci_alloc_erst(struct xhci_hcd *xhci,
+ 					   size, &erst->erst_dma_addr, flags);
+ 	if (!erst->entries)
+ 		return -ENOMEM;
++	xhci_info(xhci, "alloc ERST at %pad\n", &erst->erst_dma_addr);
+ 
+ 	erst->num_entries = evt_ring->num_segs;
+ 
+@@ -1867,6 +1868,7 @@ xhci_free_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir)
+ 				  ir->erst.entries,
+ 				  ir->erst.erst_dma_addr);
+ 	ir->erst.entries = NULL;
++	xhci_info(xhci, "free ERST at %pad\n", &ir->erst.erst_dma_addr);
+ 
+ 	/* free interrupter event ring */
+ 	if (ir->event_ring)
+
+--MP_/8AsFH90U3UhJQJ44ORrK+_/--
 
