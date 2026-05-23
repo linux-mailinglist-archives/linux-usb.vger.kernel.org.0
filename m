@@ -1,593 +1,104 @@
-Return-Path: <linux-usb+bounces-37971-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37972-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CMHQOIlpEWrKlgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37971-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:47:05 +0200
+	id 0DTREPmNEWrHnQYAu9opvQ
+	(envelope-from <linux-usb+bounces-37972-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 13:22:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 865305BDFE0
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB15C5BEB36
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 13:22:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 793BC3039C95
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 08:44:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 687493018765
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 11:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349FD375AB8;
-	Sat, 23 May 2026 08:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D9A4388E55;
+	Sat, 23 May 2026 11:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lIjwluaq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fCurXfNj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D950D372B3C
-	for <linux-usb@vger.kernel.org>; Sat, 23 May 2026 08:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30BC388E65;
+	Sat, 23 May 2026 11:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779525877; cv=none; b=rBgF9lkOiU95vsR+3vHoHKhuPXA4QOx1LCzVki1NUiUiLAvUCDHRFq30qWJ2oXkCRPeChpgsYKAvE23ip3PVbCJeF73u7LxOVL1HkbEsBdDNdCEkm5UuswZvXR3oo9E49krk+zNXoq/uPoe47ZIrGLrjlBVF0gAkl6hC8IrzasA=
+	t=1779535338; cv=none; b=EoZH6gsqLZuV+DuVoL6FDPkgUwvqxBJUNRoPZnXG30fame0dVhFj4H6eWkzDO/bCQV1oZvSsLwYDng/naVLqfZ19HOOTsUsGEahoLMiV40PT8Xrk+w6nrjjMXw69zONJ/MW0EDcYwnxLrt7GwrBVjnkRbNpGzYmWd/6LHZAYm4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779525877; c=relaxed/simple;
-	bh=9oprkoi7DYWuhOMzKA+2R6TB07z0WZogt1+14SSTfkk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G17CHMObsDMl7yAk1gdKEMNktfW889ncneZs65MG43VmFoWAZzrzDUkwIBH6AowHY/3gJo26ngNOGvL7jkiedZJgU8IkJmTUGRkAkp7fmmxrBf4r6yOg1s8zEcj5hax2JqQngB2urSs64jG8reGjBiHRyu7dxnbkgesraLUQXGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lIjwluaq; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-bd85ebb368fso1193803466b.1
-        for <linux-usb@vger.kernel.org>; Sat, 23 May 2026 01:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779525869; x=1780130669; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w4rV8mWsiC13Dx8VjcnY9lCfoJOx46rnsUI+A7HjLZs=;
-        b=lIjwluaqBJDB/+VydAS4YfCvv30WMZgGPRPKmSCa+G0hQdkEb2KMZUwQ+94kSfhsJS
-         GegRh2VHd5nLk1FcWaiUsUv7qdx0FkzRU2jlSSi7jYPNCN9diDoxnWLJ5nyNul2E12Q1
-         jNLR8n+HxIGGgsm932h+yLb6paRvrI58b6gEBXGrZ7NblPKV3HOYw5EYXRnj+fFu75vd
-         ckY2hEjJraIIO58+03bgTDgZC+0oWFnCl6Hde/Hw3HugRQTJyaki8WyAIU7gBR7W+MlI
-         QOHptVd74+xXeoE55vpQ6XYbWW5T5uy59xVUbaOVQDXkSWPAnTJb8hQheXrQG8zAKbrW
-         ff2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779525869; x=1780130669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=w4rV8mWsiC13Dx8VjcnY9lCfoJOx46rnsUI+A7HjLZs=;
-        b=lv2UmrhrSMPzVtTOR3YvxngazJukSRLf/Ta+le6AHzQdCyk6yq8vMh6gCWjVJd/UQn
-         2QECYnWQp8zw5DjWa0hm6Nsi/36euhyhYnNSNHLknXNz4p/hqN8YWMNtLgm3rw0wybHv
-         IJGy8iq1U7OtjtMQJ/paMuY3MnVMguxz6kpfu/HY4Q953NknINHIwBDCYeEsZDWeRKlf
-         UIvpEEMX8/e2EuTgThYwRfMVNk3al4biUFm/vgkVmsaY2EPzrqvOp3gXUeCNTge/ZfG8
-         OFFxI8yoZuojhDJ8aDuJSllXCzGnd64u9WOfnNSTa7UI1BwqJBIbBMBP8S/jAXYUsZ95
-         yQTg==
-X-Forwarded-Encrypted: i=1; AFNElJ+dxPHNcuydAOwcvMZtnZF59gzuIGwfXXzEKcU4uI3EmMxd5AMaZA8Rf8vgSj4PDEDSULgUQRlp0+M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycyLQvz0DBcwsXN4/NngLfRpsxKR1iB/+c/UH3jE4Hb84Wc/Hb
-	9GZ0XKI2B8BbzjEPceXRZN6F/Va+Px9j5tv30ttBjkFpxfLJU0bMpJDY
-X-Gm-Gg: Acq92OGrIzKL3XyYtKtDUw64kZ1ciTAJjGQWuOj9WwxfvIdu2/+RUepDVr0Ank9jNBo
-	AvqgfZSzSNig97fMDHi/UVhkRTC83+8OOUsTvvonB7iEl40lHa7+MDyf8JaHkfr8YzoRALoUqTK
-	kRVpwn65m1K4lZln0Q7YuzSyno8gH0x6M9oBk/aSwGAj1gqtkIvFekB+/pkWM7hEZw+0suy+GLw
-	4FTVC7zR8RoXdxJvrMuxKIrS27lf00/JgoJaVMTl1iBelr0sY7Nr/aUrSft1edIbX8uEgJcQZDu
-	j1xw6mcG9MM3tD05Xp1S8oOojEXKIMeNmV3Bitn5nw/i9gD1XK7AELSE0wF46NNgP2eaK7xsiYk
-	yYadTItGkZVjTSMKv2w5qO0xeDj+rDvfgoxjLGyDnXQyJ97oqJFnafljmtYSazLodUwd07onG3z
-	5j/lEeh5riWxai
-X-Received: by 2002:a17:907:1c28:b0:bd6:6f5e:ea6f with SMTP id a640c23a62f3a-bdd237f5752mr401948666b.19.1779525869132;
-        Sat, 23 May 2026 01:44:29 -0700 (PDT)
-Received: from xeon ([188.163.112.61])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bddc62d70a5sm154042966b.48.2026.05.23.01.44.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 01:44:27 -0700 (PDT)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: netdev@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v2 2/2] net: usb: Add Infineon XMM6260 Baseband modem support
-Date: Sat, 23 May 2026 11:44:07 +0300
-Message-ID: <20260523084408.50346-3-clamor95@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260523084408.50346-1-clamor95@gmail.com>
-References: <20260523084408.50346-1-clamor95@gmail.com>
+	s=arc-20240116; t=1779535338; c=relaxed/simple;
+	bh=3z187oJdspEvfdjBQDnCoD0zYJjSgMVe8daGEQHiO0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qeI1RNPB93oEfIzIamBwSQgNPwqQ0Xz7mMwCeI1dAYdPqZiTrHfzYxJpKzAyNLN2vOPQuRNWkVlOjEmeZqJ54OS8m2riPvWOWHhOki44hU+nrI2k18lMbjVGVMB9N5wvo2kOLKZjPD9ORK16H9GGVDVlv6rRI2QUFiBLPMMthkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fCurXfNj; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D381F000E9;
+	Sat, 23 May 2026 11:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1779535336;
+	bh=Fo4xH9DlFocBUzd0NxxvNQMTDYgzgVIXeU4G1m275jc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=fCurXfNjT5bPTrlbm+jzAji705gTGEDr/x0IqFm/Y6g8PUOPwx0Yg+RdaMJOqHR1P
+	 lhS0dm7KjgX6jy1HRam0tMlQelNhm1eSva5nBDF16q2b+I3WleowEBjsE1S6NRD0+/
+	 74rKlBjXl9I7NFW+U0FFjAcvRQtf0oaBmE05wu90=
+Date: Sat, 23 May 2026 13:22:18 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB serial fixes for 7.1-rc5
+Message-ID: <2026052311-lavish-evergreen-61e8@gregkh>
+References: <ahFmuYsT3E8GcG5h@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ahFmuYsT3E8GcG5h@hovoldconsulting.com>
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-37971-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FREEMAIL_TO(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,gmail.com];
+	TAGGED_FROM(0.00)[bounces-37972-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,netdev,dt];
-	NEURAL_HAM(-0.00)[-0.987];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	NEURAL_HAM(-0.00)[-0.995];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,modem_work.work:url]
-X-Rspamd-Queue-Id: 865305BDFE0
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: BB15C5BEB36
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The Infineon/Intel XMM6260 is a 3G-focused, slim modem platform designed
-for smartphones, data cards, and Machine-to-Machine (M2M) applications.
-The modem is usually connected via the application processor's USB line
-in HSIC mode; however, to work properly, the modem must control this line
+On Sat, May 23, 2026 at 10:35:05AM +0200, Johan Hovold wrote:
+> The following changes since commit 5d6919055dec134de3c40167a490f33c74c12581:
+> 
+>   Linux 7.1-rc3 (2026-05-10 14:08:09 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-7.1-rc5
 
-Dmesg with modem appearing on LG Optimus Vu (P895):
+Pulled and pushed out, thanks.
 
-[    9.427014] ci_hdrc ci_hdrc.1: EHCI Host Controller
-[    9.431488] ci_hdrc ci_hdrc.1: new USB bus registered, assigned bus number 1
-[    9.457197] ci_hdrc ci_hdrc.1: USB 2.0 started, EHCI 1.00
-[    9.460370] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.16
-[    9.468470] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-[    9.475597] usb usb1: Product: EHCI Host Controller
-[    9.480508] usb usb1: Manufacturer: Linux 6.16.0+ ehci_hcd
-[    9.485913] usb usb1: SerialNumber: ci_hdrc.1
-[    9.490862] hub 1-0:1.0: USB hub found
-[    9.494005] hub 1-0:1.0: 1 port detected
-[    9.657191] usb 1-1: new high-speed USB device number 2 using ci_hdrc
-[    9.844726] usb 1-1: New USB device found, idVendor=1519, idProduct=0020, bcdDevice=12.74
-[    9.850530] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[    9.857594] usb 1-1: Product: HSIC Device
-[    9.861606] usb 1-1: Manufacturer: Comneon
-[    9.865627] usb 1-1: SerialNumber: 0123456789
-[    9.908739] cdc_acm 1-1:1.0: ttyACM0: USB ACM device
-
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/net/usb/Kconfig            |  15 ++
- drivers/net/usb/Makefile           |   1 +
- drivers/net/usb/baseband-xmm6260.c | 378 +++++++++++++++++++++++++++++
- 3 files changed, 394 insertions(+)
- create mode 100644 drivers/net/usb/baseband-xmm6260.c
-
-diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-index 52a5c0922c79..d54d8db752df 100644
---- a/drivers/net/usb/Kconfig
-+++ b/drivers/net/usb/Kconfig
-@@ -642,4 +642,19 @@ config USB_RTL8153_ECM
- 	  CONFIG_USB_RTL8152 is not set, or the RTL8153 device is not
- 	  supported by r8152 driver.
- 
-+config USB_NET_XMM6260
-+	tristate "Infineon XMM626X Baseband HSPA/HSUPA modem"
-+	depends on USB_CHIPIDEA && (RFKILL || RFKILL=n)
-+	help
-+	  Select this if you want to use an Infineon XMM626X modem, found in
-+	  devices such as the LG Optimus 4X P880, LG Optimus Vu P895, Samsung
-+	  Galaxy S II (GT-I9100), and Galaxy Nexus (GT-I9250). This driver
-+	  handles the modem configuration and provides a stable way to expose
-+	  the modem's USB interface. To establish a connection, you will first
-+	  need a userspace program to send the correct commands to the modem
-+	  through its CDC ACM port, as well as a DHCP client.
-+
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called baseband-xmm6260.
-+
- endif # USB_NET_DRIVERS
-diff --git a/drivers/net/usb/Makefile b/drivers/net/usb/Makefile
-index 4964f7b326fb..ffa532c7d7d6 100644
---- a/drivers/net/usb/Makefile
-+++ b/drivers/net/usb/Makefile
-@@ -42,3 +42,4 @@ obj-$(CONFIG_USB_NET_CDC_MBIM)	+= cdc_mbim.o
- obj-$(CONFIG_USB_NET_CH9200)	+= ch9200.o
- obj-$(CONFIG_USB_NET_AQC111)	+= aqc111.o
- obj-$(CONFIG_USB_RTL8153_ECM)	+= r8153_ecm.o
-+obj-$(CONFIG_USB_NET_XMM6260)	+= baseband-xmm6260.o
-diff --git a/drivers/net/usb/baseband-xmm6260.c b/drivers/net/usb/baseband-xmm6260.c
-new file mode 100644
-index 000000000000..557ec79f5e2a
---- /dev/null
-+++ b/drivers/net/usb/baseband-xmm6260.c
-@@ -0,0 +1,378 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2011 NVIDIA Corporation
-+ * Copyright (C) 2023 Svyatoslav Ryhel <clamor95@gmail.com>
-+ */
-+
-+#include <linux/array_size.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/export.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/notifier.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/pwrseq/consumer.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/rfkill.h>
-+#include <linux/usb.h>
-+
-+#define BASEBAND_XMM_INIT_DELAY		5000
-+
-+#define BASEBAND_PRODUCT_ID_XMM6260	0x0020
-+#define BASEBAND_VENDOR_ID_COMNEON	0x1519
-+
-+/*
-+ * Starting from ver 1145 modem starts in the IPC_AP_WAKE_IRQ_READY state.
-+ * AP wake interrupt keeps low util CP starts to initiate its HSIC hw. AP wake
-+ * interrupt goes up during CP HSIC init (BASEBAND_XMM_IPC_AP_WAKE_INIT1 state)
-+ * at this point Host USB bus must be configured in order for modem to set
-+ * properly. Then interrupt goes down when CP HSIC is ready
-+ * (BASEBAND_XMM_IPC_AP_WAKE_INIT2 state) and at this point XMM6260 USB device
-+ * should appear and be accessible for further work. In case it does not, the
-+ * cycle must repeat.
-+ */
-+
-+/* bits [0:2] */
-+enum baseband_xmm_ipc_ap_wake_state {
-+	BASEBAND_XMM_IPC_AP_WAKE_IRQ_READY,
-+	BASEBAND_XMM_IPC_AP_WAKE_INIT1,
-+	BASEBAND_XMM_IPC_AP_WAKE_INIT2,
-+	BASEBAND_XMM_IPC_AP_WAKE_L,
-+	BASEBAND_XMM_IPC_AP_WAKE_H,
-+	BASEBAND_XMM_IPC_AP_WAKE_UNINIT,
-+	BASEBAND_XMM_IPC_AP_WAKE_MASK = 7,
-+};
-+
-+#define BASEBAND_XMM_IPC_AP_WAKE_MAX	3
-+
-+#define BASEBAND_XMM_STATE_POWERED	3 /* Tracks regulator state */
-+#define BASEBAND_XMM_STATE_PROTECTED	4 /* Prevents rfkill from access */
-+#define BASEBAND_XMM_STATE_PRESENT	5 /* Tracks USB device presence */
-+#define BASEBAND_XMM_STATE_POWEROFF	6 /* Prevents poweroff recursive call */
-+#define BASEBAND_XMM_STATE_MAX		8
-+
-+struct baseband_xmm_data {
-+	struct device *dev;
-+	struct rfkill *rfkill_dev;
-+	struct pwrseq_desc *pwrseq;
-+
-+	DECLARE_BITMAP(state, BASEBAND_XMM_STATE_MAX);
-+	int irq;
-+
-+	struct gpio_desc *reset_gpio;
-+	struct gpio_desc *enable_gpio;
-+
-+	struct gpio_desc *ipc_cp_gpio;
-+	struct gpio_desc *ipc_ap_gpio;
-+
-+	struct regulator *vbat_supply;
-+
-+	struct delayed_work modem_work;
-+	struct notifier_block nb;
-+};
-+
-+static int get_ipc_ap_wake(struct baseband_xmm_data *priv)
-+{
-+	int i, ret = 0;
-+
-+	for (i = 0; i < BASEBAND_XMM_IPC_AP_WAKE_MAX; i++)
-+		ret |= (test_bit(i, priv->state) << i);
-+
-+	return ret;
-+}
-+
-+static void set_ipc_ap_wake(struct baseband_xmm_data *priv,
-+			    enum baseband_xmm_ipc_ap_wake_state state)
-+{
-+	for (int i = 0; i < BASEBAND_XMM_IPC_AP_WAKE_MAX; i++)
-+		if (state & BIT(i))
-+			set_bit(i, priv->state);
-+		else
-+			clear_bit(i, priv->state);
-+}
-+
-+static void baseband_xmm_reset(struct baseband_xmm_data *priv)
-+{
-+	int ret;
-+
-+	set_bit(BASEBAND_XMM_STATE_PROTECTED, priv->state);
-+
-+	if (!test_bit(BASEBAND_XMM_STATE_POWERED, priv->state)) {
-+		ret = regulator_enable(priv->vbat_supply);
-+		if (ret)
-+			dev_err(priv->dev,
-+				"failed to enable vbat power supply\n");
-+
-+		set_bit(BASEBAND_XMM_STATE_POWERED, priv->state);
-+	}
-+
-+	gpiod_set_value_cansleep(priv->enable_gpio, 0);
-+	msleep(50);
-+
-+	gpiod_set_value_cansleep(priv->reset_gpio, 1);
-+	msleep(200);
-+	gpiod_set_value_cansleep(priv->reset_gpio, 0);
-+
-+	msleep(50);
-+
-+	/* falling edge trigger to CP */
-+	gpiod_set_value_cansleep(priv->enable_gpio, 1);
-+	usleep_range(50, 100);
-+	gpiod_set_value_cansleep(priv->enable_gpio, 0);
-+	msleep(20);
-+}
-+
-+static void baseband_xmm_poweroff(struct baseband_xmm_data *priv)
-+{
-+	/*
-+	 * The test_bit check prevents poweroff from being recursively
-+	 * called during USB device deregistration. USB device
-+	 * deregistration can be triggered by the driver by calling this
-+	 * function or by some external event. The first case will cause
-+	 * a recursive call by the notifier if not handled, while the
-+	 * second case requires this call to handle the USB controller
-+	 * properly.
-+	 */
-+	if (test_bit(BASEBAND_XMM_STATE_POWEROFF, priv->state))
-+		return;
-+
-+	set_bit(BASEBAND_XMM_STATE_PROTECTED, priv->state);
-+	set_bit(BASEBAND_XMM_STATE_POWEROFF, priv->state);
-+
-+	pwrseq_power_off(priv->pwrseq);
-+	gpiod_set_value_cansleep(priv->reset_gpio, 1);
-+
-+	if (test_bit(BASEBAND_XMM_STATE_POWERED, priv->state)) {
-+		regulator_disable(priv->vbat_supply);
-+		clear_bit(BASEBAND_XMM_STATE_POWERED, priv->state);
-+	}
-+	set_ipc_ap_wake(priv, BASEBAND_XMM_IPC_AP_WAKE_IRQ_READY);
-+
-+	clear_bit(BASEBAND_XMM_STATE_PROTECTED, priv->state);
-+	clear_bit(BASEBAND_XMM_STATE_PRESENT, priv->state);
-+	clear_bit(BASEBAND_XMM_STATE_POWEROFF, priv->state);
-+}
-+
-+static int baseband_xmm_usb_notifier_call(struct notifier_block *nb,
-+					  unsigned long action, void *data)
-+{
-+	struct baseband_xmm_data *priv =
-+		container_of(nb, struct baseband_xmm_data, nb);
-+	struct usb_device *udev;
-+	u16 product, vendor;
-+
-+	if (action == USB_BUS_ADD || action == USB_BUS_REMOVE)
-+		return NOTIFY_OK;
-+
-+	udev = data;
-+	product = le16_to_cpu(udev->descriptor.idProduct);
-+	vendor = le16_to_cpu(udev->descriptor.idVendor);
-+
-+	switch (action) {
-+	case USB_DEVICE_ADD:
-+		/* Infineon XMM6260 ID 1519:0020 */
-+		if (vendor == BASEBAND_VENDOR_ID_COMNEON &&
-+		    product == BASEBAND_PRODUCT_ID_XMM6260) {
-+			cancel_delayed_work_sync(&priv->modem_work);
-+			clear_bit(BASEBAND_XMM_STATE_PROTECTED, priv->state);
-+			set_bit(BASEBAND_XMM_STATE_PRESENT, priv->state);
-+		}
-+		break;
-+
-+	case USB_DEVICE_REMOVE:
-+		/* Infineon XMM6260 ID 1519:0020 */
-+		if (vendor == BASEBAND_VENDOR_ID_COMNEON &&
-+		    product == BASEBAND_PRODUCT_ID_XMM6260)
-+			baseband_xmm_poweroff(priv);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static int baseband_xmm_set_block(void *data, bool blocked)
-+{
-+	struct baseband_xmm_data *priv = data;
-+
-+	if (test_bit(BASEBAND_XMM_STATE_PROTECTED, priv->state))
-+		return -EBUSY;
-+
-+	if (blocked && test_bit(BASEBAND_XMM_STATE_PRESENT, priv->state))
-+		baseband_xmm_poweroff(priv);
-+	else if (!blocked && !test_bit(BASEBAND_XMM_STATE_PRESENT, priv->state))
-+		baseband_xmm_reset(priv);
-+
-+	return 0;
-+}
-+
-+static const struct rfkill_ops baseband_xmm_rfkill_ops = {
-+	.set_block = baseband_xmm_set_block,
-+};
-+
-+static void baseband_xmm_work(struct work_struct *work)
-+{
-+	struct baseband_xmm_data *priv =
-+		container_of(work, struct baseband_xmm_data, modem_work.work);
-+
-+	baseband_xmm_poweroff(priv);
-+};
-+
-+static irqreturn_t baseband_hostwake_interrupt(int irq, void *dev_id)
-+{
-+	struct baseband_xmm_data *priv = dev_id;
-+	int state = gpiod_get_value(priv->ipc_ap_gpio);
-+
-+	switch (get_ipc_ap_wake(priv)) {
-+	case BASEBAND_XMM_IPC_AP_WAKE_IRQ_READY:
-+		if (!state) {
-+			set_ipc_ap_wake(priv, BASEBAND_XMM_IPC_AP_WAKE_INIT1);
-+			pwrseq_power_on(priv->pwrseq);
-+		}
-+		break;
-+
-+	case BASEBAND_XMM_IPC_AP_WAKE_INIT1:
-+		if (state) {
-+			set_ipc_ap_wake(priv, BASEBAND_XMM_IPC_AP_WAKE_INIT2);
-+			schedule_delayed_work(&priv->modem_work,
-+					      msecs_to_jiffies(BASEBAND_XMM_INIT_DELAY));
-+		}
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int baseband_xmm_probe(struct platform_device *pdev)
-+{
-+	struct baseband_xmm_data *priv;
-+	struct device *dev = &pdev->dev;
-+	unsigned long irqflags;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = dev;
-+	platform_set_drvdata(pdev, priv);
-+
-+	priv->vbat_supply = devm_regulator_get(dev, "vbat");
-+	if (IS_ERR(priv->vbat_supply))
-+		return dev_err_probe(dev, PTR_ERR(priv->vbat_supply),
-+				     "failed to get vbat regulator\n");
-+
-+	/* Own modem gpios */
-+	priv->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-+						   GPIOD_OUT_LOW);
-+	if (IS_ERR(priv->reset_gpio))
-+		return dev_err_probe(dev, PTR_ERR(priv->reset_gpio),
-+				     "failed to get reset GPIO\n");
-+
-+	priv->enable_gpio = devm_gpiod_get_optional(dev, "enable",
-+						    GPIOD_OUT_LOW);
-+	if (IS_ERR(priv->enable_gpio))
-+		return dev_err_probe(dev, PTR_ERR(priv->enable_gpio),
-+				     "failed to get enable GPIO\n");
-+
-+	/* CP - AP connections */
-+	priv->ipc_cp_gpio = devm_gpiod_get_optional(dev, "cp-wake",
-+						    GPIOD_OUT_LOW);
-+	if (IS_ERR(priv->ipc_cp_gpio))
-+		return dev_err_probe(dev, PTR_ERR(priv->ipc_cp_gpio),
-+				     "failed to get CP wake GPIO\n");
-+
-+	priv->ipc_ap_gpio = devm_gpiod_get_optional(dev, "ap-wake", GPIOD_IN);
-+	if (IS_ERR(priv->ipc_ap_gpio))
-+		return dev_err_probe(dev, PTR_ERR(priv->ipc_ap_gpio),
-+				     "failed to get AP wake GPIO\n");
-+
-+	/* Modem power sequence */
-+	priv->pwrseq = devm_pwrseq_get(dev, "modem-power");
-+	if (IS_ERR(priv->pwrseq))
-+		return dev_err_probe(dev, PTR_ERR(priv->pwrseq),
-+				     "failed to get modem pwrseq");
-+
-+	bitmap_zero(priv->state, BASEBAND_XMM_STATE_MAX);
-+	INIT_DELAYED_WORK(&priv->modem_work, baseband_xmm_work);
-+
-+	priv->irq = platform_get_irq(pdev, 0);
-+	if (priv->irq < 0)
-+		return dev_err_probe(dev, priv->irq, "failed to get IRQ\n");
-+
-+	/*
-+	 * Systems using device tree should set up interrupt via DT,
-+	 * the rest will use the default edge both interrupt.
-+	 */
-+	irqflags = dev->of_node ? 0 : IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING;
-+
-+	ret = devm_request_threaded_irq(dev, priv->irq, NULL,
-+					&baseband_hostwake_interrupt,
-+					IRQF_ONESHOT | irqflags,
-+					"modem-hostwake", priv);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "failed to register IRQ %d\n", priv->irq);
-+
-+	priv->rfkill_dev = rfkill_alloc("xmm-modem", dev, RFKILL_TYPE_WWAN,
-+					&baseband_xmm_rfkill_ops, priv);
-+	if (!priv->rfkill_dev)
-+		return -ENOMEM;
-+
-+	ret = rfkill_register(priv->rfkill_dev);
-+	if (ret) {
-+		rfkill_destroy(priv->rfkill_dev);
-+		return dev_err_probe(dev, ret,
-+				     "failed to register WWAN rfkill\n");
-+	}
-+
-+	priv->nb.notifier_call = baseband_xmm_usb_notifier_call;
-+	usb_register_notify(&priv->nb);
-+
-+	return 0;
-+}
-+
-+static void baseband_xmm_remove(struct platform_device *pdev)
-+{
-+	struct baseband_xmm_data *priv = platform_get_drvdata(pdev);
-+
-+	rfkill_unregister(priv->rfkill_dev);
-+	rfkill_destroy(priv->rfkill_dev);
-+
-+	disable_irq(priv->irq);
-+	cancel_delayed_work_sync(&priv->modem_work);
-+
-+	usb_unregister_notify(&priv->nb);
-+	baseband_xmm_poweroff(priv);
-+}
-+
-+static const struct of_device_id baseband_xmm_match[] = {
-+	{ .compatible = "infineon,xmm6260" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, baseband_xmm_match);
-+
-+static struct platform_driver baseband_xmm_driver = {
-+	.driver = {
-+		.name = "baseband-xmm6260",
-+		.of_match_table = baseband_xmm_match,
-+	},
-+	.probe = baseband_xmm_probe,
-+	.remove = baseband_xmm_remove,
-+};
-+module_platform_driver(baseband_xmm_driver);
-+
-+MODULE_AUTHOR("Svyatolsav Ryhel <clamor95@gmail.com>");
-+MODULE_DESCRIPTION("Baseband Infineon XMM6260 driver");
-+MODULE_LICENSE("GPL");
--- 
-2.51.0
-
+greg k-h
 
