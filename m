@@ -1,151 +1,208 @@
-Return-Path: <linux-usb+bounces-37968-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37969-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kNcgNsRmEWo2lgYAu9opvQ
-	(envelope-from <linux-usb+bounces-37968-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:35:16 +0200
+	id 4KqRFR5pEWrKlgYAu9opvQ
+	(envelope-from <linux-usb+bounces-37969-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:45:18 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56A305BDF2E
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:35:16 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2A8C5BDFAA
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 10:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 467C3301A523
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 08:35:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C93E1302450A
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 08:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B87346AC4;
-	Sat, 23 May 2026 08:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E133769F1;
+	Sat, 23 May 2026 08:44:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0dW7p45"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qFrKywnq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3463723FC41;
-	Sat, 23 May 2026 08:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E210373BF3
+	for <linux-usb@vger.kernel.org>; Sat, 23 May 2026 08:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779525309; cv=none; b=BAHqFlmtIhjmFUCqMxZfAjjxs9KszV5bhP6lgKhMRwid4Zd+PR0ThcVJ9f/r47DMzv4MKx56uF9ucwUNUQll3zMcgYDrsu/PbC5Te9IGS3aJcwl6DIbnIybklfPz3A+A40cM5/b8c9XSMdL4TZ0mYa2fOL3/0vTC4Ahz+Q3K0eY=
+	t=1779525868; cv=none; b=QTAotY+gYlrpl5Vplh1Ajqsojs/t5JgW38Ly0eXOeQ2N+YxTeAbL89enJa2VORrknVPnfC3JwzHSMGKAJKe0mHwnhivJTsnSEeXrUTZ+nfsYpKueRJr6NqqQ12tVeOUjKECbnyHWsze53i4a+l1Bg0zxto9JhA8UQ8ixzOySOlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779525309; c=relaxed/simple;
-	bh=VZmL4UpAzNuZvD9Q7drkb5i37CcPCBJdUMf7f+tvhrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F/P0W0laSAJk8Ur3CgiZSVr3CRmOaW+9LVqRKfnhcrTxjslcY6Im5Tbqs3uEvjwjOrDPINKGEyImdTKGPRINW2LtPfv8lqbBW3TDfKtGJdCvHwgdZrRw8J4oTV9uhGpMg+e9KDFOlozFzZuBNGfXvxadu/4jzeVPej7EdBGRX00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0dW7p45; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19321F000E9;
-	Sat, 23 May 2026 08:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779525307;
-	bh=j+krLquwL7mqJ1I7jEP1/X++eJehbYdoriFkzs2ttNA=;
-	h=Date:From:To:Cc:Subject;
-	b=V0dW7p45uPGbA/6SmZHH3peKWeopC5b4riFSdQ4p62BNN9Hx6wiXQaaT9y3aXnNWm
-	 SP+dvl10tjMyQrHHarpdA3LUr64qRE094D4p7v6dcYRiYfiplw1gDKIia++yTvvR1R
-	 6dnyakaG5dXRhbXuZxZBpvYwP33SebQYO5kprfQFVFife7YEPO0SaR0Nc0UhuaOfz5
-	 1kaXtIGH1WgJrhT186t0jzFKSr7wSm5dz7g9WTp5ndyegYRuLOgIe6f+D/8mlVTG82
-	 KK/W6Bka3/xghXEQUzzW4PE94jK7x3z5GWICUUZv0X6bIaSzPqGf/57Sw7ieBrsxl/
-	 nuDFZvIJ781pA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wQhp3-000000049V9-1JcX;
-	Sat, 23 May 2026 10:35:05 +0200
-Date: Sat, 23 May 2026 10:35:05 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB serial fixes for 7.1-rc5
-Message-ID: <ahFmuYsT3E8GcG5h@hovoldconsulting.com>
+	s=arc-20240116; t=1779525868; c=relaxed/simple;
+	bh=LOuv6LBODqsvsKQfWfPMlLqdey26ht+cHZM6a96wiWU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CERByoLKqnCklSqAVWV6+daMXGPs9d+Q3km7cQkHZJh8wqW422/y/B8975a9EEfpkWp5hhgj1I92LdOTheOl/iglz0UFnV1F0TrcHWN1mtnqN+F7Qn0bqxups9b5YMeefSk1+ZoQC1np0YXT264vVZPwD+njGSxh6axlbRASbdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qFrKywnq; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-bd4f7f05e90so1452622466b.2
+        for <linux-usb@vger.kernel.org>; Sat, 23 May 2026 01:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779525865; x=1780130665; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AjESINGZXo1FbNpnq3OQ+lE96hLtibEqkNb3ouXLoxs=;
+        b=qFrKywnqpoA6uaR+iYUoP7HzrifrDFpwWipmEtWG8Y2Vbwv+2ZLOYRCQXc36tBKPsz
+         L6kk1xXEgo6yrif3r0m4Y2GWzjClniGOPtduoTpDVOnpskfb28HlOjYy8gQrgJcap55J
+         SXcOZaxEPO+EByuOCGP7u8LAgZnj9MHf8HOYpeGG+Dwtav1jWgStduumtQnFf0i+sTuJ
+         qFW85cGA7KcyxmcrPdsf/auV9vxgn6d4O5VrsTYARCT4AQ1+lESb2Qb5LAE80YNxEYL0
+         kwTslOWJK1RVZzmtc81HHawpflNHLUwr3Lq4MtKVXxrbVqwEI+rnHkvyA0a+MbvDDgko
+         85Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779525865; x=1780130665;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AjESINGZXo1FbNpnq3OQ+lE96hLtibEqkNb3ouXLoxs=;
+        b=ONn2Fjzd2CWTBEx4odQ0pt6uE/CWYjQib3dTXlh4W8sJib9348cH5gfPmMhI/AHvPP
+         c9CC280RR6Adz7W2gb2bGC6TPKBIPZsJjtEWD4mGufebIPUHUS/EaPxbXxoKNc448DJE
+         iJL+lNyziCtgDvVxcwnM/wJUiid+qPkKqIllr45FLcpDvwq3stWuNPibB1v6rYIGyb84
+         LTABQ9sLYRA3wrdGELwnzz9XCJt8L3QEdzk3LV9dnZ9OWyALWHmDggkFkm4nJ2eaqTUy
+         cREvbZ1zdn7jEA9EwNs1nW+cwSFbs41yOY2e9B9ZaLVe1Fg32MEqytTNHsrWSX3DqfSz
+         x3sA==
+X-Forwarded-Encrypted: i=1; AFNElJ9b3V7GH3XEafG6Ny12SL7qZFZxME5QabugH7MDBGE8Sw6FntJ1dNDaFgUlt4lU89NlI6hCl7VWLAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzP3mm0db/D2n2s4INkcp5ntaCujtzbd7BkwaJFLDj+f/RRgsJB
+	94N4k4dsQCcmCAUi+bAJeP+LzvYyo5h26Rcme45eg469mjGxrSdzdHIR
+X-Gm-Gg: Acq92OEVMP1AXohES1aLlUWiVDQULZlxNczbTkugCBUBhLL43F/ECrG7KPQv6vesSbJ
+	0L92nHOGakkMy7IAU50du2yIlwKXFPeM6pZifaD6+Sh6jXpuXUkj1JBK9dLner7PMK/1ux6qZy3
+	P6eMPinftnfXsxzBuGZOhewAu5c+pBjhEkUCrRIgXuo9TxNPT7yETp7U0SO8h4kaSHtXGBBma3U
+	5tv80dsinrhG+mlKU2KmVFJTVcBzFcUNGZ+nbvAWr7DGuoU2o8O7+r6Lz2/JCcharnVc/HMXmIs
+	KSCAleeyN2QLJ0Y2drgDcaVM/MTGOxKt5+NwB7VvBdLUxJNXskF/gbcF2IZR8JfpcyQhIP94AaZ
+	JBq6x3JE9Wn6kTl957+plTJVVHpzhPXTAugGFmTzY9DkAcHDlCJylnaRJ/WiJj4vbOm4OhwK+vA
+	JwAHbohaV8/sCU
+X-Received: by 2002:a17:907:75dc:b0:bd5:27b7:adaf with SMTP id a640c23a62f3a-bdd272cf2efmr313030066b.33.1779525864367;
+        Sat, 23 May 2026 01:44:24 -0700 (PDT)
+Received: from xeon ([188.163.112.61])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bddc62d70a5sm154042966b.48.2026.05.23.01.44.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 May 2026 01:44:22 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/2] Add support for Infineon/Intel XMM6260 modem
+Date: Sat, 23 May 2026 11:44:05 +0300
+Message-ID: <20260523084408.50346-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	TAGGED_FROM(0.00)[bounces-37968-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-37969-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_TO(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,dt];
+	NEURAL_HAM(-0.00)[-0.990];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 56A305BDF2E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: B2A8C5BDFAA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The following changes since commit 5d6919055dec134de3c40167a490f33c74c12581:
+The Infineon/Intel XMM6260 is a 3G-focused, slim modem platform designed
+for smartphones, data cards, and Machine-to-Machine (M2M) applications.
 
-  Linux 7.1-rc3 (2026-05-10 14:08:09 -0700)
+The modem is typically connected via the application processor's USB line
+in HSIC mode. To function correctly, the modem must control this line, as
+it requires precise timing to initiate or de-initialize the USB connection.
+This control is necessary to successfully enumerate the next stage of the
+USB device loader (moving from firmware loading to the actual device
+interface for example).
 
-are available in the Git repository at:
+Patchset adds support for the generic portion of the Infineon XMM6260
+baseband modem, which was used in many Tegra-, OMAP-, and Exynos-based
+devices circa 2012. This driver provides generic power sequences,
+manages initial communication with the application processor, handles the
+SoC-specific modem powersequence, and verifies that the modem USB device
+appears correctly.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-7.1-rc5
+While current support is relatively basic, this configuration already
+allows the modem device to appear in the dmesg of my device
+(LG Optimus Vu (P895)):
 
-for you to fetch changes up to 9f9bfc80c67f35a275820da7e83a35dface08281:
+[    9.427014] ci_hdrc ci_hdrc.1: EHCI Host Controller
+[    9.431488] ci_hdrc ci_hdrc.1: new USB bus registered, assigned bus number 1
+[    9.457197] ci_hdrc ci_hdrc.1: USB 2.0 started, EHCI 1.00
+[    9.460370] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.16
+[    9.468470] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    9.475597] usb usb1: Product: EHCI Host Controller
+[    9.480508] usb usb1: Manufacturer: Linux 6.16.0+ ehci_hcd
+[    9.485913] usb usb1: SerialNumber: ci_hdrc.1
+[    9.490862] hub 1-0:1.0: USB hub found
+[    9.494005] hub 1-0:1.0: 1 port detected
+[    9.657191] usb 1-1: new high-speed USB device number 2 using ci_hdrc
+[    9.844726] usb 1-1: New USB device found, idVendor=1519, idProduct=0020, bcdDevice=12.74
+[    9.850530] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    9.857594] usb 1-1: Product: HSIC Device
+[    9.861606] usb 1-1: Manufacturer: Comneon
+[    9.865627] usb 1-1: SerialNumber: 0123456789
+[    9.908739] cdc_acm 1-1:1.0: ttyACM0: USB ACM device
 
-  USB: serial: cypress_m8: validate interrupt packet headers (2026-05-23 09:35:26 +0200)
+This patchset is a part of larger series aiming to bring XMM6260 modem
+support for Tegra devices:
+https://lore.kernel.org/lkml/20260511135703.62470-1-clamor95@gmail.com/
 
-----------------------------------------------------------------
-USB serial fixes for 7.1-rc5
+---
+Changes in v2:
+- changed phy to pwrseq in schema
+- adjusted Kconfig dependencies
+- implemented bitmap for modem state tracking
+- switched from phy to power sequencing
+- in notifier added chech to filter only USB events
+- in notifier added USB_DEVICE_REMOVE
+- added tracking for regulator, rfkill access, usb device
+  presence and poweroff calls using bitops
+- moved pseq on call from work to irq handler
+- improved rfkill registration logic
+---
 
-Here are a number of fixes for memory corruption and information leaks
-due to missing endpoint and transfer sanity checks dating back to
-simpler times when we trusted our hardware.
+Svyatoslav Ryhel (2):
+  dt-bindings: net: Document Infineon/Intel XMM6260 modem
+  net: usb: Add Infineon XMM6260 Baseband modem support
 
-Included are also a fix for a recently added modem device id entry and
-some new modem devices ids.
+ .../bindings/net/infineon,xmm6260.yaml        |  74 ++++
+ drivers/net/usb/Kconfig                       |  15 +
+ drivers/net/usb/Makefile                      |   1 +
+ drivers/net/usb/baseband-xmm6260.c            | 378 ++++++++++++++++++
+ 4 files changed, 468 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/infineon,xmm6260.yaml
+ create mode 100644 drivers/net/usb/baseband-xmm6260.c
 
-All but the last five commits have been in linux-next and with no
-reported issues.
+-- 
+2.51.0
 
-----------------------------------------------------------------
-Jan Volckaert (1):
-      USB: serial: option: add MeiG SRM813Q
-
-Johan Hovold (8):
-      USB: serial: digi_acceleport: fix memory corruption with small endpoints
-      USB: serial: keyspan: fix missing indat transfer sanity check
-      USB: serial: mct_u232: fix memory corruption with small endpoint
-      USB: serial: mct_u232: fix missing interrupt-in transfer sanity check
-      USB: serial: cypress_m8: fix memory corruption with small endpoint
-      USB: serial: mxuport: fix memory corruption with small endpoint
-      USB: serial: omninet: fix memory corruption with small endpoint
-      USB: serial: safe_serial: fix memory corruption with small endpoint
-
-Wanquan Zhong (1):
-      USB: serial: option: add missing RSVD(5) flag for Rolling RW135R-GL
-
-Zhang Cen (2):
-      USB: serial: belkin_sa: validate interrupt status length
-      USB: serial: cypress_m8: validate interrupt packet headers
-
- drivers/usb/serial/belkin_sa.c       |  3 +++
- drivers/usb/serial/cypress_m8.c      | 20 +++++++++++++++++++-
- drivers/usb/serial/digi_acceleport.c | 23 +++++++++++++++++++++--
- drivers/usb/serial/keyspan.c         |  4 ++++
- drivers/usb/serial/mct_u232.c        | 26 ++++++++++++++++----------
- drivers/usb/serial/mxuport.c         |  8 ++++++++
- drivers/usb/serial/omninet.c         |  9 +++++----
- drivers/usb/serial/option.c          |  9 ++++++++-
- drivers/usb/serial/safe_serial.c     | 11 +++++++++++
- 9 files changed, 95 insertions(+), 18 deletions(-)
 
