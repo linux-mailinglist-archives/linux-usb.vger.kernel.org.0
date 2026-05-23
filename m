@@ -1,191 +1,235 @@
-Return-Path: <linux-usb+bounces-37949-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37950-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GPXkHAj1EGrNfwYAu9opvQ
-	(envelope-from <linux-usb+bounces-37949-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 02:30:00 +0200
+	id cGhIEUn3EGoxgAYAu9opvQ
+	(envelope-from <linux-usb+bounces-37950-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 02:39:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC3385BC02F
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 02:29:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E22175BC1A0
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 02:39:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 271513012EBA
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 00:29:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3B2B0302D50E
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2026 00:38:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7503C1DD525;
-	Sat, 23 May 2026 00:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8382376FD;
+	Sat, 23 May 2026 00:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q9+HAMMB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/qwAMS1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD561A680C
-	for <linux-usb@vger.kernel.org>; Sat, 23 May 2026 00:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B0DFC0A;
+	Sat, 23 May 2026 00:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779496191; cv=none; b=NdjkNv8wZzHxbeUYdurFo/1OZpXq5+oe3KQ/iIzaDDCCGtAiyOZ/rH9jMji8HNXDE4IuHIDYiJIQIC8ojh16OgZq7xyi4LMjx/fKkhql29b5YDQthWQWeSGmednKEaA2rkwD+Q3PLK/QdLeL0s+/UnMxwRZLDm59YYwS/b8YgIE=
+	t=1779496689; cv=none; b=IQaTe+gCPBiaxl9+p3IJ+Q2Dnx8XI+G+pTfJVka1+ANrXw66sfyQdzcpuLaHEvymnKjBn4j8AgF7NkyhUJA3G8LQBrUOAEOrft/w5Uk+2yxOqunFajPet5mztBeQyJJmebCAyRUdnTttV2eezOlU7cYtWqfHllQ9ue2Vu82L7Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779496191; c=relaxed/simple;
-	bh=w6E0YRreyAwApnZtybobqMm+JuPyTSoPhzeahJUKmwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pSdD/sB+94naeX0oVXgQKzKiNmI4uhfPEBTYHltTWd5tgUO16fx3skH4ZtNQpbZMy9TnB6CGvyfbATaL2LuYh1zdoftN8gDqGoFDuiEhTCPMtfU7ywqLuCfxj1BIMEQ5m8dkBsFvwFiQi/ttIuLqzn6Y7MjL4fJ8m1uofJVlJhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q9+HAMMB; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-449d6c68ed8so4499710f8f.0
-        for <linux-usb@vger.kernel.org>; Fri, 22 May 2026 17:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779496188; x=1780100988; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w6E0YRreyAwApnZtybobqMm+JuPyTSoPhzeahJUKmwM=;
-        b=q9+HAMMBbmbOmEtIX8nFjPojvDY0AgEJVmYfCRXC+6OIFPyZHlMa1RLHiXcjUiFH+v
-         WdA9PrElzj367yrEL5TabZcMLKXiuOD1jthxRDq50VvdgdbjsJe7LviTVWuDd6dJ4fyX
-         fiUvRYX1opuJnCf380ofr05Oc4tzwWu+2CzvU1vBeqOODsieGCr8g8riQ+GzpNeS49zR
-         tvjl2waepwQ6kdGtxLGbtr816d87qSEDDp3Z8fFJeHpkCQuacHntlTd93cgQFkqHWI3B
-         07tUBZeaaZCNBJJleRyNwL2qN4gfi8c1QAQmsp/worRWR5VnWAZAykjdhu75K3b0dvSv
-         NERg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779496188; x=1780100988;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=w6E0YRreyAwApnZtybobqMm+JuPyTSoPhzeahJUKmwM=;
-        b=oNRvN2H2z6w2svKEX/bi7NNJ0xaeyclgdJTRC+1TWr1BcxuF6LNZbpBIx3GL5V86xD
-         dGH0tGoTRJcR6pRWR/gVEePq+3taJRxf3yjszZbomR93ajARHSo51wb7Fb+W/jDySN7v
-         pQdte1OySc7mrN4zRv9wnTHP+74uyaLORd2WwK6t9U/ra9aV4OgOn8iX5HhyQL3H46Ez
-         z3k/R0yXkrTBTpPYtxB/2XHmOqpdiibRpoEc6rMBXB5CUR2+O9f8eduutjjDE6mPMrtP
-         rr5YfdR/irXHnTOiIsBbzJyol214ozJ6HnndNwt6b0/CVmxYjzttNywe0S9mjgAjvOO0
-         lKFw==
-X-Forwarded-Encrypted: i=1; AFNElJ+sayf1CtnQYB91dY+V++VMoVtumzI/mtifYvlpIwv0Ir6n6iKSSf3KpNZzTUayGwwHi5oL3pzGxZ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfd7Lt70HXFTpAVe6i70bUQ/ixrQ0nyDAsso7vWY4NTsVE8UtG
-	/Gp+kQYVSxj1HIgvFz2QnuXtFRKlf0v3yQEVFgj5YFJw/7uqeppbuPDb
-X-Gm-Gg: Acq92OGABezvrbhXobYkh8Zw3JZItPl2wmHyk9ilG1gHrUIhMeBUA+jcL8hTE1quNzI
-	0zXvPM6tlwglX4Js/cUPqnSO1jN9OVQTwdVtBwO3VDpZw5+3srBqpVkqPvMTX4DtnevWzGd+ZWP
-	yu4XFtEmjhXY+GFRxQ5zdWZdNroQGHBjxUcCikgb44EnhhB6jLU4TIacxLB3VyDfn244pEC6+WR
-	CcYxts1hn5w7UVkuwLHj4MbsPLd7s7uOTRC5MUBbl1r0b9wDOZYI67qki+unw+/mrZBIdfKUmxz
-	k83MvO3nJ9skUJF087hD0ecvbvc+hUaVFgas8ypRP1vZ7urBL261mSlrcm+uGc5sKqc6X9/xHzF
-	C8uwuuinvFI3odfx9YZleaHt4qOyazy1sy9CiFytq0hHmfM0xxsOJcWXsw72NjFuvuJVEv3Y1E9
-	PbcaIsnpk/vhwe8EgLY4z2wyOvkG2p+8HX
-X-Received: by 2002:adf:e005:0:10b0:439:c18f:5aaf with SMTP id ffacd0b85a97d-45eb38bafbcmr6665775f8f.34.1779496188044;
-        Fri, 22 May 2026 17:29:48 -0700 (PDT)
-Received: from foxbook (bfk48.neoplus.adsl.tpnet.pl. [83.28.48.48])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6cce0a4sm7355058f8f.12.2026.05.22.17.29.47
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 22 May 2026 17:29:47 -0700 (PDT)
-Date: Sat, 23 May 2026 02:29:44 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Desnes Nunes <desnesn@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- gregkh@linuxfoundation.org, mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH RFT RFC] usb: xhci: Kill hosts with HCE or HSE on
- command timeout
-Message-ID: <20260523022944.59799d83.michal.pecio@gmail.com>
-In-Reply-To: <CACaw+ezqEO_PgjGeYCLq5hA2eKczFXgmZLa8qjPtVJZCGwsdsg@mail.gmail.com>
-References: <20260430014817.2006885-1-desnesn@redhat.com>
-	<CACaw+exdPSVSfdAob7+d-xH=JEjBbPpY_z1cPPU6rzXx4wUZpA@mail.gmail.com>
-	<20260430235453.2288c973.michal.pecio@gmail.com>
-	<CACaw+ewwM_5eqyGW5=+THwHsYPs7u3NT096AFQdt6x4E6HcWtA@mail.gmail.com>
-	<20260502114644.76e6b5a3.michal.pecio@gmail.com>
-	<CACaw+eyKh7buHDoDyTOe8O65FP5cSXYdzCcQvwqKw=1DwX26oA@mail.gmail.com>
-	<20260502235517.089ba5bf.michal.pecio@gmail.com>
-	<CACaw+ewOTVh49tnkz+cRr0SD_Z-LmYrMWhFUrsik6YF83mPBtA@mail.gmail.com>
-	<20260503071749.6abda137.michal.pecio@gmail.com>
-	<CACaw+ew8uV5g1G-6qZGtVBEYZ3k+fvFrOq3XMyq-Nuhbq5mdnA@mail.gmail.com>
-	<20260503213111.117db3a1.michal.pecio@gmail.com>
-	<20260504093118.615ff480.michal.pecio@gmail.com>
-	<20260518083339.507e24bd.michal.pecio@gmail.com>
-	<CACaw+ewSWTo72fSk2Q7ZzCM8pNuyrX5ua+qA=SZOQuNNMKSA5Q@mail.gmail.com>
-	<20260522110328.0d3eecd8.michal.pecio@gmail.com>
-	<CACaw+ezqEO_PgjGeYCLq5hA2eKczFXgmZLa8qjPtVJZCGwsdsg@mail.gmail.com>
+	s=arc-20240116; t=1779496689; c=relaxed/simple;
+	bh=5mcnBS5MtgC9UfAOoDlmY0BQO+Ao/SdQLXT9dBQtNkk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rNlIIwOGjatOkritxjJNEUAlz2vwjWZJ9JMwAJxKdCkcyRKjimih0PPF61skI2pMDAiLsTReITEBhwjWSn7QL5XDnPnSbMfHBgGBXEpi6C3SGDhBlbluVCZk9doqKgOCp8tV3xZgEeRSgcBIPobl/b95etFlgHkeUg3y6JsD5d0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/qwAMS1; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCE81F000E9;
+	Sat, 23 May 2026 00:38:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779496688;
+	bh=ke0QgGP72oU1/KHDzVSs1lh/gkg7Mw8fFDTolKbzoHA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=W/qwAMS1ok+56HAwvYiYz0R5wmKsD0RscuUhy5BVEzThMnr+wQxbKIW0Yk+lqtg0R
+	 dxN4FM+nLAHenqFi1JvSelOt20CYFnYpdSX3hvz5/mvzq/JXO7gcBTjSStG/A5FM8j
+	 0Dk4RFZ90/nX0Xzby8V+5D3uQDTYP8o1bo3XSKlx4rKPB6vCO/Oui18woqanoP+n4U
+	 enXhw+/EJeP6Kw2ZiII29eiMOdyHFC3VD0U1T97Mm+aD6rZa6A+hyeA7zcgLPdsptw
+	 8LWGxoojes1mewesgkVxxy+dLIhtJlwu3XyRYodcKxBzIRSnWjQs++a/owD5p2CmBM
+	 RNz3sazG7iMhQ==
+From: SeongJae Park <sj@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Corey Minyard <corey@minyard.net>,
+	Gabriel Somlo <somlo@cmu.edu>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Hannes Reinecke <hare@suse.de>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	Jason Baron <jbaron@akamai.com>,
+	Jim Cromie <jim.cromie@gmail.com>,
+	Tiwei Bie <tiwei.btw@antgroup.com>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"David E. Box" <david.e.box@linux.intel.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Frank Li <Frank.Li@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Alexander Potapenko <glider@google.com>,
+	Marco Elver <elver@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Georgia Garcia <georgia.garcia@canonical.com>,
+	kvm@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	apparmor@lists.ubuntu.com,
+	linux-security-module@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-acpi@vger.kernel.org,
+	openipmi-developer@lists.sourceforge.net,
+	qemu-devel@nongnu.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-rdma@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	virtualization@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 04/11] treewide: Convert struct kernel_param_ops initializers to DEFINE_KERNEL_PARAM_OPS
+Date: Fri, 22 May 2026 17:38:01 -0700
+Message-ID: <20260523003801.86344-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260521133326.2465264-4-kees@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37949-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,iscas.ac.cn,suse.com,nod.at,cambridgegreys.com,sipsolutions.net,minyard.net,cmu.edu,redhat.com,linux.intel.com,intel.com,ursulin.net,gmail.com,ffwll.ch,acm.org,ziepe.ca,ideasonboard.com,google.com,suse.de,HansenPartnership.com,oracle.com,arm.com,linuxfoundation.org,rowland.harvard.edu,linux.alibaba.com,akamai.com,antgroup.com,orcam.me.uk,infradead.org,linux.ibm.com,alien8.de,zytor.com,atomlin.com,linux-foundation.org,canonical.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,googlegroups.com,kvack.org,lists.ubuntu.com,lists.infradead.org,lists.sourceforge.net,nongnu.org,lists.freedesktop.org,lists.ozlabs.org,lists.one-eyed-alien.net,lists.linux.dev];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37950-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[sj@kernel.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_GT_50(0.00)[100];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: CC3385BC02F
+X-Rspamd-Queue-Id: E22175BC1A0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, 22 May 2026 17:45:22 -0300, Desnes Nunes wrote:
-> Hello Michal,
->=20
-> On Fri, May 22, 2026 at 6:03=E2=80=AFAM Michal Pecio <michal.pecio@gmail.=
-com> wrote:
-> > If the bug is deterministic it should be fairly easy to nail it down.
-> > Attached xhci debugfs patch adds a list of almost all memory the xHC
-> > is allowed to access, including (if I havevn't missed something) all
-> > mappings it is allowed to access before any slots are enabled.
-> >
-> > Please apply, reboot and then:
-> >
-> > zip -r before.zip /sys/kernel/debug/usb/xhci/0000:80:14.0
-> > # trigger crash kexec and the bug
-> > zip -r after.zip /sys/kernel/debug/usb/xhci/0000:80:14.0
-> ...
-> > And since the bug may be an out of bounds access by the HW, if you
-> > don't mind running slightly experimental patch to a critical subsystem,
-> > please also apply the DMA guard pages patch. I've been using it for a
-> > few months without issues, but YMMV. It helps determine which mapping
-> > is accessed OOB.
-> >
-> > Note: DMA guard pages may casue USB to stop working before kexec if
-> > it's a HW bug masked by memory layout, or begin to work after kexec in
-> > case of some IOMMU subsystem issues.
->=20
-> Please find the requested information in the attachments below.
-> Kernel was patched with both patches.
+On Thu, 21 May 2026 06:33:17 -0700 Kees Cook <kees@kernel.org> wrote:
 
-Sorry, I forgot about the most important thing: crash kernel log, or at
-least the IOMMU fault message showing the bad address.
+> Using Coccinelle, rewrite every struct kernel_param_ops initializer that
+> sets .get into a DEFINE_KERNEL_PARAM_OPS-family macro invocation,
+> for example:
+> 
+> @@
+> declarer name DEFINE_KERNEL_PARAM_OPS;
+> identifier OPS;
+> expression SET, GET;
+> @@
+> - const struct kernel_param_ops OPS = {
+> -       .set = SET,
+> -       .get = GET,
+> - };
+> + DEFINE_KERNEL_PARAM_OPS(OPS, SET, GET);
+> 
+> Using the macro for initialization means future changes can manipulate
+> the struct layout and callback prototypes without having to change every
+> initializer.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+[...]
+>  mm/damon/lru_sort.c                           | 19 ++---
+>  mm/damon/reclaim.c                            | 19 ++---
+>  mm/damon/stat.c                               |  6 +-
+[...]
+>  samples/damon/mtier.c                         |  6 +-
+>  samples/damon/prcl.c                          |  6 +-
+>  samples/damon/wsse.c                          |  6 +-
 
-However, in this case it's moot because it seems that the HC didn't
-fault after kexec and it worked normally - debugfs shows that USBSTS=3D0
-and some device has been successfully enabled.
+For the above DAMON part changes,
 
-(It's a little odd that CRCR.CRR appears to be clear, not sure what's
-the deal with that, but it's same thing in before.zip as well.)
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
-So either the bug isn't as deterministic as we thought, or one of the
-patches "fixed" it, and that could only be DMA Guard Pages. If you
-can't reproduce the problem with guard pages, please remove that patch
-and post before/after debugfs again, plus crash kernel dmesg.
 
-Regards,
-Michal
+Thanks,
+SJ
 
+[...]
 
