@@ -1,268 +1,229 @@
-Return-Path: <linux-usb+bounces-37981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37982-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gCO6AaOxEmq/2wYAu9opvQ
-	(envelope-from <linux-usb+bounces-37981-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2026 10:06:59 +0200
+	id dXE+CFG3Emqh3AYAu9opvQ
+	(envelope-from <linux-usb+bounces-37982-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2026 10:31:13 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 608265C1A7E
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2026 10:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C575C1B0A
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2026 10:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50C7F3012273
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2026 08:06:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7BEE4300E245
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2026 08:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92790349CCE;
-	Sun, 24 May 2026 08:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC1F38F658;
+	Sun, 24 May 2026 08:31:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HCF50kvM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SBIR3Xj1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5253B23AE9B
-	for <linux-usb@vger.kernel.org>; Sun, 24 May 2026 08:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779610001; cv=pass; b=EK9lRm6u0oe3WE/hIue2EjO59xImsuIM8H/pcKC33jcUeKqoUWIUYy5Sxp+8Nb6tCtolnNOyZ1d7b9VOlWITNEhZ08yUqXnio+ThfnbCKHYRbrp1jJczpdL6tupbf7coT1+wNdU0pja6FFR50uJ3Ex/uQPbvyVQuYToZKDUKZio=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779610001; c=relaxed/simple;
-	bh=4WMpRmGDV6X/z1OH5zMJ111/X3tKN2AtCzBErEW3G/E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p1RPRzL3X0Z+0ped5VY5XQp5dogsTC1f2Z5Qh0WywRKcd/HBNrjU7VcAMdu8nc65dG9qUsTKGSWNpZAldp10mVogv7XvkRU3DX4sqtRF8ycarfwE2+nwwz/+2imk5RLuvTCP46tdlXum6HlATKXWtnb1Tc0V+opDbdZ9tDMNd+8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=HCF50kvM; arc=pass smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a88db610ccso8831437e87.2
-        for <linux-usb@vger.kernel.org>; Sun, 24 May 2026 01:06:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779609997; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fpDWTmHc6fzYC6bm+5OgV21XXNz+lvMFK+mMtzyMP97CZsTW0j49hi3U/akEC2aRPQ
-         XtxFuOY/M57/Co3EAoKiMikrJ+deKaNoijjPuFEexcrzgE3WXGC0589W6P2tUr6V3Vz4
-         XdpdPxaemxg7qZHlUQmWJtshKINF5TOfNyIGSGWW/VI3u+ZuskIBcn+1h6CWrgItDOue
-         VLjEByLyk0Ub56XKAVzIpvrzGdUSOZAsoW/cGsslb/9HTo7Oqsprs6fuSQ3CNuWh8gce
-         JRFnQqKmsgywfvs7nh3nkFw0Co+JBF682l6skScYO9rj3e8Tk9UrnWqWLC120ZKy3g6t
-         lpbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4WMpRmGDV6X/z1OH5zMJ111/X3tKN2AtCzBErEW3G/E=;
-        fh=d4Q2wz3DNIrEkndy7sIBqBoUG0OydNswylNSxnJpakU=;
-        b=HPhnxwTnYmMwY8SwIgwXYY3F260SUd+R4q4dcvwp6SwK1QZ6PuCUmwN5D8n5Kbt4zM
-         LtNdr3dwr19mOMpARjCUzWrz90Ee0B7pdW4xt3DXiwOo6nNT5dqznB27bXe/MGy+WLUC
-         asB+9v55JLetIMNaaMkLNp+KUY3XEIVlUcQk5JYq3Yj3IGvDgfbXcAbKOW51+Vqr9bkM
-         jWQ3HVP/YiXM5kjCVWa9Y0/R1kfxpA4yLaW1l2ZIRZ0O2EGL8i4x2bAyVZnjubAXs95K
-         wC4v3EzUc93arkWjSQd6h1k6l0lo7flUpTu653ErEgzvOLsf6wriZJWlgBodxWzQa58N
-         XTwQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D391938E8CB
+	for <linux-usb@vger.kernel.org>; Sun, 24 May 2026 08:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779611462; cv=none; b=Tj7nwi4s3WsNgiLqBvTnI54alSRoerkYwtgb3wGnPeFAELrLxAx/GvTsEmMe/ucxwtcdKTMA80icEpeLMDJXvgaCFaNDHz0z38Ma2yssseQtJnMUPWMFaGwdu4kXtrvuyPUi33ya9yhEGplZEijX+tcgck/HGcYti1wbt1r/P3Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779611462; c=relaxed/simple;
+	bh=VttMbDlvLgw2G/I4Aw7HZ4R11PoG8jiUwczUsi1qoUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F9dEOyUlgK/yafNNmcPn5SGTqnQD6Oy96afGDHycEbxpNjBt8C0HAbCNWjai8LfF05Q4Y7E3v4N+nsRdV1vHhSPcXSUWzPmE0cOm6b8JUN9RtCzyuyKEJlJbreEBhnUdzMp/VkHOSs8JtzD6hqRP7w8Htc8EZen+96cKFkeNFwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SBIR3Xj1; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5aa0cf8bca3so8023622e87.0
+        for <linux-usb@vger.kernel.org>; Sun, 24 May 2026 01:30:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1779609997; x=1780214797; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779611458; x=1780216258; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4WMpRmGDV6X/z1OH5zMJ111/X3tKN2AtCzBErEW3G/E=;
-        b=HCF50kvMwRvyV6XJTP+4HauBdJ+E3X9+mYqzAHDfbAVErJ0oknBtGt2eG9+goD9yJo
-         3QOD0ZMjWkrylDZztf34rcgw76ey5KQqYQcq9l14e70LLH1fpEz/3gj8lcYbe4wymUo4
-         8IiucWp7tXP28mCk+v49wdgh+yz/BFHIN6wIY=
+        bh=OSdJZOa5hy/Nodbj4dZkXLtOENV90ph6gNx9+T8TlxY=;
+        b=SBIR3Xj1TJiW91zL1XpkOIjQWV5LGBodXakpxFRZJsCjb0IcX2D3cDgonv44QQNmyP
+         qTKatpJc2vkjcDYD9uhojHXW+m9m0rlyLnc9845biFJJoJCOTWwoDrl+vGl/pJsM5ng3
+         NdDJ6tnv3CJDsuY6WOGt+VM02y7dxp17Ui9Tl3AAsr9WdTOkCVhyS8P+UeQLIOp+Mab8
+         8rFqc3MNPgQcsb/JK33kJqldAoPPEIDY7bvUHH8+C4vNKdZDD3OchVdEr6/K8PHn9VAU
+         8ev7PSic7VNvPhMJw4CyqnhaOCno6w4wA9YV6U8nkEgTnuflybwhtQ61s4gveZz/iTD+
+         ag2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779609997; x=1780214797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1779611458; x=1780216258;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=4WMpRmGDV6X/z1OH5zMJ111/X3tKN2AtCzBErEW3G/E=;
-        b=KjZY0smi/j8tzBnAZpRFYSz+pEqw7sEQ0DOIiIru0k012QmxULGwPn9v4qBdl5L7L5
-         IHtFddxGbXsXuPaupel0Ta6bQVEZeo710t7YqD813O3Ikr6fL2b3EWtaOtN+0GjOBdQj
-         8dAz1dSgCXzw43v3on9x0tDvbI4pX0DLp2fZ4Lciy5VtmwN79sHIyP1eNmgGuGiLrISv
-         WtaPfSCaflgGiXjyMcRe50KxcVDJFd3eL0RpcG4VzPZOPdNepf/8AQ4eQYwSRM+f6dD7
-         6iXaFWmEhry1NBhgsgYIidCtY/HbW8ELkP6RU/U0ZHBOFpbV2al0hfjWtIJNdyoOb3ko
-         URbw==
-X-Forwarded-Encrypted: i=1; AFNElJ88SMfcoG/qKjQULRdZmInry7HemmquAzyfBfisSyFBWGR88zLJ6BqO/7VXR5m6Xv6ihZmC50fx/+g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3uVjDIogHSa1Tq2qsBSJTbK3MHpjrXU0bJw1kCb+Rjg0w42/4
-	cgrQ79yic77hjRqegXjxR60/Gz8QOGXFX4BXB00H4Kpj/HE5Ij5vIVwHVj32Nq/8sLB5pTcZHGw
-	te4PJzllX+pLLBuofUIca4RThO3QRIkmHk1AZIsaH
-X-Gm-Gg: Acq92OFE3BAFdFHSSIx6lNWot8EyV1dXjBQ6J+eOpcAMqn4Zkd+vezi5iGHdtN8KYCc
-	Fqu64mEjb3B44I4duR8jIAJUKUOH33UIYn49BEMelieF0s170/Zl8hZ/FLkGhtuDeDs/73+W2nF
-	LOILPoVFxxtAS4gRqbQjDnyraRz08w9pbf3qVUqj1roZCsxIzgonpySLPzVMiw9uYaalYQ/At5L
-	zYgpM8UFLY1GY18QR4bkMXqdYmO337ig2N+N6j0fBdBDiBRE5/39cK9wDUJ3jVKaJlsDWcqekfH
-	6aAPP1Rza5HRfDVZ
-X-Received: by 2002:a05:6512:1548:b0:5a4:52e:5933 with SMTP id
- 2adb3069b0e04-5aa3235c913mr2060405e87.5.1779609997332; Sun, 24 May 2026
- 01:06:37 -0700 (PDT)
+        bh=OSdJZOa5hy/Nodbj4dZkXLtOENV90ph6gNx9+T8TlxY=;
+        b=mssodYDBpWxZ/Inb+3h1neY7EAPugJTJw5GrKA3aZywiibpmoIfbAOQmN3JPpz7ODa
+         rhqoTEG437bY1mMANA/eUXsN1QNEH2XkXmq7yaoKKQWAqNpsLzc8mpbdwM8j2LZidFyt
+         6xzyvMrYYpLeQxlBK8aPJUrDIJfl5eLNAAPZcRMvC/TCRUQQrKRIlqG7KsD0dmdp/BSO
+         opi9JUmjSsmucawPczQ4cdLeoAmFYYHAeFzSWaQzLFrWG/tXC0kGIllPo4enWXuplur8
+         GWWCvRh/QF9Ji24crEWIOroYqi9jcs536pDu6NPXgii4tzvAfZsMXSLbYv/0h+lIq6cV
+         29Dg==
+X-Forwarded-Encrypted: i=1; AFNElJ8TqHL+acbc22dJXpoTRRqbOHvgzrHfRBWVZzhW4r/WfiDMwjKrriMLVIPjOgPoZk4PZCMvdHPBcE8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOKc14svs0d3dl9QikI2bHw1Fms9tZ8QMN7AytnTNvNyaNSTTX
+	8kAPy0wOUR0wUFsbWLzR4/CXMUdqwgF/3HbsWXrg6Dsvvq/gJlw63dTd
+X-Gm-Gg: Acq92OHcOSc98V5qa+fuoNHH37G5KZijahmxEXIzSwfqLZKHS9J4ic1wz4F5LTBUmCP
+	Kyq7ZJV3DDLUpe5KagslsObhbxA1DR1EoWmrBvW1ii4pcl57RtZ07aPQMa5t/3aUeM58vX3d/bj
+	r0se5Afz2VrQDWshqi7Y03bPOt2hNd66oWniZzjCjOQn38uaL9SH5LXYpntX3lW1s75HeOkvaiV
+	aUS7uAr9I8i6w1JJtNlPYRu+hJnVv5uMw4AxEDpvqpOvUIQFBtbmD1Y3BFxtkiy4/Z8jtj8Dd5S
+	LaG7o1sP+7zvvwVLIZTptLOy+pGFCxA/7yV5gzSpNq3o1bnfZ7gYQild2fAhBNp3SKG0aYly6ae
+	pyXPmENHbOn0qTJEOXkfrRaBF0sasfdNaz96y2R9COI6iA5IG5TMp8OU57J+TV8MXZcWnwiQKAn
+	n4GhUAH5y8QNSgrylskvfAESuXZgV39zwS
+X-Received: by 2002:a05:6512:685:b0:5a9:95be:7f7f with SMTP id 2adb3069b0e04-5aa3238b732mr3379175e87.14.1779611457470;
+        Sun, 24 May 2026 01:30:57 -0700 (PDT)
+Received: from foxbook (bfk48.neoplus.adsl.tpnet.pl. [83.28.48.48])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa32cf4f1csm1731116e87.70.2026.05.24.01.30.56
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 24 May 2026 01:30:57 -0700 (PDT)
+Date: Sun, 24 May 2026 10:30:53 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Joseph Bursey <jbursey@uci.edu>
+Cc: syzbot <syzbot+ad2aac2febc3bedf0962@syzkaller.appspotmail.com>,
+ gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Write in
+ iowarrior_write_callback (2)
+Message-ID: <20260524103053.308501de.michal.pecio@gmail.com>
+In-Reply-To: <32c79569-8001-48d2-9675-b38b1670f285@uci.edu>
+References: <6a0ce39b.170a0220.39a13.0007.GAE@google.com>
+	<32c79569-8001-48d2-9675-b38b1670f285@uci.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515090149.3169406-1-wenst@chromium.org> <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
-In-Reply-To: <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Sun, 24 May 2026 11:06:26 +0300
-X-Gm-Features: AVHnY4KQQKvEna3YmFG3JiRUMuMCSWWGPOX7GZHTMr-aA0Q2R8PaQnONHyygdDE
-Message-ID: <CAGXv+5HC3dqgcE3KnKzakHHWFHB6m_X42orOkNUvZvp=SL_O8g@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/12] arm64: mediatek: Add M.2 E-key slot on Chromebooks
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-37982-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37981-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wenst@chromium.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[chromium.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,chromium.org:email,chromium.org:dkim,x:email]
-X-Rspamd-Queue-Id: 608265C1A7E
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,ad2aac2febc3bedf0962];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: 96C575C1B0A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 20, 2026 at 7:01=E2=80=AFPM Bartosz Golaszewski <brgl@kernel.or=
-g> wrote:
->
-> On Fri, May 15, 2026 at 11:02=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org=
-> wrote:
-> >
-> > Hi everyone,
-> >
-> > This series is my attempt at enabling power sequencing for USB to suppo=
-rt
-> > the USB connection on M.2 E-key slots. M.2 E-key was enabled in v7.1-rc=
-1
-> > with just PCIe and UART supported [1].
-> >
-> > Most of the series is based on next-20260508, while the DT changes also
-> > depend on some other DT cleanup patches I sent [2][3].
-> >
-> >
-> > Patch 1 reworks the power sequencing framework to allow matching agains=
-t
-> > different USB ports. The consumer API gains an "index" parameter (which
-> > is the USB port number on the hub), while the provider API is reworked
-> > to pass the index to the matching function of the providing driver.
-> >
->
-> Sigh... I would really prefer to avoid going in this direction. IMO
-> it's not very clear what this index actually refers to in generic
-> terms, given that pwrseq is flexible on purpose and there's no
-> specific, well-defined DT property which could have an "index".
->
-> > Patch 2 implements the index matching in the pcie-m2 driver. Matching
-> > only happens when a valid (>=3D 0) index is given.
-> >
-> > Patch 3 reworks the power sequencing targets for the E-key connector in
-> > the pcie-m2 driver to add targets for USB and SDIO. The former is used
-> > later on in this series.
-> >
-> > Patch 4 reworks the USB hub driver to return the actual error code from
-> > hub_configure() in hub_probe(). This is needed in the next patch to
-> > correctly return -EPROBE_DEFER.
-> >
-> > Patch 5 lets the USB hub driver look for power sequencers for each port=
-.
-> > Currently this only works for M.2 E-key connections, but it could be
-> > extended to cover other cases. It should also make port reset via turni=
-ng
-> > off the port VBUS work, even when VBUS is not directly controlled by th=
-e
-> > hub.
-> >
-> > I expect some discussion on this patch, because a) it adds some
-> > OF-specific code into an otherwise generic (core) driver, and
-> > b) it doesn't yet handle USB 2.0 / 3.x shared ports; it ends up powerin=
-g
-> > on the port twice, which negates the port reset part.
-> >
->
-> I understand that you do this because the port device has no OF node
-> assigned. If we wanted to call pwrseq_get() for the port device, is
-> there really no other way to associate it with the correct pwrseq
-> provider?
+On Fri, 22 May 2026 13:38:40 -0700, Joseph Bursey wrote:
+> Hello, I believe I have a reproducer for this bug using a combination
+> of syz-execprog and eBPF programs.
 
-I suppose we could tie the "port@X" node to the usb port device, but
-AFAIK no other subsystem does this so we would be introducing a new
-pattern.
+Hi, could you check if this patch (compile tested only) fixes it?
 
-In the M.2 pwrseq driver, we would have to match by port node instead
-of its parent device node. We may end up with different behavior for
-the USB target vs the other targets.
+I admit I'm not an expert on USB core, but I see nothing _reliably_
+preventing URB submissions after usb_disable_interface(), which may
+be the root cause of this bug (besides the driver sloppiness for
+which separate patches have been posted by Johan Hovold).
 
-Also, the "port@X" nodes only exist for the OF graph connections to
-connectors and/or muxes (this series doesn't deal with the latter).
-For directly connected devices, there is a "device@X" child node
-directly under the USB hub node. That node is what gets tied to the
-the USB device.
+My patch tries to fix it by updating ep->enabled under a spinlock
+which will be held while checking this flag on submission attempts.
 
-> Does the child index in hub_configure() relate to the port index as
-> defined by the unit address of the port DT node? I'm talking about the
-> X in port@X?
+Such bug is trouble not only for sloppy drivers, but also for HCDs
+which assume that no URBs exist while endpoints are being "dropped".
+Syzbot and you apparently found ways to break this assumption:
 
-Yes. The downstream port numbers start at 1. I believe 0 corresponds
-to the upstream port.
+static int usb_unbind_interface(struct device *dev)
+{
+	[...]
+        /*
+         * Terminate all URBs for this interface unless the driver
+         * supports "soft" unbinding and the device is still present.
+         */
+        if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
+                usb_disable_interface(udev, intf, false);
+	// no URBs should be pending on these endpoints now
 
-> > Patch 6 reverts an incorrectly modeled OF graph connection for the
-> > MediaTek XHCI controller.
-> >
-> > Patch 7 then adds a proper representation.
-> >
-> > Patches 8 through 12 enable the M.2 E-key slots (used for WiFi/BT) and
-> > USB type-A connectors found on MediaTek-based Chromebooks. These are
-> > provided in this series for reference. The USB type-A connector changes=
-,
-> > while not directly related, have overlapping context, and was easier to
-> > include. They were also used to test some extra local changes I tried
-> > to convert the USB A connector from an onboard USB device to a power
-> > sequencing provider.
-> >
-> >
-> > As this series changes existing power sequencing API, and also uses the
-> > changed API in subsequent patches, I think the best way to merge this
-> > is for Bartosz to take the power sequencing patches and provide an
-> > immutable tag for Greg to merge and then merge the USB patches.
-> >
-> > The DT patches can go through the soc tree once all the driver and DT
-> > binding changes are merged.
-> >
-> >
-> > Thanks
-> > ChenYu
-> >
-> > P.S. I'll be at Embedded Recipes if anyone wants to discuss details.
-> >
->
-> I'll be there too! Or should i say "here"? I live here after all. :) Let'=
-s talk!
+        driver->disconnect(intf);
+	// but one is observed completing concurrently now
 
-Sure!
+I also suspect that more UAF in sloppy drivers is possible due to
+usb_hcd_flush_endpoint() failing to wait for pending BH givebacks.
+It seems that dummy-hcd doesn't use HCD_BH, so this shouldn't be
+a factor here, but it could become an issue on real hardware.
 
+As long as resubmission is prevented reliably, this won't affect
+HCDs, but it may cause UAF in buggy class drivers.
 
-Thanks
-ChenYu
+---
+
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index b181b43a35dc..4fee30101e96 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1958,6 +1958,15 @@ int usb_hcd_alloc_bandwidth(struct usb_device *udev,
+ 	return ret;
+ }
+ 
++void usb_hcd_set_endpoint_enabled(struct usb_host_endpoint *ep, int enabled)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&hcd_urb_list_lock, flags);
++	ep->enabled = enabled;
++	spin_unlock_irqrestore(&hcd_urb_list_lock, flags);
++}
++
+ /* Disables the endpoint: synchronizes with the hcd to make sure all
+  * endpoint state is gone from hardware.  usb_hcd_flush_endpoint() must
+  * have been called previously.  Use for set_configuration, set_interface,
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 75e2bfd744a9..8d656d7e8f69 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -1358,7 +1358,7 @@ void usb_disable_endpoint(struct usb_device *dev, unsigned int epaddr,
+ 			dev->ep_in[epnum] = NULL;
+ 	}
+ 	if (ep) {
+-		ep->enabled = 0;
++		usb_hcd_set_endpoint_enabled(ep, 0);
+ 		usb_hcd_flush_endpoint(dev, ep);
+ 		if (reset_hardware)
+ 			usb_hcd_disable_endpoint(dev, ep);
+@@ -1523,7 +1523,7 @@ void usb_enable_endpoint(struct usb_device *dev, struct usb_host_endpoint *ep,
+ 		dev->ep_out[epnum] = ep;
+ 	if (!is_out || is_control)
+ 		dev->ep_in[epnum] = ep;
+-	ep->enabled = 1;
++	usb_hcd_set_endpoint_enabled(ep, 1);
+ }
+ 
+ /**
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 181db044c4d2..de97827a579b 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -437,6 +437,7 @@ extern void usb_hcd_unmap_urb_setup_for_dma(struct usb_hcd *, struct urb *);
+ extern void usb_hcd_unmap_urb_for_dma(struct usb_hcd *, struct urb *);
+ extern void usb_hcd_flush_endpoint(struct usb_device *udev,
+ 		struct usb_host_endpoint *ep);
++extern void usb_hcd_set_endpoint_enabled(struct usb_host_endpoint *ep, int enabled);
+ extern void usb_hcd_disable_endpoint(struct usb_device *udev,
+ 		struct usb_host_endpoint *ep);
+ extern void usb_hcd_reset_endpoint(struct usb_device *udev,
 
