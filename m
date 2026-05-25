@@ -1,90 +1,90 @@
-Return-Path: <linux-usb+bounces-38038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38039-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id II2RLxewFGrRPQcAu9opvQ
-	(envelope-from <linux-usb+bounces-38038-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 22:24:55 +0200
+	id EM2mOiKwFGrRPQcAu9opvQ
+	(envelope-from <linux-usb+bounces-38039-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 22:25:06 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 626E25CE52E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 22:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 930B65CE543
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 22:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D0590302C178
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 20:24:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 470D1302F26D
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 20:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E7A29D29F;
-	Mon, 25 May 2026 20:24:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122AC390C81;
+	Mon, 25 May 2026 20:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dBy/+nXb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EXbc0nC/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41323955D4
-	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 20:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B1A3932EE
+	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 20:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779740662; cv=none; b=Pt8QU5RPVozxkY3p1wc8zokxsqjvSOqSSpu8hD1a+jhcT3XJWzqce0BXrqEkAN+hmbTx8iaJQP2GAkHN4AwE8mmnOgyK0NShpvUOKyZ6XJFPAs7J4XpxtcyV2MvI/IMMtVJ1p26MVwwxNzX3PeVWW5pk8FpcI84ohb5yXVkq30o=
+	t=1779740663; cv=none; b=Pg6OrwRtmRIF+rIgNh4URpkit1qXn1WhdZi3kN9vFfBb8OBQs4fjoMgu6hKzqo9rSdiThKEEfiV4Fz2PNmQyIK3oEIGjOCvOVbaA2effBe1TKVyzujSo/4h7bPh5Mwz67X6483p7GrR325qLLCed5MMX1Q1Fsg8Pjz19RuESVr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779740662; c=relaxed/simple;
-	bh=0fGTtdOlj0OaFFj/juQWY2eIIWPMURqhon21vBu56EU=;
+	s=arc-20240116; t=1779740663; c=relaxed/simple;
+	bh=2z3nyKEVA3fX4RWIlRXG+J+3x5NijVYYAa2uEK6YBRs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CCD16qO7opP309WowgSCK3ZTHzbpkiWokIYAxsi4JSdPct2ymTzimmaTBKsZBPXiUp2a7v2W5TCyVWEe0+Q35Rmulb9rG1PtKkoXQZ1MejaTVF+/+3dT4JEcijwLOi0hjV3kppyfvAqLPM5yCYP4uqwF1Omf0GhwIKci9Q42S1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dBy/+nXb; arc=none smtp.client-ip=209.85.167.170
+	 MIME-Version; b=fI/nI5K/WZJpsYNqSUwy8NnQCy5hEiuDZi3y73Gatrb6yujw9BZ0qco5Pjh8GAEU2TjSi4NUjiJTHPt3JMmmn42e6Eq1ghoTQeJNMDF9mUJ3mENlOlN2cHL1l8FsRRhoLKwF6yX7RIvb1IjucHhXjGIo9bJ/5HIL+d+hJSlGprw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EXbc0nC/; arc=none smtp.client-ip=209.85.167.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4854d5cc708so2597281b6e.2
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 13:24:20 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-4855003fa6cso2241281b6e.3
+        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 13:24:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779740659; x=1780345459; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779740660; x=1780345460; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rH2bOPxUTZ7jcp1ZJ8Ke8Qi27deWhvd2Eb9MPg+cVXs=;
-        b=dBy/+nXbTu8AyYHszM8QEKbRZM1STqSMBGrEHUQvi9feIPlmjsYaVho3Q1l6wQV00U
-         rKUWUBO59xYPolp+c5ujQm/bvmQdjOF0K/ruz1AK7fwQdrBBu3n3miJ8YNf6RyCTh6d6
-         2skxUXFG8EINgH2q8rambSqBJoq4ESHWvwIFgFU/JULY1XiKpwIOmQBlKjG6b4B3etyX
-         Mgo4AMUigLFk8q2S/Gr1kBLgf7FG4WlgUcqTxMcAJX3ukxmFGCPhgYyybz7gZ7M2gApM
-         c5yezwic2nf4UyeEF7NOwVKuZMUDihEGl6Y4MNxDkQ6jKI0T+W8OTHg0GE466OkmRb3w
-         HD0w==
+        bh=7r8RhsQYE6qApYlJu+dL8K8TLlcMeAFqJPIZDrl2xNw=;
+        b=EXbc0nC/UkukedZ/qZ8jdJThyMllC5lvnl43YdYcDaVv508JlXP1F43V0eO9bYcRlW
+         k2U8AS1n6/Jo7rJAHkSBpIkeS6xTLL+PB5HooyFNJHeKNc7AwFhO9uCcfECQGDEi7qYg
+         qIl5xImT0c3geBeuN0LJ/7z/7yeo74pk4gbUeIek7SjdJJSp3PxMJxdVV7MZsTz4E7AV
+         OhuDu9qREKoxX/jvHrmFxB1NvEIOKtKPG5sP6oJacNtdECHi2PVf1zFbXvnMXVpW37aN
+         +wB3oTjPova0svwrA1LAjFQlgCGnpFdtWUATveSbhVtGxyO4TzNFkryKd07WQ7k2wzI8
+         +gvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779740659; x=1780345459;
+        d=1e100.net; s=20251104; t=1779740660; x=1780345460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rH2bOPxUTZ7jcp1ZJ8Ke8Qi27deWhvd2Eb9MPg+cVXs=;
-        b=boI77efUxMCrvql/tV8h9/IYvd8bgB4Y3yLhJ2CSJDEyTc8Mrwozk0e5auK8dhR5Dl
-         BYngFfkUi7YKR9dYkBj8SNsiZcHHVGJ0dYVcsYdhzJgfce4vVUJKZ7Z/3qLuvnilwngc
-         HJzI7BpGcd9tRNhjqcOn4fBFqiHDWVfJhXT9JWpGcy9CElKCOd3Z1bQlnNgUm6GBYGFE
-         SNxlqW4t4ppHinwRToYeczP1BtHFOkrJ/imZ8GHhhEScMDZNCFFvfnygrqlR6PFwbqkQ
-         QPv9H+RQ+YEW8zmlOScXp+r/WTSiDYiCEMBZiI8AXYb9zxEr2S6/s4B+aYHGshCRtb70
-         teng==
-X-Gm-Message-State: AOJu0YzowAgrDdRdIDEzxRZpoUm41eBD0Yc+y8rWT/sB11G3RS61A9sq
-	dvUHnA9o0C0rwCqpPtCAleTDGtIhCiymXms8cjLtSzubfBy1zjGUwytV7tE/ISUp27U=
-X-Gm-Gg: Acq92OGKE1myPDq76FrJAJ7kOzz5ex12BR3pO4qh5+8Q7LoVi8WbNmcbOoMqdBv5KP5
-	7oP7XYoAQuSaQoqno0/VwMkgm2HhXILJWRfolIUTL3dYSI6DYSmemEaes1amtFORciAPF4nAxti
-	XlMLtXhV43VPKh1a9WUQLEKe4DK+Xmkkct4vFFNzstz7WnD/9RIjMZC9H9PfqPi5PS9kE5T3TMN
-	KzQpEsH5pM5119pQ7z8KwY7eapY8jry/sAJb9a3l2lze52bEsqte/7U3O+sD8dsOgTqGx8fH7bx
-	obWZDYAif3x0O9FXKTA16YUfUZA6Rw3vvpll8fVm2zhMDe4595RqwJwob+E3aBUVqeD9Ig21i0p
-	cLGParcfucj7hfgjzc1PFXAZnJBHvnX7R7YqJsM07FkNQN4Dz3maAGpoZ1u0dd91CKweo1HZTft
-	7xBVQHJWf97NS4Stb/yQG36SFBPsnhHaSiKHDmluaWNtivG3eCZadPZ26YHckYJ9m41xU+CSXgp
-	96i+VYIwgGjInY+9pPeucMUlbJsLuIfA3yFlhQDMrEWxvI=
-X-Received: by 2002:a05:6808:5387:b0:485:3dd3:7719 with SMTP id 5614622812f47-4854a3fa2abmr8790520b6e.22.1779740659634;
-        Mon, 25 May 2026 13:24:19 -0700 (PDT)
+        bh=7r8RhsQYE6qApYlJu+dL8K8TLlcMeAFqJPIZDrl2xNw=;
+        b=i8Oz9lGdUzGccUjuLdHsEE+ktshXkrrv1YuxudD9pRxKoCSGm5KkiICYXWd3O1iWEH
+         SfvR9hHQFBSUyqy6X1M/A1GsscA9Yo7xknnv0W2KqlM5rdsBZEn/DO0KIkkhMcV0g2t7
+         lFzV9lsqOerr/jkwdNx6DkeO1+bWNzbfj2OaWdonNMDpBZ12pTmz5qQrwzkEdVE0gltT
+         l3uO//F2Hj7xl0GMfnt3AMbhWri1RB9yNMrvm9IoMXKYQ34VfHs0as9deC0K7wIOlqEU
+         M2tj6tNjo9QAz9kpymhO2v3beVfPHIJhZtDdp/Pkg/qQAVTU+IaEQ8G26ADMUprAE9gi
+         c7ng==
+X-Gm-Message-State: AOJu0YzKwFphx8DLfwuHIT9Jlg4oZXGJivTGkaSu/rWP5yxVpo+QLvOv
+	6ldi4mncWE0CzcbZUSI7FKixDae4XDn+ZG4me+Ii+GH6XIJth2rlXxtCQkCC+M+/wMI=
+X-Gm-Gg: Acq92OEPzWG1c43dGYljEiLctc/nk6WJrLjX/g5NlU0uDkeEjAZlCZjzIeRZPlEtqkj
+	nJmHemLKPMmCSxhOg/UUFL1cKJQbOUhu8wVgBQ4hv0g32JRJ9sQayWR3iWb7GNAO44vMYnHIohy
+	FfNUTJuUCsz43Hnp/s+g7teXJBJN+YcZNLCFqW/BQrDBnakNDlr7NUYgzDYA7GSXEhU25U6AUoC
+	TUuIoApv/9YWfikev9SdBdkwbNZpHGr8ZXx7Nf73LQUHDLK+o2jusLq+LdJ3Edv4C4LelkmlF5r
+	KZqWpmGtPnzlOAOCBy6PjmcEu2sa76jBI33k/+48Rqhl1/AUhJACHPJBtw80sRgqrRWrRqZaBlC
+	6PFiRYrm/TyMJuB8ThadO1znTfr+lD1syEv3NTQMJCR4HLkfcvNeiV3KMlZc1Tf7MY84tBFfIYF
+	TArEnsznO566u2kw7huGg/X1DpR//nMSTj810lJ/8Lj9aJn/am0p5NjSV6e3mRqclHhJwjsecoy
+	6/j8M8+K9nDsE3MYyyhkyl/48xqcEbh786IQPjkSc+zBwUOeAeo+kA6Ug==
+X-Received: by 2002:a05:6808:191a:b0:47b:d914:48c3 with SMTP id 5614622812f47-48549cfca30mr8480499b6e.10.1779740660388;
+        Mon, 25 May 2026 13:24:20 -0700 (PDT)
 Received: from DESKTOP-J47FREO.mynetworksettings.com (171.sub-75-196-24.myvzw.com. [75.196.24.171])
         by smtp.gmail.com with ESMTPSA id 5614622812f47-48554757d5dsm5204305b6e.15.2026.05.25.13.24.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2026 13:24:19 -0700 (PDT)
+        Mon, 25 May 2026 13:24:20 -0700 (PDT)
 From: Adrian Korwel <adriank20047@gmail.com>
 To: linux-usb@vger.kernel.org
 Cc: gregkh@linuxfoundation.org,
 	stable@vger.kernel.org,
 	heikki.krogerus@linux.intel.com,
 	Adrian Korwel <adriank20047@gmail.com>
-Subject: [PATCH 2/4] usb: gadget: f_uac1_legacy: fix use-after-free caused by bound guard
-Date: Mon, 25 May 2026 15:24:10 -0500
-Message-ID: <20260525202414.602-4-adriank20047@gmail.com>
+Subject: [PATCH 3/4] usb: gadget: f_uac1_legacy: cancel work in f_audio_disable()
+Date: Mon, 25 May 2026 15:24:11 -0500
+Message-ID: <20260525202414.602-5-adriank20047@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260525202414.602-1-adriank20047@gmail.com>
 References: <2026052517-undergrad-reformat-44bc@gregkh>
@@ -108,7 +108,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,linux.intel.com,gmail.com];
-	TAGGED_FROM(0.00)[bounces-38038-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-38039-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -125,70 +125,41 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 626E25CE52E
+X-Rspamd-Queue-Id: 930B65CE543
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-f_audio_bind() guards gaudio_setup() with an 'audio_opts->bound' flag
-to prevent re-initialization on repeated bind attempts. However the
-fail: error path unconditionally calls gaudio_cleanup(). On repeated
-bind attempts after failure, this closes file handles that were opened
-in a previous bind invocation and already freed by RCU, causing a
-use-after-free detected by KASAN:
+f_audio_disable() was an empty stub that simply returned without
+cancelling the pending playback work item. The work function
+f_audio_playback_work() accesses audio->lock, audio->play_queue and
+audio->card which reside in the audio struct that is freed by
+f_audio_free() after disable returns.
 
-  BUG: KASAN: slab-use-after-free in filp_flush+0x23/0x1b0
-  Read of size 8 at addr ffff88810d5523a8 by task bash/306
-  ...
-  gaudio_cleanup+0x59/0x100
-  f_audio_bind+0x4b0/0x590
-
-Fix by removing the bound guard and calling gaudio_setup()
-unconditionally in f_audio_bind(), making setup and cleanup a matched
-pair within each bind invocation. Remove the now-unused 'bound' field
-from struct f_uac1_legacy_opts.
+Fix by adding cancel_work_sync() to ensure the playback work item is
+not in flight when the audio struct is freed.
 
 Fixes: d355339eecd9 ("usb: gadget: function: make current f_uac1 implementation legacy")
 Cc: stable@vger.kernel.org
 Signed-off-by: Adrian Korwel <adriank20047@gmail.com>
 ---
- drivers/usb/gadget/function/f_uac1_legacy.c | 11 ++++-------
- drivers/usb/gadget/function/u_uac1_legacy.h |  1 -
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ drivers/usb/gadget/function/f_uac1_legacy.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
-index 5d201a2e30e7..6ad4b16769b7 100644
+index 6ad4b16769b7..798fbb8550bc 100644
 --- a/drivers/usb/gadget/function/f_uac1_legacy.c
 +++ b/drivers/usb/gadget/function/f_uac1_legacy.c
-@@ -735,13 +735,10 @@ f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+@@ -697,7 +697,9 @@ static int f_audio_get_alt(struct usb_function *f, unsigned intf)
  
- 	audio_opts = container_of(f->fi, struct f_uac1_legacy_opts, func_inst);
- 	audio->card.gadget = c->cdev->gadget;
--	/* set up ASLA audio devices */
--	if (!audio_opts->bound) {
--		status = gaudio_setup(&audio->card);
--		if (status < 0)
--			return status;
--		audio_opts->bound = true;
--	}
-+	/* set up ALSA audio devices */
-+	status = gaudio_setup(&audio->card);
-+	if (status < 0)
-+		return status;
- 	us = usb_gstrings_attach(cdev, uac1_strings, ARRAY_SIZE(strings_uac1));
- 	if (IS_ERR(us))
- 		return PTR_ERR(us);
-diff --git a/drivers/usb/gadget/function/u_uac1_legacy.h b/drivers/usb/gadget/function/u_uac1_legacy.h
-index b5df9bcbbeba..fd22fd37fe53 100644
---- a/drivers/usb/gadget/function/u_uac1_legacy.h
-+++ b/drivers/usb/gadget/function/u_uac1_legacy.h
-@@ -61,7 +61,6 @@ struct f_uac1_legacy_opts {
- 	char				*fn_play;
- 	char				*fn_cap;
- 	char				*fn_cntl;
--	unsigned			bound:1;
- 	unsigned			fn_play_alloc:1;
- 	unsigned			fn_cap_alloc:1;
- 	unsigned			fn_cntl_alloc:1;
+ static void f_audio_disable(struct usb_function *f)
+ {
+-	return;
++	struct f_audio *audio = func_to_audio(f);
++
++	cancel_work_sync(&audio->playback_work);
+ }
+ 
+ /*-------------------------------------------------------------------------*/
 -- 
 2.43.0
 
