@@ -1,90 +1,90 @@
-Return-Path: <linux-usb+bounces-38006-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38007-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8FbNBK8WFGo4JgcAu9opvQ
-	(envelope-from <linux-usb+bounces-38006-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 11:30:23 +0200
+	id QAguNLUWFGqFJgcAu9opvQ
+	(envelope-from <linux-usb+bounces-38007-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 11:30:29 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDB835C89DB
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 11:30:22 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 382EC5C89E2
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 11:30:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 630593024197
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 09:29:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E0D0302C5D0
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 09:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940213E5A3B;
-	Mon, 25 May 2026 09:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C368F3DD513;
+	Mon, 25 May 2026 09:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bX46uY/x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n7qC440Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADC720010A
-	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 09:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B191A3E639F
+	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 09:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779701343; cv=none; b=kTdScg8v1ZimyBoBueHPzwZoKRwFVm0+jfBEoXTacixS1RtIV6FCwSiEAcBY0+vCGuJlJS8XslFhMAutFhz9eJTG8w9YKmk7FmABAVY6vZz+IgByw0YwjwaL/InD7qrzM89IPMSujPMkz8FfHjx1tPSsGX+zyHDEPKmc7SLHYGY=
+	t=1779701344; cv=none; b=hMltEmFtdYytrtSNVjuEQwJm2/vjkxvhKY1YkesY9F+VYvGtBtzOS4nlRufKWzuPZwT4XhiKuR/kwBvk5ko30/nSIE1FZaSpUN1MD77NJmXlA72s5gRdpCThbt6AMP8b43+z5eMojvPaobQKwIYgB8+0jouEofLq39x5rnw05tU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779701343; c=relaxed/simple;
-	bh=v/6rZ1VmN1v3nBRbzYBC6QI9R/AMWWmdAQWVgoLRewc=;
+	s=arc-20240116; t=1779701344; c=relaxed/simple;
+	bh=aSVYpEez6Aw3aMw4yoHZCiaTJpswyN4Tsnuhzn+aSKw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PdsXGRGIIQwtWNdxHMY1hyzEwowdt/nqNXfLu66e81NHHf3poBH47IGSBaqSUOhWP5cFzCk0dwFPumIrLDQZ0L90UFcBrNRb7ZLH1YtCB23hMEbGR/mCpA65Ss69T9GtWNVybVRtJC+Ifr9mGLu1RVwNeeYDnTC/MaCxzj0qjyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bX46uY/x; arc=none smtp.client-ip=209.85.219.45
+	 MIME-Version; b=Ntzf2rXfPiPM8XheVGTAWk4D0Y+bNmf2PIkZ8wFldXHcSbTLTMmUf7wCLGdxeQMynl6ILLlcWY/Hd+cNPpjccanLOqYjsS3Kr3sW7bzWznbydz51KgKOBPt/H7gDW+OzLuK6kKOHtzX+UFugv5hARyUq9JqFB9hA80Vh1LGh/po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n7qC440Q; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8acb3daf2aaso170975926d6.0
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 02:29:01 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8b74b460d77so129656506d6.3
+        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 02:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779701341; x=1780306141; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779701342; x=1780306142; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nUgjwpPNQNXM4+anOpqwS/DzvwIVP/9fFHWONmUgMwY=;
-        b=bX46uY/xcF9bBa16vsMQXdfpTUJ1XerdTV78tz3UH95GGtmQRtN7KGR14khc1yDS+k
-         pw3pMdYLRMv2NS86vK4KD433BLWSE6uZt+dpzzkVVuYDotTXB6n/hdcIS9jIYKNpA6qv
-         7/PVQ9yya6IATgehbqWmDSWM6FDTRjvPeGD/mp0FxrzkrUU5pk/gRxncAmPoiwNtQL16
-         HBwIVHCqHcz0Ec75AxHuz4T1CEC4n8krmB4hn95OrYtEXZZCTF5LlfiRBP1YuovtQE8i
-         cUiyD3hj1Y48MoTddmtBG7Nm3Pd6829XsIe7CpYpt7TRu7cfFl0TtBY7qjnQ6hWoG1Mu
-         fLow==
+        bh=+/u6dFLgaY7n68TYn6Ld3RzN6PYRAr2JmUCcJULqcT0=;
+        b=n7qC440Qy4xRfoZEOYrH71Zxu15QxQsQzAEeakQyYCxS3jEOTYf5wX9ud4yifTPIFS
+         bu8aI3cpZFgJUS+8xPv9VJyCoLWMVyMaABtMklzW2EAPHqyrXwXfOzOMWITXwor/NMhh
+         5aIK4GXoMCda5RZgTYySKwkeCTY6pR9cF4lFjG9TD5x8+ZHR5MDSDukWDToXRImfQ/8N
+         1ZixY9KCDJxurZyN6/c6CWDqIXQW7JafHcFe3henWvSNijivcz4wZu9/qEjnCjDD13AL
+         NxlHTXPTX2KsVH2FTZx0nG9N3IzswW3LzgqyT2Ss1MshyHwqdDLnPYmpfvTNbXRB/rX0
+         Hulw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779701341; x=1780306141;
+        d=1e100.net; s=20251104; t=1779701342; x=1780306142;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=nUgjwpPNQNXM4+anOpqwS/DzvwIVP/9fFHWONmUgMwY=;
-        b=Eh3XXB4+T1MlwJ1R2315Tm7S0qAUMU3GI8JfBHjlxn1WmbaJn0L1/HJAPH3PdvLSKe
-         TvtHvDKkBPynkR2bAZ1MdZLgvIetu7zfFIA0zH7jIw6p9J8W8mlo0J7BFRriyGyxcAVR
-         iqVqoMAeP9LDdcK8gI6L/QQ0usBVRbl19kC4V3TPPqtmL3t/KdEkuUCyfMxsDJ+mVexB
-         IypGhEXt6Ao1QCeJntPU1SNEFq0Q453Uh2mz3APGILF/SFJvNH+c2tgROPNPiGNXNNTP
-         WKIXKpWV0fvRuiH9Al9W9LXMCsd1AHtLvD4zALTp0Ifx0JsKkt8vj2ZRuFj/OdHiwhzv
-         +vgw==
-X-Gm-Message-State: AOJu0Yz4FrqhAyg/yCnt/ikSxVH5A0l2XkIk643dYp6yKq7A+49OsXoV
-	1OD3se6srRFBvG6DtIcl6TUWEzXz+DMGf0wqyT6qcM//uhJPPqw/7Vck
-X-Gm-Gg: Acq92OGTmiKkyHMSM+hYNyVxSTB6HEKG0UgQoRUvAKD7AG5Xp3sxHYprA51lkbKPIIQ
-	IiMKhNLe/9xnYpizpa4h840102eWftGaNWxbeCkis2oVroPtzQ5/EkWyw7qDHeQ6jyM4zmfurNz
-	vl0YPuRbEwAQ/ecJejOGT6GxWYFZ6hb4NLPsMEaBEUQ9EtqH3QzmaZ6xAP0LjO/Nhik9h3lRmgj
-	3TloISsqI5w3cxivv/lvuyl5ZXeKzbLAt0lW1N1Jz5PUwOyqbyJ+HvdaHNHltchGdwWyHetCiH/
-	lG0NloigrFbMx4jPYratZ4sRl/oCXQ/6tc6z3rKLu+a5JucHHZh+tHJ/mgLlmwXkxPr4DY8JSRW
-	sxZyvyfI3uU7LPuHYBV1vrLifH35HrzBUnkmkAsDhXqonFO+OJn5OpUasu4VyRK+0Wlb2vSks+I
-	/f05RuKhE74we3pSrlCT3y/eC5QZySDCryfWf4KuH4cV9tGGG33TMTmcsECc8JsO/mWYY3xG9/8
-	2s0LUgLgYTiBCPBDirJo+HXSLtMY/pECaCK92RYgMs=
-X-Received: by 2002:a05:6214:242c:b0:8bf:6a92:84b2 with SMTP id 6a1803df08f44-8cc7b620b40mr227647156d6.13.1779701340666;
-        Mon, 25 May 2026 02:29:00 -0700 (PDT)
+        bh=+/u6dFLgaY7n68TYn6Ld3RzN6PYRAr2JmUCcJULqcT0=;
+        b=LYnD20iLcRCzhEOMK1Z5C2PlLkZS0277h4KFL6LgnbZhWVOIm0gDiWKAkZ0wOYUGYr
+         OVmulhtKzpJ1DPcYIrp9zHpng/9Mobs78sfqjDKt8uHxD0uq/O0F5aYS5lw4XkYJZS+B
+         3XEDmlmt9I91K3jM9PX9zwyPBLYy4C/yf1h2j1IK+1scGnLzFgTKNY/jCVRhAUTNI2hJ
+         MVi5b9OML6JDGdWIaP1fIcX5qF7xuw2ELu4HjHIflchtRCk2TtS4UUescs+xq6u7EQo9
+         fTBWXtiYjcbhEZCysp1tjtReegfW7gfsvhkp6A7qeb7YlqfOHW0wAPXktE5sxzNbgfGt
+         5nSQ==
+X-Gm-Message-State: AOJu0YxtCxbo0qpS/sWpjEN1lNENlud93rNUXAmUAFA5JVr90cgMq0FY
+	4VqRfkzuhe5lYac5S25oPtFxcmGAvWtut3pYQC1Ta4mI/x/nydJid2DN
+X-Gm-Gg: Acq92OGPLEvJMo9o7RNpAaC7ur0VMomG+Ds2nUhZ/JUbTdNpkQvW4ZpKMhaVv71WzFC
+	E0r8Y8ebqx+oa934UZLDz/+tWeYinn4WKoafFGc66AUMCm47vH1/35U+9pt+YijwNS+jBlsRI7h
+	at9wKaVk7F16t5uztER7qvQKsRVvKWyKi9zm3EV8vwpghCzXePJARVPEOKD30I2lgI4yXOqRMj/
+	TmNXcUbNOgvTFC4SFe194o/FSIvbkG6XpRYsO8EWbTJ5eMjtynhGrxqnjdlsCiGNd0kX6rdxZDk
+	qCDaaz54rIPH4FhBQIbPsA6SO4JLAY501Nj7jzi1ef448314JUU84oZCugsbQpKdrdOzLd+tmZB
+	7aXPoI1yTH69Ec6Bmg7t7vSStc+6SLpHw/rWsbBP9sF6CFNkdfTqn2Po1r8TEZSk9mjDwEItRr7
+	b1RWfvDStrRmowS44K+BgNhZ5hG3jgQZxsrTNBrHrv3t1tOPxY4BsmFtn7cJFa7/k/ecX+T0yJn
+	6TUR+iTDVYzK8QJuZnlt70REiarbw5OiTbrSoySUfBxtYlaTxeHHQ==
+X-Received: by 2002:a05:6214:3d88:b0:8cc:6b85:610b with SMTP id 6a1803df08f44-8cc7b5ff8f4mr230230136d6.47.1779701341602;
+        Mon, 25 May 2026 02:29:01 -0700 (PDT)
 Received: from server0.tail6e7dd.ts.net (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cc80dcf4a9sm104255826d6.2.2026.05.25.02.28.59
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cc80dcf4a9sm104255826d6.2.2026.05.25.02.29.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2026 02:29:00 -0700 (PDT)
+        Mon, 25 May 2026 02:29:01 -0700 (PDT)
 From: Michael Bommarito <michael.bommarito@gmail.com>
 To: Mika Westerberg <westeri@kernel.org>,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Yehezkel Bernat <YehezkelShB@gmail.com>
 Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] thunderbolt: bound root directory content to block size
-Date: Mon, 25 May 2026 05:28:26 -0400
-Message-ID: <20260525092830.735472-3-michael.bommarito@gmail.com>
+Subject: [PATCH 3/6] thunderbolt: clamp XDomain response data copy to allocation size
+Date: Mon, 25 May 2026 05:28:27 -0400
+Message-ID: <20260525092830.735472-4-michael.bommarito@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260525092830.735472-1-michael.bommarito@gmail.com>
 References: <20260525092830.735472-1-michael.bommarito@gmail.com>
@@ -98,12 +98,12 @@ Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38006-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-38007-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -112,7 +112,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -122,42 +122,50 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: BDB835C89DB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 382EC5C89E2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-__tb_property_parse_dir() does not check that content_offset +
-content_len fits within block_len for the root directory case.
-When rootdir->length equals or exceeds block_len - 2, the entry
-loop reads past the allocated property block.
+tb_xdp_properties_request() derives the per-packet copy length from
+the response header without checking that it fits in the previously
+allocated data buffer.  A malicious peer can set its length field
+larger than the declared data_length, causing memcpy to write past
+the kcalloc allocation.
 
-Add a bounds check after computing content_offset and content_len
-to reject directories whose content extends past the block.
+Clamp the per-packet copy length so that the cumulative offset
+never exceeds data_len.
 
 Fixes: cdae7c07e3e3 ("thunderbolt: Add support for XDomain properties")
 Cc: stable@vger.kernel.org
 Assisted-by: Claude:claude-opus-4-7
 Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
 ---
- drivers/thunderbolt/property.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Confirmed over Thunderbolt 4 cable (Framework -> Dell, stock Ubuntu
+26.04 7.0.0-15-generic).
 
-diff --git a/drivers/thunderbolt/property.c b/drivers/thunderbolt/property.c
-index 5cbc1c4f159c2..59beab43f90a6 100644
---- a/drivers/thunderbolt/property.c
-+++ b/drivers/thunderbolt/property.c
-@@ -187,6 +187,10 @@ static struct tb_property_dir *__tb_property_parse_dir(const u32 *block,
- 	if (is_root) {
- 		content_offset = dir_offset + 2;
- 		content_len = dir_len;
-+		if (content_offset + content_len > block_len) {
-+			tb_property_free_dir(dir);
-+			return NULL;
-+		}
- 	} else {
- 		if (dir_len < 4) {
- 			tb_property_free_dir(dir);
+Also reproduced with KASAN on QEMU (7.1.0-rc3):
+
+  BUG: KASAN: slab-out-of-bounds in
+       tb_test_synthetic_overflow.cold+0x131/0x29a
+  Write of size 192 at addr ffff888002110200
+
+ drivers/thunderbolt/xdomain.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index 754808c43f006..4099419c74795 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -393,6 +393,8 @@ static int tb_xdp_properties_request(struct tb_ctl *ctl, u64 route,
+ 			}
+ 		}
+ 
++		if (req.offset + len > data_len)
++			len = data_len - req.offset;
+ 		memcpy(data + req.offset, res->data, len * 4);
+ 		req.offset += len;
+ 	} while (!data_len || req.offset < data_len);
 -- 
 2.53.0
 
