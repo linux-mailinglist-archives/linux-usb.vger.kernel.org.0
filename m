@@ -1,267 +1,397 @@
-Return-Path: <linux-usb+bounces-37996-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37997-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UIinDCPRE2oaGQcAu9opvQ
-	(envelope-from <linux-usb+bounces-37996-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 06:33:39 +0200
+	id QOAMCrHTE2rPGQcAu9opvQ
+	(envelope-from <linux-usb+bounces-37997-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 06:44:33 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FA195C5B0D
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 06:33:38 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E8D85C5BD0
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 06:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 106BE3008E13
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 04:33:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D9A0A300B9ED
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 04:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CB930C17E;
-	Mon, 25 May 2026 04:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342A530C17E;
+	Mon, 25 May 2026 04:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWIAM7x1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Foyit35T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC5225B09C
-	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 04:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779683615; cv=pass; b=duNUqcd7nYXFvpQC2KD4V+NLChgvdpg+5NU/2xjlEj2C3G5iwTldkJsLjUkfDAUtpZZ4mr9IlkvnY61UejMWEtvRHAb4fvp8rD265FEXQNHXWeaWR/B2/41KyUmImvGvn5b2hvaTFRLDLqrnkUcTAC8FRESMszXe8PLu8ielTaE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779683615; c=relaxed/simple;
-	bh=Gf45grVFuOm3demmJCZ0UXk9nAXKGdOg6ojGQvuzccI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=bJQ//NSfmtpALK/60H/urguUMYHW/nIHxgP/hCByEei7AqfBbPZ5zFf/TX/68WBa2ul34cqPB/KxgESEBWSLc1v4xiG67xlM2kTmhwemJjaSFIm9J+eNZ9G58eeWhbf6F6qCKou7ooycXBnjkH3vcM3sQgVcE5eQO0lmcUAdqLQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWIAM7x1; arc=pass smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7e568ab0bc5so10122564a34.0
-        for <linux-usb@vger.kernel.org>; Sun, 24 May 2026 21:33:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779683613; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SsnHhMx7z1CTDDrMlx6Uv/EDCOi36Zr72pcGi1q+O0ZCaoVI7mIN1qDaFYeL1+u2sH
-         QECPX5m68PFQqzDWSNOfs2+EXA52mUvgxpJ/f687K4RlK1L6KT8y6vjsNDIk1xuNDY4l
-         SZH22lzWiHWkfM6GkFRhM1gmUrNd0Q5zKQfl5aw3FeWCw4ZoB7ydL1Y/3gskNQKBx011
-         6ww9myyp5WtvBjiEvukOnq24yGnVNpJuNVBRPWAPyGD+eqlw4UJ6bPnrgWpgOexUE8+x
-         8mmmwqi+3DoPNYUu/5/0ZvsOSg3R6j1JpaREWBzhfSxc9B1V7lrtJcgUSXENxMO2ZeVC
-         BVHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=wwimpFsVZlAEhB9iEYy3FCj8FLxAMGpQ6vRgmclzF68=;
-        fh=jFgV+vaB+pQP2bULkviOpkHevnActo/+FW2k5l5jgqE=;
-        b=R+Zfs6t1cuuE+1e3LE6DEIl5mCG9bQWoAmNF6kdBG4tJ1ak26W4G3OmK/+ZGVQNRgE
-         k87lhL247kted38Bk+VdTCaBDMSAi5H+dGBvk7h0USzXigMQsJw5cp3LBtcImG8UYWdp
-         ABA7YRMLHrHYVz6MTCbEl6IqEGvodvxnogKA9fTVFAT60KvM3W+IsRVf/K3+oWl4AwWD
-         aiKrD7vIBo7jXo9wRAZqm6sbyUmAWScRYtAH/wIWcVK4Y2N5YwW3Zp5YD47YaJN+Xy4Q
-         h0F9rsrnwTXfpPjENznbxSQTjZaQcbv8FTNBkRYyIKuPTscsfOXo2SVIMv+LIIj1Yh4C
-         Ticg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779683613; x=1780288413; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wwimpFsVZlAEhB9iEYy3FCj8FLxAMGpQ6vRgmclzF68=;
-        b=iWIAM7x1UqXiWMshCiyjp0hy8VWaTHpB9LEyZS1Gcxb1Ife+lFXF9ogH+OkIGvuq0B
-         jdKtdTmqFSeBdjzv50dceFC2UKGl348ZjXu9ZrdgC4K5LlaN7TKZtMfCsyUnr0K7e1x6
-         wC13cOvFf1wwtVrwZpTQtxY7ehog+8WzznOzQrrvMNZoa9w3O8fjWwOCBPjlFAbxeivl
-         6PvUOb/KfVQmH4m1Sbb6Q0/Ehsd9BMC9tKTk/ljVb+eD3IZhcCvIf990Ua1WgIVK0ZgT
-         7an3ZEVsUiuAbnEtUJ6h/Dsgv6n5RVWv8njOAviXvhO4X4vzeM85/lIXSfjHmpoV8Rd2
-         dyWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779683613; x=1780288413;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wwimpFsVZlAEhB9iEYy3FCj8FLxAMGpQ6vRgmclzF68=;
-        b=COlBUuPMUrvSnXXh+YcMzfpRCtz+S8vxgINvgdqMHLpBwFVOCwrptj0aXmDQwi/V/Y
-         RuyIlH1BT19mY3Aq/8jK1LF2K3ET4M1hqs5/3sxrskv9bYoZlTq4WO6ZiU6USfh8dIis
-         ye+Mbw5+pkA4z1aeBl+cGMFuLxR+oqlvofM6+ECxv7BSe1v/3RQTjgY2nQq0gtsntXsx
-         f95pal9fz/q68jCzcOZ1xgoGNeB70oSLQruotqoAm0Rva8/UC8qoArxsXvnxa/H5s3GF
-         LvfAe1VLzd1GwAcUvv94QvTFHnfzKbntz00NHEdfMR0cGsFWEZ3ue0WTMvBtzoxGO96M
-         yXHQ==
-X-Gm-Message-State: AOJu0Yx4NIOIcrtV/2Q0EPhZHfYDNM90EgP0H/XVDpMdT8EG73iTrhJB
-	8xIq3Ops2deHhLnJyP4a9ERRJZw0FbbjVX3wX+qxJkF69XiZuiR/ZQAJibPUSRF/VyuDIacyEr6
-	qmkWq+Eg7G1VMfzuQ673xv4OQyI1nU41rSi27QEY=
-X-Gm-Gg: Acq92OHgH+Pi67zmCwZ0bDbLiScccKBDCLN46GA5g9Ejy0WMi1S9FNtyQLQI5Fp49tb
-	5am3oOd0uuvJX/3EGHeLM1Zp1YG4midunbhznhSuKGOvb/B19f+JCqUSkSxKmDxmm5MD9TalFDA
-	zUQ75iEuAzVz7BtFfTu7ztEcxhvVdLURHz3iRthkJwDzAI4qvwOdKpNRdI3B8KPEpnrYjTM3bRG
-	zPIROul/4oBnrIvWEYLYRzAO6mMUCf8zqjLhCOgCCjUaczG8PCPBMXvsCFVR/xMBl3gv0NiGNSp
-	vgFKNxa8Vkbd9NIHDXftTlqQFI4NpgA/Gmuu2ZzrWJjXficmubjCnFdwCv8lRylYLtPztnCZ1Ld
-	RmgcjuLeM
-X-Received: by 2002:a05:6830:6afa:b0:7dc:cbe1:119c with SMTP id
- 46e09a7af769-7e6000b023dmr6457209a34.10.1779683613339; Sun, 24 May 2026
- 21:33:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6FA2772D
+	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 04:44:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779684267; cv=none; b=F4rGmZlU9QqAmj36yinKJMXGkQ5enej0/lfUOun7zKUahrIleNSphNF7sb1R3xdK2NxvNMcSr0e+iqQ9lEevgkJyPNuU70R3aNT/V3TbyIrkJEtijFUzkJZ9T98mtrat33Qz7ctmiNoX6QKkaEoIKxsyateVgSFsZXd7klPxVvg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779684267; c=relaxed/simple;
+	bh=c+R3xmh8woI0z0uNEorhzdFMnNpNk76OjFilG31kZ+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vtb9FBPF4iIvyo3bYl3MFbJA6lt2IUan8/kdtp0t42wAnjLzIEWFm7c/S/mH/I2fL6adjYOtXTi1tNq76ST4eHJeOdeLNYFnqJunXVb4Ifa+Y966RX/UNQlKixr0Pr82f1/ktFaXLBw0VwbNdhZWvFz7Gc9z8Keg6JUv31toRJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Foyit35T; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779684265; x=1811220265;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c+R3xmh8woI0z0uNEorhzdFMnNpNk76OjFilG31kZ+M=;
+  b=Foyit35T22SGfjhSKMjx/GM5SQ68zdHZGHYLEH8gMDkrEqSuupHItZCl
+   /zCUxCchB+zA6UnowItICAFAS/7rHftcMpJOzsQayBuUYhlqb/v7cXfNC
+   57Np96tou5baej/ArRWq+ZKGtSZCR3mL8AcGS4gpR+9YdQMs4oubDRDBA
+   2o8I8vQS0LBldAz0CjlIWJolvHKxlTmxOwTSUKGZl9tlxyTC/1alFmvQo
+   4HsShcHUCjnJjEs1srSMu2Mz2DiR3DVyivS+CkAFNnop17J39C1q0lKEL
+   4ZWLsaDnYLCSY2Dm4/UJwiGF9Mwua6gFqU95QhCNBx/5M/v3uwBaxbvGM
+   A==;
+X-CSE-ConnectionGUID: nrQGQ8XkSka0+P8RKM/9yg==
+X-CSE-MsgGUID: Qy58D2CRTAi4W+DWeMJywQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11796"; a="90802524"
+X-IronPort-AV: E=Sophos;i="6.24,167,1774335600"; 
+   d="scan'208";a="90802524"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2026 21:44:24 -0700
+X-CSE-ConnectionGUID: HLp/SfPlQCCAnKY4QIv0qg==
+X-CSE-MsgGUID: mF/5S3DkRs+BxSU7VxkyAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,167,1774335600"; 
+   d="scan'208";a="240462454"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa006.jf.intel.com with ESMTP; 24 May 2026 21:44:23 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 81BE995; Mon, 25 May 2026 06:44:21 +0200 (CEST)
+Date: Mon, 25 May 2026 06:44:21 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Sebastian Loscher <krang@krang.de>
+Cc: linux-usb@vger.kernel.org, andreas.noever@gmail.com,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [BUG] thunderbolt: USB4 v2 TBGAA tunnel creation crash in TMU
+ enhanced uni-directional mode
+Message-ID: <20260525044421.GI8580@black.igk.intel.com>
+References: <13787e02-75d9-8000-65d5-41434a0e817c@krang.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Adrian Korwel <adriank20047@gmail.com>
-Date: Sun, 24 May 2026 23:33:21 -0500
-X-Gm-Features: AVHnY4J0HTryi2DT2Tdv7mGRhtqdMvtV227rgKH7mGi89iEWn-SK3ZAC4rfOuBA
-Message-ID: <CADgB2mFBdTbad5+W=bDOMO+fe1S4jg+aCNjkgd3B3Guq0WFQdw@mail.gmail.com>
-Subject: [PATCH v2] usb: gadget: f_uac1_legacy: fix use-after-free in gaudio_open_snd_dev()
-To: linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <13787e02-75d9-8000-65d5-41434a0e817c@krang.de>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37996-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,amd.com];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-37997-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[adriank20047@gmail.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 9FA195C5B0D
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,black.igk.intel.com:mid]
+X-Rspamd-Queue-Id: 4E8D85C5BD0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Three bugs exist in this driver related to ALSA device file lifetime:
++Mario
 
-1. gaudio_open_snd_dev() opens the ALSA control file first, then the
-   PCM playback file. If filp_open() for playback fails, the function
-   returns without closing the already-opened control file handle.
+Hi,
 
-2. playback_default_hw_params() return value was ignored. If it fails,
-   both the control and playback file handles are leaked, causing
-   gaudio_cleanup() to call filp_close() on already-freed file objects.
+On Sat, May 23, 2026 at 06:43:06PM +0200, Sebastian Loscher wrote:
+> Hi Mika and the Linux USB team,
+> 
+> I hope you are well. I am testing a new Thunderbolt 5 setup on a brand-new AMD
+> Strix Halo system, and I have run into a reproducible hardware panic during the
+> initial connection handshake.
+> 
+> I have gathered full dynamic debug traces and would appreciate your insight on
+> whether this requires a specific hardware quirk.
+> 
+> This is my first report in such format ever, maybe big for me but please bare
+> with me.
+> 
+> Hardware:
+> 
+> Host: Minisforum MS-S1 Max (AMD Strix Halo USB4 v2 controller)
+> 
+> Dock: Minisforum eGPU dock (Vendor 0x41f, Device 0xd002, TBGAA controller)
+> 
+> Kernel: CachyOS (state your exact kernel version, e.g., 6.12-rcX)
+> 
+> The Issue:
+> When plugging in the Thunderbolt 5 dock, the connection fails during USB3
+> tunnel creation and drops entirely.
+> 
+> Using dyndbg="file drivers/thunderbolt/* +p", the trace shows the AMD host
+> successfully shifting the dock into TB5 asymmetric routing (TMU: mode set to:
+> enhanced uni-directional, MedRes). However, immediately after querying the NVM
+> authentication status of the retimers (reading NVM authentication status of
+> retimers), the dock suffers a hardware panic and physically drops the link
+> (acking hot unplug event on 0:1).
+> 
+> The subsequent -107 and -71 PCIe/USB errors appear to be the Linux driver
+> attempting to route through a connection the dock has already severed.
+> 
+> Attached:
+> Full dynamic debug dmesg trace of the hotplug event.
+> 
+> I deeply hope this contribution can help the community. Let me know if there is
+> anything else I can help with. And keep up the great work.
 
-3. f_audio_bind() guards gaudio_setup() with an 'audio_opts->bound'
-   flag to prevent re-initialization, but the fail: error path
-   unconditionally calls gaudio_cleanup(). On repeated bind attempts
-   after failure, this closes file handles that were opened in a
-   previous bind invocation and already freed by RCU, causing a
-   use-after-free detected by KASAN:
+Thanks for the report.
 
-   BUG: KASAN: slab-use-after-free in filp_flush+0x23/0x1b0
-   Read of size 8 at addr ffff88810d5523a8 by task bash/306
-   ...
-   gaudio_cleanup+0x59/0x100
-   f_audio_bind+0x4b0/0x590
+Can you enable tracing and provide both full dmesg and the trace output?
 
-Fix all three issues:
-- Close already-opened file handles on each error path in
-  gaudio_open_snd_dev().
-- Check and propagate the return value of playback_default_hw_params().
-- Remove the 'bound' guard and call gaudio_setup() unconditionally in
-  f_audio_bind(), making setup and cleanup a matched pair within each
-  bind invocation. Remove the now-unused 'bound' field from the opts
-  struct.
+Tracing can be enabled using tbtools [1].
 
-Additionally, f_audio_disable() was an empty stub. Add
-cancel_work_sync() to ensure the playback work item is not in flight
-when the function is unbound and the audio struct is freed.
+# tbtrace enable
 
-Changes since v1:
-- Added removal of the 'bound' guard in f_audio_bind() which was the
-  root cause of the repeated-bind UAF
-- Added cancel_work_sync() to f_audio_disable()
-- Removed now-unused 'bound' field from struct f_uac1_legacy_opts
+Then repro and run
 
-Fixes: d355339eecd9 ("usb: gadget: function: make current f_uac1
-implementation legacy")
-Cc: stable@vger.kernel.org
-Signed-off-by: Adrian Korwel <adriank20047@gmail.com>
----
- drivers/usb/gadget/function/f_uac1_legacy.c | 15 +++++++--------
- drivers/usb/gadget/function/u_uac1_legacy.c | 10 +++++++++-
- drivers/usb/gadget/function/u_uac1_legacy.h |  1 -
- 3 files changed, 16 insertions(+), 10 deletions(-)
+# tbtrace disable
+# tbtrace dump -vv > trace.out
 
-diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c
-b/drivers/usb/gadget/function/f_uac1_legacy.c
-index 5d201a2e30e7..798fbb8550bc 100644
---- a/drivers/usb/gadget/function/f_uac1_legacy.c
-+++ b/drivers/usb/gadget/function/f_uac1_legacy.c
-@@ -697,7 +697,9 @@ static int f_audio_get_alt(struct usb_function *f,
-unsigned intf)
+[1] https://github.com/intel/tbtools
 
- static void f_audio_disable(struct usb_function *f)
- {
--       return;
-+       struct f_audio *audio = func_to_audio(f);
-+
-+       cancel_work_sync(&audio->playback_work);
- }
+> 
+> Kind regards
+> 
+> Sebastian
+> 
 
- /*-------------------------------------------------------------------------*/
-@@ -735,13 +737,10 @@ f_audio_bind(struct usb_configuration *c, struct
-usb_function *f)
+> [  332.894110] [UFW BLOCK] IN=enp98s0 OUT= MAC= SRC=fe80:0000:0000:0000:ee0c:b911:402c:55a2 DST=ff02:0000:0000:0000:0000:0000:0001:0003 LEN=76 TC=0 HOPLIMIT=255 FLOWLBL=319052 PROTO=UDP SPT=5355 DPT=5355 LEN=36 
+> [  335.894390] [UFW BLOCK] IN=enp97s0 OUT= MAC= SRC=10.23.1.207 DST=224.0.0.252 LEN=56 TOS=0x00 PREC=0x00 TTL=255 ID=13896 PROTO=UDP SPT=5355 DPT=5355 LEN=36 
+> [  352.890811] [UFW BLOCK] IN=enp98s0 OUT= MAC= SRC=fe80:0000:0000:0000:ee0c:b911:402c:55a2 DST=ff02:0000:0000:0000:0000:0000:0001:0003 LEN=76 TC=0 HOPLIMIT=255 FLOWLBL=319052 PROTO=UDP SPT=5355 DPT=5355 LEN=36 
+> [  355.893947] [UFW BLOCK] IN=enp98s0 OUT= MAC= SRC=10.23.107.208 DST=224.0.0.252 LEN=56 TOS=0x00 PREC=0x00 TTL=255 ID=8056 PROTO=UDP SPT=5355 DPT=5355 LEN=36 
+> [  370.697051] thunderbolt 0000:67:00.0: acking hot plug event on 0:1
+> [  370.697152] thunderbolt 0000:67:00.0: 0:1: hotplug: scanning
+> [  370.697256] thunderbolt 0000:67:00.0: 0:1: is connected, link is up (state: 2)
+> [  370.697795] thunderbolt 0000:67:00.0: current switch config:
+> [  370.697803] thunderbolt 0000:67:00.0:  USB4 Switch: 8087:5786 (Revision: 133, TB Version: 64)
+> [  370.697807] thunderbolt 0000:67:00.0:   Max Port Number: 23
+> [  370.697810] thunderbolt 0000:67:00.0:   Config:
+> [  370.697812] thunderbolt 0000:67:00.0:    Upstream Port Number: 1 Depth: 0 Route String: 0x0 Enabled: 0, PlugEventsDelay: 10ms
+> [  370.697815] thunderbolt 0000:67:00.0:    unknown1: 0x0 unknown4: 0x0
+> [  370.700819] thunderbolt 0000:67:00.0: initializing Switch at 0x1 (depth: 1, up port: 1)
+> [  370.701184] thunderbolt 0000:67:00.0: 1: link: USB4
+> [  370.701185] thunderbolt 0000:67:00.0: 1: TBT3 support: yes, xHCI: yes
+> [  370.702464] thunderbolt 0000:67:00.0: 1: credit allocation parameters:
+> [  370.702465] thunderbolt 0000:67:00.0: 1:  USB3: 20
+> [  370.702466] thunderbolt 0000:67:00.0: 1:  DP AUX: 1
+> [  370.702466] thunderbolt 0000:67:00.0: 1:  DP main: 6
+> [  370.702467] thunderbolt 0000:67:00.0: 1:  PCIe: 76
+> [  370.702468] thunderbolt 0000:67:00.0: 1:  unknown credit allocation index 0x0, skipping
+> [  370.706433] thunderbolt 0000:67:00.0: 1: DROM version: 1
+> [  370.708353] thunderbolt 0000:67:00.0: 1: uid: 0x1bce40080871534
+> [  370.709632] thunderbolt 0000:67:00.0:  Port 1: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.709634] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.709635] thunderbolt 0000:67:00.0:   Max counters: 4
+> [  370.709635] thunderbolt 0000:67:00.0:   NFC Credits: 0x4a000000
+> [  370.709636] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.710784] thunderbolt 0000:67:00.0:  Port 2: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.710785] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.710785] thunderbolt 0000:67:00.0:   Max counters: 0
+> [  370.710786] thunderbolt 0000:67:00.0:   NFC Credits: 0xca000000
+> [  370.710786] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.711929] thunderbolt 0000:67:00.0: acking hot plug event on 1:13
+> [  370.712061] thunderbolt 0000:67:00.0: acking hot plug event on 1:14
+> [  370.712066] thunderbolt 0000:67:00.0:  Port 3: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.712067] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.712068] thunderbolt 0000:67:00.0:   Max counters: 4
+> [  370.712068] thunderbolt 0000:67:00.0:   NFC Credits: 0x8a000000
+> [  370.712069] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.712189] thunderbolt 0000:67:00.0: acking hot plug event on 1:16
+> [  370.713215] thunderbolt 0000:67:00.0:  Port 4: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.713216] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.713217] thunderbolt 0000:67:00.0:   Max counters: 0
+> [  370.713217] thunderbolt 0000:67:00.0:   NFC Credits: 0x8a000000
+> [  370.713217] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.714495] thunderbolt 0000:67:00.0:  Port 5: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.714496] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.714497] thunderbolt 0000:67:00.0:   Max counters: 4
+> [  370.714497] thunderbolt 0000:67:00.0:   NFC Credits: 0x8a000000
+> [  370.714497] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.715647] thunderbolt 0000:67:00.0:  Port 6: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.715648] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.715649] thunderbolt 0000:67:00.0:   Max counters: 0
+> [  370.715649] thunderbolt 0000:67:00.0:   NFC Credits: 0x8a000000
+> [  370.715649] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.716928] thunderbolt 0000:67:00.0:  Port 7: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.716929] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.716929] thunderbolt 0000:67:00.0:   Max counters: 4
+> [  370.716930] thunderbolt 0000:67:00.0:   NFC Credits: 0x8a000000
+> [  370.716930] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.718079] thunderbolt 0000:67:00.0:  Port 8: 0:5780 (Revision: 0, TB Version: 1, Type: Port (0x1))
+> [  370.718080] thunderbolt 0000:67:00.0:   Max hop id (in/out): 31/31
+> [  370.718081] thunderbolt 0000:67:00.0:   Max counters: 0
+> [  370.718081] thunderbolt 0000:67:00.0:   NFC Credits: 0x8a000000
+> [  370.718082] thunderbolt 0000:67:00.0:   Credits (total/control): 160/2
+> [  370.718336] thunderbolt 0000:67:00.0:  Port 9: 0:5780 (Revision: 0, TB Version: 1, Type: PCIe (0x100102))
+> [  370.718337] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.718337] thunderbolt 0000:67:00.0:   Max counters: 2
+> [  370.718338] thunderbolt 0000:67:00.0:   NFC Credits: 0x40800000
+> [  370.718338] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.718591] thunderbolt 0000:67:00.0:  Port 10: 0:5780 (Revision: 0, TB Version: 1, Type: PCIe (0x100101))
+> [  370.718592] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.718593] thunderbolt 0000:67:00.0:   Max counters: 2
+> [  370.718593] thunderbolt 0000:67:00.0:   NFC Credits: 0x40800000
+> [  370.718593] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.719103] thunderbolt 0000:67:00.0:  Port 11: 0:5780 (Revision: 0, TB Version: 1, Type: DP/HDMI (0xe0102))
+> [  370.719105] thunderbolt 0000:67:00.0:   Max hop id (in/out): 9/9
+> [  370.719105] thunderbolt 0000:67:00.0:   Max counters: 2
+> [  370.719105] thunderbolt 0000:67:00.0:   NFC Credits: 0x800000
+> [  370.719106] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.719615] thunderbolt 0000:67:00.0:  Port 12: 0:5780 (Revision: 0, TB Version: 1, Type: DP/HDMI (0xe0102))
+> [  370.719616] thunderbolt 0000:67:00.0:   Max hop id (in/out): 9/9
+> [  370.719617] thunderbolt 0000:67:00.0:   Max counters: 2
+> [  370.719617] thunderbolt 0000:67:00.0:   NFC Credits: 0x800000
+> [  370.719618] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.719618] thunderbolt 0000:67:00.0: 1:13: disabled by eeprom
+> [  370.719619] thunderbolt 0000:67:00.0: 1:14: disabled by eeprom
+> [  370.719746] thunderbolt 0000:67:00.0:  Port 15: not implemented
+> [  370.719746] thunderbolt 0000:67:00.0: 1:16: disabled by eeprom
+> [  370.719999] thunderbolt 0000:67:00.0:  Port 17: 0:5780 (Revision: 0, TB Version: 1, Type: PCIe (0x100101))
+> [  370.720000] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.720001] thunderbolt 0000:67:00.0:   Max counters: 2
+> [  370.720001] thunderbolt 0000:67:00.0:   NFC Credits: 0x40800000
+> [  370.720002] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.720255] thunderbolt 0000:67:00.0:  Port 18: 0:5780 (Revision: 0, TB Version: 1, Type: PCIe (0x100101))
+> [  370.720256] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.720257] thunderbolt 0000:67:00.0:   Max counters: 2
+> [  370.720257] thunderbolt 0000:67:00.0:   NFC Credits: 0x40800000
+> [  370.720258] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.720768] thunderbolt 0000:67:00.0:  Port 19: 0:5780 (Revision: 0, TB Version: 1, Type: DP/HDMI (0xe0102))
+> [  370.720769] thunderbolt 0000:67:00.0:   Max hop id (in/out): 9/9
+> [  370.720769] thunderbolt 0000:67:00.0:   Max counters: 2
+> [  370.720770] thunderbolt 0000:67:00.0:   NFC Credits: 0x800000
+> [  370.720770] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.721023] thunderbolt 0000:67:00.0:  Port 20: 0:5780 (Revision: 0, TB Version: 1, Type: USB (0x200102))
+> [  370.721024] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.721025] thunderbolt 0000:67:00.0:   Max counters: 1
+> [  370.721025] thunderbolt 0000:67:00.0:   NFC Credits: 0x800000
+> [  370.721026] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.721279] thunderbolt 0000:67:00.0:  Port 21: 0:5780 (Revision: 0, TB Version: 1, Type: USB (0x200101))
+> [  370.721280] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.721281] thunderbolt 0000:67:00.0:   Max counters: 1
+> [  370.721281] thunderbolt 0000:67:00.0:   NFC Credits: 0x800000
+> [  370.721282] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.721535] thunderbolt 0000:67:00.0:  Port 22: 0:5780 (Revision: 0, TB Version: 1, Type: USB (0x200101))
+> [  370.721536] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.721537] thunderbolt 0000:67:00.0:   Max counters: 1
+> [  370.721537] thunderbolt 0000:67:00.0:   NFC Credits: 0x800000
+> [  370.721537] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.721791] thunderbolt 0000:67:00.0:  Port 23: 0:5780 (Revision: 0, TB Version: 1, Type: USB (0x200101))
+> [  370.721792] thunderbolt 0000:67:00.0:   Max hop id (in/out): 8/8
+> [  370.721793] thunderbolt 0000:67:00.0:   Max counters: 1
+> [  370.721793] thunderbolt 0000:67:00.0:   NFC Credits: 0x800000
+> [  370.721793] thunderbolt 0000:67:00.0:   Credits (total/control): 8/0
+> [  370.721794] thunderbolt 0000:67:00.0: 1: running quirk_usb3_maximum_bandwidth [thunderbolt]
+> [  370.721818] thunderbolt 0000:67:00.0: 1:21: USB3 maximum bandwidth limited to 16376 Mb/s
+> [  370.721819] thunderbolt 0000:67:00.0: 1:22: USB3 maximum bandwidth limited to 16376 Mb/s
+> [  370.721820] thunderbolt 0000:67:00.0: 1:23: USB3 maximum bandwidth limited to 16376 Mb/s
+> [  370.722047] thunderbolt 0000:67:00.0: 1: current link speed 40.0 Gb/s
+> [  370.722048] thunderbolt 0000:67:00.0: 1: current link width symmetric, dual lanes
+> [  370.722687] thunderbolt 0000:67:00.0: 1: preferred link width symmetric, dual lanes
+> [  370.723455] thunderbolt 0000:67:00.0: 1: CLx: current mode: disabled
+> [  370.730752] thunderbolt 0000:67:00.0: 1: TMU: supports uni-directional mode
+> [  370.730753] thunderbolt 0000:67:00.0: 1: TMU: supports enhanced uni-directional mode
+> [  370.731136] thunderbolt 0000:67:00.0: 1: TMU: current mode: off
+> [  370.733484] thunderbolt 0-1: new device found, vendor=0x41f device=0xd002
+> [  370.733486] thunderbolt 0-1: Micro Computer (HK) Tech. Ltd. TBGAA
+> [  370.735631] thunderbolt 0000:67:00.0: 1: NVM version 62.42
+> [  370.737726] thunderbolt 0000:67:00.0: 0:1: reading NVM authentication status of retimers
+> [  370.940313] thunderbolt 0000:67:00.0: 0:1: disabling sideband transactions
+> [  371.042092] thunderbolt 0000:67:00.0: 1:1: CLx: CL0s/CL1/CL2 supported
+> [  371.042099] thunderbolt 0000:67:00.0: 0:1: CLx: CL0s/CL1/CL2 supported
+> [  371.042594] thunderbolt 0000:67:00.0: 1: CLx: CL0s/CL1/CL2 enabled
+> [  371.042598] thunderbolt 0000:67:00.0: 1: TMU: mode change off -> enhanced uni-directional, MedRes requested
+> [  371.042718] thunderbolt 0000:67:00.0: 0: TMU: local_time[0]=0x5a400000
+> [  371.042721] thunderbolt 0000:67:00.0: 0: TMU: local_time[1]=0x005523e1
+> [  371.042723] thunderbolt 0000:67:00.0: 0: TMU: local_time[2]=0x03e80000
+> [  371.043821] thunderbolt 0000:67:00.0: 1: TMU: updated local time to 0x5523e15a40
+> [  371.048099] thunderbolt 0000:67:00.0: 1: TMU: mode set to: enhanced uni-directional, MedRes
+> [  371.050527] thunderbolt 0000:67:00.0: 1:1: reading NVM authentication status of retimers
+> [  371.201482] thunderbolt 0000:67:00.0: acking hot unplug event on 0:1
+> [  371.301780] thunderbolt 0000:67:00.0: 1:1: disabling sideband transactions
+> [  371.302412] thunderbolt 0000:67:00.0: 0:1: link maximum bandwidth 9000/9000 Mb/s
+> [  371.302655] thunderbolt 0000:67:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
+> [  371.302782] thunderbolt 0000:67:00.0: 1:20: available bandwidth for new USB3 tunnel 9000/9000 Mb/s
+> [  371.303024] thunderbolt 0000:67:00.0: 1: USB3 tunnel creation failed
+> [  371.303922] thunderbolt 0000:67:00.0: 0:9 <-> 1:9 (PCI): activating
+> [  371.303925] thunderbolt 0000:67:00.0: activating PCIe Down path from 0:9 to 1:9
+> [  371.304046] thunderbolt 0000:67:00.0: 1:1: Writing hop 1
+> [  371.304047] thunderbolt 0000:67:00.0: 1:1:  In HopID: 8 => Out port: 9 Out HopID: 8
+> [  371.304048] thunderbolt 0000:67:00.0: 1:1:   Weight: 1 Priority: 3 Credits: 76 Drop: 0 PM: 0
+> [  371.304049] thunderbolt 0000:67:00.0: 1:1:    Counter enabled: 0 Counter index: 2047
+> [  371.304050] thunderbolt 0000:67:00.0: 1:1:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
+> [  371.304051] thunderbolt 0000:67:00.0: 1:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
+> [  371.304302] thunderbolt 0000:67:00.0: 1:1: hop deactivation failed for hop 1, index 8
+> [  371.304303] thunderbolt 0000:67:00.0: PCIe Down path activation failed: -107
+> [  371.304304] thunderbolt 0000:67:00.0: 0:9 <-> 1:9 (PCI): activation failed
+> [  371.304305] thunderbolt 0000:67:00.0: 0:9 <-> 1:9 (PCI): deactivating
+> [  371.304948] thunderbolt 0000:67:00.0: 1:9: PCIe tunnel activation failed, aborting
+> [  371.304981] thunderbolt 0000:67:00.0: 0:1: switch unplugged
+> [  371.305759] thunderbolt 0-1: device disconnected
+> [  371.306674] thunderbolt 0000:67:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
+> [  371.306677] thunderbolt 0000:67:00.0: bandwidth re-calculation done
+> [  371.306678] thunderbolt 0000:67:00.0: looking for DP IN <-> DP OUT pairs:
+> [  371.306705] thunderbolt 0000:67:00.0: 0:13: DP IN available
+> [  371.306706] thunderbolt 0000:67:00.0: 0:13: no suitable DP OUT adapter available, not tunneling
+> [  371.306833] thunderbolt 0000:67:00.0: 0:14: DP IN available
+> [  371.306834] thunderbolt 0000:67:00.0: 0:14: no suitable DP OUT adapter available, not tunneling
+> [  371.421827] usb 5-1: new high-speed USB device number 8 using xhci_hcd
+> [  371.549027] usb 5-1: New USB device found, idVendor=1d5c, idProduct=5801, bcdDevice= 1.01
+> [  371.549043] usb 5-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> [  371.549044] usb 5-1: Product: USB2.0 Hub
+> [  371.549047] usb 5-1: Manufacturer: Fresco Logic, Inc.
+> [  371.588232] hub 5-1:1.0: USB hub found
+> [  371.588621] hub 5-1:1.0: 6 ports detected
+> [  372.195131] usb 5-1.2: new high-speed USB device number 9 using xhci_hcd
+> [  372.292245] usb 5-1.2: New USB device found, idVendor=0bda, idProduct=5420, bcdDevice= 1.80
+> [  372.292256] usb 5-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> [  372.292259] usb 5-1.2: Product: 4-Port USB 2.0 Hub
+> [  372.292260] usb 5-1.2: Manufacturer: Generic
+> [  372.356618] hub 5-1.2:1.0: USB hub found
+> [  372.357272] hub 5-1.2:1.0: 4 ports detected
+> [  372.894153] [UFW BLOCK] IN=enp98s0 OUT= MAC= SRC=fe80:0000:0000:0000:ee0c:b911:402c:55a2 DST=ff02:0000:0000:0000:0000:0000:0001:0003 LEN=76 TC=0 HOPLIMIT=255 FLOWLBL=319052 PROTO=UDP SPT=5355 DPT=5355 LEN=36 
+> [  373.106976] usb 5-1.2.3: new high-speed USB device number 10 using xhci_hcd
+> [  373.206451] usb 5-1.2.3: New USB device found, idVendor=0bda, idProduct=8156, bcdDevice=31.04
+> [  373.206463] usb 5-1.2.3: New USB device strings: Mfr=1, Product=2, SerialNumber=6
+> [  373.206465] usb 5-1.2.3: Product: USB 10/100/1G/2.5G LAN
+> [  373.206467] usb 5-1.2.3: Manufacturer: Realtek
+> [  373.206469] usb 5-1.2.3: SerialNumber: 4013000001
+> [  373.347588] r8152-cfgselector 5-1.2.3: reset high-speed USB device number 10 using xhci_hcd
+> [  373.728871] usb 5-1.2.4: new high-speed USB device number 11 using xhci_hcd
+> [  373.852519] usb 5-1.2.4: New USB device found, idVendor=152d, idProduct=0583, bcdDevice= 2.14
+> [  373.852545] usb 5-1.2.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> [  373.852548] usb 5-1.2.4: Product: USB to PCIE Bridge
+> [  373.852550] usb 5-1.2.4: Manufacturer: JMicron
+> [  373.852552] usb 5-1.2.4: SerialNumber: 0123456789ABCDEF
+> [  373.854075] scsi host0: uas
+> [  373.854542] scsi 0:0:0:0: Direct-Access     JMicron  Generic          0214 PQ: 0 ANSI: 6
+> [  373.898145] usb 5-1.2.4: stat urb: status -71
+> [  375.893793] [UFW BLOCK] IN=enp97s0 OUT= MAC= SRC=10.23.1.207 DST=224.0.0.252 LEN=56 TOS=0x00 PREC=0x00 TTL=255 ID=34161 PROTO=UDP SPT=5355 DPT=5355 LEN=36 
+> [  392.894057] [UFW BLOCK] IN=enp98s0 OUT= MAC= SRC=fe80:0000:0000:0000:ee0c:b911:402c:55a2 DST=ff02:0000:0000:0000:0000:0000:0001:0003 LEN=76 TC=0 HOPLIMIT=255 FLOWLBL=319052 PROTO=UDP SPT=5355 DPT=5355 LEN=36 
+> 
 
-        audio_opts = container_of(f->fi, struct f_uac1_legacy_opts, func_inst);
-        audio->card.gadget = c->cdev->gadget;
--       /* set up ASLA audio devices */
--       if (!audio_opts->bound) {
--               status = gaudio_setup(&audio->card);
--               if (status < 0)
--                       return status;
--               audio_opts->bound = true;
--       }
-+       /* set up ALSA audio devices */
-+       status = gaudio_setup(&audio->card);
-+       if (status < 0)
-+               return status;
-        us = usb_gstrings_attach(cdev, uac1_strings, ARRAY_SIZE(strings_uac1));
-        if (IS_ERR(us))
-                return PTR_ERR(us);
-diff --git a/drivers/usb/gadget/function/u_uac1_legacy.c
-b/drivers/usb/gadget/function/u_uac1_legacy.c
-index 01016102fa17..5bcd3afd6366 100644
---- a/drivers/usb/gadget/function/u_uac1_legacy.c
-+++ b/drivers/usb/gadget/function/u_uac1_legacy.c
-@@ -226,12 +226,20 @@ static int gaudio_open_snd_dev(struct gaudio *card)
-
-                ERROR(card, "No such PCM playback device: %s\n", fn_play);
-                snd->filp = NULL;
-+               filp_close(card->control.filp, NULL);
-+               card->control.filp = NULL;
-                return ret;
-        }
-        pcm_file = snd->filp->private_data;
-        snd->substream = pcm_file->substream;
-        snd->card = card;
--       playback_default_hw_params(snd);
-+       if (playback_default_hw_params(snd) < 0) {
-+               filp_close(snd->filp, NULL);
-+               snd->filp = NULL;
-+               filp_close(card->control.filp, NULL);
-+               card->control.filp = NULL;
-+               return -EINVAL;
-+       }
-
-        /* Open PCM capture device and setup substream */
-        snd = &card->capture;
-diff --git a/drivers/usb/gadget/function/u_uac1_legacy.h
-b/drivers/usb/gadget/function/u_uac1_legacy.h
-index b5df9bcbbeba..fd22fd37fe53 100644
---- a/drivers/usb/gadget/function/u_uac1_legacy.h
-+++ b/drivers/usb/gadget/function/u_uac1_legacy.h
-@@ -61,7 +61,6 @@ struct f_uac1_legacy_opts {
-        char                            *fn_play;
-        char                            *fn_cap;
-        char                            *fn_cntl;
--       unsigned                        bound:1;
-        unsigned                        fn_play_alloc:1;
-        unsigned                        fn_cap_alloc:1;
-        unsigned                        fn_cntl_alloc:1;
--- 
-2.43.0
 
