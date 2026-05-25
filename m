@@ -1,94 +1,94 @@
-Return-Path: <linux-usb+bounces-37994-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-37995-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6OIxAxWyE2rdEwcAu9opvQ
-	(envelope-from <linux-usb+bounces-37994-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 04:21:09 +0200
+	id oPsYLbTGE2r1FgcAu9opvQ
+	(envelope-from <linux-usb+bounces-37995-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 05:49:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C03D5C5661
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 04:21:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4195F5C5959
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 05:49:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 446BC30099B5
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 02:21:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2A2F630053EB
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 03:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6AA5276050;
-	Mon, 25 May 2026 02:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98797286AC;
+	Mon, 25 May 2026 03:49:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NzAWbejO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sukvwes6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC18276038
-	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 02:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2A222D781
+	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 03:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779675666; cv=pass; b=Xej39nL6B/cDRz/GPh9Mxbtw+VWC3tW1J/hzZyIeNNUpU0YQoCdN1TRZn4cXyT7nFSLY9R93dB7zxad4Db8ybwSBDE2h/QUNeUmlA5GOItMnyG2ca0OyaKp1RlxCi3XGRIjC1+BTOhYG8got3UOW+897ThBFIdmqonuyvPzwuK0=
+	t=1779680941; cv=pass; b=dMg3U2iN/QxrLqktGpR3SaUpknpPLtpGCqgQJQgq8Djx7bSrpSAI0G2u8BFFpuy6AxtdKQk8X63nQuul8pne3MkHJllGtBqMNotTnM2IUpJ90BwBTAwu0oZKL36hM+F+r0mV8OWxaguULQk0rRXdlug99gWZ+72XPPDG1cknf7A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779675666; c=relaxed/simple;
-	bh=9OF++De0qbfSaGV9kKcaQ7PVSfEbE8hrcqNBVw2etnY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Zzth2uo/J0kDex5PABXoN4DMoWORI/3W0NyVTzJcM/ltT/VJ+7Tim7+7pVifNNx5Q5x2ZHhlWOYceVlPVl8dTvZD0qNTrVQKjw92+NVHKdKW1w/W0rg+X4hrd4pjz54Qo+Gvba1V5+T3LsTTt8ZK0POr3GNVEjxWm0xfxwbhZVE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NzAWbejO; arc=pass smtp.client-ip=209.85.210.45
+	s=arc-20240116; t=1779680941; c=relaxed/simple;
+	bh=rTx8D4UcJdlhVCBQDSERZhHgU/k80RnRK8QBKWN0RYQ=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=P/7xSY9vhTfZn9uORxALzo9ihwuc1ywyKVNwp1ESuMxbHdxOFUSNY8cTBMbu9xyLn4z8zzdHY4Zn76rTXNLLIOi9wwXfgmIvXZFthm9pdgifKZ93FQc6rB2fzVjQJ+cSLaqzzvKhXcKAa6vHl070yReNShBuwpjfj5A8mFA33uI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sukvwes6; arc=pass smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7e5fe62fc87so2443329a34.1
-        for <linux-usb@vger.kernel.org>; Sun, 24 May 2026 19:21:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779675664; cv=none;
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e582b3bcaaso7878782a34.3
+        for <linux-usb@vger.kernel.org>; Sun, 24 May 2026 20:48:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779680939; cv=none;
         d=google.com; s=arc-20240605;
-        b=WipHNLgC2Htv0MX4YwiUni8iANZdlWlnkDcYPTHh/UHp9qKU/QoDmiHGFqjb4ajfhU
-         fBtrvvER7zNQgTK0ZqIxhmyNiItI4sHfxEk/ojhjSU6oVqg8FGfJzTLs4f0Laqbz/h62
-         PdAxQFAfzqWnfxyFVs2/Zd1MnYfc5t/azK0b711pIfiZY/qa1qig3GIcMf4DsunW9sox
-         qecnIMllzax0med1rkJ2vwXWYkIFMFWO6/e4qoFKdrSIlmjdLyI7qxoKmTNNU9+10Dbd
-         Kemreo8XUVTgQWK5+LfpSTf4NALLfupaCXvhGDeVy4+wch/iqVipVG/jQxIgTJauQDHn
-         qMCg==
+        b=Hav7Ipoy8xNuvkmr3o510q1u3Vzeyks6nK/LJ2J9+YJDEI2IvdwoL62aah/2FvwsnZ
+         HcW/6Yr0lq7LxPnb6GUxzP3LqJBVcFUv29horzq9JqnS5U5CpY61clqAg6NLCZGL9LQ8
+         /C7h0zBUPb3MZiJTtCQvmKQ1tn5yg18ZoCez9/p7KqWeZDGOA4pQMI1eGXKf6LppgEP8
+         n8zXR3jJmvHRUx9X6pXQaJXlEns3H4U7YtqW4K/h5UyqtfY80u1EByqD9NPZ3efnS721
+         tKLndXAKgP5QELPixB9u+Vyxe1m/qhq2acI2MsF5+MFohWxzPcDVsu8yQrKEH4evl/jv
+         dgNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=aw1fhyGrsU8/wH2/4vYCJYAjvuo5aa1sDViZVMzFnqk=;
-        fh=NaM3uOI9IBUL8CouaedBEWnVPCNeqBndwIzF0DzzWOo=;
-        b=GDgXIIxVcQ9Hf4XQQmdz9/VrS9vv0EDtKInmtLpKpLv9griHVzL9RiPvIwz0Y/u+s6
-         bt1GQI2p1zjQj3qyTxFs41iOlgL7Gzq0UmFaihRMsLTFZc14mzIAHmhZctstuBbCO+ZH
-         nF9IgWl1QXC8EvOMo6Tb8B8sFXQe4LhV+ar/o8JnlVBNwMY6KaIaTo3j1KAWddJ0fCYZ
-         ShKRbtmALxzswkBwHIAzbNJvHsX7lypYEeDtTYDROujAkUb1dDHK0R8GwsXa9KCNFfLA
-         GknGGxlXdgKh4bFhjEyN5YbvRl3pnn0toCOpzqZ0FcdkShT9nqVn5aQluDqAlkkZB40E
-         MO0Q==;
+        bh=ZwqZ3s+fz2IowxtGp1OrH7H6BgIiCMLMrlQiYx/q52M=;
+        fh=jFgV+vaB+pQP2bULkviOpkHevnActo/+FW2k5l5jgqE=;
+        b=FXi9PEjdFmEfeJh5/If+wO4ZZo/KxdQ/i9CGYDryMir8VDF5m8sNjJAJZYKnG+j08k
+         RmfrYBhslhd3qPhgSGknm6IZUOMFTSSdFQuOEUG8xQERQRm2xAHc5cy2XNkr80K8xQq6
+         zNUzfpN7fJglWAJGWYHXYN6qcCUxfaEJc61sTHgc87jkzv3V2sWJZzrGyhPwyM9r4UPD
+         W+0trALZtCJHmZJTdTNrwE8AaEglxGISKua0r9CaCR89VLUftxtGPV+iun3vkc8B/bQ4
+         dB30k+E535ATlL5BL2vGQmtW2gNxmLmpAle40sX3KhzT8DXTkF5AgmMOM0Tauxhw5j4O
+         jgwg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779675664; x=1780280464; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779680939; x=1780285739; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=aw1fhyGrsU8/wH2/4vYCJYAjvuo5aa1sDViZVMzFnqk=;
-        b=NzAWbejOlyQtXRCcNbi+JjCoZF1YSI9gz7P0VkyZyMbKiyT0ExzLaDX6xxcskgmcGp
-         3qN2GML+rlUHvaO0ImYe3/aX+BRlYqIbZCHRH/9HW4+wK2cjIinbJnpovDA+QIGO02ud
-         pVchsJcpc0K//dozybhXY2i60RqFVqarhdjJ3PA5EtagpmjhIKbwL5z0uwd727taasag
-         bD0sdT6l/89YSw9KHoqYSeGTj9xrCVz49iDdYbjj9Kafry+6/Snyj54/ntU5Y2Ei7dau
-         dRZFSM+H3jMSFMZMSo9CUUI/MjGm13Kb8BOn8pQ3ODggqlKwzpK9umdVdOfJp0b7yyRf
-         vOPA==
+        bh=ZwqZ3s+fz2IowxtGp1OrH7H6BgIiCMLMrlQiYx/q52M=;
+        b=Sukvwes6IiejQaphXiNRU0fE+/KzjU8ousbRSoejT8m+fg9wO3dKt0pUZhkJzrycuy
+         6ToWVpWz8NjGOzH6r0GbNJL/ooy8NYtwAiu5Sow08Y+PFb6L2DaUKe/2Mjxk/suDUJ59
+         Zp929TuYlEBsnngDx5gXUDDg/XBBLzbFQv9K6bvFqnQubLyktHzbvMfhlZ92DvCgfEFn
+         1MvtNyO44NVwBaQtBOuBYOrNHdMFuwXYD11GsZ+2OX68/UIWTg+ZxQRmReGFqX6XiU/q
+         fwCG7wx+potISTPVgALYZ5AEP2IMKAaHk2uGrMCf8DwH+ifTXumHUDedfuhFnepZ9OM+
+         CaBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779675664; x=1780280464;
+        d=1e100.net; s=20251104; t=1779680939; x=1780285739;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aw1fhyGrsU8/wH2/4vYCJYAjvuo5aa1sDViZVMzFnqk=;
-        b=muvDtaoNx5GKsdE/GcbuZ6qGEZ9xxgzeLSwWDOuJy0fhBDddEPpojqkUHOY3Ek+LiP
-         4nsTSThds0RoKjNkmLRIS84igQWn5hZbJUFmx3JlKD+aHjO5lzkVR2263Qos9LMTk6AA
-         vcc97mSoXPmE+Szrgv0QCo8eJXJB9eJmFY1/coXXzmL909cC4WPXpWnIrOrs+/8dZYpm
-         24O12c3HampF2d0duz/Cfk6QF1pKjgzu4rtcpcar1WFTQ8Wv+kWFBu0f50KlwBc2slhO
-         hMirwkZKBMe3IELZ+Xdbb7AdAzNG9mTp1QkF3Kn0dT47485RU3c5F8vL+EA2lru0tzpR
-         8lvA==
-X-Gm-Message-State: AOJu0YyFdSJcRLj+7fqCdyzsVHkcw7T52kcUcH15ms07MqSQY9DcO+ay
-	OeV+0sjMog4xi9TJcLkwq+dXi/DrMhA4BOxw7DE8Ez/i9HK8tP35MzTXngoUm/Xrzqwt87U1Onh
-	Yhf7fOzc7JxFOdQZhUAotLnX5+j8WGcpGf1o6TDQ=
-X-Gm-Gg: Acq92OGHUdZGsbYePKyD+idR4LrLachikCkm5WJS8vFpxKhR6ZFGaKgFB2zPezBCMAT
-	v8XtoWlcU8Rrzv/LNFclY2B9xFSPs7QrYqKU0SPo+9wpMul1BG71PVe7kPNeIYWmmPDfZmDoTbJ
-	OwgLlDgGh9sQXLQOlB3LZQpP7HyLCfwXfZ8ujtUO8SRh5jau9DXWJ/N1OAa4rt5SjaM+Y6rH+Bc
-	axG3/Wqpbigh22KpMtdjUlvyaeO4ZflMdV6hnPRZa75kK2YhRHn49Kps/UG+TNgDu7YdqWsnsdf
-	YDQRmYdlwragg00tEZ4hj6UBmXuUYcMaV0j3Ek0qMkUJZ6X3M869qjQ3RzJhNA8tiK4JbOyCnQ=
-	=
-X-Received: by 2002:a05:6830:2404:b0:7e5:f831:50a3 with SMTP id
- 46e09a7af769-7e5fef1a50cmr7856308a34.17.1779675663643; Sun, 24 May 2026
- 19:21:03 -0700 (PDT)
+        bh=ZwqZ3s+fz2IowxtGp1OrH7H6BgIiCMLMrlQiYx/q52M=;
+        b=flVxj2PXSnSMkC/CIuDHEfL0FiQqUkkNnyJ0B2+QwGeMHluhr8Lz6zbvFiyRomRkfy
+         M3ue7PiylYWeLYGlq5hmNYuYwZavgMhA6GC3RHN3ZhUBav7VuVf1PRgLFYeTs3BAK374
+         CMj5qPQZSRILVBZmfUmdoyX6RlQxdvMyThGEntSLVWrQXriLF42+LuDBh9Xr2PBttRyr
+         /EGMRvl3zLwbwZq6j5l0H8BcGzg8b0ryKgggFqfKQYzIki1Mm1wan4AGOMUV55YHkgK5
+         VVeeyPGnwqLnIc7kYtkIeU3h3O0ILo6rXhLLFfvJZZiljUPfcdNxtzNsxX0htOsj+eeB
+         n0fw==
+X-Gm-Message-State: AOJu0YxWThRxRhBtwnQTvawx32SOvddliVgkjM+Ao9dQM/8l0dxSboyz
+	grIKcwlRPB2xh2+GvLQRlrpfoOhcn2LB/NJO0RvyDH4jVD3/YZp3n3PM1tqCq4FbTdzoxq9fvKp
+	p5ZjeCP7EQb8gRiJcEX1Mff05iD3Vh3OCKl8x9CM=
+X-Gm-Gg: Acq92OEVJE/cj7G+d8Wmp4o9QYCDoL2TtOt/q4mMLT3esY5FYYpmExweBEGFzjmN7HX
+	qjquqFhwFSACML2q8c6SaviXx7ZV+pmen4sRuGeodl6Unr6upSgM5F369uoVJPDdU0V4jsse5zY
+	iyGwL7HhAfdLd2OqdeaeMW+0394G8I2CDONfNKJcQDvDv862S1Fa71UG1djB3AU4gua52NaYzg0
+	OszU2wFu47wiw9yJgeq35IJPRqcBTxRuxdSGotUvAgEy8UDqa7CF8IeqwkvvqFG6/2A53grbfY7
+	L8ApobWUGn51TkWVhyQXZQlkUQSot3c1+jOARWme7msVDLfnrwstOhGc+xxSGU/vadNYn4lQCeb
+	Cbu4tW/xG
+X-Received: by 2002:a05:6830:4988:b0:7dc:3db6:f02 with SMTP id
+ 46e09a7af769-7e5fed893demr7562326a34.9.1779680938801; Sun, 24 May 2026
+ 20:48:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -96,113 +96,103 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: Adrian Korwel <adriank20047@gmail.com>
-Date: Sun, 24 May 2026 21:20:51 -0500
-X-Gm-Features: AVHnY4Kfxoj-dhzRCkEkzc8-pfd6J5A5tN96IQEGMkQHqb1-0MgBCW-JEdx6GJI
-Message-ID: <CADgB2mF95N09=gOvBZ+4ePSQ-0wCynx-rbu=aiyQecT=iDdyRw@mail.gmail.com>
-Subject: [PATCH] USB: serial: io_ti: fix heap overflows in get_manuf_info()
- and build_i2c_fw_hdr()
+Date: Sun, 24 May 2026 22:48:48 -0500
+X-Gm-Features: AVHnY4ILZevoNw-otkjh-DMkD3-TgQyfRZJgzVhQd76nn8nhr2Wf1aYMaGwk0N4
+Message-ID: <CADgB2mEykL2CH-5And2m4_k+2Pc6UkWr=zxHGMyXsB5CRJvcLQ@mail.gmail.com>
+Subject: [PATCH] usb: gadget: f_uac1_legacy: fix file handle leaks in gaudio_open_snd_dev()
 To: linux-usb@vger.kernel.org
-Cc: johan@kernel.org, gregkh@linuxfoundation.org, stable@vger.kernel.org
+Cc: gregkh@linuxfoundation.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-37994-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-37995-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[adriank20047@gmail.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 7C03D5C5661
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 4195F5C5959
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Two heap overflows exist in this driver:
+gaudio_open_snd_dev() opens the ALSA control device file first, then
+opens the PCM playback device. On two error paths the control file
+handle is leaked:
 
-1. get_manuf_info() reads le16_to_cpu(rom_desc->Size) bytes from the
-   device I2C EEPROM into a buffer allocated with kmalloc_obj(), which
-   is sizeof(struct edge_ti_manuf_descriptor) = 10 bytes.
+1. When filp_open() for the playback device fails, the function
+   returns immediately without closing the already-opened control
+   file handle.
 
-   The Size field comes from the device and is only validated to fit
-   within TI_MAX_I2C_SIZE (16384 bytes), not against the destination
-   buffer size. A malicious USB device can therefore set Size to any
-   value up to 16383, causing a heap overflow of up to 16373 bytes
-   when plugged into a host running this driver.
+2. When playback_default_hw_params() fails, the return value was
+   previously ignored and both the playback and control file handles
+   were leaked.
 
-   valid_csum() is called after read_rom() and also iterates
-   buffer[0..Size-1], compounding the out-of-bounds access.
+Both leaks result in gaudio_cleanup() calling filp_close() on already
+freed file objects when the bind error path in f_audio_bind() triggers
+cleanup, causing a use-after-free detected by KASAN:
 
-   Fix by rejecting descriptors larger than the destination struct
-   before calling read_rom().
+  BUG: KASAN: slab-use-after-free in filp_flush+0x23/0x1b0
+  Read of size 8 at addr ffff88810d5523a8 by task bash/306
+  ...
+  gaudio_cleanup+0x59/0x100
+  f_audio_bind+0x4b0/0x590
 
-2. build_i2c_fw_hdr() allocates a fixed-size buffer of
-   (16*1024 - 512) + sizeof(struct ti_i2c_firmware_rec) bytes, then
-   copies le16_to_cpu(img_header->Length) bytes into it without
-   validating that Length fits within the available space after the
-   firmware record header. img_header->Length is a __le16 from the
-   firmware file and can be up to 65535. check_fw_sanity() validates
-   the total firmware size but not img_header->Length specifically.
+Fix by closing previously opened file handles before returning on
+each error path, and by checking the return value of
+playback_default_hw_params().
 
-   Fix by rejecting images where img_header->Length exceeds the
-   available destination space.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: d355339eecd9 ("usb: gadget: function: make current f_uac1
+implementation legacy")
 Cc: stable@vger.kernel.org
 Signed-off-by: Adrian Korwel <adriank20047@gmail.com>
 ---
- drivers/usb/serial/io_ti.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/usb/gadget/function/u_uac1_legacy.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
-index cb55370e036f..afe29fdf9536 100644
---- a/drivers/usb/serial/io_ti.c
-+++ b/drivers/usb/serial/io_ti.c
-@@ -773,6 +773,12 @@ static int get_manuf_info(struct edgeport_serial
-*serial, u8 *buffer)
+diff --git a/drivers/usb/gadget/function/u_uac1_legacy.c
+b/drivers/usb/gadget/function/u_uac1_legacy.c
+index 01016102fa17..5bcd3afd6366 100644
+--- a/drivers/usb/gadget/function/u_uac1_legacy.c
++++ b/drivers/usb/gadget/function/u_uac1_legacy.c
+@@ -226,12 +226,20 @@ static int gaudio_open_snd_dev(struct gaudio *card)
+                ERROR(card, "No such PCM playback device: %s\n", fn_play);
+                snd->filp = NULL;
++               filp_close(card->control.filp, NULL);
++               card->control.filp = NULL;
+                return ret;
         }
-
-        /* Read the descriptor data */
-+       if (le16_to_cpu(rom_desc->Size) > sizeof(struct
-edge_ti_manuf_descriptor)) {
-+               dev_err(dev, "%s - descriptor too large: %u\n", __func__,
-+                       le16_to_cpu(rom_desc->Size));
-+               status = -EINVAL;
-+               goto exit;
-+       }
-        status = read_rom(serial, start_address+sizeof(struct ti_i2c_desc),
-                                        le16_to_cpu(rom_desc->Size), buffer);
-        if (status)
-@@ -838,6 +844,11 @@ static int build_i2c_fw_hdr(u8 *header, const
-struct firmware *fw)
-        /* Pointer to fw_down memory image */
-        img_header = (struct ti_i2c_image_header *)&fw->data[4];
-
-+       if (le16_to_cpu(img_header->Length) >
-+                       buffer_size - sizeof(struct ti_i2c_firmware_rec)) {
-+               kfree(buffer);
+        pcm_file = snd->filp->private_data;
+        snd->substream = pcm_file->substream;
+        snd->card = card;
+-       playback_default_hw_params(snd);
++       if (playback_default_hw_params(snd) < 0) {
++               filp_close(snd->filp, NULL);
++               snd->filp = NULL;
++               filp_close(card->control.filp, NULL);
++               card->control.filp = NULL;
 +               return -EINVAL;
 +       }
-        memcpy(buffer + sizeof(struct ti_i2c_firmware_rec),
-                &fw->data[4 + sizeof(struct ti_i2c_image_header)],
-                le16_to_cpu(img_header->Length));
+        /* Open PCM capture device and setup substream */
+        snd = &card->capture;
 -- 
 2.43.0
 
