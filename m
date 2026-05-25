@@ -1,218 +1,222 @@
-Return-Path: <linux-usb+bounces-38016-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38017-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iKH4LSRRFGryMQcAu9opvQ
-	(envelope-from <linux-usb+bounces-38016-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 15:39:48 +0200
+	id 2P4cFkNdFGqPMwcAu9opvQ
+	(envelope-from <linux-usb+bounces-38017-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 16:31:31 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45AA85CB47C
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 15:39:48 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7F4E5CBC2F
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 16:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E74773055D72
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 13:35:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 884E03021982
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 14:30:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37CB43876CC;
-	Mon, 25 May 2026 13:35:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6823F0748;
+	Mon, 25 May 2026 14:30:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BpUH14EG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F7b6fofx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C34385D72
-	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 13:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779716114; cv=none; b=Hq+FjwwlOIJ1VSPSCyvOUl+hRgV4d1svb1kJL6nH9DII6q73Cx3n6ykYTNKdqhFsoiKTMyUXkiGHzQcT9KPeyNoQaGkAcmRkHvN0OK+2adG7Z249Y65mp0/ugqDvfEbb+4qNwCKqNtWpBelOuvuwYZNTQ9rn0jk4A2UGlGUqKK8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779716114; c=relaxed/simple;
-	bh=s/CzDsE1zdMqB98tClQW/DiNhe7WU760fn0iU6bx43Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LlX5szibuxVUuHvktqo385vFtVlFECJovYzUeDJLW1rDRpE6TnukYpS+qCxdHqubfKz5UuwuddycR58P/CkJhv0EPP5HoFCy55B+HDTv4WCueDS2VX51tqmmEBUUH2m2WI6MP4+kv9+uW8tZQMB4YUbm+Vihd0GsG9nAC0UC8fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BpUH14EG; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-441209fb77eso5927341f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 06:35:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C323AE703
+	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 14:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779719448; cv=pass; b=EHkSurLmOR/5dhA5E5PeR02aa7oKQmI7ljbgQKn9e4u7kKB3q2bPCi+Ysj9jdbgIf+9UZZqO8brKbZVQA3ceLoSVrmUv35OWJsPEcLvaQhmjmglKn2nr6Clf7IbShuIDtbKJq9VHJOszwjOkZHaO+3bXDWQynOQa38RBotPvSWU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779719448; c=relaxed/simple;
+	bh=e/pflblZpx450bgLEPan8je120WMxU8S1lS5NqC4+Ys=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fWAYbRbWZkhc/yMm2sd2Tv1vJ+JN8FWD/dkTtFppbRYph3WgRiPu4F1tpYEVg+D1pyvLVcP+4g/B1DtqMwE9ZvztTmg0sGFPNmjPS+sQRHeb2w545fo8NkRFaRz9OTun3PjPyVaoaE3Er0mZ8p/zR9FxGwMBabWbJK1+j2sSXEI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F7b6fofx; arc=pass smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e61e25199bso690374a34.1
+        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 07:30:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779719446; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UrBL3X4fde+XoV2h3TJb/pDFhxJO+0yCQxV6VPLLK8eBO4jzERRWGwk6O8y57SN3pi
+         DpbB6Shq2UjGHc7847d1ubOUela4grAkFgilo7oSDT2t+hF/XskrS/p9xgtPQLymz62t
+         JsIbteZ3BPiG2ttZl+ddWRc6dZXfp3zCWGgqJ+ubY2whWWrfGucqfAVm1WcuL+gGD0p8
+         7h1WKyPcsIMaMLXZKdW8sDda5v3UitXL6htHVeTKbNiMUOYrL6RM1YtiBC44TY+dU+ZA
+         t32lulOI9/JSf7AbjbkiPOHE6qTV8RZ/DospYDIfa1jZ/Y75pPen+Xjo5k2kdUj64StV
+         +Q4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8slmcbMjttgDQLvQhoFcyFtOip+Pdw+NZrKEViWNNwc=;
+        fh=ZWrVR8Is0iQ1zhOSlfgOBR4Cd4Sra6V5e3fz69cbUBk=;
+        b=OMkefZ6Y7jCGD9zfk02QlLKKkw9G1Vrprf/c1awshEkMj54QSbfRcCL2iHm8e00OQ2
+         PXkdPczx+FJ2JG9MwLqu2jRLo6WDyTlJ1Xof/tslSHKUc73MwYoUeOMBNBaeouGzyQU/
+         /S8Jd09YTuqbb9QlfaRpA9KDTixcOOBFlq4YQ5ZC5trN7ccJ3wieUFOZttX44s346dcR
+         7ovb5haGDiCtmx6qMcAI5jnsYhqMirQK6Od0fS1tz73lT3XnSdlFssoQYUxPTIB106lr
+         Pih/tihOB1jKe0pjo8VV5bdYhyaMoWtvlHLd+d4tJATC3Z3Lf4hfXC3bWL7AumN0LXZn
+         SSmg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779716110; x=1780320910; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9XVHRPBSt9KXo5wrulw6nEDVPqzcFN/DF35DZwL4F0c=;
-        b=BpUH14EGnlm4UYZVu9foBdalLVCHK55wdvwsZK81HpX2SG6MTxvw/kc4VaJeXSjZQs
-         3eTBMqQvcMIzwXiWfi3KT13WN+SRW8QHICGRtWD6SY/UWm63k8eQp79rk6d0NGLAc1qv
-         WjIAbFurjt3Rkm4z1tsFPUIrIEG7MyEpyocm02DR2uAkfQIxvmO2cNTG+McK3R2XH7Rj
-         7AUUX8rh2epSIAQYE8gycCnQ+260SuVSBqvdVV4OrRcaJMwiZDn6IsIj94PggCttQSXr
-         UHNrnpG4ko2zTsVOvv0b7M9hyRTdGQZQuFT25cBFZjgK3I+CYbhCVOqZqdeTrTSrkrDJ
-         92RA==
+        d=gmail.com; s=20251104; t=1779719446; x=1780324246; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8slmcbMjttgDQLvQhoFcyFtOip+Pdw+NZrKEViWNNwc=;
+        b=F7b6fofxjZzd9/A+hUFwrYaLK0q4v6QMOa4N9bFnMoSdMSE8JEosIbsS0dhdOuvlxC
+         wvY18RFI5EZzhC51y3LnPERYM++CBDlXT9HHuwF+z7nJuPizgE7NLRoo0oidFUuKSEq2
+         9EX+plG1SwR6SZbyYWXDmtr96LzejCL5rd0lGFeyqTRLHRGG1BXhKljAKExmlK/R+924
+         i32XtTYhkFZmFiw5mr0WCgcVJuNN4msZzmZ4iLOdseZtZaIoSE6Ktx60eJ3i/l1uGRLU
+         tZBeKGkXHSPMi3EhtJ/X2ozawCvWpjnGlZG/MPpPuUVJmiiXGLbVBZc3aR63L8HC+poA
+         H49A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779716110; x=1780320910;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9XVHRPBSt9KXo5wrulw6nEDVPqzcFN/DF35DZwL4F0c=;
-        b=L2KDguzL6gdrY6gOR5sIFPYmhPuWsXMcMCIwLgLDf6yq8aSKjrAVmVT8O1LOLdc/NG
-         +Uf/Hs4l7KN/kwOdlCesw4YF4vR+XwvH7ZI4hiROw4dsgr1n6AjLDeNGVcDKX4AtjQ2M
-         AEcFgqi2U1WoqRaTVr0KQQTkYpFC4+RaI5yrT21aAI7KxRGAisl5rqkl1a/lKzfU7apS
-         r2uLjX7XpOMLx+vxmc5CdcnvBRIRDM+Xq3peRKVg42kDs/0A+6GmGQrlZTtodUl9Z6uM
-         NZj5EdmwL6S8SMtiWuuIZA/x4Dt7Xtz6rOLvMhMEe6RnlbuwLg6eop2J36hDAYzlQNYz
-         cWIw==
-X-Forwarded-Encrypted: i=1; AFNElJ9yvBctA82pTCZVeImuINVoy6jYswbj0XA3ERcDct51xKm4RDBAgCrReiokZirt4ZyrqWCCIGg0I/4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ2j0lriDjDp8issgmyGA4RElO51MiBSSJMy28olgxfmKqnRG4
-	5ySZZz9zSkfURqMoB664iK0gMuOUo4/50w9Vulvn5Wfi6ZLD5LusTHAIPA+z75kFgk0=
-X-Gm-Gg: Acq92OHUiVue176FIt2a6vNPFjzvvDMwU0Xp+AWdiV/67hSXQMKFV3u111J+KgcXJa5
-	oSLbDLF/1VQYbGGbhKR0LZdfc2Vfv4Lz9vQVgSof5U5bIGYWi7Zp0SFkq9d8rYcx5q+bG0IKe95
-	iTdioKg6xUrsZSIp5nPe05XSezfaUlnRHC+alPkxIr3VuLqIJQifFKhplqcG+8IRkYhBfD+5MOb
-	QyY18UXGqLq2IoFJDpnfcBKKMR5b0iJhB4+ZI0HV1ulc4HHPgdyaLx7WlGOSnCHOkSFkZk4nTUE
-	/r+HGbqJumrTcXxnukoa5EDTzWjgUzOTFgQGQy4L6tumd/ZGHRLm2aF19CpHG88gJvgCSWBNOte
-	Gr3ybg7LAgwczSuTjeIVsUnb4cB2Ltg1IiVId6jmeTI4BeyZfq1+shZrYqXMpoVRO0PJDyPulle
-	XcnTXIHEZ1aSIaBTk7vy/tdxzngCseD+OILQDkWvz7DqhgJoUiXQG+C3JwaDO9I8+AdAQx9B97H
-	HW1NVbLZMolpx+ywxfY4R9BiEBBwuFiuBOeJCl6PgtLJStu3kw3/C/qGnUG8kyra5Ln6A==
-X-Received: by 2002:a05:6000:2008:b0:45e:8cdc:4ee8 with SMTP id ffacd0b85a97d-45ea3128ccdmr31052715f8f.6.1779716109692;
-        Mon, 25 May 2026 06:35:09 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb9asm29456456f8f.27.2026.05.25.06.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 06:35:09 -0700 (PDT)
-Message-ID: <da358ae1-91b4-4a16-ac76-ffab99c230b9@suse.com>
-Date: Mon, 25 May 2026 15:35:06 +0200
+        d=1e100.net; s=20251104; t=1779719446; x=1780324246;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8slmcbMjttgDQLvQhoFcyFtOip+Pdw+NZrKEViWNNwc=;
+        b=BdPIBRVziwtq2aOFrk4JsLO89ScflOjOoTG5vn3eu0MaqmHRVNW8hcBn91XZ4RLMg5
+         fZKKv5KnTK9n9vo2HYxC2MSnoAy1LyrQEzdJuKAEilHI7pc+GKP0KRPZ5xmY9XIIJoZ4
+         GE3gHQl6jyS1LmHMKHc44leMjMOZrqfKvaVHDm7yL/9fOzdBzrSRutRH1FinJmuywCvj
+         JtjLdk7koxVnL+6mRLkuDmO+p++mZOAS9kTv011rMk5wOg49L5Dn3TcVgBCPEnvHSmhZ
+         6dTFAJK+gtQ1MnSQvtOMTNnu4P64FQdPAAEqQn/F7MWXt9yc/+IpdQ4FXGYUoU9VEeLp
+         Viug==
+X-Gm-Message-State: AOJu0Yy/C1W0qPaDrqJFWjhq3fzllCD1lSdvz6CR7MomwdxJBmnHXjdT
+	p1VhGElka//M/pSo7CBZ83OMS1Rd18vYzEnzEJ9ieWkkAXnL/cvWin00flWN9TwukUiKMtrcS6N
+	xLXyM+bqIzFkh+7INzipWvL/YZk1fZl+ATolOzVZ5ww==
+X-Gm-Gg: Acq92OHs+SpOUhWcZIuoiIcwVHW8Hb0RYw8qqN/zNNxCiXwicdH0mTmtMSxrkcDk1z2
+	GCc5TKeBCz67UbmuvBp0KRuCldFaKLg+9hdew+iu91YRxO6tkeKAVxWLGBPB9BatBML8pXBL8r5
+	drehkRNPM4H+litCiN3Q6jb76VxxHBwCwih0mq+L5aYOwvdJFUHwRXA5KhVi566aEkixnXi71dl
+	xasRGkwrTxI4YT2ezh+oQVikK1o/fefr/uemk5e8Spu64+r7wFguidCjk380JsIAjJixyu0DZbz
+	V6227V7tXfFA5VoPN9HKsGCLsIBJ3a+M5sWXkQiXp48vjIlZ0pb0f0Kcxe+rFvXFV4uNJP2C378
+	rDY76Tjsh
+X-Received: by 2002:a05:6830:498d:b0:7dc:c6fe:ca51 with SMTP id
+ 46e09a7af769-7e5feef5f6cmr10112046a34.24.1779719445804; Mon, 25 May 2026
+ 07:30:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/11] treewide: Convert struct kernel_param_ops
- initializers to DEFINE_KERNEL_PARAM_OPS
-To: Kees Cook <kees@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou
- <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Corey Minyard <corey@minyard.net>, Gabriel Somlo <somlo@cmu.edu>,
- "Michael S. Tsirkin" <mst@redhat.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Hannes Reinecke <hare@suse.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
- Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
- Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "David E. Box" <david.e.box@linux.intel.com>,
- "Maciej W. Rozycki" <macro@orcam.me.uk>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
- Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
- Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, John Johansen <john.johansen@canonical.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
- linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
- qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20260521133315.work.845-kees@kernel.org>
- <20260521133326.2465264-4-kees@kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260521133326.2465264-4-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+References: <CADgB2mFBdTbad5+W=bDOMO+fe1S4jg+aCNjkgd3B3Guq0WFQdw@mail.gmail.com>
+ <2026052528-resupply-fanatic-496a@gregkh>
+In-Reply-To: <2026052528-resupply-fanatic-496a@gregkh>
+From: Adrian Korwel <adriank20047@gmail.com>
+Date: Mon, 25 May 2026 09:30:34 -0500
+X-Gm-Features: AVHnY4KcyaizCgoDowmF0zPIviVFXH7xFlZshfJbt6joWFZrnd7s4qRMImr5Tq8
+Message-ID: <CADgB2mH8VayssgQmuyfMJn8Vv-o8_udfL6msVGrHrL1hO9nd4g@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: f_uac1_legacy: fix use-after-free in gaudio_open_snd_dev()
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-38017-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,iscas.ac.cn,nod.at,cambridgegreys.com,sipsolutions.net,minyard.net,cmu.edu,redhat.com,linux.intel.com,intel.com,ursulin.net,gmail.com,ffwll.ch,acm.org,ziepe.ca,ideasonboard.com,google.com,suse.de,HansenPartnership.com,oracle.com,arm.com,linuxfoundation.org,rowland.harvard.edu,linux.alibaba.com,akamai.com,antgroup.com,orcam.me.uk,infradead.org,linux.ibm.com,alien8.de,zytor.com,atomlin.com,linux-foundation.org,canonical.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,googlegroups.com,kvack.org,lists.ubuntu.com,lists.infradead.org,lists.sourceforge.net,nongnu.org,lists.freedesktop.org,lists.ozlabs.org,lists.one-eyed-alien.net,lists.linux.dev];
-	DKIM_TRACE(0.00)[suse.com:+];
-	TAGGED_FROM(0.00)[bounces-38016-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[petr.pavlu@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[98];
-	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[adriank20047@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 45AA85CB47C
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: C7F4E5CBC2F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 5/21/26 3:33 PM, Kees Cook wrote:
-> Using Coccinelle, rewrite every struct kernel_param_ops initializer that
-> sets .get into a DEFINE_KERNEL_PARAM_OPS-family macro invocation,
-> for example:
-> 
-> @@
-> declarer name DEFINE_KERNEL_PARAM_OPS;
-> identifier OPS;
-> expression SET, GET;
-> @@
-> - const struct kernel_param_ops OPS = {
-> -       .set = SET,
-> -       .get = GET,
-> - };
-> + DEFINE_KERNEL_PARAM_OPS(OPS, SET, GET);
-> 
-> Using the macro for initialization means future changes can manipulate
-> the struct layout and callback prototypes without having to change every
-> initializer.
+On Mon, May 26, 2026 at 12:57AM, Greg KH wrote:
+> Why is this not broken up into smaller patches...
+> The "changes" go below the --- line, right?
 
-Nit: For consistency, I suggest also converting the few remaining
-kernel_param_ops instances that specify only .set and no .get, such as
-simdisk_param_ops_filename.
+Apologies for the formatting issues. Please find v3 below as a series
+of 4 patches. Fixes split into separate patches and changelog moved
+below the --- line.
 
--- 
-Thanks,
-Petr
+Adrian Korwel (4):
+  usb: gadget: f_uac1_legacy: fix file handle leaks in gaudio_open_snd_dev(=
+)
+  usb: gadget: f_uac1_legacy: fix use-after-free caused by bound guard
+  usb: gadget: f_uac1_legacy: cancel work in f_audio_disable()
+  usb: typec: thunderbolt: cancel work before altmode is removed
+
+ drivers/usb/gadget/function/f_uac1_legacy.c | 15 +++++++--------
+ drivers/usb/gadget/function/u_uac1_legacy.c | 10 +++++++++-
+ drivers/usb/gadget/function/u_uac1_legacy.h |  1 -
+ drivers/usb/typec/altmodes/thunderbolt.c    |  2 ++
+ 4 files changed, 18 insertions(+), 10 deletions(-)
+
+On Mon, May 25, 2026 at 12:57=E2=80=AFAM Greg KH <gregkh@linuxfoundation.or=
+g> wrote:
+>
+> On Sun, May 24, 2026 at 11:33:21PM -0500, Adrian Korwel wrote:
+> > Three bugs exist in this driver related to ALSA device file lifetime:
+> >
+> > 1. gaudio_open_snd_dev() opens the ALSA control file first, then the
+> >    PCM playback file. If filp_open() for playback fails, the function
+> >    returns without closing the already-opened control file handle.
+> >
+> > 2. playback_default_hw_params() return value was ignored. If it fails,
+> >    both the control and playback file handles are leaked, causing
+> >    gaudio_cleanup() to call filp_close() on already-freed file objects.
+> >
+> > 3. f_audio_bind() guards gaudio_setup() with an 'audio_opts->bound'
+> >    flag to prevent re-initialization, but the fail: error path
+> >    unconditionally calls gaudio_cleanup(). On repeated bind attempts
+> >    after failure, this closes file handles that were opened in a
+> >    previous bind invocation and already freed by RCU, causing a
+> >    use-after-free detected by KASAN:
+> >
+> >    BUG: KASAN: slab-use-after-free in filp_flush+0x23/0x1b0
+> >    Read of size 8 at addr ffff88810d5523a8 by task bash/306
+> >    ...
+> >    gaudio_cleanup+0x59/0x100
+> >    f_audio_bind+0x4b0/0x590
+> >
+> > Fix all three issues:
+> > - Close already-opened file handles on each error path in
+> >   gaudio_open_snd_dev().
+> > - Check and propagate the return value of playback_default_hw_params().
+> > - Remove the 'bound' guard and call gaudio_setup() unconditionally in
+> >   f_audio_bind(), making setup and cleanup a matched pair within each
+> >   bind invocation. Remove the now-unused 'bound' field from the opts
+> >   struct.
+>
+> Why is this not broken up into smaller patches to corrispond with each
+> issue/fix?  Please do so.
+>
+>
+> >
+> > Additionally, f_audio_disable() was an empty stub. Add
+> > cancel_work_sync() to ensure the playback work item is not in flight
+> > when the function is unbound and the audio struct is freed.
+> >
+> > Changes since v1:
+> > - Added removal of the 'bound' guard in f_audio_bind() which was the
+> >   root cause of the repeated-bind UAF
+> > - Added cancel_work_sync() to f_audio_disable()
+> > - Removed now-unused 'bound' field from struct f_uac1_legacy_opts
+>
+> The "changes" go below the --- line, right?
+>
+> thanks,
+>
+> greg k-h
 
