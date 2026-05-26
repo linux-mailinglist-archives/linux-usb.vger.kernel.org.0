@@ -1,151 +1,197 @@
-Return-Path: <linux-usb+bounces-38056-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38057-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4G3lIWxuFWojVAcAu9opvQ
-	(envelope-from <linux-usb+bounces-38056-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 11:57:00 +0200
+	id +Mg+FBNwFWpbVAcAu9opvQ
+	(envelope-from <linux-usb+bounces-38057-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 12:04:03 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C8C75D3CA3
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 11:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 640855D3E2E
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 12:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7321C302C04B
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 09:49:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B43F2300BE86
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 09:55:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD87C3DA5D3;
-	Tue, 26 May 2026 09:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7744F3D891F;
+	Tue, 26 May 2026 09:55:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NVZlTsys"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="V80fYTHx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011019.outbound.protection.outlook.com [52.101.57.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134F03DB64E
-	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 09:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779788896; cv=none; b=f/Za5aYBWX1Lv4+nQe+iVB+NlJd8F84JnVc5bCyJ7Ko2D2Ex06HXxCtoJoLFYxbmCGwdBI4pOfDWZjt/ymy7I6FMUF6fqvZaXk8hzrDyCFOY+w2L13bF8n45+GezPb0oSbBosdrtvFGRksZ8/Ta5TSHrxGNqOKpgM/R/dVfls0I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779788896; c=relaxed/simple;
-	bh=6xgiU7UHk0fyH8OtVpuJExgRt0VbjZpUEjJ/frbR0FA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J4kaIuQ8C9TWaZOTvmuOkUsx2rEdncvOGEKDU5o3uJHkprwpUCwEsu6YOBgtThzN3RyFS8oKMJzbKGxOt8DocKsq5Q49k8Hr+bxykJwMwFtlsJauMzUlltia6sR293GkVXTF+O2krOT608r8d0PFHNVHMfxOiYpSpzf+nMdAh8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NVZlTsys; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED9451F00A3A
-	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 09:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779788895;
-	bh=6xgiU7UHk0fyH8OtVpuJExgRt0VbjZpUEjJ/frbR0FA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=NVZlTsys9BWdtHzTDLDn5rfEhTbtLxyyJGzF9yhWAnDRt41GZGQkchM1KVUs4BE+V
-	 1ZfotqeJQVRfUIDBM6RJ2k1gVu2eBPsu9O+FeP6SXfWF/fNjDthrrS7mHTkNCjm0tu
-	 z8lXLoRuCz3oM81VIG4KNypW0wZMBD+C0W5bBLTTQrUkpCxFSnVeLs5s6QmfusqyrK
-	 2DZ+l73jxUWSahhHCjeNnze7jpJ4/4lfxQqN/demRkAnfOOJj/aQiLbtdK7j/e7uRU
-	 bs0KQ9vbAJ0Tk2r4RTaxzHBYygw2z2HFkI95yphzgxLV8SHOsGkb3Hm9fXVZm2Odf1
-	 r7Hx6MJKvNEGw==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3939d2bd7ecso87321381fa.0
-        for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 02:48:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+HS1sTtWeeqyr1Yll1UjWDERoxNq1s0BkhcfxBrdrkBeAs/uTyaDjkNAsNkUFC6pJDwBLo5VLkLQg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrIHrqUgWfltvx0HDddR5WsuYbhHLHMkdcbG9iOFZDAJXX8t3a
-	caOnUVOtDApSFn+OozoRqD571PIgTSsjzLtfk3eoVEXeTZwNJFd7yrF1I+seovXkc3DW4iwsyqW
-	YmufqRnfMjG8d7a7zg+usRhsqavbAILi1xCxvAEkO4Q==
-X-Received: by 2002:a05:651c:20cd:20b0:38e:94c6:b706 with SMTP id
- 38308e7fff4ca-395ca1c8679mr43054031fa.7.1779788893678; Tue, 26 May 2026
- 02:48:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5973CF97E;
+	Tue, 26 May 2026 09:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779789325; cv=fail; b=ek0UJ6rjrs3M+b7TGN4giHdjAFl/3sl10zoAofkAjGvJRE+64JMG2C8SUl+o2ePUw7NM5YwQWNX5gQhGZ0meDUUfUi013g9axDucGAgNHLKHl+jjq+zzVYDMkMOtbFExtk8wrt3YYTvWz1K+pcAhdWunCh6Gmsrdo1JoA5oYWkY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779789325; c=relaxed/simple;
+	bh=5bayH101FRoPxqRCyn+HCk6b+fEvMcK3cax4KaAUcxA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=uip+1+0FWttLDPo3CA1QnF4whLdWnk9fhTTQvg+NVdgs133EoOBnRv/6hFm272QXWjaexeYfmxzffwJSrGxXdWzhvJdiYjGaL1S9RaoJrCv+aS/+Pz8mM5doiVnekSs/SuWWnDPzqF8/3LFlGJ9rn0nqzN46Jav3uKcwwkcPS4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=V80fYTHx; arc=fail smtp.client-ip=52.101.57.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Q528pVnaQ0vrq4cOkNEinFuGXMxoXAMeZcadauDMpSp3LbiaDoTvuVAHYNPqIs1leKSOyHg8jQvJ6MT8D6ZmSy+bXd4vHuGfkVtUnnD7fI8bGonMYD4o6pgtPQP2o+O/ziHRPxiogSsY0n2GyB4ecB6Kx4lUkaQMkG70N207OEq7ssdKE8nOwnitgOzissr8OrJ6rSIOXiH5gvVWzoR5RJXRlXUzvl2eeFiFkdTBgu8tjqZSWw+WsDNajC0myj9WRn6uQIJM2IhDpxDcl0LAn2bBp9ZWIENdsnFKTK2cm9MLyj4tEuK2/JlqGumwFGXojaHgaD8VRZknvDEtcK2qnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5bayH101FRoPxqRCyn+HCk6b+fEvMcK3cax4KaAUcxA=;
+ b=AdJoPhCaZJgRHsYG8Vq2P+adDrGRWAjJ9ke+bseP2nplDIcGcLSDPHFAOx5thfSqmyHfwrR9ZyTv2xaxwvdJrCHMiFPyCm4HHgXzCrA8llk+rEL/eky+CNTnI19EUEEM0ZoBOwzInIipDL5bZf/BlcPexsRNrhGqUOPe43CancxGciqOt1agyl9+6Wx/oSt7ugFhch9LdOsb5keSess/BHLHVYVtve+oKQCeS9P2xkK1l3SL/rvLbHVIFPdGEdHmCMmpbCXTqgk2TAm3EB5Z5tkvYG/SHzgysHcQao+PUQVr6KH/TNAcvoOaexxosCXnoJ4rDoZNGUDJ8I15zOaT+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5bayH101FRoPxqRCyn+HCk6b+fEvMcK3cax4KaAUcxA=;
+ b=V80fYTHxfQ7f+CVVGhDFb3hULJXkmerh133flDVaOH/nUHp6m5oxoCBClk3OtG6Q8Ig1wN8KCwKBH+qSA8PPm4oeJMFJKlzOA6/NUEcPeusqdpDO7+cqKBj4tdY4ITU5HjWTMVCgD+/kF/MdZCBkVsiv+0/nGg/bMz54RihhsAg0rQCcBaI+O4ObAaZBrANvQRh8Iqd8+PF6/tjdnqV4dcKPRTOcS3zDkQzy4idLAHd1xtAWRZNhxqiC+kQ9LN5zPvf1SI5OhErh0lPPah+Vgitwbky3killJpl9y1JXIdZHVm+3mM9Dvv7LS12Ecopn1Ic+fjvnwFQzyAYbYGA/ug==
+Received: from SAWPR12MB999118.namprd12.prod.outlook.com
+ (2603:10b6:806:4e2::13) by IA1PR12MB7589.namprd12.prod.outlook.com
+ (2603:10b6:208:42b::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.20; Tue, 26 May
+ 2026 09:55:19 +0000
+Received: from SAWPR12MB999118.namprd12.prod.outlook.com
+ ([fe80::29d3:5625:9339:d4ba]) by SAWPR12MB999118.namprd12.prod.outlook.com
+ ([fe80::29d3:5625:9339:d4ba%4]) with mapi id 15.20.9913.009; Tue, 26 May 2026
+ 09:55:19 +0000
+From: Henry Lin <henryl@nvidia.com>
+To: Michal Pecio <michal.pecio@gmail.com>
+CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Mauro Carvalho
+ Chehab <mchehab@kernel.org>, "linux-media@vger.kernel.org"
+	<linux-media@vger.kernel.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/1] media: uvcvideo: reset interface on bulk stream
+ stop
+Thread-Topic: [RFC PATCH 0/1] media: uvcvideo: reset interface on bulk stream
+ stop
+Thread-Index: AQHc7HNZ+U2PWH4GIEyVP7J8a4HKY7YfavUAgACmhmQ=
+Date: Tue, 26 May 2026 09:55:19 +0000
+Message-ID:
+ <SAWPR12MB99911841F75A9492A6FA875421AC0B2@SAWPR12MB999118.namprd12.prod.outlook.com>
+References: <20260525182028.2148267-1-henryl@nvidia.com>
+ <20260526015514.466b72d4.michal.pecio@gmail.com>
+In-Reply-To: <20260526015514.466b72d4.michal.pecio@gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SAWPR12MB999118:EE_|IA1PR12MB7589:EE_
+x-ms-office365-filtering-correlation-id: 0a93001e-ccf1-4416-bb2a-08debb0ce532
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|376014|366016|38070700021|22082099003|11063799006|18002099003|56012099003|4143699003;
+x-microsoft-antispam-message-info:
+ AlNzvWUsHIJEBQXnkLJgE65vcUKmXiLtkXhIZobk6fKvOk04ITwsYTXXPjwQSVx2WJH7M5AnPauhe/NNvLB6Whc/TJ/2zzGcJhO9KBt+8BdYtyqYqF80ZKfSL3DpkVHUHEo6R6+tijH5g9XUjg9cvqQDIJZIgNZDGtsCgs9Ok9iKfJAgizN0aQSfXVTyc83oZ62pj962MFqQD1mh+5wa7Z8VbVjcHAcH74YRU+Yt4dxqkpMdfT37Dj3Vq9McQptXt92/3SsO9EYeqswD5sWTahl2W6wFV6gZUeiWgggoprS8q21GA3qfaiifyxZPhm/CfKJQDRNSd8Tg1CNM+lcW4SuJPgAG9HgyyeQ6b22ZK0LAJmwFWyMBPXMwBe4/fJBpw1RiZhoIyZZlQRW5E8ZMZ8g10sgsJemrYMrhyz+s2LUiyc5aucSqf/F1mBn0Q6Cku4RSoKpynkAzJsCQuGYGjpUfVvPh9QC+3FWSWL802lrKol9XrooW9KyzWcei18gez1ELB4SGP1CHEK5N4//QVqm/1TovW3y6tPwYC3wdWM/r5sSoT6scU3WA9ucypceLyFVJHd6Z49UBjBunuo2WKtHrHnXJC07VW4oLdhl/ctoLGyNWBfPr8QuFEtbeMY6e4dJiv5+v4Eg1Pd5a+hFA826lg6M7MdgR9ageF721ey9NOK6N4lZ3ze+fwBoI2fXB6aI+qN+Q/GwqSlyHkSs6mtFIzy5FAIHbyNiWpq99vAQmyIYgssDONr8AeajwBPBG
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SAWPR12MB999118.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021)(22082099003)(11063799006)(18002099003)(56012099003)(4143699003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?L0dOEgxb+WI33c3tHAMv5xdV9yXoI66e2Ng3d/QLbyi+gSSWBM4G9NzLOD?=
+ =?iso-8859-1?Q?hWmID8QtK93zpHO0AvteVCXMWJjnN2ep3rQwxGHNz5on5i/jjpQwGqmEXe?=
+ =?iso-8859-1?Q?EkmrOqrpR4KICcWh4JnzlmMnVTkXjLrRba2AYyadn3DRvIm8vuuizQl3KC?=
+ =?iso-8859-1?Q?luiw+8gVeCcEMaU2G9Q6fL4G88hBnvgF+QHFYZP5MsOYj0T/k9ignpreI2?=
+ =?iso-8859-1?Q?TLZU+GxercSRvyhrTYXepisngJxqiUJbb90tA8vZsTZbtUW54XGMxks9Xp?=
+ =?iso-8859-1?Q?K102JLaHXo8GBFB01uQLnPoleheQfbv3XjpG3AWl2nLi5cweSXZjMf3RX8?=
+ =?iso-8859-1?Q?uvp9KsWsV6qVzsQpMu/0jlTnrb/aBWHien8DL9xFP1I7dHqcFEY6mLLhTB?=
+ =?iso-8859-1?Q?kmxPP2R5/JH6yTQfW4cnrYCPxF70f5bc8fqpoF0aao0r5wkLmyx+qwOQon?=
+ =?iso-8859-1?Q?yWAz1Gzq0oMBxONrK4dG50AiKzzr2QCm3poDdOf3QOoMLAP67mQtn0Ag/v?=
+ =?iso-8859-1?Q?xmEdhWYjlCjIrVa1ycFzZCHyTcs4PyQ/jwSJL3rKkK3EqdTrMhQoY1aAVb?=
+ =?iso-8859-1?Q?xDP+3IvwjrWr7Ds3hD0CC+iEu7fG3213Rzs6nDv1yq8Z4XGjG6ikV0HeJP?=
+ =?iso-8859-1?Q?59ntfJfKCPV5dTNV2tSv0Vg7o0ON+OQtswh98J0w1HIGknctmN8Iv4txuv?=
+ =?iso-8859-1?Q?SGgzoarTz/eIpgIqQkpUGsO9Lq/Y5VVIpLtJdSuS0FDRj9lmt4sNOx5MUg?=
+ =?iso-8859-1?Q?8CMdlqRN7k1zNl9apwNZ8emeDK1kWGn3Lv+fTygzLciiuGx9sUlacLB+6f?=
+ =?iso-8859-1?Q?U74nz3X5jivL4C5UIbjh6OfK+CLi826m8m3+zyxmPpEdbhLM5fRp9rhRNY?=
+ =?iso-8859-1?Q?qCx90LgNLokvtTNiLq2IVwj1GWSDoUsmCpoWzzMX9jyGWoQV23u5S/xLP7?=
+ =?iso-8859-1?Q?RXxppwPxi8aq2wta88bOPaI52B2yoW5kJPdAkHJVrZAzLlYknIYTc+Y5Tq?=
+ =?iso-8859-1?Q?QXWtWkGILrXAgwxX7u9R9+5Ip23fw4I5RV8N5Ol89FvYGwq6yFKFMVM+7c?=
+ =?iso-8859-1?Q?JC3AIrERLqUPlvz38H8gECJH19i+kGpGXKnQau8ShbRnApBxjQHcvSli9x?=
+ =?iso-8859-1?Q?6P2zVn1EVEipLQ3C2C4KsMdfMHZCthfhjgv6wofFOxgmZuNR0IKcxi6iLa?=
+ =?iso-8859-1?Q?oeGsqaxNcSkAf86Ha8KdCSmQCVvJJL8ns1lxaBbOvKSBfdL486MfBp9oDj?=
+ =?iso-8859-1?Q?5c/wtH+wuMlW8/bWqnfMUFfpV/lfWqR3BRQRBAqFSRG/WDGJs6zY2KXGIA?=
+ =?iso-8859-1?Q?bqxzowPLoYeAQ9MT5Kb6AEa2W5hHfVlpshhYd7KfRuS6TIRqW7+wzdrbBQ?=
+ =?iso-8859-1?Q?n/iU4haoczUztG6+UBVMvW0RYCJ/tqWAa/qPmYq3QdBOfUv8Uh7RIiFZBD?=
+ =?iso-8859-1?Q?OMIHVjb3TP2KtmsatM+Dp53FhzC9vJhDmQPExNKLmoaCZ/W7J76RC+rBr8?=
+ =?iso-8859-1?Q?VAeWVa6b4KunPT87zNPNbrzzcfekO92mpuA39FmJbgHulnLJp0TfcKbhkL?=
+ =?iso-8859-1?Q?0NBS9tO5np742kdS2zVcl9kGJvO5njzyc8svLgntaU6ewdR69HURNW/R/t?=
+ =?iso-8859-1?Q?kN9u3Y8sUVGK+dp7auQlQtEGl4GZPVCpJqBQuKJ0KnpAALhg0T3sjt6BOx?=
+ =?iso-8859-1?Q?JHRbxJIHYgJAXp+GpGjOSX4qkNYQhTegq3HVGBuRnHxn7lVC2plVlzRpib?=
+ =?iso-8859-1?Q?JLEScfo2wDynik6kp3TCgBg+ugQTsnSPLv+lQcPbaYgurm?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515090149.3169406-1-wenst@chromium.org> <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
- <CAGXv+5HC3dqgcE3KnKzakHHWFHB6m_X42orOkNUvZvp=SL_O8g@mail.gmail.com>
-In-Reply-To: <CAGXv+5HC3dqgcE3KnKzakHHWFHB6m_X42orOkNUvZvp=SL_O8g@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Tue, 26 May 2026 11:48:01 +0200
-X-Gmail-Original-Message-ID: <CAMRc=Med-_0GSYzoFBRiwFzBCK0DZqJD8_SEBxi+zwR20GS-HA@mail.gmail.com>
-X-Gm-Features: AVHnY4JnWCndh1h2w4rgycQThCJN5e2R-74Cpg5S6rpAEGBFVHeaeEFDCnabd1Q
-Message-ID: <CAMRc=Med-_0GSYzoFBRiwFzBCK0DZqJD8_SEBxi+zwR20GS-HA@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/12] arm64: mediatek: Add M.2 E-key slot on Chromebooks
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SAWPR12MB999118.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a93001e-ccf1-4416-bb2a-08debb0ce532
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2026 09:55:19.1623
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NUog6pzEAzbo8UAQCl/ViFXOx9XyDX4wWsom7hgJxC6O4DTVZsVKGEEIfQDCVz4yTCRz237K6H8bRacjgEUM+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7589
+X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
+	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
 	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38056-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-38057-lists,linux-usb=lfdr.de];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[Nvidia.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FROM_NEQ_ENVFROM(0.00)[henryl@nvidia.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-0.995];
 	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chromium.org:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,x:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 8C8C75D3CA3
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,Nvidia.com:dkim]
+X-Rspamd-Queue-Id: 640855D3E2E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, May 24, 2026 at 10:06=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> =
-wrote:
->
-> > >
-> > > I expect some discussion on this patch, because a) it adds some
-> > > OF-specific code into an otherwise generic (core) driver, and
-> > > b) it doesn't yet handle USB 2.0 / 3.x shared ports; it ends up power=
-ing
-> > > on the port twice, which negates the port reset part.
-> > >
-> >
-> > I understand that you do this because the port device has no OF node
-> > assigned. If we wanted to call pwrseq_get() for the port device, is
-> > there really no other way to associate it with the correct pwrseq
-> > provider?
->
-> I suppose we could tie the "port@X" node to the usb port device, but
-> AFAIK no other subsystem does this so we would be introducing a new
-> pattern.
->
-> In the M.2 pwrseq driver, we would have to match by port node instead
-> of its parent device node. We may end up with different behavior for
-> the USB target vs the other targets.
->
-
-I imagine, we can check the bus type of the parent device to know if
-this is USB?
-
-> Also, the "port@X" nodes only exist for the OF graph connections to
-> connectors and/or muxes (this series doesn't deal with the latter).
-> For directly connected devices, there is a "device@X" child node
-> directly under the USB hub node. That node is what gets tied to the
-> the USB device.
->
-
-Is this a problem? I don't think I understand what you're saying here.
-
-Bart
+Hi Michal,=0A=
+=0A=
+> Please check if this works for you, it's included in 7.1 RCs and some=0A=
+> latest stable kernels. If not, you might be affected by other bugs.=0A=
+=0A=
+I tested 25e531b422dc ("usb: xhci: Make usb_host_endpoint.hcpriv=0A=
+survive endpoint_disable()") on the affected setup, and it fixes the=0A=
+issue.=0A=
+=0A=
+With that change applied, repeated stop/start cycles complete=0A=
+successfully, and I no longer see the uvcvideo -71 transfer errors.=0A=
+=0A=
+So I think the uvcvideo workaround in this RFC is not needed. The issue=0A=
+is covered by the xHCI fix.=0A=
+=0A=
+Thanks,=0A=
+Henry=
 
