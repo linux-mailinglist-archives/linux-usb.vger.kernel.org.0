@@ -1,82 +1,86 @@
-Return-Path: <linux-usb+bounces-38052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38053-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oFLCBHA2FWqwTgcAu9opvQ
-	(envelope-from <linux-usb+bounces-38052-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 07:58:08 +0200
+	id EFT1CnNDFWokUAcAu9opvQ
+	(envelope-from <linux-usb+bounces-38053-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 08:53:39 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95D475D1009
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 07:58:06 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A23615D160B
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 08:53:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 22C103030126
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 05:56:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AC35F302D136
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 06:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C5C3BFAE1;
-	Tue, 26 May 2026 05:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7BF33C4B71;
+	Tue, 26 May 2026 06:53:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Os5GTe9w"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TR/s+dSF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565D230AAA6
-	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 05:56:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AC03C3BF7
+	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 06:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779774981; cv=none; b=No5s+oFq+l/tv7pvpIqadpyJaXL+w6O4xd2VYjXYX3Y7uuTE/LH0fa0bEeYv0a0vVRYZe1TTw5vHK0Ibz1dxtxFIeWS0A8xrnLQODZBJtWLv2hEDHM33GGpHKxsWdFU8latf/D+vC5M4/OVFmbNSM/hk3ElXGcZtYALi91qFeQ8=
+	t=1779778393; cv=none; b=jYaEyd/MCjeUS95kviVntlQwhqiHIciRcQgqtYktDxi34BRs9BSj49Y4Jol05jIv+J+pCWBqtp0V5Da9OuWLfzAG2QYGz/iB+gWhH8XW3jCFSRZ6hCGFT28Ble5aDGYK/s4M0RRPxLPJbH7V+S26QGyanP7JBHKM4l0eqzf8DhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779774981; c=relaxed/simple;
-	bh=qQtbda1P/oGFIFnlbhP/vFGqkEuuQ0uC4OudUy+fFIM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Bm5WdcLPZKaaNtEHnGROHGxLN6UBcxQOnO23bMb0ktpEIL+yJewGL59KY2dLmkWxcWVcheUavqF+RzXnu9gvsQpoCtqcFNBJlLod9fy5lprtCE8RMptsfV79lva/PbdzcgbbTXIhgDV/MNTyZnGYenju920qojBggUPEA/b9ItU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Os5GTe9w; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-44a14580111so7602128f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 22:56:19 -0700 (PDT)
+	s=arc-20240116; t=1779778393; c=relaxed/simple;
+	bh=lI94k3K5Kcc20pekEfGAOaAomJ1QgkYtP6G74MUe9gk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pVKToj7FU4QSwJwyxycc01G0JGIz4f4zM8PjfXkQY5/dwfzfUEoOuU4emvoIrb0JeVnb/omCvsY/7gc/jih5lpTGOEsu461IKOuWesmzL9QhR4ZL4vzECD/9bh09EklIlAmeyJ6RZKehAR51F/qqDuXng2rs+MuvHnw0vI+BfI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TR/s+dSF; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43fe608cb92so6170154f8f.2
+        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 23:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779774978; x=1780379778; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/+tzxiMti/hkPabMXB5B0TCtwIofItPhM7EIuDr1tBY=;
-        b=Os5GTe9w3OkO7J/qnEijfllW3a0oWXUC3d+MtwllgcYtb1iuymIRy9xnHZhCJ6Kwaj
-         utQy4dGN75KkNlls2KCd6ZzMhZ9vXsNjVv4Okojd2HLqg4jHZjGLpvx79xgC9et2wjyo
-         xSmosazW04zLMq/rXSh3fUUe9TqEdDHLgQa8vHyQl9YOC5xt6LUxcm/LpUYuaQnkgAjO
-         r5qEj0WcAwEh9pnPmfwBLDcynvJ6Xhit78YV+QlD8AmE7Th+37QNlB93lmqiORBoFdcU
-         AcvSFN6e0YOVGMlDj3weGNecZO9PRsue6/IqVYqW+kPlhbzP8Wh34LxfVSvjuNaMvNo9
-         Kj/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779774978; x=1780379778;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+        d=suse.com; s=google; t=1779778389; x=1780383189; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/+tzxiMti/hkPabMXB5B0TCtwIofItPhM7EIuDr1tBY=;
-        b=nmOyv8hE8AfeG+QXgV2nVIbinJ2CrVw54mxkG0KmyWrPi7gHuIe7Qy2rKm/M1Jml3Q
-         3LxdfJaGKBi++TQ9ZZLXz+hEcpWcjF7XMn64IXwrFYt5U77Fz3VA6fnOCeM72tdAbCR3
-         7/3bsNZY9EQF+8m2zeDFX6qAw7yX7FBgdW227zd8lY6wB21ZEkj8z//MINYN7rUEmn8t
-         oNH5p3MV/p3xYklxvV/7mzwNJjaEpMcMJFX9BVu1dfd8erN/PiOSzPOQwEFxSmucs2eJ
-         UDTUf5A6qOCmE38GJPevUibcC1RUHpX412UCM86BcfuSEnIcn8JdVzYk5qj17jw2frsU
-         BI7A==
-X-Forwarded-Encrypted: i=1; AFNElJ9zkdSCvjiWQQ304IW7HALGiLVUJrEpBfBHPVT0nKOITaeK4nlptuhyhJ8xZlKwbZ3IBH8beDNlxV8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUwjgHFd/Uy0SQ2Chjeemk1O1Uwp6/E4fjBiCycwwp69ZbcJQp
-	WZSdBxVwhWucF2QK4LjKzV3lJZTv0g1P0NLV9V4cMUCfoOCjGS5u3n/a
-X-Gm-Gg: Acq92OHTak0KgT9mo+FVtM43+1y92L8j+3hMXGibv6Gk0m7qC/HDk7RInuV5vz/F8zq
-	0Qe+tv46Lv7PZ/JhliFACOOVaYcFy5kyX1Egzj/Q+h6Jn7JGuqs0YeqnE1mQ2EGiRf5AOYaPaAu
-	+XE0x6BYtiA1+VgeptmgCu+Svd8ifgCGFZZO51Rq/VeMIh63PEkp5AtUfWtucUCJfc837TvB7R9
-	zU2MH7IcO9BIwiPAEBI6LLDdpS84Z+MJML+Hdn8N8dNvgFy39YCso6bFMaImtmVYqB3l1BoajmH
-	668HFy94EAjHzkgZqXD92PZJbZZo9jpo5z/x3OTJKxOO0R5NkaQAwtcVHR6DbV6Gg7g14FKjLUG
-	F0VDTxG9akeInNl3FuKqYMI8PHnmERMFJcWW0DOYYPSM3aQUdkbx3S4Ca8vFJK8vEzs9P1nPO4z
-	JGL21od2/jSh0HAn+7gLVmjWnK72V6CApYNa5Fb49wLX7SMA==
-X-Received: by 2002:a05:6000:1446:b0:43d:7a97:78af with SMTP id ffacd0b85a97d-45eb38e04e3mr29609480f8f.42.1779774977394;
-        Mon, 25 May 2026 22:56:17 -0700 (PDT)
-Received: from [192.168.1.10] ([95.43.220.235])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-45eb6cce01asm33665917f8f.11.2026.05.25.22.56.16
+        bh=yXWASYjT/jE4WzpKhE8nVhHkzGwmPlTITkkcMF0D8BI=;
+        b=TR/s+dSFI2Vk05JY9oKvhTkUPLyGjERphtpAPMGuiQxvuv3fbFSbN1th4lK+bttysm
+         cFb/iWCpkNb08kRUbTcn9WjfJUaB3xcjwa8CXEuHNu8ztYYWGwWQbD8loHo0HuyuciOC
+         0TwcL+CxgU01vXU93n3aCg4f5dmgC1/3cis8o9d493p1B0tb+ArlTCB5LaW6RVOHuZSe
+         xFgNBY2Ddet/gPdHUxjFVULwbZSkZetwjzSKlyv7KFRavsith7RHUAc5uHnKUJqDu/G4
+         H3+i6q7GH893mbCE8FjnHXqiv6/6t+5ocWoYo60XT6575r8A+rywJ8KG4tumaLrCo8Ff
+         W8Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779778389; x=1780383189;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yXWASYjT/jE4WzpKhE8nVhHkzGwmPlTITkkcMF0D8BI=;
+        b=dTU9w0lCUSXaivST/cz4b5SxMkHg7tTaIXA+yfFqFQYFjpFcdzzx5xZyhqagUUyzc1
+         DIvTkzY38T2N05uxh37fozURYhWSDxI4WjS0Bax4whixYgl/Zfq9u8ZvUZeHITkGaXkg
+         GeY5INgyOM6fSeF/RMLY2CSG9ZiXxiu7Vl7ZC7xB6bOPiv4TFNyMQw2gNTIHK5/azlLi
+         QTxezO8Bw35AzIfO0VugyMKFOrdopmvauhQAuZulnwDlv5socvXzI+T8aZlU73nyMGps
+         skccTZOLCKJrpL5IX52EGdqnVfY4S8a7tqRhvI1Ch0POZaKm3lFJ2eyce7rkKBt8x9G8
+         Fsbw==
+X-Forwarded-Encrypted: i=1; AFNElJ+eQQ01S5fRTCJMonHAhn3P/wHigVDfH3hNH1BhtrAOqBOL6ikt6D1Bv/CXghm4TNxt2Gq5rpDF9k4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywyob7FFGlFEjWdmvUkao6NZRHtitoXfUmQXZr4iAexLLRaEtVS
+	Kr5tAd/Ryez4ZkzWTrk+Rf8xP87djnpdjvg1nCmUgUOWZJqcgLpnLPmZ3hOUZd4UMOQ=
+X-Gm-Gg: Acq92OHgJdOptAOFmUciaL+L50g/DRGg5h180iSE6FlaSzSAfuRigBFEv7Sq85HFILD
+	xstHVZyARi95RAJtV42sAq41auF8EsLA/0vPWG2GSlGnvJN1GJYiJatxF5261ZQgQrbI453mgRq
+	T3ydIrbBRH+RcD/y5MtdXuP+eVoQyyQ4JZneYcO0CCe9VRxnyXaxDzjMiB5tSZOH6ds4AViC+pn
+	kk23SMKPY3kRAChpccJbN2hesvUOjxgc4nU6UiClYa+ivIQk8HpYv9PsCxhShmwylHqld2xbhi9
+	tIHfY26v9UqU8Vbr2zCbmLfIS5zFXXaQu822dAC1mQ4y3jfuthTXvQnJP3SfRddZewswo90CMY6
+	vCZbRg+vyY6pnUCVTT/H1JxQbom3AoGQGuXHYIGvXV2K5UsArjEqqJS90YA5U6di7Kgj0+sRceY
+	yHh9dncVBrFRAKVU1ZCkVIgzU7CL01loNOa3rJ//pLxOXlRdpXmFQunDb46cCIw3E9oAyZ0YMHU
+	km0bzFmexTftickAeKQ/85jkikZn6CTzOA/yJl4hf1e7KcaBrK4jYlUnWDu4geOCaQawFE3Jg0x
+	BtvN
+X-Received: by 2002:a05:6000:2003:b0:43b:4136:1e6f with SMTP id ffacd0b85a97d-45eb38e4b46mr29516257f8f.38.1779778389230;
+        Mon, 25 May 2026 23:53:09 -0700 (PDT)
+Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6c9ba2esm33848641f8f.8.2026.05.25.23.53.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 22:56:17 -0700 (PDT)
-Message-ID: <89e19e6e-7ee7-4bb0-abd6-60971b7fd601@gmail.com>
-Date: Tue, 26 May 2026 08:56:15 +0300
+        Mon, 25 May 2026 23:53:08 -0700 (PDT)
+Message-ID: <88c5ca1d-eeda-4023-bc7a-397b92780db9@suse.com>
+Date: Tue, 26 May 2026 08:53:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,229 +88,134 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-From: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Subject: [REGRESSION] usb: gadget: u_ether NULL deref in eth_stop after
- gether_detach_gadget
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, khtsai@google.com
-Cc: sashal@kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 00/11] Convert moduleparams to seq_buf
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Pengpeng Hou
+ <pengpeng@iscas.ac.cn>, Richard Weinberger <richard@nod.at>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Corey Minyard <corey@minyard.net>, Gabriel Somlo <somlo@cmu.edu>,
+ "Michael S. Tsirkin" <mst@redhat.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Bart Van Assche <bvanassche@acm.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Hans de Goede <hansg@kernel.org>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Hannes Reinecke <hare@suse.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+ Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
+ Tiwei Bie <tiwei.btw@antgroup.com>, Benjamin Berg <benjamin.berg@intel.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "David E. Box" <david.e.box@linux.intel.com>,
+ "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Peter Zijlstra <peterz@infradead.org>, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Vinod Koul <vkoul@kernel.org>,
+ Frank Li <Frank.Li@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>, John Johansen <john.johansen@canonical.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Georgia Garcia <georgia.garcia@canonical.com>, kvm@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-mm@kvack.org, apparmor@lists.ubuntu.com,
+ linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
+ linux-acpi@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+ qemu-devel@nongnu.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+ virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20260521133315.work.845-kees@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260521133315.work.845-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38052-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,iscas.ac.cn,nod.at,cambridgegreys.com,sipsolutions.net,minyard.net,cmu.edu,redhat.com,linux.intel.com,intel.com,ursulin.net,gmail.com,ffwll.ch,acm.org,ziepe.ca,ideasonboard.com,google.com,suse.de,HansenPartnership.com,oracle.com,arm.com,linuxfoundation.org,rowland.harvard.edu,linux.alibaba.com,akamai.com,antgroup.com,orcam.me.uk,infradead.org,linux.ibm.com,alien8.de,zytor.com,atomlin.com,linux-foundation.org,canonical.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,googlegroups.com,kvack.org,lists.ubuntu.com,lists.infradead.org,lists.sourceforge.net,nongnu.org,lists.freedesktop.org,lists.ozlabs.org,lists.one-eyed-alien.net,lists.linux.dev];
+	DKIM_TRACE(0.00)[suse.com:+];
+	TAGGED_FROM(0.00)[bounces-38053-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ivogdimitrov75@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[petr.pavlu@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_GT_50(0.00)[98];
 	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 95D475D1009
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,suse.com:mid,suse.com:dkim]
+X-Rspamd-Queue-Id: A23615D160B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-on linux 6.18.31 I am seeing a NULL pointer dereference during RNDIS 
-gadget teardown.
+On 5/21/26 3:33 PM, Kees Cook wrote:
+> Hi,
+> 
+> I tried to trim the CC list here, but it's still pretty huge...
+> 
+> We've had a long-standing issue with "write to a string pointer" callbacks
+> that don't bounds check the destination (and for which the bounds is
+> also not part of the callback prototype, even if it is "known" to be
+> PAGE_SIZE, which sysfs_emit() depends on). Both moduleparams and sysfs
+> use this pattern. As a first step, and to test the migration method,
+> migrate moduleparams first.
+> 
+> There are 2 "mechanical" treewide patches that are handled by Coccinelle:
+> - treewide: Convert struct kernel_param_ops initializers to DEFINE_KERNEL_PARAM_OPS
+> - treewide: Convert custom kernel_param_ops .get callbacks to seq_buf via cocci
+> 
+> The last treewide patch is manual, and may need to be broken up into
+> per-subsystem patches, though I'd prefer to avoid this, as it would
+> extend the migration from 1 relase to at least 2 releases. (1 to
+> release the migration infrastructure, then 1 release to collect all the
+> subsystem changes, and possibly 1 more release to remove the migration
+> infrastructure.)
+> 
+> Thoughts, questions?
 
-[ 7207.040679] udc musb-hdrc.2.auto: unbinding gadget driver [g1]
-[ 7207.041442] configfs-gadget.g1 gadget.0: unbind function 'rndis'/c807d802
-[ 7207.044097] rndis_deregister:
-[ 7207.050445] 8<--- cut here ---
-[ 7207.050445] Unable to handle kernel NULL pointer dereference at 
-virtual address 00000080 when read
-[ 7207.050628] [00000080] *pgd=00000000
-[ 7207.050659] Internal error: Oops: 5 [#1] SMP ARM
-[ 7207.050659] Modules linked in: phy_cpcap_usb aes_arm_bs aes_arm 
-aes_generic ccm bnep usb_f_rndis u_ether usb_f_mass_storage libcomposite 
-bluetooth ecdh_generic ecc zram zsmalloc nf_tables nfnetlink 
-snd_soc_audio_graph_card option qmi_wwan gnss_motmdm usb_wwan gnss 
-snd_soc_motmdm cdc_wdm usbnet usbserial snd_soc_omap_hdmi wl12xx wlcore 
-mac80211 libarc4 cfg80211 panel_dsi_cm joydev mousedev evdev omapdrm 
-drm_display_helper snd_soc_audio_graph_card2 phy_mapphone_mdm6600 
-pwm_vibra snd_soc_simple_card_utils cec pvrsrvkm_omap4_sgx540_120 
-phy_generic ff_memless drm_client_lib pwm_omap_dmtimer omap_aes_driver 
-emif libaes omap4_keypad omap_sham ohci_platform matrix_keymap ohci_hcd 
-omap_mailbox omap2430 ehci_hcd st_accel_spi st_sensors_spi st_accel_i2c 
-st_sensors_i2c wlcore_sdio st_accel musb_hdrc st_sensors ak8975 
-industrialio_triggered_buffer kfifo_buf udc_core usbcore usb_common 
-w1_ds250x cpcap_battery cpcap_adc rtc_cpcap cpcap_charger omap_hdq wire 
-snd_soc_omap_mcbsp snd_soc_cpcap cn phy_omap_usb2 serdev_ngsm isl29028
-[ 7207.051177]  cpcap_pwrbutton snd_soc_ti_sdma atmel_mxt_ts omap_des 
-n_gsm lm75 industrialio libdes snd_soc_core omap_crypto crypto_engine 
-hwmon leds_lm3532 snd_pcm_dmaengine display_connector snd_pcm 
-drm_kms_helper snd_timer snd drm soundcore led_bl 
-drm_panel_orientation_quirks touchscreen_buttons leds_cpcap gpio_keys 
-led_class [last unloaded: phy_cpcap_usb]
-[ 7207.051361] CPU: 0 UID: 0 PID: 6109 Comm: hildon-usb-gadg Tainted: G 
-       W           6.18.31 #8 PREEMPT
-[ 7207.051391] Tainted: [W]=WARN
-[ 7207.051391] Hardware name: Generic OMAP4 (Flattened Device Tree)
-[ 7207.051391] PC is at dev_driver_string+0x0/0x38
-[ 7207.051422] LR is at __dynamic_dev_dbg+0x8c/0x118
-[ 7207.051422] pc : [<c0926264>]    lr : [<c080f050>]    psr: 40010113
-[ 7207.051483] sp : f6265cc8  ip : f6265d64  fp : c1445150
-[ 7207.051483] r10: 00002fef  r9 : f6265e48  r8 : 00000000
-[ 7207.051483] r7 : bf7e2000  r6 : 00000000  r5 : f6265ce4  r4 : 00000048
-[ 7207.051513] r3 : 00000001  r2 : fffffffc  r1 : 00000000  r0 : 00000048
-[ 7207.051513] Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM 
-Segment none
-[ 7207.051544] Control: 10c5387d  Table: 9a8b804a  DAC: 00000051
-[ 7207.051544] Register r0 information: non-paged memory
-[ 7207.051544] Register r1 information: NULL pointer
-[ 7207.051574] Register r2 information: non-paged memory
-[ 7207.051574] Register r3 information: non-paged memory
-[ 7207.051605] Register r4 information: non-paged memory
-[ 7207.051605] Register r5 information: 2-page vmalloc region starting 
-at 0xf6264000 allocated at kernel_clone+0xa4/0x3d4
-[ 7207.051635] Register r6 information: NULL pointer
-[ 7207.051666] Register r7 information: 1-page vmalloc region starting 
-at 0xbf7e2000 allocated at load_module+0x800/0x208c
-[ 7207.051696] Register r8 information: NULL pointer
-[ 7207.051696] Register r9 information: 2-page vmalloc region starting 
-at 0xf6264000 allocated at kernel_clone+0xa4/0x3d4
-[ 7207.051727] Register r10 information: non-paged memory
-[ 7207.051727] Register r11 information: non-slab/vmalloc memory
-[ 7207.051757] Register r12 information: 2-page vmalloc region starting 
-at 0xf6264000 allocated at kernel_clone+0xa4/0x3d4
-[ 7207.051788] Process hildon-usb-gadg (pid: 6109, stack limit = 0xeff2ce29)
-[ 7207.051788] Stack: (0xf6265cc8 to 0xf6266000)
-[ 7207.051818] 5cc0:                   c0e03a1c 00000000 00000002 
-cef5af25 f6265d7c bf7e443c
-[ 7207.051818] 5ce0: f6265cd8 00000000 00000000 00000000 00000000 
-00000000 00000000 00000000
-[ 7207.051818] 5d00: 00000000 00000000 00000000 00000000 00000000 
-00000000 00000000 00000000
-[ 7207.051849] 5d20: 00000000 00000000 00000000 00000000 00000000 
-00000000 00000000 00000000
-[ 7207.051849] 5d40: 00000000 00000000 00000000 00000000 00000000 
-00000000 00000000 00000000
-[ 7207.051879] 5d60: 00000000 cef5af25 f6265d38 c6248000 f6265e48 
-bf7e050c bf7e443c 000000e2
-[ 7207.051879] 5d80: 0000003b 00000000 00000000 f6265d38 c6248000 
-f6265e48 00000000 bf7e4508
-[ 7207.051879] 5da0: 00000000 f6265e48 00002fef c0b29a10 00000000 
-0000068e 00023864 c6248000
-[ 7207.051910] 5dc0: 00000000 cef5af25 f6265d38 f6265d38 f6265e48 
-00000001 00000000 c0b29bb0
-[ 7207.051910] 5de0: f6265e80 c03959cc 0b3dc968 00000000 00000000 
-cef5af25 f6265e40 f6265d38
-[ 7207.051940] 5e00: f6265d38 f6265e94 f6265e48 00000000 f6265e48 
-c0b349c0 0b3dc968 00000000
-[ 7207.051940] 5e20: c50f3040 60010013 6a14845e 00000000 0b3dc968 
-00000000 00000000 c50f4820
-[ 7207.051940] 5e40: c50f3040 c03959cc c6248110 c6248110 c2ee9060 
-f6265e80 c50f3040 cef5af25
-[ 7207.051971] 5e60: c2ee9000 c6248000 00000000 00000000 00000000 
-00000000 c411e050 bf7b507c
-[ 7207.051971] 5e80: 00000000 c0b351dc 0b3dc968 00000000 6a14845e 
-c6248108 c6248108 cef5af25
-[ 7207.052001] 5ea0: c6248000 c6248000 bf7c1160 c0b35a1c c6248640 
-bf7df5bc c3649e00 bf7ba068
-[ 7207.052001] 5ec0: bf7be6c0 bf7b0350 c3649e00 c042cc34 00000040 
-c3649e00 bf7be6c0 c2ee9000
-[ 7207.052001] 5ee0: 00000000 c042ab98 c50f3040 bf7b56c0 00000000 
-cef5af25 00000000 c2ee9000
-[ 7207.052032] 5f00: 00000000 c50f4820 ffffff9c 00000000 00000002 
-c5fa53d0 c2e507f8 c0381e8c
-[ 7207.052032] 5f20: c2e507f8 f6265f68 00000000 c03808fc 00000000 
-c2ee9000 00000000 c2170000
-[ 7207.052062] 5f40: ffffff9c c03877dc f6265f68 f6265f5c 00000000 
-00000ff0 c5fa53d0 00000000
-[ 7207.052062] 5f60: c5fa53d0 c2e507f8 e7d70be1 0000000a c217003b 
-00000000 004c3efc cef5af25
-[ 7207.052062] 5f80: beff9a3c beff9a3c 004c5488 004c5220 00000028 
-c01002ec c66a9f80 00000028
-[ 7207.052093] 5fa0: 004c3efc c0100080 beff9a3c 004c5488 beff9a3c 
-b6f046e5 00000000 00000000
-[ 7207.052093] 5fc0: beff9a3c 004c5488 004c5220 00000028 00000001 
-004c52a0 00000000 004c3efc
-[ 7207.052124] 5fe0: b6f0708c beff9a24 b6f0071d b6e87ae8 80010030 
-beff9a3c 00000000 00000000
-[ 7207.052124] Call trace:
-[ 7207.052124]  dev_driver_string from __dynamic_dev_dbg+0x8c/0x118
-[ 7207.052124]  __dynamic_dev_dbg from eth_stop+0x70/0x134 [u_ether]
-[ 7207.052185]  eth_stop [u_ether] from __dev_close_many+0xd0/0x1f4
-[ 7207.052185]  __dev_close_many from netif_close_many+0x7c/0x124
-[ 7207.052337]  netif_close_many from 
-unregister_netdevice_many_notify+0x220/0x994
-[ 7207.052337]  unregister_netdevice_many_notify from 
-unregister_netdevice_queue+0x9c/0xec
-[ 7207.052398]  unregister_netdevice_queue from unregister_netdev+0x18/0x2c
-[ 7207.052398]  unregister_netdev from gether_cleanup+0x14/0x28 [u_ether]
-[ 7207.052398]  gether_cleanup [u_ether] from rndis_free_inst+0x2c/0x48 
-[usb_f_rndis]
-[ 7207.052459]  rndis_free_inst [usb_f_rndis] from 
-usb_put_function_instance+0x1c/0x28 [libcomposite]
-[ 7207.052459]  usb_put_function_instance [libcomposite] from 
-config_item_cleanup+0x64/0xa4
-[ 7207.052612]  config_item_cleanup from configfs_rmdir+0x1e8/0x300
-[ 7207.052612]  configfs_rmdir from vfs_rmdir+0x90/0x1ec
-[ 7207.052642]  vfs_rmdir from do_rmdir+0x12c/0x170
-[ 7207.052673]  do_rmdir from ret_fast_syscall+0x0/0x58
-[ 7207.052673] Exception stack(0xf6265fa8 to 0xf6265ff0)
-[ 7207.052703] 5fa0:                   beff9a3c 004c5488 beff9a3c 
-b6f046e5 00000000 00000000
-[ 7207.052703] 5fc0: beff9a3c 004c5488 004c5220 00000028 00000001 
-004c52a0 00000000 004c3efc
-[ 7207.052734] 5fe0: b6f0708c beff9a24 b6f0071d b6e87ae8
-[ 7207.052734] Code: e3a02009 eae09cdf 00000477 c104c684 (e5903038)
-[ 7207.052764] ---[ end trace 0000000000000000 ]---
+This looks reasonable to me. I added a few minor comments on the patches
+but they already look solid.
 
-
-I suspect the reason is commit:
-
-   usb: gadget: f_ncm: Fix net_device lifecycle with device_move
-
-
-The crash appears caused by DBG() inside eth_stop()
-dereferencing dev->gadget after gether_detach_gadget()
-has already executed:
-
-   void gether_detach_gadget(struct net_device *net)
-   {
-       ...
-       dev->gadget = NULL;
-   }
-
-eth_stop() still executes afterwards during unregister_netdev()
-triggered from gether_cleanup()/rndis_free_inst().
-
-The likely problematic path is:
-
-   DBG(dev, ...)
-     -> dev_dbg(&dev->gadget->dev, ...)
-
-which becomes invalid pointer dereference as dev->gadget is set to NULL 
-already:
-
-This seems to be a regression caused by the new decoupled
-netdev/gadget lifetime semantics introduced by the patch.
-
-Previously dev->gadget appeared to remain valid for the entire
-netdev lifetime.
-
-The issue reproduces on ARM/OMAP4 during configfs RNDIS teardown.
-
-
-Regards,
-Ivaylo Dimitrov
+-- 
+Thanks,
+Petr
 
