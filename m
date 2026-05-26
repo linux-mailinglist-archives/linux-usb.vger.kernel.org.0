@@ -1,397 +1,396 @@
-Return-Path: <linux-usb+bounces-38071-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38072-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4NF1I+znFWqXegcAu9opvQ
-	(envelope-from <linux-usb+bounces-38071-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 20:35:24 +0200
+	id QNsyKhDyFWp7fQcAu9opvQ
+	(envelope-from <linux-usb+bounces-38072-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 21:18:40 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29BA75DB68F
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 20:35:24 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E305DBE5D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 21:18:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 94F10305FAF5
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 18:30:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 410D9303635C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 19:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678ED421EF3;
-	Tue, 26 May 2026 18:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2371C3C13E6;
+	Tue, 26 May 2026 19:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="E6s6i0Nx";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="KOAfKgfF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pUB6xy3L"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A071830AAA6
-	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 18:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779820223; cv=none; b=fZElXZokhyduAnC8k0hUeOqlCpdmKzB+5BxTuSt0Z4B+/V596P+h5SUZyRz1ytjxvsi9LiNt22Vu5jKvLPET5Rw4L4Otl5kLmOc89abcv7JAExioNU6N4QAoWNmJOJU9YRPClHhNNpB4yyDk3nI+zLzCwzI1H7mRtwfS0VMxX/4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779820223; c=relaxed/simple;
-	bh=AnERR3aYBMShlbG8W01rgjvYAZLp4HueE8R5yBYjsQY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YsxKnQ9+2+hHXVlm+z3jmgGBcjbQ1coaAPkGNq9/UlkfRcRi8bz/ag2JWs+Glq0z6WY8Bs08E+O1x8ofbH8LFNv0e1zYMf1NJS9ulIN/RAOsueKOXZMrBLyVr1c9dta24gQlfykzwGoO9HcroLUBfOppNlnocn3mmabJiYw6/K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=E6s6i0Nx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=KOAfKgfF; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64QH1Eh12995577
-	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 18:30:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=TEi2Tq0xC1zN1d24vzrJg3IDr3nxq28YoQs
-	nHTaOUJw=; b=E6s6i0NxphHx2lXQdZnGor8QMoy/RQSJ5BuvhZ4AaZGFLy7YJGj
-	GLE/aeVYkRDHeyr3BhnmvgpaqSSsMdEUiU+ADKEie8FwpHcs+l8os5jvbRGXa9CK
-	yzlVqrIdGji1Pfl3z9a7xsuk+LnTFvDeeGM3xh04xn1B1/gNfdkUrV4+tmNvRAfI
-	toSic01aLnAgMukYB604BEh7Pf5BtlWMbc2OmySHBt/4kuSuvUv58t4FND1FrvlO
-	GWDDEcFsKDGCTbM4OUp63ABFxx9rFQPbOFN1TvK1qonugpbih9cVQ5dlFuKfMBGr
-	UOO6qrqo+pITRg0pIkA6iRDgkxqKcgQz+fw==
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4edcnnsa2d-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 18:30:19 +0000 (GMT)
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-3048abb847eso1156504eec.0
-        for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 11:30:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E0D3C1994
+	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 19:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779822738; cv=pass; b=Et0FTYJXwPWXUX0GlFBt7FQAPwIuN64/OAaAO4KaTG60wdQHXQZPV4Mw1x0IYjzD3WvamTBNDDgIaUXp0LT9qwPbS1HTeKszoU4NDP7625OatvhWhnlMpf4Kr+5+lyK+siVN+YTFZDDvU/1HC2f39th86GuRuQDhzR4hifKJ3ak=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779822738; c=relaxed/simple;
+	bh=aiF8fG6BFn6ui2MZdXJ8W/PTadNodeen3LKVHWm6nSA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YF3QO26el2IHpt6H4s54+PDqCRsP68WZpTr2icwgfE25XvsrmI57hbLQ82sryhGBtspbzernNdhgonElV6cPU72FekPrk9QhywLkm7pwFyDi+hDUon08h57q9zCz+RsffVYv94SaD3hFrwknHgHBHy8Yclhjsjsooib5313OOKM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pUB6xy3L; arc=pass smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-39397d63804so58917651fa.2
+        for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 12:12:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779822734; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BUBykwSNv7MDcj3cBOBLzxt0hX3AiIJc9+1WVuTUyFLGVMbUicewbXAG9v77tBGk0F
+         tcEw2HdNNBLmiR5S6PvG38fig25pYZGO0INy9HwuqBGIFC/EFQhrbBYFPnMMPjSoaXki
+         8yhRFgyUsZJjN56U5O0ey0BCOOYNqVeVZOumRKR57NF9LjBawismmloJgGjhU6d7Ukc7
+         W6C3AyKa7kGGtlQeT2XCkqz+LADGAYs5W1PbpjciI/y7MOYfBcO1AfVEb8azhLrkdJm1
+         0lcObrC7wNA6N+EuHnJDl5clvOyoAiwswnVfiylA7IJwJZ84xJBjjpv2ueFxN1Tc1u2x
+         Rgkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=iSORlCrsECXKalN8WGdeklBADHTM4Z7NlX/OTwwcOfg=;
+        fh=DN19s0ibwwfJeGavrSM1cHit2/YwAmBInLLPIvjttCQ=;
+        b=feuKD7ya3EzM20vzA/Wl8UmWbuNk41P6gLG2TDtY0fst37bq/m8mLeKuHd73cdr2n2
+         MvikybDMOO+UhT3R0DI6TZpyAgw7kCh2Lj4NA7Q7Wq0gFe71WLzEskf1fMQXpbjq3VuT
+         64aMtmRjzEh+E30+5LvExpuOTEstefwdHENQLTmWbCrzw0Hx522PFEpT2XaVAuQl+KFL
+         noH/cuPJTTVvGgZTb1cXdqToSyTCoPXdADtqZPMqePcJep6q7IGbp8MEHsnohxIGTEQa
+         8y6oQ4SmVkYw9wJzoM++K3CamRkI/3RwR7vjp3sjeQr6AXR3Bx101iLxr7czZeoARgIG
+         xFUQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1779820219; x=1780425019; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TEi2Tq0xC1zN1d24vzrJg3IDr3nxq28YoQsnHTaOUJw=;
-        b=KOAfKgfF6dBn6QbAQZpgTJDhixat+Cap7KaAEGIERYdFdgTefCLva/AcMdKJeEtyR+
-         BtvsEu1xJbBlsjq6aUHP6xwI3EmvNZHwBD/DGY3uv2NLXUIK8OBmZ/pw/2UsVz0i43ey
-         ZHM0EhqKJ8wQetIdLTVyOiC5xRFYc1voCFf8pOBDZeFiu/gzP3he+yxVlsJ/uoXjs+A+
-         n/Pc/ZuYqZescROECQkVuDOfsZTQvZFv63pUS0yWSvLVA+hsjf8aTi1rsIhPcaWybNS1
-         +kxzflhFF3bZspBDYnW4HLrxnK6lueda0yjrYcguu/5QvWt2qmEJZ+jes/QR1o/bt4Mj
-         ZJfA==
+        d=gmail.com; s=20251104; t=1779822734; x=1780427534; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iSORlCrsECXKalN8WGdeklBADHTM4Z7NlX/OTwwcOfg=;
+        b=pUB6xy3LoUv8UdJ9ekHd+cUiePnWecgM4bATz5g1epqYGMepGJQPTZ1Iok4FABb5n0
+         KyUOdAMcITwyCP0XeREwOckFyn9wjszpyEZIC0SxsZjSCI5t4HNkzBWThLC8FcO9Lt/Q
+         e1F8MDW+iRn11jJsSvPbugdKKVkBA3STldYudCWVOiHJ5f3pKht6F1VwbCnKwl+PtJZB
+         AL0piKi90IiRl+5OTiNpf6FPJRlB5FTK7XnIRbF/EWOEBqjKgSVDRlgmymGkOQHxPOK6
+         aOjHtRxR8Fh908q7i77w5BGNWpZv1ss1mXwa7s4L1592MdZM4wSbapVtfQ++6vrhdfoS
+         PWpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779820219; x=1780425019;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1779822734; x=1780427534;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TEi2Tq0xC1zN1d24vzrJg3IDr3nxq28YoQsnHTaOUJw=;
-        b=XaC+GAEOsqNZU4uoufh72PdyiJ2y/4cswZsBmm9QGy7WiPter7/1C9Igq5qpyqqUze
-         xrE6lHF/qGL+F3lssbdI1Dm3unp6bZauBikAx0LuO1Jvg3hpbpEKZAP4ts0tO95FognG
-         wYRych0q4j+fJ+wuu2/t82vcLKQ8WPdtarCXuAz7GTH1IpTGOEJBdkZ4R+RMZVHsjWHA
-         vI4wxUzhzc+8y9rLIWB2U2T7sHHuWcBeB65dqqnIAd7tJwRPZp8QvX1h2L1saO3kZa9t
-         Y8nzHd8W2Mc0eAQExLVpUNK1DCybLFpy3qwvaMBLi2GjdRSISf/LJ8cxItOdXuoQcQ0O
-         x5MQ==
-X-Gm-Message-State: AOJu0YwiSFu4ROOYQF3Tbzh7uRzkSirjX2YKbdxLbVSqQjdmWe3PPXjw
-	Th/P/4DCCs3BZIRjbH/xBcy/siMvMj1b4FS0E/dyl6Hc7O/Dd8BN5XHvUY8O8hzDLOQZPv/JUVx
-	rVw0mPsCxfVA3tbMh/6WEdPesmlvgwwJiy9N88XKfaEF0A0ZJMDCWfkq924leJJ8=
-X-Gm-Gg: Acq92OElI4VRNIl3ONHQEDTG8CIXZxelBMSM2RHw7z4F0aoLdEvVtGCf+A/mXxTiAUo
-	ngQ3RY+UDnBK2SmVdnMKAk6iqEPyqvFPEMs63kvJGHmiHrNR+ozMj9CxdXBHaPXDouKj6rgTGwS
-	evUHWUejNDFLsiRK1RLWIHhCEGbYSTU4W5QEXnzjmswTOW5ec3kAZiCEPIzZSXvu556pmV+7FHW
-	LxhdbYCGf1BQ9qmECq0Gb3Lefc91MusA4MDzDycBCmEL0Xgtpx3bW6Q9emmIly4g9ZNg/SzeFV6
-	HJaeLXBgKiOoDSL/zue7Kp5E/Tnk82AguPuUmBdzPIzImjfeZueagIYoDGWpensrZUCEhY3fzGx
-	j4pvAs4GS8kwfJ4nOmK3aPqyvidvKr0O47cUoSfdpJYcXmhYoidyi1tdXVC9T9qIqp5lNTwtBq9
-	c=
-X-Received: by 2002:a05:7022:3d12:b0:135:3983:2131 with SMTP id a92af1059eb24-136341c8b21mr7896447c88.21.1779820218353;
-        Tue, 26 May 2026 11:30:18 -0700 (PDT)
-X-Received: by 2002:a05:7022:3d12:b0:135:3983:2131 with SMTP id a92af1059eb24-136341c8b21mr7896429c88.21.1779820217669;
-        Tue, 26 May 2026 11:30:17 -0700 (PDT)
-Received: from hu-eserrao-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366a4011d9sm9045003c88.6.2026.05.26.11.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 11:30:17 -0700 (PDT)
-From: Elson Serrao <elson.serrao@oss.qualcomm.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack.pham@oss.qualcomm.com, wesley.cheng@oss.qualcomm.com
-Subject: [PATCH v2] usb: dwc3: avoid probe deferral when USB power supply is not available
-Date: Tue, 26 May 2026 11:30:16 -0700
-Message-Id: <20260526183016.3501307-1-elson.serrao@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+        bh=iSORlCrsECXKalN8WGdeklBADHTM4Z7NlX/OTwwcOfg=;
+        b=lZJTggR0uClbC6O2KNsMaLyWGXrfHC7NpaX+KbCkDVvA75xLle+2FUH7v/42OoNyGm
+         Q1h3qxHF3a3OOiv7xOpP4nyG0dOpTmpLLc/fk1dGMqw6cy43QEKkXAOPHsiJRM7TkAI9
+         N7/89zhUcIBS68zDJj/Y2IaSC69iL3A5lpxQqn9iThLmUWFv/W2eC4LTsmu0Pq6ejnJJ
+         5Cl/bjINyE566Uq541th5FPeimnmgJ1Iaznd87Ia9giBl/R7VEzP1L/hQSQTk5zMSUaT
+         7vGl28iKBzwzO1M/filk5fZYkXBGGFeK5jkFBmxQUJak5yg+wuvQpam8Dbby8gTeshYF
+         SayA==
+X-Gm-Message-State: AOJu0YwRcBX7X71aY9MDbS2gtwFK9m4gYuRgo/VFAsJiRB7ASrXJYcNj
+	Vd742x+bLkGNUw8k1r9zNpPHY0UJtvT+4oega7ci79UdUPjgSAnlGaMsLq3Y+Yr4BLhq8MZpX56
+	T0SPoQOEGbrL0V9zCsF14XglxFWBEEgWOeTE8
+X-Gm-Gg: Acq92OF9kXhY7Uw8hOFs2eVcxoeE9RiqsuahMmXr/44stFTfHsDUcG907H7kaOW2NXx
+	XN+pfJNxjK6zOB9RDIfanHwjKdniuFIPqsBt8OCV2mdqEYMYw5MvAQaUv5XhsRPIlkaff4GOdFJ
+	wUN3xU/XP5v7yzDuRXMkRUQFBi5lLmGloYpANzH5V+wMH+LPUmIx2N51o5ekejmLRdHdbzSDOps
+	wt88/+xHITU1PvbehYJTSqAea0dQD6b83UXcyPN9zqdTvx5lQ4LK5lOhdPfDC/RUZ4+oSMP0Qoo
+	SnHX3lpfbhFp0XHVkQ==
+X-Received: by 2002:a2e:a994:0:b0:396:28df:1133 with SMTP id
+ 38308e7fff4ca-39628df1db6mr6361241fa.16.1779822733497; Tue, 26 May 2026
+ 12:12:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: blO6FDdgIwlNqyK3UrjVRiP47NMtOgHP
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI2MDE2MSBTYWx0ZWRfX+2/Tl2bY+lnJ
- Tmspu8c1dGrdfCaYfqN3YhUB1+YFJfK10W+AeXcck8zGJ70Wnhn6vxvXK6KJmIB9oHItopOl6RA
- 9mULx3N5pRq5t4PIw0VQOoyW7km8brGzQaXlu2kEHgWyoDLoBpxUayKBgEwVfpruCr6r7P205EF
- dHxpKWv4+x0NGCgNV3gsP4rK5Qu2cQGcNrNMPKKWKjH477Y2NYZTj/CweZWcW9QHsBWG8Mwb5se
- EU7oZbkaBI4lqmd5iaTwaY9MvFEk6Tl0qHj5vzGgogl/G9fWNGuDf+4iGF0dGhDk+gWyxDPEAkl
- IslqTzFQwkrFfg4UfFkeJsIfw6y/A66PXSJqpBjqboTlgsFnktUugiRC3/PPfjbB41R0gqjVTi+
- bQjBsFs78n24Ksb9wyNCZQykgvQowz3xpSF7RWlJnj4vcM8T5+EIvfL4Rv8rtknek1/0uD/MH4c
- Bk6aGkbaSp8Polat7xw==
-X-Authority-Analysis: v=2.4 cv=VPHtWdPX c=1 sm=1 tr=0 ts=6a15e6bb cx=c_pps
- a=PfFC4Oe2JQzmKTvty2cRDw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=IQkDn3IUzkMpPxIPlJ0A:9 a=6Ab_bkdmUrQuMsNx7PHu:22
-X-Proofpoint-ORIG-GUID: blO6FDdgIwlNqyK3UrjVRiP47NMtOgHP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-26_04,2026-05-26_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 spamscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- adultscore=0 malwarescore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605260161
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+References: <CAGwGCQ+YFkxxnnbSKbSWC7wsh5ORAT=5riqHJrwsimtqFCuKYw@mail.gmail.com>
+ <20260512122719.51338042.michal.pecio@gmail.com> <CAGwGCQLjcOkjgDZgxmL0gR6uVwmFjxJ22sMzBYRJLXrDtbZZCQ@mail.gmail.com>
+ <20260512190203.5695eb7f.michal.pecio@gmail.com> <CAGwGCQJ5eOfuq2dKPSL1yocruT8prwns93sTvzAUVZTJ4CZsyg@mail.gmail.com>
+ <20260518084648.00fdc77e.michal.pecio@gmail.com> <CAGwGCQKyRsyRE_HRCNYgBComN-cZU4SW0j-cq3OwqG=-VH4NKA@mail.gmail.com>
+ <CAGwGCQJ6SaB_mLH5DGttVDXHvvNW9zrSnijwYxp2W4d_W40FRw@mail.gmail.com> <20260523183200.344d784f.michal.pecio@gmail.com>
+In-Reply-To: <20260523183200.344d784f.michal.pecio@gmail.com>
+From: Anders Thomson <andtho888@gmail.com>
+Date: Tue, 26 May 2026 21:12:01 +0200
+X-Gm-Features: AVHnY4LYLZ7RjoMwPHnXkngf6l0JlS4XdRRG_dVs4LZx8CwVNH0XUWcxhw3sdLU
+Message-ID: <CAGwGCQ+_GLAPs5ew33Tk5g_0mz2z15d9Axo13MnB2e4p+QYP4Q@mail.gmail.com>
+Subject: Re: renesas 1912:0014 failures
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-38072-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38071-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[elson.serrao@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 29BA75DB68F
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andtho888@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid]
+X-Rspamd-Queue-Id: A3E305DBE5D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The dwc3 driver currently defers probe if the USB power supply is not yet
-registered. On some platforms, even though charging and power supply
-functionality is available during normal operation, there may exist
-minimal booting modes (such as recovery or diagnostic environments) where
-the relevant USB power supply device is not registered. In such cases,
-probe deferral prevents USB gadget operation entirely.
+> > Some advances, perhaps. I _did_ get (twice) the boot to succeed with
+> > the quirk (still with the 26 sec pause) . Both times was after a full
+> > power cycle (PSU on/off). After a regular I/O Button press during, the
+> > boot stalls. I'll run this a few times more to verify.
+>
+> xhci_hcd.quirks=0x80 should have no effect on anything besides
+> suspend/resume. If you see differences in boot behavior, it probably
+> is an effect of suspend/resume cycles performed or attempted during
+> the previous boot. It seems that the chip gets into some bad state
+> which requires a power cycle to fix. BTW, do you mean just turning off
+> the computer, or disconnecting the PSU to remove standby power?
+>
+Ok. That can be the case. I did power cycle with the (240V presumably)
+power button on the back of the case.
+To be sure, I now disconnected the power cord for 6 hours, and it
+subsequently  booted nicely with the quirk.
 
-USB data functionality for basic operation does not inherently depend on
-the power supply framework, which is only required for enforcing VBUS
-current control. The configured VBUS current limit is typically enforced
-through the charger or PMIC power path. When charging functionality is
-unavailable, applying a current limit has no practical effect, reducing
-the benefit of strict probe-time enforcement in these environments.
+[    0.000000] Command line: root=/dev/sda2
+init=/usr/lib/systemd/systemd mitigations=off xhci_hcd.quirks=0x80
 
-Instead of deferring probe, register a power supply notifier when the
-USB power supply is not yet available. Cache the requested VBUS current
-limit and apply it once the matching power supply becomes available, as
-notified through the registered callback.
+<snip>
 
-Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
----
-Changes in v2:
- - Removed notifier unregistration from the vbus_draw work function to
-   avoid a race with remove callback.
- - Added an early psy registration check in the notifier callback.
- - Moved power supply registration check after notifier registration
-   in dwc3_get_usb_power_supply() to address the race identified in v1.
- - Link to v1: https://lore.kernel.org/all/20260407232410.4101455-1-elson.serrao@oss.qualcomm.com/
----
- drivers/usb/dwc3/core.c   | 99 +++++++++++++++++++++++++++++++++------
- drivers/usb/dwc3/core.h   |  4 ++
- drivers/usb/dwc3/gadget.c | 10 +++-
- 3 files changed, 97 insertions(+), 16 deletions(-)
+[   87.156173] EXT4-fs (dm-7): mounted filesystem
+67bc6f66-1a28-49d3-b834-3a49777f62e6 r/w with ordered data mode. Quota
+mode: none.
+[   87.173234] systemd-tmpfile (363) used greatest stack depth: 12272 bytes left
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 65213896de99..c035b5fbfb2f 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2192,22 +2192,89 @@ static void dwc3_vbus_draw_work(struct work_struct *work)
- 			ret, dwc->current_limit);
- }
- 
--static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
-+static int dwc3_psy_notifier(struct notifier_block *nb,
-+			     unsigned long event, void *data)
- {
--	struct power_supply *usb_psy;
--	const char *usb_psy_name;
-+	struct dwc3 *dwc = container_of(nb, struct dwc3, psy_nb);
-+	struct power_supply *psy = data;
-+	unsigned long flags;
-+
-+	if (dwc->usb_psy)
-+		return NOTIFY_DONE;
-+
-+	if (strcmp(psy->desc->name, dwc->usb_psy_name) != 0)
-+		return NOTIFY_DONE;
-+
-+	/* Explicitly get the reference for this psy */
-+	psy = power_supply_get_by_name(dwc->usb_psy_name);
-+	if (!psy)
-+		return NOTIFY_DONE;
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	/*
-+	 * The USB power_supply may already be set. This can happen if notifier
-+	 * callbacks for the USB power_supply race, or if a previous notifier
-+	 * callback has already successfully fetched and associated the instance.
-+	 * In such cases, release the newly acquired reference and ignore
-+	 * subsequent notifications until the notifier is unregistered.
-+	 */
-+	if (dwc->usb_psy) {
-+		spin_unlock_irqrestore(&dwc->lock, flags);
-+		power_supply_put(psy);
-+		return NOTIFY_DONE;
-+	}
-+
-+	dwc->usb_psy = psy;
-+	if (dwc->current_limit != UINT_MAX)
-+		schedule_work(&dwc->vbus_draw_work);
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+
-+	return NOTIFY_OK;
-+}
-+
-+static void dwc3_get_usb_power_supply(struct dwc3 *dwc)
-+{
-+	struct power_supply *psy;
-+	unsigned long flags;
- 	int ret;
- 
--	ret = device_property_read_string(dwc->dev, "usb-psy-name", &usb_psy_name);
-+	ret = device_property_read_string(dwc->dev, "usb-psy-name", &dwc->usb_psy_name);
- 	if (ret < 0)
--		return NULL;
--
--	usb_psy = power_supply_get_by_name(usb_psy_name);
--	if (!usb_psy)
--		return ERR_PTR(-EPROBE_DEFER);
-+		return;
- 
- 	INIT_WORK(&dwc->vbus_draw_work, dwc3_vbus_draw_work);
--	return usb_psy;
-+
-+	dwc->current_limit = UINT_MAX;
-+	dwc->psy_nb.notifier_call = dwc3_psy_notifier;
-+	ret = power_supply_reg_notifier(&dwc->psy_nb);
-+	if (ret) {
-+		dev_err(dwc->dev, "Failed to register power supply notifier: %d\n", ret);
-+		dwc->psy_nb.notifier_call = NULL;
-+		return;
-+	}
-+
-+	psy = power_supply_get_by_name(dwc->usb_psy_name);
-+	if (!psy)
-+		return;
-+
-+	/* Unregister the notifier now that we have the power supply */
-+	power_supply_unreg_notifier(&dwc->psy_nb);
-+	dwc->psy_nb.notifier_call = NULL;
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	/*
-+	 * It is possible that the notifier callback ran before we reached here
-+	 * and successfully fetched the power supply. In that case we need to
-+	 * release the above reference.
-+	 */
-+	if (dwc->usb_psy) {
-+		spin_unlock_irqrestore(&dwc->lock, flags);
-+		power_supply_put(psy);
-+		return;
-+	}
-+
-+	dwc->usb_psy = psy;
-+	spin_unlock_irqrestore(&dwc->lock, flags);
- }
- 
- int dwc3_core_probe(const struct dwc3_probe_data *data)
-@@ -2255,9 +2322,9 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
- 
- 	dwc3_get_software_properties(dwc, &data->properties);
- 
--	dwc->usb_psy = dwc3_get_usb_power_supply(dwc);
--	if (IS_ERR(dwc->usb_psy))
--		return dev_err_probe(dev, PTR_ERR(dwc->usb_psy), "couldn't get usb power supply\n");
-+	spin_lock_init(&dwc->lock);
-+
-+	dwc3_get_usb_power_supply(dwc);
- 
- 	if (!data->ignore_clocks_and_resets) {
- 		dwc->reset = devm_reset_control_array_get_optional_shared(dev);
-@@ -2309,7 +2376,6 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
- 		dwc->num_usb3_ports = 1;
- 	}
- 
--	spin_lock_init(&dwc->lock);
- 	mutex_init(&dwc->mutex);
- 
- 	pm_runtime_get_noresume(dev);
-@@ -2377,6 +2443,8 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
- err_assert_reset:
- 	reset_control_assert(dwc->reset);
- err_put_psy:
-+	if (dwc->psy_nb.notifier_call)
-+		power_supply_unreg_notifier(&dwc->psy_nb);
- 	if (dwc->usb_psy)
- 		power_supply_put(dwc->usb_psy);
- 
-@@ -2433,6 +2501,9 @@ void dwc3_core_remove(struct dwc3 *dwc)
- 
- 	dwc3_free_event_buffers(dwc);
- 
-+	if (dwc->psy_nb.notifier_call)
-+		power_supply_unreg_notifier(&dwc->psy_nb);
-+
- 	if (dwc->usb_psy) {
- 		cancel_work_sync(&dwc->vbus_draw_work);
- 		power_supply_put(dwc->usb_psy);
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index e0dee9d28740..4854cfdbc64a 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1059,6 +1059,8 @@ struct dwc3_glue_ops {
-  * @role_switch_default_mode: default operation mode of controller while
-  *			usb role is USB_ROLE_NONE.
-  * @usb_psy: pointer to power supply interface.
-+ * @usb_psy_name: name of the USB power supply
-+ * @psy_nb: power supply notifier block
-  * @vbus_draw_work: Work to set the vbus drawing limit
-  * @current_limit: How much current to draw from vbus, in milliAmperes.
-  * @usb2_phy: pointer to USB2 PHY
-@@ -1251,6 +1253,8 @@ struct dwc3 {
- 	enum usb_dr_mode	role_switch_default_mode;
- 
- 	struct power_supply	*usb_psy;
-+	const char		*usb_psy_name;
-+	struct notifier_block	psy_nb;
- 	struct work_struct	vbus_draw_work;
- 	unsigned int		current_limit;
- 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 3d4ca68e584c..303598048e9a 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3124,15 +3124,21 @@ static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
- static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-+	unsigned long		flags;
- 
- 	if (dwc->usb2_phy)
- 		return usb_phy_set_power(dwc->usb2_phy, mA);
- 
--	if (!dwc->usb_psy)
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	dwc->current_limit = mA;
-+	if (!dwc->usb_psy) {
-+		spin_unlock_irqrestore(&dwc->lock, flags);
-+		dev_dbg(dwc->dev, "Stored VBUS draw: %u mA (power supply not ready)\n", mA);
- 		return -EOPNOTSUPP;
-+	}
- 
--	dwc->current_limit = mA;
- 	schedule_work(&dwc->vbus_draw_work);
-+	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	return 0;
- }
--- 
-2.34.1
+Booted with no device attached. I now attach an old iPod
+[   88.029820] EXT4-fs (dm-1): mounted filesystem
+43370d08-08a3-44a6-9809-7de71d91213a r/w with ordered data mode. Quota
+mode: none.
+[  106.553175] EXT4-fs (dm-6): unmounting filesystem
+aacac1ab-8727-4008-94ed-3997aa0c5cf2.
+[  107.627798] EXT4-fs (dm-7): unmounting filesystem
+67bc6f66-1a28-49d3-b834-3a49777f62e6.
+[  161.704296] usb 9-4: new high-speed USB device number 2 using
+xhci-pci-renesas
+[  161.835336] usb 9-4: New USB device found, idVendor=05ac,
+idProduct=1265, bcdDevice= 0.01
+[  161.835411] usb 9-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[  161.835461] usb 9-4: Product: iPod
+[  161.835506] usb 9-4: Manufacturer: Apple Inc.
+[  161.835553] usb 9-4: SerialNumber: 000A27001EAE1B01
+[  161.854035] usb-storage 9-4:1.0: USB Mass Storage device detected
+[  161.854251] scsi host8: usb-storage 9-4:1.0
+[  162.907030] scsi 8:0:0:0: Direct-Access     Apple    iPod
+  1.70 PQ: 0 ANSI: 0
+[  162.907750] sd 8:0:0:0: Attached scsi generic sg10 type 0
+[  162.909876] sd 8:0:0:0: [sdj] Spinning up disk...
+[  167.320187] .ready
+[  167.322136] sd 8:0:0:0: [sdj] 3901376 4096-byte logical blocks:
+(16.0 GB/14.9 GiB)
+[  167.322606] sd 8:0:0:0: [sdj] Write Protect is off
+[  167.322662] sd 8:0:0:0: [sdj] Mode Sense: 68 00 00 08
+[  167.322967] sd 8:0:0:0: [sdj] Write cache: disabled, read cache:
+enabled, doesn't support DPO or FUA
+[  167.341714]  sdj: sdj1
+[  167.341905] sd 8:0:0:0: [sdj] Attached SCSI removable disk
+[ 1488.464220] EXT4-fs (dm-1): unmounting filesystem
+43370d08-08a3-44a6-9809-7de71d91213a.
+[ 1713.180844] PM: suspend entry (deep)
+[ 1713.273499] Filesystems sync: 0.092 seconds
+[ 1713.276483] Freezing user space processes
+[ 1713.299802] Freezing user space processes completed (elapsed 0.023 seconds)
+[ 1713.299847] OOM killer disabled.
+[ 1713.299893] Freezing remaining freezable tasks
+[ 1713.300891] Freezing remaining freezable tasks completed (elapsed
+0.000 seconds)
+[ 1713.300957] printk: Suspending console(s) (use no_console_suspend to debug)
+[ 1713.328404] r8169 0000:02:00.0 enp2s0: Link is Down
+[ 1713.328917] sd 7:0:0:0: [sdf] Synchronizing SCSI cache
+[ 1713.333896] sd 2:0:0:0: [sdc] Synchronizing SCSI cache
+[ 1713.333911] sd 1:0:0:0: [sdb] Synchronizing SCSI cache
+[ 1713.333913] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+[ 1713.334139] ata1.00: Entering standby power mode
+[ 1713.334373] ata3.00: Entering standby power mode
+[ 1713.343045] sd 3:0:0:0: [sdd] Synchronizing SCSI cache
+[ 1713.541048] ata4.00: Entering standby power mode
+[ 1714.273447] ACPI: PM: Preparing to enter system sleep state S3
+[ 1714.273740] ACPI: PM: Saving platform NVS memory
+[ 1714.273978] Disabling non-boot CPUs ...
+[ 1714.275460] smpboot: CPU 3 is now offline
+[ 1714.278005] smpboot: CPU 2 is now offline
+[ 1714.278085] kworker/u18:4 (76) used greatest stack depth: 11856 bytes left
+[ 1714.280461] smpboot: CPU 1 is now offline
+[ 1714.287892] ACPI: PM: Low-level resume complete
+[ 1714.287921] ACPI: PM: Restoring platform NVS memory
+[ 1714.288372] Enabling non-boot CPUs ...
+[ 1714.288413] smpboot: Booting Node 0 Processor 1 APIC 0x1
+[ 1714.299130] CPU1 is up
+[ 1714.299159] smpboot: Booting Node 0 Processor 2 APIC 0x2
+[ 1714.308608] CPU2 is up
+[ 1714.308642] smpboot: Booting Node 0 Processor 3 APIC 0x3
+[ 1714.317495] CPU3 is up
+[ 1714.320878] ACPI: PM: Waking up from system sleep state S3
+[ 1714.326900] hpet: Lost 5479 RTC interrupts
+[ 1714.327867] usb usb1: root hub lost power or was reset
+[ 1714.327926] usb usb4: root hub lost power or was reset
+[ 1714.328019] usb usb5: root hub lost power or was reset
+[ 1714.328071] usb usb6: root hub lost power or was reset
+[ 1714.328122] usb usb7: root hub lost power or was reset
+[ 1714.328172] usb usb8: root hub lost power or was reset
+[ 1714.328305] usb usb9: root hub lost power or was reset
+[ 1714.328307] usb usb10: root hub lost power or was reset
+[ 1714.717925] ata6: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+[ 1714.718977] ata5: SATA link down (SStatus 0 SControl 300)
+[ 1714.767957] ata6.00: configured for UDMA/33
+[ 1719.766758] ata4: link is slow to respond, please be patient (ready=0)
+[ 1719.768733] ata1: link is slow to respond, please be patient (ready=0)
+[ 1722.777758] ata1: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+[ 1722.778469] sd 0:0:0:0: [sda] Starting disk
+[ 1722.780092] ata1.00: configured for UDMA/133
+[ 1723.235745] ata4: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+[ 1725.103942] sd 3:0:0:0: [sdd] Starting disk
+[ 1725.107308] ata4.00: configured for UDMA/133
+[ 1735.329691] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[ 1735.329695] rcu:     3-...0: (1 GPs behind)
+idle=ce4c/1/0x4000000000000000 softirq=63254/63255 fqs=5249
+[ 1735.329701] rcu:     (detected by 0, t=21002 jiffies, g=47065, q=31 ncpus=4)
+[ 1735.329705] Sending NMI from CPU 0 to CPUs 3:
+[ 1735.329711] NMI backtrace for cpu 3
+[ 1735.329716] CPU: 3 UID: 0 PID: 1075 Comm: kworker/u18:0 Tainted: G
+S                  7.0.3 #6 PREEMPT(full)
+[ 1735.329720] Tainted: [S]=CPU_OUT_OF_SPEC
+[ 1735.329721] Hardware name: HP-Pavilion FJ422AA-UUW
+a6551.sc/Benicia, BIOS 5.32    10/23/2008
+[ 1735.329723] Workqueue: async async_run_entry_fn
+[ 1735.329730] RIP: 0010:xhci_handshake+0x51/0xc0
+[ 1735.329735] Code: fa 8b 07 89 f1 49 89 fe 41 89 f5 21 c1 41 39 cc
+75 22 eb 3c f3 90 48 81 eb e9 03 00 00 48 89 da 48 c1 ea 3f 44 21 fa
+41 8b 06 <44> 89 e9 21 c1 44 39 e1 74 1c 83 f8 ff 74 2d 84 d2 75 3d bf
+c7 10
+[ 1735.329737] RSP: 0000:ffff9fef00c3bd18 EFLAGS: 00000046
+[ 1735.329739] RAX: 0000000000000002 RBX: 0000000093f583f3 RCX: 0000000000000002
+[ 1735.329741] RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000bf6319f3f
+[ 1735.329742] RBP: 0000000000989680 R08: 0000000000000960 R09: 0000000000000003
+[ 1735.329744] R10: 00000000ffffe000 R11: 0000000000000000 R12: 0000000000000000
+[ 1735.329745] R13: 0000000000000002 R14: ffff9fef0043a020 R15: 0000000000000001
+[ 1735.329746] FS:  0000000000000000(0000) GS:ffff968d5d1c5000(0000)
+knlGS:0000000000000000
+[ 1735.329748] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1735.329750] CR2: 0000000000000000 CR3: 000000007f644000 CR4: 00000000000026f0
+[ 1735.329751] Call Trace:
+[ 1735.329754]  <TASK>
+[ 1735.329756]  xhci_reset+0x65/0x110
+[ 1735.329759]  xhci_resume+0x146/0x710
+[ 1735.329762]  resume_common+0x8b/0x110
+[ 1735.329766]  ? __pfx_pci_pm_resume+0x10/0x10
+[ 1735.329769]  dpm_run_callback+0x4b/0x170
+[ 1735.329772]  device_resume+0x158/0x250
+[ 1735.329775]  async_resume+0x14/0x20
+[ 1735.329777]  async_run_entry_fn+0x29/0x130
+[ 1735.329781]  process_one_work+0x163/0x370
+[ 1735.329785]  worker_thread+0x18f/0x300
+[ 1735.329788]  ? __pfx_worker_thread+0x10/0x10
+[ 1735.329790]  kthread+0xda/0x110
+[ 1735.329794]  ? __pfx_kthread+0x10/0x10
+[ 1735.329797]  ret_from_fork+0x1af/0x2b0
+[ 1735.329801]  ? __pfx_kthread+0x10/0x10
+[ 1735.329804]  ret_from_fork_asm+0x1a/0x30
+[ 1735.329809]  </TASK>
+[ 1735.769691] rcu: INFO: rcu_preempt detected expedited stalls on
+CPUs/tasks: { 3-...D } 21383 jiffies s: 401 root: 0x8/.
+[ 1735.769699] rcu: blocking rcu_node structures (internal RCU debug):
+[ 1735.769700] Sending NMI from CPU 1 to CPUs 3:
+[ 1735.769704] NMI backtrace for cpu 3
+[ 1735.769706] CPU: 3 UID: 0 PID: 1075 Comm: kworker/u18:0 Tainted: G
+S                  7.0.3 #6 PREEMPT(full)
+[ 1735.769709] Tainted: [S]=CPU_OUT_OF_SPEC
+[ 1735.769710] Hardware name: HP-Pavilion FJ422AA-UUW
+a6551.sc/Benicia, BIOS 5.32    10/23/2008
+[ 1735.769711] Workqueue: async async_run_entry_fn
+[ 1735.769715] RIP: 0010:xhci_handshake+0x51/0xc0
+[ 1735.769717] Code: fa 8b 07 89 f1 49 89 fe 41 89 f5 21 c1 41 39 cc
+75 22 eb 3c f3 90 48 81 eb e9 03 00 00 48 89 da 48 c1 ea 3f 44 21 fa
+41 8b 06 <44> 89 e9 21 c1 44 39 e1 74 1c 83 f8 ff 74 2d 84 d2 75 3d bf
+c7 10
+[ 1735.769719] RSP: 0000:ffff9fef00c3bd18 EFLAGS: 00000046
+[ 1735.769721] RAX: 0000000000000002 RBX: 000000008a928e70 RCX: 0000000000000002
+[ 1735.769722] RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000c352263c9
+[ 1735.769724] RBP: 0000000000989680 R08: 0000000000000960 R09: 0000000000000003
+[ 1735.769725] R10: 00000000ffffe000 R11: 0000000000000000 R12: 0000000000000000
+[ 1735.769726] R13: 0000000000000002 R14: ffff9fef0043a020 R15: 0000000000000001
+[ 1735.769728] FS:  0000000000000000(0000) GS:ffff968d5d1c5000(0000)
+knlGS:0000000000000000
+[ 1735.769729] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1735.769731] CR2: 0000000000000000 CR3: 000000007f644000 CR4: 00000000000026f0
+[ 1735.769732] Call Trace:
+[ 1735.769733]  <TASK>
+[ 1735.769734]  xhci_reset+0x65/0x110
+[ 1735.769737]  xhci_resume+0x146/0x710
+[ 1735.769739]  resume_common+0x8b/0x110
+[ 1735.769742]  ? __pfx_pci_pm_resume+0x10/0x10
+[ 1735.769744]  dpm_run_callback+0x4b/0x170
+[ 1735.769747]  device_resume+0x158/0x250
+[ 1735.769749]  async_resume+0x14/0x20
+[ 1735.769752]  async_run_entry_fn+0x29/0x130
+[ 1735.769755]  process_one_work+0x163/0x370
+[ 1735.769758]  worker_thread+0x18f/0x300
+[ 1735.769761]  ? __pfx_worker_thread+0x10/0x10
+[ 1735.769763]  kthread+0xda/0x110
+[ 1735.769766]  ? __pfx_kthread+0x10/0x10
+[ 1735.769770]  ret_from_fork+0x1af/0x2b0
+[ 1735.769772]  ? __pfx_kthread+0x10/0x10
+[ 1735.769775]  ret_from_fork_asm+0x1a/0x30
+[ 1735.769779]  </TASK>
+[ 1742.263962] clocksource: Long readout interval, skipping watchdog
+check: cs_nsec: 26631211515 wd_nsec: 26631203940
+[ 1742.264015] xhci-pci-renesas 0000:03:00.0: PCI post-resume error -110!
+[ 1742.264018] xhci-pci-renesas 0000:03:00.0: HC died; cleaning up
+[ 1742.264059] xhci-pci-renesas 0000:03:00.0: PM: dpm_run_callback():
+pci_pm_resume returns -110
+[ 1742.264064] xhci-pci-renesas 0000:03:00.0: PM: failed to resume
+async: error -110
+[ 1742.266288] r8169 0000:02:00.0 enp2s0: Link is Down
+[ 1742.303296] OOM killer enabled.
+[ 1742.303337] Restarting tasks: Starting
+[ 1742.303541] usb 9-4: USB disconnect, device number 2
+[ 1742.303813] Restarting tasks: Done
+[ 1742.303874] random: crng reseeded on system resumption
+[ 1742.304744] PM: suspend exit
+[ 1742.574174] ata2: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
 
+
+
+> FYI, the quirk performs full xHCI reset during resume and prevents
+> selectively suspending the chip when all its USB devices are suspended
+> but the system is running (not going to sleep). It doesn't prevent
+> suspending when no USB devices are connected at all. And either way,
+> runtime PM may be turned off, see if this is 'on' or 'auto':
+>
+> cat /sys/bus/pci/devices/0000:03:00.0/power/control
+>
+# cat /sys/bus/pci/devices/0000:03:00.0/power/control
+on
+
+
+
+> I have no idea why it works the first time but not the second.
+> Not what happens if the same is done without the quirk?
+> Maybe try s2idle ("freeze") instead of S3 sleep? But that doesn't
+> provide the same power saving on older HW.
+>
+I''l give that a go.
+
+Thanks!
+Anders
+
+> Regards,
+> Michal
 
