@@ -1,193 +1,203 @@
-Return-Path: <linux-usb+bounces-38049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38050-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CjjdEHXhFGpaRAcAu9opvQ
-	(envelope-from <linux-usb+bounces-38049-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 01:55:33 +0200
+	id J2OuEh/uFGr+RQcAu9opvQ
+	(envelope-from <linux-usb+bounces-38050-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 02:49:35 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A0015CF368
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 01:55:32 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 994605CF51E
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 02:49:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A4DA5301CCCB
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2026 23:55:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 41D20301AD05
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 00:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 643E6363084;
-	Mon, 25 May 2026 23:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934ED212F89;
+	Tue, 26 May 2026 00:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayngoZjg"
+	dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b="R2wqSbC1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9D12FE071
-	for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 23:55:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779753324; cv=none; b=qXR8zTE0v9an1AtKSGdnpF49j0xeXSFBwWB613Eo31OZIzJ/BczSfzIdv7NRL1wJbgStUUKiH2nHLG3PgKVfiiCg7cCdwXQUBOFN0T9PJNEmADDnyds+Mi3R/svSretXp7QSppxbFHJ4l63XzLXx5/D/WX+RE69TrEGAMCPsggY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779753324; c=relaxed/simple;
-	bh=el6r8DT5ghDym332JOmydWiAPWQT30GdHB99sVXRFJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t3LPsulKmpAJzDYjuXb/LsLcXbQjPjXMxfEKtEy0qEOSReWKGTDoZLqQkPyX44ZBF8OSiscnqI3n8jRB47g5fHK74GniHLtuSwkykbQzPKqbx60TpTdiGLQfPZ/3lqnLvV3TXSSJarezGHC5UVpdEtc6Z05ELzaYkkFMYwjrg9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayngoZjg; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5a88db610ccso10059747e87.2
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 16:55:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C831891A9
+	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 00:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779756570; cv=pass; b=geSJd0CQqdan6KaN21GWH1gh0tvRYkf1xC36hXxuowK7skIAvICohWz6utIEvWHLXR9lFiH4cbvR7YzjcYJg2otrgM3x07R7w27IPgnn+KLgOa//APgr6Xg8K5QcTAskWVyiE6Xe++mTsi+o9k7hoWtErR6bIU5lInEzrsL0CGA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779756570; c=relaxed/simple;
+	bh=jjT/3dvMEkLUCJ/nCBE6z3IcNhL0yJnavyXdOw6EPgk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FRKGVanLMh9fZOkb51HFh2j+61YLewNQgph2dxy8I0bC8gKRXzO5AIY4apN/b4bpzxsxcz4uFGuCO5a/h6nSHusmjAVFVvXhjJniMaCQZKMYNVf93lLvFCfN4ysDzwSUVL27FnO2Aqc/Yj/NpmTjQWsA0d8Ylk+rWV6yDgtrps4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com; spf=pass smtp.mailfrom=motu.com; dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b=R2wqSbC1; arc=pass smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motu.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-bd8f6ef4ba6so1488829666b.3
+        for <linux-usb@vger.kernel.org>; Mon, 25 May 2026 17:49:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779756567; cv=none;
+        d=google.com; s=arc-20240605;
+        b=amrekXjy+asm/jS+wEKxsH+snlhfqP0yIRJ3tT/2BRbdFxL60CrzLEJVdDu88WxYml
+         8t/8wp6qCoekyCx3g1gGav3pYA8QIjNXsO3To6Oah4Vtt2dRmK/s5E2MIa7HkNn/AVsN
+         V9m4hc+5OTXy/wGqbI/I3/tcPYhLqvd3gd+mlpRePcQDqJ5N539FXAw3vVEn5pSrL+TR
+         B4ySnhW3DWFZ1DIBJMcXxeh82wcftwa8kMK2hQ+mDkW+up3PndQthhVMgKJBj0F9kLp4
+         hU1wdxWbaSUYnXH7mVPS+h2/jDbM6vKEIxdy6inbA1kpyhu1YG/dDr57v2LH+TKY8M+l
+         DNkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=OZgI4v/9Wfn/w9AHeqnamSdFXB61ZlPU2bX8g3drYPw=;
+        fh=cRMuRuf7Vjf4tU8aczjTswV+WBEUv7mXZvHRAJjuyD4=;
+        b=jJTMqJQ/B+U0AlH4ZB5L+hkjoRiS2mDEKlKvatQjKij/Y17VsiyHdF7RrJxhltUOcI
+         rSI6axka8xK7InbL7fUabJVsP+TANTi+i5SM2iaCqXKtinQDl6NWtisz1nNgodvqUCD2
+         p8md4O9Zv5Rc6PEqwoDXFh6x3CcMtPLh+Snxutg3bL8Tq5ZBQCvOeN51WHA4hf59BJTI
+         5nZTL8s4jS7A6MQPm3E4HHfSIUprYyO31M+ICLBIJ817BV/ScRbQkSSUu++mTtIJYnHT
+         bc5s9RfI7byO0wdXPq0Sg2nN0uR2pjxqnj3nzUlQ8n+O5p0uUqXTS7KLnqG1nEBso7C4
+         +86A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779753321; x=1780358121; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=motu.com; s=google; t=1779756567; x=1780361367; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q7XVCwdYYkBXbgnl1CqkyAGE7Fe+DjxICS1PudZs9wE=;
-        b=ayngoZjgC5tCSnR7XMAmGtVvHUdb82bIV6BHaWyoMio7K46kyKikSt5LZfCOPuiCde
-         os2zYxntoae2tC4ubAqxPtOQdBEfk6Z4SE0ySg4sQqnBp0Fvxdwi+a6cAaMe2tuStKpI
-         7kBowCWZMC88gT5vvRKIKs5MesG6+CoKh+BEJbhVHhe/n8x+LCPYZlhwP56xoLmO8Ag7
-         LCEuOl+BainJPJ8+mjYJ/uP8TJFCoGC5oC+oOOtEmtrQGpc77UXX54V0pRfKEcZSdsdz
-         Qxixn5yXOyHb1z2Q/zgLij+4vClZK1LBSS/Ol5+eHA0DVPm984Eb71dgcuXhj28REp4f
-         R0Hw==
+        bh=OZgI4v/9Wfn/w9AHeqnamSdFXB61ZlPU2bX8g3drYPw=;
+        b=R2wqSbC1nIHP1wT6UXU9zsQXg1Kz0lCjlfaMHFKNB6i0AVO62hRC4yoTnSZgguY/S3
+         vXpKMXqA6mnrutK3uvrvOZHbChSOu2iKVKf7GnjBuafIFYqG9u/na9coQEWQfwGDFKjX
+         kzdR0Lq9ItuLtZh2yVL37f1BZjZ+tqzrVYAUs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779753321; x=1780358121;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1779756567; x=1780361367;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Q7XVCwdYYkBXbgnl1CqkyAGE7Fe+DjxICS1PudZs9wE=;
-        b=Unvq4uollQ1gF7COWurAtt5PqnoJsSPpr2OEv8E5Q/bWVvAQmpjl84R5MITrXGwoyj
-         5e6/tK9JkAHQ77lNBLXYSgLO8rzh4fkIP5U5UFObwfeWCThXfEnfmdqYKSmcBa08qZ3d
-         4IiW5uh81jKQNZIB2SsYIHqgaFBPHBCYqm7Yw5/QynExmHTbffZeRdT9tIdSkuUe9nIy
-         Ptlm6sWqC3uf+3qq6G8wVP5BKyZu1/GSDCHzbooZgfirz57it7OjF25jGqB2DMqhea3E
-         dM0haLQSei506PrOWJA1napqybDive+eOBViSSx7/LefxWVjfntnSSL6qF+TTQGP+nHI
-         EUrQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+TXFFVz0/iXbmyb8J9qIyEH2kFHkvrCPdDr/E+lIOne50ep7W/cHDUvDxIqvmDuP+c6U7DEf4wQWY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV5JJc3+ffeiouo12MieurMNAIL3AHUL7EIFMeIXp81AKJMvyA
-	0sZxXMu7/8dcyGSObW6zAwYj8WQE+SNo5qAJX/2IIFrxlVcXZ7Ye6QfL
-X-Gm-Gg: Acq92OGV584BllJRoKI/drcKy1zRXsVhpRrQ88JqHvG7NYfutQ8HMCogG9RtmW+22jm
-	aAOGuhJ677CnrGKd2OrNnE3wpfI/PocRYXo7XZg9M1aNfBQ5aGBo1T3cx2BY/4p0Dpdxj6kBVOJ
-	jDQ2dmAQ9JPdmUS8KFZKfKzjRCSvEznJMjpHCtOONpMcTdeWOcV/cEf4MgKiz3jj8IIlQ9EbzYf
-	qFrpdIx4v1/kory4mFvupkd/oLfImIqQliT2Drt1jvLsSU2fmNyxyTcHWU7ccRBkV1Nm0CP7czr
-	bmtxslBpfHdgGhMNkm9n5QlU5zvcxwrHcyG9jU2cuRxYhPgXN6xXw3WDSwtpKIrQ9Fe8tSxfvLX
-	0hXlUL1m7qzTXZ5OihHoBkkrNIyToJqU8ONyq/6d5n7BH4M+EY5HpN1wqVuQuK+YtSHePE/TNTc
-	F85hfFOvGIGD0GWbZu30V5bWVmG8e+voh+
-X-Received: by 2002:ac2:41c1:0:b0:5a8:8de0:4576 with SMTP id 2adb3069b0e04-5aa323a9cc5mr3991315e87.25.1779753320567;
-        Mon, 25 May 2026 16:55:20 -0700 (PDT)
-Received: from foxbook (bfk48.neoplus.adsl.tpnet.pl. [83.28.48.48])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa462cf5f7sm47404e87.12.2026.05.25.16.55.18
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 25 May 2026 16:55:19 -0700 (PDT)
-Date: Tue, 26 May 2026 01:55:14 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Henry Lin <henryl@nvidia.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, "Mauro Carvalho
- Chehab" <mchehab@kernel.org>, <linux-media@vger.kernel.org>,
- <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/1] media: uvcvideo: reset interface on bulk stream
- stop
-Message-ID: <20260526015514.466b72d4.michal.pecio@gmail.com>
-In-Reply-To: <20260525182028.2148267-1-henryl@nvidia.com>
-References: <20260525182028.2148267-1-henryl@nvidia.com>
+        bh=OZgI4v/9Wfn/w9AHeqnamSdFXB61ZlPU2bX8g3drYPw=;
+        b=iTWT4LhSsiAu28AESg0F7Q6peHXlA2zilEmjjFxHrbmNYbeWEcUyQt7DyWtH1JkcYO
+         2Szsd5GKW+8pVmORpfn+vTO2eoeyfNwUda6dHIUq21GlJYCWJQiCOxuaPxNcEwVHLZuR
+         xbBOCj6I0JoTvRKSHO7wUOXgn1VhRM+fjd7XZJROJvKEx1QZaFON3bQt3reP39WOCL4u
+         dux4y0nRhRpAWsh9x4xQQY65vDGogZw2fMzM/VmdwvGsE7ZyK42PFRUMtE5GhsG3F45r
+         fwo0PQf+6rGT/pu0Sl2TjDrHT6hYjJ6c8gvSHDlC54rALEl0Bn3IIeFQR1GgggeBV08V
+         zkuw==
+X-Forwarded-Encrypted: i=1; AFNElJ/Hnk9fuybNAEZgtZjIvIanRC8PGo2H2HolqgAGtqlp6XciL72qb9yJCC8eKkQ+v53bm23JtRNwGc8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDc9GQAcR1oOWOAF/SGECa8WmHKV9GfU8uOvSbghYQeUFxS6Ra
+	/IXSsRRUBWRIQVS1zo3mO2njp0E5lvXnpfMOO88vEi9JlIMfyP68R7fORVLbByzEtq8hTPMkEEo
+	514evs4qifWGnkvxHMCUdCQXYQr10PGlq3LeNCtiWpw==
+X-Gm-Gg: Acq92OFNTw8dwxQGjzY8NF2HK4mZBLBRn2DdJR/vk5CJhb3Qks+fvhcZTuAasvv5JsI
+	RdEMWs5N7wSzfriov7ZGt95jdgJ7LowFSEoYEy2fEcoAhy7cRuBolztvyMwPR7XoxUsR5SCbXhU
+	OgV4yNvNWfFMULpvRbgjKZwyo/lPLh3Wte9uaDz4vcew+VC6bOpoDoBmms5XhymlODWRnMvMJ1U
+	28B9UX4POP2OXJVi9buajAlKP6wHUb+0pKSXP3a7ydJgyUpEvVKo1DeNyNpESi/Y/4gG+6tqD27
+	hwpWJoQ=
+X-Received: by 2002:a17:906:ba89:b0:bd3:2407:6b55 with SMTP id
+ a640c23a62f3a-bdd25fdf4e5mr908182266b.38.1779756566912; Mon, 25 May 2026
+ 17:49:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+References: <a67e11d4-6c80-4043-9f60-ae42a15ed0d3@linux.intel.com>
+ <20260521152715.288995-1-mathias.nyman@linux.intel.com> <20260521152715.288995-3-mathias.nyman@linux.intel.com>
+In-Reply-To: <20260521152715.288995-3-mathias.nyman@linux.intel.com>
+From: Dylan Robinson <dylan_robinson@motu.com>
+Date: Mon, 25 May 2026 20:49:15 -0400
+X-Gm-Features: AVHnY4KNQ9qxlV1o8UrNqwpoYKAxZXtInln7YkUnuBKzxLmz_330M0379G54GCI
+Message-ID: <CA+Df+jcBu2zhzwfeT9AuWdK4QoqoQeJ1EB7nzRVvDMrcevQ1_A@mail.gmail.com>
+Subject: Re: [RFT PATCHv3 3/3] xhci: tune urb->start_frame in ring overrun and
+ underrun cases
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: michal.pecio@gmail.com, linux-usb@vger.kernel.org, mathias.nyman@intel.com, 
+	stern@rowland.harvard.edu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[motu.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[motu.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38049-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38050-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,intel.com,rowland.harvard.edu];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dylan_robinson@motu.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[motu.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,spinics.net:url]
-X-Rspamd-Queue-Id: 9A0015CF368
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 994605CF51E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 25 May 2026 18:20:27 +0000, Henry Lin wrote:
-> I would like to revive an old UVC bulk-streaming issue originally
-> reported by Hans Yang. I am sending this RFC on his behalf for
-> discussion before submitting a non-RFC patch.
-> 
-> Hans previously proposed making uvcvideo call usb_set_interface(...,
-> 0) when stopping a bulk-based stream, before clearing halt on the
-> bulk endpoint. The issue was discussed here:
-> 
->   https://www.spinics.net/lists/linux-usb/msg171584.html
-> 
-> The current upstream stop path calls usb_set_interface(..., 0) only
-> when the streaming interface has more than one alternate setting. For
-> single-altsetting bulk devices, uvcvideo only sends
-> CLEAR_FEATURE(ENDPOINT_HALT) to the bulk endpoint.
+Hi Mathias,
 
-You are referring to uvc_video_stop_streaming() here, right? This calls
-usb_clear_halt(), which is supposed to reset both ends of the pipe.
+I had a chance to test these patches.
 
-> The patch in this RFC changes uvc_video_stop_streaming() to always
-> call usb_set_interface(..., 0) to reset the streaming interface
-> first. For bulk devices, the existing CLEAR_FEATURE(ENDPOINT_HALT)
-> request is still sent afterwards.
-> 
-> On the affected devices, current upstream stop/start sequence can
-> leave the next bulk stream failing immediately with transfer errors
-> such as:
-> 
->   uvcvideo: Non-zero status (-71) in video completion handler.
-> 
-> USB bus traces show that, without usb_set_interface(..., 0), the host
-> continues the next bulk stream with the previous stream's sequence
-> state, while the device expects the new stream to start from the
-> initial sequence state. With usb_set_interface(..., 0), the host and
-> device sequence states match again and repeated stop/start cycles
-> complete successfully.
+On Thu, May 21, 2026 at 11:27=E2=80=AFAM Mathias Nyman wrote:
+>
+> Make sure a new urb->start_frame is calculated for isoc URBs submitted la=
+te
+> mid stream, i.e. isoc URB is submitted to an empty ring after a ring
+> underrun or overrun event.
+>
+> If URB was queud late, but before xhci driver handles the ring
+> underrun/overrun event then kick the urb->start_frame forward by one
+> ESIT for that delayed URB.
+>
+> the gap in urb->start_frame allows class drivers to detect the glitch
+> in isochronous transfers.
 
-I suppose you mean SuperSpeed and xHCI, so that's a little mysterious
-because xhci_hcd resets host sequence state on Transaction Error 
-completions and hence it should recover from such mismatch after the
-first error. Of course, no mismatch should exist in the first place. 
+This does appear to create a detectable gap, but urb->start_frame
+still drifts relative to the actual frame id. After each
+underrun/overrun, urb->start_frame becomes increasingly offset.
 
-But xhci_hcd was broken for years and failed to clear host sequence
-state when requested by usb_clear_halt() in some cases. This recent
-commit fixed the most blatant bug and was motivated precisely by this
-UVC issue, which I encountered myself.
+> +       /* re-calculate urb->start_frame on next urb enqueue */
+> +       if (list_empty(&ep->ring->td_list)) {
+> +               ep->next_uframe =3D -2; // FIXME define something, or use=
+ suitable -EXXX
+> +               ep->skip =3D false;  // maybe, or is it the wrong place?
+> +               return 0;
+> +       }
 
-25e531b422dc usb: xhci: Make usb_host_endpoint.hcpriv survive endpoint_disable()
+Since mid-stream URBs can be submitted after an underrun or overrun
+has already occurred, but before the xrun event has been handled, the
+TD list is not necessarily empty here and all subsequent URBs will
+still be scheduled as SIA.
 
-Please check if this works for you, it's included in 7.1 RCs and some
-latest stable kernels. If not, you might be affected by other bugs.
+I think the only way to prevent this drift would be to intentionally
+introduce an additional gap so that the host controller driver can
+restart the stream on a known frame.
 
-> The affected devices we have seen include:
-> 
->   - ID 8086:0b07 Intel Corp. RealSense D435
->   - ID 2560:c1d0 e-con Systems See3CAM_CU130
->   - ID 2b03:f582 STEREOLABS ZED camera
+For URBs submitted with URB_ISO_ASAP, rather than advancing
+urb->start_frame, it may be sufficient for the host controller driver
+to re-estimate start_frame from the current microframe index. For
+non-ASAP URBs, however, intentionally inserting an additional gap may
+make more sense in order to restart the stream on a known frame
+boundary and keep urb->start_frame as accurate as possible.
 
-I think all bulk devices were affected, and all SuperSpeed bulk devices
-were affected particularly badly.
+On Thu, May 21, 2026 at 11:24=E2=80=AFAM Mathias Nyman wrote:
+>
+> Maybe we could add something like a 'delay_start_by_intervals' to the
+> URB? telling the host that class driver wishes stream to start n interval=
+s
+> after usb was submitted.
 
-Regards,
-Michal
+This would definitely help, though specified start_frame behavior
+would still be preferable so that the same driver architectures can be
+used across Linux, macOS, and Windows.
+
+Best Regards,
+Dylan
 
