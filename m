@@ -1,192 +1,157 @@
-Return-Path: <linux-usb+bounces-38063-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38064-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IKIOJdyPFWrUWQcAu9opvQ
-	(envelope-from <linux-usb+bounces-38063-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 14:19:40 +0200
+	id mEaMEsCjFWprWwcAu9opvQ
+	(envelope-from <linux-usb+bounces-38064-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 15:44:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 043905D56F5
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 14:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 418505D6C13
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 15:44:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 03C97304A8DC
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 12:15:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A14A13154E83
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2026 13:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858073F8EDB;
-	Tue, 26 May 2026 12:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1397C3FBED1;
+	Tue, 26 May 2026 13:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfCXKccX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y6u7y/Ed"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915F03F788D
-	for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 12:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EE53FF885;
+	Tue, 26 May 2026 13:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779797714; cv=none; b=kKPTACqBFO08GT35ffwuLhzPQsAleNesgZZgId8Y4IRtyo4MUq7jxpx6OXaPGW6JoAO09tQQP5oY5nkWIXllUEpQupUv5aQgXn24JZ2ku+oLyhHLUA/Zlijf+/FdIhkw5q6NT0XbM8iGoijp4+1PPJQNJRurXQa2f/dxakk882I=
+	t=1779802334; cv=none; b=NVTTltIKVmEulLswMxgHoaqCX+7A/6+ndoBMGYHiWuao3+k9Fo0JCNwJGfwgWp7fT+H2rHLfnnfETZHLBNcun/GgYko/KmKgjtvZh6I1MAfLsrajqMgm4hgUhxnkvR07KN54Mmszw2qzUyJHQsxuXK5hpwQ7F3RP8dLITieVfRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779797714; c=relaxed/simple;
-	bh=OSn6bDmKawvSjfgAUvf88Iaqe73jnCPjYLNYehHdVQg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XNiIYzLDwopp79sjUQZR2qu3OwKB0uqT8RaMTAleNJW2KaS9Rc2ijP98hTm84SqHEh1U0oJZlOi270AoPuYChj6xCmZGE0Xsk6IFwJNyKeU5KLBSmAF96UdRqsUe3qUka3uqE9MVSi7J9b7rs4/hc1EiwDww1Y5Q7W3kGZdjEUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PfCXKccX; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5aa46a95e9eso759832e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 26 May 2026 05:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779797711; x=1780402511; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OXFphSiOq5l2XJRMw9xsaJQ0NmMlS70C7omHZtJC+7w=;
-        b=PfCXKccX7O3hApcIX6We7M81KcXuURGvlh/saS1Qi77uvBq94Vnynx95XhmLOqdcnu
-         EIbI0IZK5z59jX2Rz5Wi1qtXD0v5+p9x5KtradP2EwiWO7IYtpQhlJoHRQdHUA06/r8F
-         Xq3RfT7DxPEtAqg48bCsGshYZ/m5hhX1omBXCE1yE3URTJQ5qPFxyCFBdibE9j6sG91p
-         x0yGWQK5kzW15eVkJKrWbTJ0MGArTNmZhPeA2ISAgAPZNHN2o+8TEf3CxKTcOXG8OURs
-         EPagVsfRshnO21+sAJJDNR1WWW2/SfjV3uU47FfQhQS3vRJcdtb3fIZDMl42PHCL6BW6
-         qBCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779797711; x=1780402511;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OXFphSiOq5l2XJRMw9xsaJQ0NmMlS70C7omHZtJC+7w=;
-        b=P58u/dbW2iEI5GKjc3Z6Srto6gyFL3MLDBkCleSew+aGHKGRiegetqkQpvNYLe+TYA
-         Syio8AZUZgcCDHmt898Y1hjxAvnvfjS/pqctsPykQ9mr8x5zqPBeF43Fd+9SlCbr5sRb
-         6/BWNd8bhcaFaKEbsOU8YvFuLW1q70RxZepQSRYdoHsibEmVoOKFurnv036GXKHB6zmo
-         HJxGBDJY8/4bkX0pmolJ6y3P/zlAE0bYDAEBpU36QlkP7lST6jz3t2ylDJKALb8pkTmq
-         9+0h/IdV52eP3vbadOaDXt+5xRaJ8tpO1lEaJwY7DxPoogzVTyZ3jkVOFv/86k0gl+pW
-         0LFQ==
-X-Forwarded-Encrypted: i=1; AFNElJ965Xn6iJ4qdNGLwQQwW4sNEFfash7NlelCZXMRBZN4L+CvLVd0ZLN0yBAXABdMhtbE7MZRQhoPZjg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2P5Ex1i+gpfTQBSopEFF4q8CxKzYEFEHlHXntB4VwYYR5g9FK
-	Xd8zH4jnd88aguLRo4bZESxdYf+3dfFYkhS66m/3ibrpabdoypeA6Wji
-X-Gm-Gg: Acq92OFF7DTWeIBy10HGQ9nzW0D1CTqX1CB/D6ftDo4jBaZImn4KlnPHR+BhNJHGtUS
-	6HTFG1MKzzPxdlDkj58L/yxhzrKWW0sHqjPxHHigOAY/HkT1c7hMhP+PzlJYzd34vYOpHcKSdGP
-	l9olLwBqSV20eevzkMmnlYQAebe/IGGUBQEmyka5HYLowm3kUgRP7PspNNf0zc/xkp2ixODDvGF
-	ffuKdmaLhGlVZ2FdCTtJ67RPw/NZ4eAz9DGvZrdkb8k5VSSS3W+CnvTpJO+4GO8okMDuuTkdQKU
-	n6UUR8hpS4VgsG5Tpi0qL9sOe+OAmavjLYaBdAHVAusuNmWdiMoqhAXVsTic1Job8SFYAzHUpas
-	9Tr5guFKmp7+LRtGbI2gt5lks60XZf9TEnw0mdnQ30xZZHGlJYZznKbAP+dryuMkTO/ADWkTOmB
-	s0zoaUl5Q3tq46VzwS5iaPdiQzjD2oD0H+rcLLiBwT9m51tQ==
-X-Received: by 2002:ac2:46cf:0:b0:5a8:7425:5659 with SMTP id 2adb3069b0e04-5aa323ab929mr3799400e87.39.1779797710441;
-        Tue, 26 May 2026 05:15:10 -0700 (PDT)
-Received: from foxbook (bfe246.neoplus.adsl.tpnet.pl. [83.28.42.246])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa46330d6esm402235e87.57.2026.05.26.05.15.09
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 26 May 2026 05:15:09 -0700 (PDT)
-Date: Tue, 26 May 2026 14:15:05 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Dylan Robinson <dylan_robinson@motu.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
- linux-usb@vger.kernel.org, mathias.nyman@intel.com,
- stern@rowland.harvard.edu
-Subject: Re: [RFT PATCHv3 3/3] xhci: tune urb->start_frame in ring overrun
- and underrun cases
-Message-ID: <20260526141505.455ab0c3.michal.pecio@gmail.com>
-In-Reply-To: <CA+Df+jcBu2zhzwfeT9AuWdK4QoqoQeJ1EB7nzRVvDMrcevQ1_A@mail.gmail.com>
-References: <a67e11d4-6c80-4043-9f60-ae42a15ed0d3@linux.intel.com>
-	<20260521152715.288995-1-mathias.nyman@linux.intel.com>
-	<20260521152715.288995-3-mathias.nyman@linux.intel.com>
-	<CA+Df+jcBu2zhzwfeT9AuWdK4QoqoQeJ1EB7nzRVvDMrcevQ1_A@mail.gmail.com>
+	s=arc-20240116; t=1779802334; c=relaxed/simple;
+	bh=naOd3Yz+KrIr7vzeEOffhi4Rqcya381gjmXOnDHsYio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vGoLYkiDaH5EsFZynMa7Ep9iG7U9SQs3a9kfDaxlYITq6Gigulvu9B1pD0p9v4Miac7lWR0UEEU1eQLgXG4zrSJ2RRSt5xBBLN4QfBxLoLGzEbrcEej7YxPbZwg5MliX9yOtTP4dI1e4IXjRkBa9JPW6TpA2crxv7g7iihnAK5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y6u7y/Ed; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779802331; x=1811338331;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=naOd3Yz+KrIr7vzeEOffhi4Rqcya381gjmXOnDHsYio=;
+  b=Y6u7y/EdIWLD6SLlSMSVSsGhbvjA+s2EnbzQZpWwgbMlXnWow6dZYJ6J
+   ugs8dL9WpdONXMC1eihfwNGfatBp6L6iJjrDqwy2Hhrj76aQbosfyaFEP
+   EyG1tYcJqqq4RGX2TCzkRxG+2DbN4miY/8bryo5rIOrYmM5LFd7AyV8c+
+   PJgovFfoTbOgGvzBNKxfu2NUqkgh1Ty5VfmOQAoo8etq/bWh1ThX5Inyz
+   7MEmx76A1yH1bgUWY1JmFHud66aIcjXMxdZ7RiyLn8hUcisLXU1bX8bdj
+   TMRRCTWV24bUdH7fyHYGFgK06k3OM/jR71jqThUWRKLCAn2fOhD4xvGl+
+   A==;
+X-CSE-ConnectionGUID: wG3DRNAMRY6eMTMl6I3kZw==
+X-CSE-MsgGUID: Yo//7pCgQ4eWR3S/IoQDbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11797"; a="68138167"
+X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
+   d="scan'208";a="68138167"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 06:32:09 -0700
+X-CSE-ConnectionGUID: qxKMmR6XSyeO7oISCs1FTA==
+X-CSE-MsgGUID: 27bIQ3BzTiiCiuY9GTrzLQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
+   d="scan'208";a="246182881"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa004.jf.intel.com with ESMTP; 26 May 2026 06:32:08 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 3EFCC98; Tue, 26 May 2026 15:32:06 +0200 (CEST)
+Date: Tue, 26 May 2026 15:32:06 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Michael Bommarito <michael.bommarito@gmail.com>
+Cc: Mika Westerberg <westeri@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] thunderbolt: harden XDomain property exchange
+Message-ID: <20260526133206.GP8580@black.igk.intel.com>
+References: <20260525092830.735472-1-michael.bommarito@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260525092830.735472-1-michael.bommarito@gmail.com>
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-38064-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38063-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 043905D56F5
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:dkim,black.igk.intel.com:mid]
+X-Rspamd-Queue-Id: 418505D6C13
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 25 May 2026 20:49:15 -0400, Dylan Robinson wrote:
-> On Thu, May 21, 2026 at 11:27=E2=80=AFAM Mathias Nyman wrote:
-> > Make sure a new urb->start_frame is calculated for isoc URBs
-> > submitted late mid stream, i.e. isoc URB is submitted to an empty
-> > ring after a ring underrun or overrun event.
-> >
-> > If URB was queud late, but before xhci driver handles the ring
-> > underrun/overrun event then kick the urb->start_frame forward by one
-> > ESIT for that delayed URB.
-> >
-> > the gap in urb->start_frame allows class drivers to detect the
-> > glitch in isochronous transfers. =20
->=20
-> This does appear to create a detectable gap, but urb->start_frame
-> still drifts relative to the actual frame id. After each
-> underrun/overrun, urb->start_frame becomes increasingly offset.
+Hi,
 
-That's not surprising, the exact delay is unpredictable, which will
-affect drivers that tolarate the gap and continue their stream.
+On Mon, May 25, 2026 at 05:28:24AM -0400, Michael Bommarito wrote:
+> This series fixes 4 memory-safety defects and 1 data-handling
+> hardening issue in the Thunderbolt XDomain property exchange path
+> (property.c and xdomain.c) and adds KUnit regression tests.
+> All are reachable from an adjacent Thunderbolt peer without
+> authentication.  The XDomain protocol runs automatically on cable
+> insertion regardless of the configured security level, unless
+> disabled with thunderbolt.xdomain=0.
+> 
+> Patches:
+> 
+>   1/6 - reject zero-length property entries in validator
+>   2/6 - bound root directory content to block size
+>   3/6 - clamp XDomain response data copy to allocation size
+>   4/6 - validate XDomain request packet size before type cast
+>   5/6 - limit XDomain response copy to actual frame size
+>   6/6 - add KUnit tests for property parser bounds checks
+> 
+> Tested with KASAN on v7.1-rc3 and over Thunderbolt 4 hardware.
+> KUnit regression tests (patch 6) confirm the fixes and existing
+> tb_test_property_* tests pass on the patched tree.
+> 
+> Based-on: thunderbolt/fixes (928abe19fbf01)
+> 
+> Michael Bommarito (6):
+>   thunderbolt: reject zero-length property entries in validator
+>   thunderbolt: bound root directory content to block size
+>   thunderbolt: clamp XDomain response data copy to allocation size
+>   thunderbolt: validate XDomain request packet size before type cast
+>   thunderbolt: limit XDomain response copy to actual frame size
 
->=20
-> > +       /* re-calculate urb->start_frame on next urb enqueue */
-> > +       if (list_empty(&ep->ring->td_list)) {
-> > +               ep->next_uframe =3D -2; // FIXME define something, or u=
-se suitable -EXXX
-> > +               ep->skip =3D false;  // maybe, or is it the wrong place?
-> > +               return 0;
-> > +       } =20
->=20
-> Since mid-stream URBs can be submitted after an underrun or overrun
-> has already occurred, but before the xrun event has been handled, the
-> TD list is not necessarily empty here and all subsequent URBs will
-> still be scheduled as SIA.
+All these applied to thunderbolt.git/fixes.
 
-Yes, they have already been written to the ring as SIA. (And if they
-weren't SIA, the HW is empirically known to do weird things. The 1.0
-spec was weird and so is the HW which implements it).
+>   thunderbolt: test: add KUnit tests for property parser bounds checks
 
-These URBs will very likely execute in a wrong interval, unless we stop
-the endpoint to remove them (which we may fail to do quickly enough)
-or completely prevent submissions violating the IST in the first place.
+This one applied to thunderbolt.git/next.
 
-> I think the only way to prevent this drift would be to intentionally
-> introduce an additional gap so that the host controller driver can
-> restart the stream on a known frame.
-
-If we want to gamble that maybe a slight IST violation will still
-succeed anyway, this seems to be the only recovery when we lose.
-
-Either way, we need to fail certain IST-violating submissions with
--EXDEV or complete them immediately with -EXDEV status. Which is what
-I was working on and finding various issues with (the driver doesn't
-expect queued URBs which aren't written to the ring). Unfortunately,
-it still isn't finished as I have little free time currently.
-
-By the way, do you know what Windows does in such cases?
-
-Regards,
-Michal
+Thanks!
 
