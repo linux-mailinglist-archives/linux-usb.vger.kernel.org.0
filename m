@@ -1,157 +1,223 @@
-Return-Path: <linux-usb+bounces-38104-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38105-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eFjULawRF2o12wcAu9opvQ
-	(envelope-from <linux-usb+bounces-38104-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 17:45:48 +0200
+	id eFJlFhwaF2ov4gcAu9opvQ
+	(envelope-from <linux-usb+bounces-38105-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 18:21:48 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 280185E719D
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 17:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A969C5E7AAB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 18:21:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CD9CF30AC60F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 15:37:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7C296304201E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 16:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B996E43DA25;
-	Wed, 27 May 2026 15:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BD9428464;
+	Wed, 27 May 2026 16:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CO7NzX0a"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MtsCw/0k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292623D1AB5;
-	Wed, 27 May 2026 15:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779896174; cv=none; b=j9XX/fvTI0gX1PzuGDBXPmh7aV0ahfxW0UB6Mmgl6NM+ksAqcrbY6xZA0lQ8hUt7V8BYnrRjJmXITegYBSbA8hCOdKYoPbLtSpbIDU0Qi4sQC3JV3TFyITH7K8ERl8ONDwgRhJo5xueMEW/C6/mVVKZTG9Qgfbuy9mgMgcGQbPw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779896174; c=relaxed/simple;
-	bh=Ovp+K4FnIuO8i9CGXqYhA/YWXaEutFtXl4uEiD4jDVo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Ue8iK9Zzh52GhsOl0J+eHlvIY2lY4jPck17H65GG6vVxTgNlwbFpLaYJV6GWjWvMT8lAelD99yPrz4XEQiv+ernDbcJeq4NWxxCZI1KUPoDF7gSdldJEOXlScvKPqsFZvCx8nWegkd61b+G7dqhkrm+01dvEqOGVEknnZneW878=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CO7NzX0a; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142B81F000E9;
-	Wed, 27 May 2026 15:36:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779896172;
-	bh=tyMTaumHRjBinJdhP3tD87rZtnu90BQDmn//aI/sKmo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=CO7NzX0aE0E+SHj+82S+F/U8cAQzuwA8hkUPUNhJLQ2phlY3RB4OcpfkpOC+dW4us
-	 qjbQuYT4T45deTaGv3FFA8SHPEUNFhx94kaWnwwyDuaie2bUyyAN0N5GPX9GmjjbT8
-	 yx2NyadlN03P0nR703Zi77z6eXdY9EVjHiC85zMb1twHn3rLnsS+bt/vbWFG2XZ5J/
-	 7fNu4YopxFJ1v2ZqzTS3CpuuX1QzQ6zn1hKuaz5vYmfBQaCyMiCiE685vOoS+B+oKi
-	 t8mW6mahwlddIi1E01MbB0ycvEVyQW350njEZzE+LYQZHRbCx9c6rKFsuimdasqz1e
-	 VM+dsl4Rrhleg==
-From: Lee Jones <lee@kernel.org>
-To: Lee Jones <lee@kernel.org>, 
- Mark Brown <broonie@opensource.wolfsonmicro.com>, 
- Thierry Reding <thierry.reding@avionic-design.de>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Srinivas Kandagatla <srini@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Vinod Koul <vkoul@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Danilo Krummrich <dakr@kernel.org>, Rob Herring <robh@kernel.org>, 
- Saravana Kannan <saravanak@kernel.org>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- Andi Shyti <andi.shyti@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, Doug Berger <opendmb@gmail.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Ulf Hansson <ulfh@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Matthew Brost <matthew.brost@intel.com>, 
- =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
- Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Peter Chen <peter.chen@kernel.org>, 
- Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
- Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: brgl@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
- driver-core@lists.linux.dev, devicetree@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org, 
- iommu@lists.linux.dev, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, intel-xe@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, 
- linux-mips@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
- stable@vger.kernel.org
-In-Reply-To: <20260521-pdev-fwnode-ref-v1-1-88c324a1b8d2@oss.qualcomm.com>
-References: <20260521-pdev-fwnode-ref-v1-1-88c324a1b8d2@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH 01/23] mfd: tps6586x: fix OF node refcount
-Message-Id: <177989616081.737612.15563215651036638106.b4-ty@b4>
-Date: Wed, 27 May 2026 16:36:00 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EFD426EDA
+	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 16:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779898877; cv=pass; b=IN42g5tv8hS0JcyDqZweeGXULIVN1w0TUzbJlNW8KF8QQKA1YgPLNwYHe/6isBgurMK/HbzwNZwzvRlIJv1x8vntOjK77HBpqmuGELgNUMJA1aCKTOJP5UHtPfOsQIkQSx2hSWuNIR864ZOrDYk270k/9mnCcpol6t7Ht0QGdTE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779898877; c=relaxed/simple;
+	bh=3dxrqcdNnKYVhdfP7nh0R/VHpio1dU95MRkKy/vXfjQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EIkj7rh55lPT4+B0lLWZClJmlaibiw++uCqca0/VjaystU62fOEHXkTNMZPzIJ+TSM40oszEqXxc2lVPoOODIugmx8Dbtgo+ihChwB+/ENANcjKTA/KwKpQ5lZuPPL1uF9IhaNNXd0Kd/YUVIUGO+/vV47nG73A0/a+wS5fCQxE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=MtsCw/0k; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5aa4b50e054so1082479e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 09:21:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779898874; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EVI/UFllRFXDOgLrrAiAYfRzeKKGWSElbzivpNC06QxZGyWLH2ezsdi7eMKQM3gv1p
+         yIZaWt8vPbPXooUZPjM8o51rjBMTJC7Unr+IeL4FfctwUCUDQVx6/3SElZ9seHZJLHQy
+         WWoJskYDt/dgSjFZI5B6xEl0boTMf+f76mqLdjyITBRBsbyjZMaE/WRMaynnqcuXLZ9I
+         aYniXGMBdn3qHSpH5PjYtT91tTuDcJhOoIpP/zMun5ChVnEIoPbUa5WMb5WkPBnxhc4D
+         B4BvkNf2VmTU6sm/1cIlthhkMWCbGczb2xLllGMA2enk8c4RfQNjwzrxP0f5vvDVkPVo
+         JTBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3dxrqcdNnKYVhdfP7nh0R/VHpio1dU95MRkKy/vXfjQ=;
+        fh=Z6mZxUhDldpoaVU/QSA9HDE//rBZYq6TCQTPtchOEmA=;
+        b=iG5acu+tMSX1vp9eCHlZtpUzKSq/t7QbW4IYG3Jdpc3aayOgkuWXqRcMLBmjJcnKW4
+         D84J3LVfS7WpWpegnpTlXfZk2hD4JRGtyYijkegwrnn3tWC+maCjxZq6FYmoT7Rk98ZO
+         kExaeMP8CmqQA688njhbkLyUerS5RScTSs92tPEDiwlFAQz5XSShncL8+n5U/6OjnXrX
+         R0zuWKSkjtARvdNoE56fU+74xAeXiWF3IGZqo/IN4iOWMWYckeCG2ACUI92okVaRU4zR
+         EW586JegzAT8qYyoajEhqmhZ1tf7vAGc+FFyAEpWz/gfgr7MNw6D04DZdu8te13lCMMP
+         0Sdg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1779898874; x=1780503674; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3dxrqcdNnKYVhdfP7nh0R/VHpio1dU95MRkKy/vXfjQ=;
+        b=MtsCw/0k4OTSh4B9Pxdh8daiLEm1A4poAtaF365+vNmdjmNuioPQE6g8HcgmwrknBF
+         f1Q3Jm83/Zr6u9mhgKmWMxNGSPRXmiv1g6vEKggOtJJgd2yttYR/1v+gVAIoNokSeBof
+         G5Lj2vyr9uNlDENkRHcJphLP7MfjDoFs3NgvU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779898874; x=1780503674;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3dxrqcdNnKYVhdfP7nh0R/VHpio1dU95MRkKy/vXfjQ=;
+        b=kPvMTkAhSt2IO/pLxm18zGlSjv268EKUDkgTCKVLSTcjGT+wF3VDEpB2VGhfiei/jf
+         EZ519g7A44ZLUmLyQoGCX6PxjvVuMsY8PGV7X2H0d9iWYZuFl4dVBONOkatxyuYCXupi
+         r0Uc5t970vCsoY0SSQ3b9IGiIH6kR/1X9OKc02KG/CCi2AgK7D0rI3PpBvlc7UBEwN0b
+         HIxRb0vUrkMrKvu6+szgXfv+2Yjn+MDEu3JCgBTzonajA/1ceePMmGaFfdqce8UMKwrs
+         gL5X/x6f6JUZsr1omxz9J7WLcS+TFAKHSU8MebKhJOvhhgPC2/ZGg5vLvUJCGXy4ykYM
+         LdbA==
+X-Forwarded-Encrypted: i=1; AFNElJ9PDhiWrNeowpyN00qt0ii5RBNbHMHdZLkn5atisRHQ7qrYOvmXVtVgrg8EfugTVXycKMUtE9/Qqbc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp7aCsB24Op7GZDz4QChSIBg/Ex5G2bu0VcI9PNx8KDnXIrmsP
+	TJBHTXZDWLAKWxiZJytYzcpFSauUearXlBPNW3SVaiAmaflaY+SNuG5R+oVbGhaz+oEPwOxxKQy
+	9F7oOvMPTkUrrN0dRjHm+9FwGJxxRy7KKY77W1EbP
+X-Gm-Gg: Acq92OFFTFjREk1VGUMDexpzdYwirqs1MUpaQjjpqJD5BtmlPcKZAJfZOc2wPKj+Sts
+	wQf65ql4WtR9BmXv0fW7Y91eCyegiHL1ZD0Hi/inV5GyYszAcYpFoBQuOjpTwKOGL6hcezMe4hw
+	mLjhffrDox5zHRLG1IjnWmFeoW2WvRBjyNlcpgdDv6r0Tsjj6SwIyIdLadF5ee9YB5E3U/YX0FO
+	0LxjocZTXLAvH+5nUdG7xU13e1/iQ6T2nSQvzSWTXL81zgcBMVhjB6XhagStBav+FqQLpOpiVHk
+	p6F/SkdjkxMjF9q0xw==
+X-Received: by 2002:a05:6512:2204:b0:5aa:b6a:9257 with SMTP id
+ 2adb3069b0e04-5aa32393ff6mr7614476e87.44.1779898874134; Wed, 27 May 2026
+ 09:21:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.16-dev-ad80c
-X-Spamd-Result: default: False [-0.16 / 15.00];
+References: <20260515090149.3169406-1-wenst@chromium.org> <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
+ <CAGXv+5HC3dqgcE3KnKzakHHWFHB6m_X42orOkNUvZvp=SL_O8g@mail.gmail.com> <CAMRc=Med-_0GSYzoFBRiwFzBCK0DZqJD8_SEBxi+zwR20GS-HA@mail.gmail.com>
+In-Reply-To: <CAMRc=Med-_0GSYzoFBRiwFzBCK0DZqJD8_SEBxi+zwR20GS-HA@mail.gmail.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Wed, 27 May 2026 18:21:00 +0200
+X-Gm-Features: AVHnY4LzsI5n_9iqirzC_of7SGIfiJw_kQ6vIsCvh5Qe5puVB03Deb7QvAn9uiw
+Message-ID: <CAGXv+5GbW0bx3nKdZt2+tHuHyQ-J-1-Z79nMzHAwjmEPGKT02A@mail.gmail.com>
+Subject: Re: [PATCH RFC 00/12] arm64: mediatek: Add M.2 E-key slot on Chromebooks
+To: Bartosz Golaszewski <brgl@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38104-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,linux.intel.com,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org,oss.qualcomm.com];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-38105-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[67];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lee@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[wenst@chromium.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[chromium.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 280185E719D
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,x:email,0.0.0.3:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,chromium.org:email,chromium.org:dkim]
+X-Rspamd-Queue-Id: A969C5E7AAB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 21 May 2026 10:36:24 +0200, Bartosz Golaszewski wrote:
-> Platform devices created with platform_device_alloc() call
-> platform_device_release() when the last reference to the device's
-> kobject is dropped. This function calls of_node_put() unconditionally.
-> This works fine for devices created with platform_device_register_full()
-> but users of the split approach (platform_device_alloc() +
-> platform_device_add()) must bump the reference of the of_node they
-> assign manually. Add the missing call to of_node_get().
-> 
-> [...]
+On Tue, May 26, 2026 at 11:48=E2=80=AFAM Bartosz Golaszewski <brgl@kernel.o=
+rg> wrote:
+>
+> On Sun, May 24, 2026 at 10:06=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org=
+> wrote:
+> >
+> > > >
+> > > > I expect some discussion on this patch, because a) it adds some
+> > > > OF-specific code into an otherwise generic (core) driver, and
+> > > > b) it doesn't yet handle USB 2.0 / 3.x shared ports; it ends up pow=
+ering
+> > > > on the port twice, which negates the port reset part.
+> > > >
+> > >
+> > > I understand that you do this because the port device has no OF node
+> > > assigned. If we wanted to call pwrseq_get() for the port device, is
+> > > there really no other way to associate it with the correct pwrseq
+> > > provider?
+> >
+> > I suppose we could tie the "port@X" node to the usb port device, but
+> > AFAIK no other subsystem does this so we would be introducing a new
+> > pattern.
+> >
+> > In the M.2 pwrseq driver, we would have to match by port node instead
+> > of its parent device node. We may end up with different behavior for
+> > the USB target vs the other targets.
+> >
+>
+> I imagine, we can check the bus type of the parent device to know if
+> this is USB?
 
-Applied, thanks!
+The "bus type" type is probably not exported. However since the DT binding
+explicitly says which port on the M.2 slot is for which connection type,
+I think the matching can do a special case check for the USB port.
+The next obstacle is that the target string is not given to the provider
+match function.
 
-[01/23] mfd: tps6586x: fix OF node refcount
-        commit: 60a28e85ba5c0707b743857a3304107f2f9d0482
+> > Also, the "port@X" nodes only exist for the OF graph connections to
+> > connectors and/or muxes (this series doesn't deal with the latter).
+> > For directly connected devices, there is a "device@X" child node
+> > directly under the USB hub node. That node is what gets tied to the
+> > the USB device.
+> >
+>
+> Is this a problem? I don't think I understand what you're saying here.
 
---
-Lee Jones [李琼斯]
+It shouldn't be. I'm just saying there would be different behavior on
+the USB side for connectors vs onboard devices (like hubs) device nodes.
 
+I talked to Greg earlier, and he said not to touch the hub driver; the
+hub driver should only deal with features from the USB spec. The
+"onboard USB devices" driver is what should be used. And this would
+be a proper case of adding an auxiliary device to the M.2 slot driver.
+
+However this seems to completely decouple the power sequencing from the
+USB core. Take the USB A connector for example, it was recently added to
+the onboard USB devices driver. However the connector has a device node
+that is not a child node of any USB host controller or hub; it is connected
+through OF graph. At the same time, since it typically sits at the top
+level of the device tree, a platform device is directly created and the
+driver subsequently binds to that device. This is totally different from
+how the hub and other directly connected onboard USB devices work. In
+the onboard device case, the device node is a child node of the USB hub
+or controller, and the corresponding platform device only gets created
+when the USB hub driver probes, thereby sort of tying it into the USB
+device topology.
+
+If the power sequencing ends up not connected to the USB subsystem, then
+maybe the M.2 slot driver could just check if the USB port (port@3) was
+used, and just enable the USB / BT pwrseq target at probe time? That
+would mean less changes needed.
+
+
+Thanks
+ChenYu
 
