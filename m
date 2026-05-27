@@ -1,497 +1,188 @@
-Return-Path: <linux-usb+bounces-38109-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38110-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cLwQGNlGF2qS/QcAu9opvQ
-	(envelope-from <linux-usb+bounces-38109-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 21:32:41 +0200
+	id UEQEMEtTF2oPBQgAu9opvQ
+	(envelope-from <linux-usb+bounces-38110-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 22:25:47 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF2D65E9847
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 21:32:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E1495EA070
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 22:25:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BFD11307D7E9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 19:30:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 59060310A7F9
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 20:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E23F37B015;
-	Wed, 27 May 2026 19:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F7B93B777B;
+	Wed, 27 May 2026 20:20:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hXloiCs8"
+	dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b="JTFe8QHF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACF2379EF0
-	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 19:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779910228; cv=none; b=Fdd5hiUMhNyGn/MSo16HNQbflQPLHsLsAqcU7AgaT+OMK1uCgtPfqXmB0KxVDGNng8g7h+lyckLG53ynCr9nsYBhvJravgcWUEAq3MCs23T6+DtB1xtNNhvUkLjHyq2YlIPIbBtUrslUNZDsghOEj0bMNZunvMuXAyzFHZc4VWY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779910228; c=relaxed/simple;
-	bh=XnLXECd39en+z/aRQhZU/Pi3po/muwdDHatmweq+ty8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EeE98mNnoGhfI/EYMVWf9LfAx5mURqagUUxZd0/7OmqRFKtpswBlTk9Dd7uJOnH/199vBTqj0/WDlgmqNd11oU0Mma5AWkzAi34BAxMFNIO3OR3+8xaxaj02SfBi2A6PeQ+JmpDXoU1esGZJYGGq5Y0rTfWLrh/sWiJQywUX2Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hXloiCs8; arc=none smtp.client-ip=74.125.82.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-304cd7d4083so781797eec.0
-        for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 12:30:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500F93B1031
+	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 20:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779913254; cv=pass; b=eSiMNg/+DQRCRnvQNxAEFkh2mxCnoD6CBLE9gY6F7JjEO3AwwsJmZKOAuOiyy8pOIfwdml1U7bUR+Cm08oLhSzQ4L1SDZaN4Iw4dnbsSxFYqRDwxKbxnXiFF0cSHc4dJRLBrgD+DLWsJ9Uc/xmvSsmEz344feC+oKfHHh6W/7Wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779913254; c=relaxed/simple;
+	bh=h/FDKdwKoKoDYux97LgThXLbdK2kP2FL5xrSZvoeXCU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oQB+EypAOwt4qPFDeS7qXezp/lUT3D2MvxXsIkyQlEnJ4dJZ4Q/Ow4MJ5wWHlGBMl8cn2N3j7k5C8F6mPyomQ0JPybktV9slbXirr+GESSWws5YRuVvSHMxrUSmPEBWg3yOKM3HujgOKVMlOGSppD2rjaw+uZ25YygoCjWyjOVg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com; spf=pass smtp.mailfrom=motu.com; dkim=pass (1024-bit key) header.d=motu.com header.i=@motu.com header.b=JTFe8QHF; arc=pass smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motu.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6870a365c77so14732645a12.0
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 13:20:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779913252; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MojPsxb5lDUMxuEq5HI8zhcthxvqOjpFPr/LRw6yFm3HzS+q9IQaDmzHkaZVtPx/5K
+         NL+FNQDjV3+gTC6GF9xoEJYUWy/qbhtHB8xRXDPMjLgQBEuFUEavsPM5ZRjz1wfLQ7fb
+         qZZNqAtNU7lW/7A9UhX9tZ2JvUXstKUHeCNhJc/A+xe2P5RdvBEb2XYWTXE1kUs767nl
+         mcPpNaoJGtINjT/pdlgfJQIyWtPX3XPY9N42KFNvpvQjz6C1H5XU1WnArfU/siE3s4yw
+         qXX+/e0vg8gbKJ1z1z5IATvLQI15zX8WX5wQtLO3z9mLGfE/m1f7ObBEfzifdNLWuLYz
+         tbyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=h/FDKdwKoKoDYux97LgThXLbdK2kP2FL5xrSZvoeXCU=;
+        fh=81s0qE3zusW7t+f9T5fdCWzTEfC0Zq2S6Pk1d5e9kow=;
+        b=AsyL1qyF7KhIQ3BNDKDT3ISTlaXIPGG8Wm00l3/adFRTGocj96F4o/2hZdxypPFTZx
+         Bt8PYgX80IZuEuSeA7CVL5hXvdXWnDW73oAxOkPck7OYA2fE2uRcP1LGnDxyp5Vcd8gX
+         rA/VYf1sP6uWcXQzHm9Fq5uvQYG2w/2tbOjcN+e541x1zwFVNpb98Rz6uNFL0eopLYhv
+         N/N87L+jJ78VJrXVHvTz1crHoWdnXQkiE/H3xKtnAyWA0CmFDFCK0Q/0zz09JGxgc+kT
+         sjZesVJujjO+AxgrRow8dFMo7Qsw2ega2eczR8oUOZtKliflnLVHUVVo0NslgWHfbE4M
+         FJVw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779910226; x=1780515026; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PXtWEbDs3zgPkGw6xxXPOO82q1lDm2Cgn2gdWx+FiYo=;
-        b=hXloiCs8gLaRxI+BmXZukqei88Lw9ThTHxfgsWX7T/Q/z7dfzPfNuSrhyplxNfo4rd
-         QRP6m/z2o8XshMsDlFBayCdfdBDbZdj+M0GVoB56R2NDge1IHyhhSbmlHklNbn5Itp2f
-         UvWjc+I+TMc0+gIGCkvcDe4diq7BSafat0bKTiUAOHQxH+P4f8K+iOHyzp5+2ptGXYW1
-         MZmmAb0C3uB8D1DHe5083Plner2jwz0u9DgrYu+ja2p2LqKAPIlU6CW4aOWaOAs4Vr2J
-         KtptA1KxR+/F8TZTkxNYitMN7chsXfhi52Sv1XSJBDWK4Bur7zBW+DQVl46csH4M3hmO
-         UgNA==
+        d=motu.com; s=google; t=1779913252; x=1780518052; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h/FDKdwKoKoDYux97LgThXLbdK2kP2FL5xrSZvoeXCU=;
+        b=JTFe8QHFIB/cl/nHH6Q7lx998aHK2UmkxP3zv8IwhoUnM6YKAwc1mijDhTUomp7++V
+         kPHXPQAYJQO2/phZSkm07xsaUDU2QP2tEowFH52bGFkS/j4RFfbbZKNpWtAiLhnI6EDY
+         1Nd0Wqqwd+13/VIPQxSKn52kjVD5CVP1870ik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779910226; x=1780515026;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PXtWEbDs3zgPkGw6xxXPOO82q1lDm2Cgn2gdWx+FiYo=;
-        b=NTKJh7D870MKNOn3IcoLr9Q6Ee2APgYrmqACdqkLL73zFS6WMjSs9KPkdpaW20jcxm
-         nVPObCPx/ACFs6njs1Y6O/hi9/fmo8Mnl/uzFLJ9NrI/J+u3GjYhxyN4eY9OexZpukUW
-         xb6JOHkgUjAJk0aNxJGHzuVGWB2kuPAPKuk9toD+dQy+1Qc85hFcBK71C88qg4hctyI1
-         h+AK3HdiUJwJUk/OyC3/kb4a28zE041Z1juUSy1T7cG8f8rEX4MSLppS+fJe/uHaht0M
-         JcdN4+voGe4fh46iffh5xQ20t0cJobMsYUF/1ib3JOnzw47txLDeqqorkNqJEwuhFGM9
-         Ue+Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+lAh/K4yFjnZGwGNQCxj30lve/9iKSa1c4TnZcU6pvPCGmCbD/7g35PKTrrt9tRswPIoEySQwzaOg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzctT91YTi+cTF4O8s/Z0ZEbNQ5gKm32hH8omeexbtW9uzWMaO3
-	+8sLgtKNbfhFe2fDxYLmz3q54XgYH4O5FqimiCE57QBQHkuyrZQ7Y08ztpkNXtTAVQ==
-X-Gm-Gg: Acq92OErM4ifB0VS9ATH6TrIJ2cORTU71M4xKg6PQVHMRZyiujGedgqkX2hAfFgUEjF
-	vjngoJyKS7rl9B5dztNENM6WyOEXvqDzX8CDKiJugnsGqWPENGcVTkTz0Jnzndfi+Y8lBjVNvYj
-	Cf10/CcXaF4Ez7uoZXCn7Ptc2uktgYiWFqHTzkHm7UlYd961rN5qgvHQzo9XQ8j6Yhp+oFq2EV1
-	kdwIBlYjLNJF/oXAbPt+whH+Qn27EwKKxxR1Gayx6OUU03tolOPr7bawTEJ62fwvsTDANKetyVb
-	iyoEVpUkU1GNrdINJl9ZiU9nYyz9ZpTzOR76Ywp5+N54XzSvS3T1LZnB7VG3Zyk6A6c2ISONuhI
-	zVJAPK4+r7KHCgmJZ3y4vD32lcd6hyG3LpfBs3ymftKgS0ZYckwM2++ufWEWkssFD/EscdkP4+X
-	iqGCOg+Huxty5jT9rFeTSr5+JP4bZm8h7jZRlG44TJJ7VDoEw1/B7g6xdDjUwWMSCMTCWyBjp1S
-	I4n/GD0Xff8Ewl7ZPMt2bNAOmui5ZqCW9WVSwwbClADWurvwJ2sIYCdxXh30/OgkQ==
-X-Received: by 2002:a05:7301:fa8b:b0:2ca:8099:ffc0 with SMTP id 5a478bee46e88-30448ffc59emr10801053eec.7.1779910225133;
-        Wed, 27 May 2026 12:30:25 -0700 (PDT)
-Received: from ?IPV6:2a00:79e0:2e7c:8:1f44:24e2:83c:2f06? ([2a00:79e0:2e7c:8:1f44:24e2:83c:2f06])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30481ad4cd3sm11102024eec.27.2026.05.27.12.30.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2026 12:30:24 -0700 (PDT)
-Message-ID: <638948f5-99e7-4a64-8f55-d9a895dd8e81@google.com>
-Date: Wed, 27 May 2026 12:30:19 -0700
+        d=1e100.net; s=20251104; t=1779913252; x=1780518052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=h/FDKdwKoKoDYux97LgThXLbdK2kP2FL5xrSZvoeXCU=;
+        b=Ql0qIQzDpI8qwflRqrziyzOVaXbnrf6x888eXQH3gdkubssxll3yYGeDolBX7fQBEe
+         g40e+drA68bxI4nsYSRtKBDgBayVJZydLQzqIhUAXM8hj7gUItE4ayMDnDudPukmxYoy
+         VOtXQHM8Dud3Vunt68yOdLvWGOmd9ljFmODjLZxaKy9LT7vHaLMz7aDKjlTl2WsXFwQn
+         ukopSeQZ8c6sO52oz9uFFZjuvgznsxMd2/adhpfuSr2YBb7Be95W2wUQgDv+1HlSCkWn
+         e/c1gNTAqpNRmHM2fi6k9A3vEeXnobb2qK0i4ssQKBBN60EkzD9q8rhG2zdAVfFNRaOd
+         /Nrw==
+X-Forwarded-Encrypted: i=1; AFNElJ/+kY9X7CO4wggxfW+Ny9z8ChfCmYUaqDDWwsCrCx1GA2ll9hs1Fx0smdzjxmU+cq1INkFVSazrLd4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN6z1fq+1CF6Yw4Bd/jGQ5Eh8LxQfe3faOzocDTSPDRlja69C+
+	tnphtR8SDVqIyHX5zDk5GWNNlXwcVIARK11eRJy/S/u8yU5B/qB/NJdXLA1G2z49rRqIAJ6BCkq
+	LJgQASSfVfINnZA/P3Kv6Jrrua9laYZIf4a6eKq9oug==
+X-Gm-Gg: Acq92OFo+8VY4sX8lO8IVbbv+dgd5xkqbMEwSa3w+vZcwO4c6jan5UjjJUUSaV03NTZ
+	ZAqeMIT6vnbQi+Z7RbcdoPGMbyJLPAFy5FNvJeJ2t5OA/wVt6wrTNHw6kTJkClCt8NUhLOD+Iqr
+	76Fjxkwjb6pioX+TfJHlQpZwHQlFbc8Nm3oRI5QbVleVYVtUJyKOe4jOgdYNbR3EFkF56OZmL2y
+	vmH5qA0NdITW9mboKF909VmjM78NySUtBSumi+O9Y1oeflvtkyT0ZpecswMYbKKVftaFHoT3tkw
+	opr3gp5qEJmogaMIIv0=
+X-Received: by 2002:a17:907:3e99:b0:be2:cd33:213f with SMTP id
+ a640c23a62f3a-be2cd332452mr576795066b.17.1779913251520; Wed, 27 May 2026
+ 13:20:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Add support for Battery Status
- response message
-To: Hans de Goede <hansg@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
- Peter Griffin <peter.griffin@linaro.org>, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20260527-batt-status-v2-0-4282985165f3@google.com>
- <20260527-batt-status-v2-2-4282985165f3@google.com>
- <4e4a63a4-9d07-4b77-a8dc-ba19c9a803f7@kernel.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <4e4a63a4-9d07-4b77-a8dc-ba19c9a803f7@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+References: <a67e11d4-6c80-4043-9f60-ae42a15ed0d3@linux.intel.com>
+ <20260521152715.288995-1-mathias.nyman@linux.intel.com> <20260521152715.288995-3-mathias.nyman@linux.intel.com>
+ <CA+Df+jcBu2zhzwfeT9AuWdK4QoqoQeJ1EB7nzRVvDMrcevQ1_A@mail.gmail.com> <20260526141505.455ab0c3.michal.pecio@gmail.com>
+In-Reply-To: <20260526141505.455ab0c3.michal.pecio@gmail.com>
+From: Dylan Robinson <dylan_robinson@motu.com>
+Date: Wed, 27 May 2026 16:20:38 -0400
+X-Gm-Features: AVHnY4ISdrDnG1urkMHUM7qB5JrEX7Of9hjgnBs8Kgei56KVTt3JZYaAt3-yeSI
+Message-ID: <CA+Df+jfswGTNn4k2Jtg+5qEGNCcgLCL3ga_ftytD4vS=7fZ2mA@mail.gmail.com>
+Subject: Re: [RFT PATCHv3 3/3] xhci: tune urb->start_frame in ring overrun and
+ underrun cases
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, linux-usb@vger.kernel.org, 
+	mathias.nyman@intel.com, stern@rowland.harvard.edu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[motu.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[motu.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	TAGGED_FROM(0.00)[bounces-38109-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38110-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[dylan_robinson@motu.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[motu.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: AF2D65E9847
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 1E1495EA070
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Hans,
-
-Thanks for the review!
-
-On 5/27/26 3:15 AM, Hans de Goede wrote:
-> Hi,
+On Tue, May 26, 2026 at 8:15=E2=80=AFAM Michal Pecio wrote:
+> On Mon, 25 May 2026 20:49:15 -0400, Dylan Robinson wrote:
+> > I think the only way to prevent this drift would be to intentionally
+> > introduce an additional gap so that the host controller driver can
+> > restart the stream on a known frame.
 >
-> On 27-May-26 02:02, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add support for responding to a Get_Battery_Status request with a
->> Battery_Status message. The port partner shall request the status of a
->> port's battery by providing an index in the Get_Battery_Status AMS. In
->> case of failure to identify the battery, the port shall reply with an
->> appropriate message indicating so.
->>
->> Support for Battery_Status message is required for sinks that contain
->> battery as specified in USB PD Rev3.1 v1.8
->> ("Applicability of Data Messages" section).
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
->> ---
->>   drivers/usb/typec/tcpm/tcpm.c | 151 +++++++++++++++++++++++++++++++++++++++++-
->>   include/linux/usb/pd.h        |  29 ++++++++
->>   2 files changed, 177 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->> index dfbb94ddc98a..ee45d90dbf98 100644
->> --- a/drivers/usb/typec/tcpm/tcpm.c
->> +++ b/drivers/usb/typec/tcpm/tcpm.c
->> @@ -232,7 +232,8 @@ enum pd_msg_request {
->>   	PD_MSG_DATA_SINK_CAP,
->>   	PD_MSG_DATA_SOURCE_CAP,
->>   	PD_MSG_DATA_REV,
->> -	PD_MSG_EXT_SINK_CAP_EXT
->> +	PD_MSG_EXT_SINK_CAP_EXT,
->> +	PD_MSG_DATA_BATT_STATUS
->>   };
->>   
->>   enum adev_actions {
->> @@ -389,6 +390,14 @@ struct pd_timings {
->>   /* Convert microwatt to watt */
->>   #define UW_TO_W(pow)					((pow) / 1000000)
->>   
->> +/*
->> + * As per USB PD Spec Rev 3.18 (Sec. 6.5.13.11), the number of fixed batteries
->> + * that a port can be queried is restricted to 4.
->> + */
->> +#define MAX_NUM_FIXED_BATT				4
->> +
->> +#define BATTERY_PROPERTY_UNKNOWN			0xffff
->> +
->>   /*
->>    * struct pd_identifier - Contains info about PD identifiers
->>    * @vid: Vendor ID (assigned by USB-IF)
->> @@ -683,6 +692,9 @@ struct tcpm_port {
->>   
->>   	struct pd_identifier pd_ident;
->>   	struct sink_caps_ext_data sink_caps_ext;
->> +	struct power_supply *fixed_batt[MAX_NUM_FIXED_BATT];
->> +	u32 fixed_batt_cnt;
-> Why not just have a struct power_supply **fixed_batt here
-> and directly pass that to power_supply_get_battery_all() ?
->
-> And then call power_supply_put_battery_all() at cleanup /
-> driver-remove time ?
+> If we want to gamble that maybe a slight IST violation will still
+> succeed anyway, this seems to be the only recovery when we lose.
 
-Comment addressed below.
+Yeah, if this mid-stream recovery concern can be avoided by
+disallowing IST violations in the first place, that seems like the
+better approach. It took me a moment to understand what you were
+getting at, but if an IST-violating transfer cannot be submitted in
+the first place, then I think this problem mostly goes away. If a
+driver wants to try violating the IST, it could just use the ASAP flag
+instead, right?
 
+> Either way, we need to fail certain IST-violating submissions with
+> -EXDEV or complete them immediately with -EXDEV status. Which is what
+> I was working on and finding various issues with (the driver doesn't
+> expect queued URBs which aren't written to the ring). Unfortunately,
+> it still isn't finished as I have little free time currently.
 
->
->
->> +	u32 batt_request_id;
->>   #ifdef CONFIG_DEBUG_FS
->>   	struct dentry *dentry;
->>   	struct mutex logbuffer_lock;	/* log buffer access lock */
->> @@ -1391,6 +1403,37 @@ static int tcpm_pd_send_revision(struct tcpm_port *port)
->>   	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
->>   }
->>   
->> +static void tcpm_init_fixed_batt(struct tcpm_port *port)
->> +{
->> +	struct power_supply **batteries;
->> +	int ret, i;
->> +
->> +	if (port->fixed_batt_cnt > 0)
->> +		return;
->> +
->> +	ret = power_supply_get_battery_all(port->dev, &batteries);
->> +	if (ret < 0) {
->> +		tcpm_log(port, "Failed to fetch batteries refs ret=%d", ret);
->> +		return;
->> +	}
->> +
->> +	for (i = 0; i < ret; i++) {
->> +		if (!batteries[i])
->> +			continue;
->> +
->> +		if (port->fixed_batt_cnt < MAX_NUM_FIXED_BATT)
->> +			port->fixed_batt[port->fixed_batt_cnt++] = batteries[i];
->> +		else
->> +			break;
->> +	}
->> +
->> +	if (i < ret)
->> +		power_supply_put_array(batteries + i, ret - i);
->> +
->> +	if (ret)
->> +		kfree(batteries);
->> +}
->> +
-> If you do as I suggest above this entire function can go away.
-The reason for implementing it this way was because the USB PD protocol 
-only caters to a maximum of 4 batteries. I wanted to avoid unnecessarily 
-holding references to any extra ones if a platform theoretically had 5 
-or more.
+This makes sense, and I am starting to wrap my head around the various
+requirements, so I may try putting together a patch as well, although
+finding the time may be difficult for me too.
 
-However, I agree that this is overthinking it for a practical scenario, 
-and your approach is much cleaner. I will drop the helper function and 
-switch to dynamically holding the array pointer directly as you suggested.
+> By the way, do you know what Windows does in such cases?
 
+I wasn't sure, so I ran some tests. Windows behaves somewhat
+unexpectedly with IST-violating submissions. The observable behavior
+appears to be mostly the same regardless of CFC.
 
->
->>   static int tcpm_pd_send_source_caps(struct tcpm_port *port)
->>   {
->>   	struct pd_message msg;
->> @@ -1476,6 +1519,8 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
->>   
->>   	if (!port->self_powered)
->>   		data->spr_op_pdp = operating_snk_watt;
->> +	else
->> +		tcpm_init_fixed_batt(port);
-> And you can just call power_supply_get_battery_all() here and store
-> count int fixed_batt_cnt (make fixed_batt_cnt an int so that negative
-> errors don't turn into a big number.
->
->>   
->>   	/*
->>   	 * SPR Sink Minimum PDP indicates the minimum power required to operate
->> @@ -1502,6 +1547,7 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
->>   	skedb.load_step = data->load_step;
->>   	skedb.load_char = cpu_to_le16(data->load_char);
->>   	skedb.compliance = data->compliance;
->> +	skedb.batt_info = port->fixed_batt_cnt;
->>   	skedb.modes = data->modes;
->>   	skedb.spr_min_pdp = data->spr_min_pdp;
->>   	skedb.spr_op_pdp = data->spr_op_pdp;
->> @@ -1520,6 +1566,87 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
->>   					   port->message_id,
->>   					   data_obj_cnt,
->>   					   1 /* Denotes if ext header */));
->> +
->> +	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
->> +}
->> +
->> +static int tcpm_pd_send_batt_status(struct tcpm_port *port)
->> +{
->> +	u16 present_charge = BATTERY_PROPERTY_UNKNOWN;
->> +	bool batt_present = false, invalid_ref = true;
->> +	u32 batt_id = port->batt_request_id;
->> +	union power_supply_propval val;
->> +	struct power_supply *batt;
->> +	u8 charging_status = 0;
->> +	struct pd_message msg;
->> +	int ret, charge_now;
->> +	u64 energy_now;
->> +	u32 bsdo;
->> +
->> +	memset(&msg, 0, sizeof(msg));
->> +
->> +	if (batt_id >= port->fixed_batt_cnt || !port->fixed_batt[batt_id])
->> +		goto send_status;
-> And here you can then additionally check against MAX_NUM_FIXED_BATT .
->
-> Also drop the NULL check here, power_supply_get_battery_all() never
-> leaves holes / NULL entries in the array.
+Windows appears to always complete isochronous URBs with a success
+status, regardless of whether the transfers actually occur on the bus
+(yikes). When a transfer does occur, it appears on the exact frame
+requested by the submission, whereas transfers that do not occur,
+presumably because they violated the IST, may complete immediately
+upon submission. Consequently, I saw URB completions occurring out of
+submission order.
 
-Ack.
-
-
-BR,
-
-Amit
-
->
->
->> +
->> +	invalid_ref = false;
->> +	batt = port->fixed_batt[batt_id];
->> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_PRESENT, &val);
->> +	if (ret)
->> +		tcpm_log(port,
->> +			 "Failed to fetch power_supply_prop_present ret %d",
->> +			 ret);
->> +	else
->> +		batt_present = val.intval > 0;
->> +
->> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_CHARGE_NOW,
->> +					&val);
->> +	if (!ret) {
->> +		charge_now = val.intval;
->> +
->> +		ret = power_supply_get_property(batt,
->> +						POWER_SUPPLY_PROP_VOLTAGE_AVG,
->> +						&val);
->> +		if (!ret) {
->> +			energy_now = ((u64)charge_now * val.intval) / 1000000;
->> +
->> +			/*
->> +			 * Battery Present Charge is reported in
->> +			 * increments of 0.1WH.
->> +			 */
->> +			present_charge = (u16)UW_TO_W(energy_now * 10);
->> +		}
->> +	}
->> +
->> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_STATUS, &val);
->> +	if (!ret) {
->> +		switch (val.intval) {
->> +		case POWER_SUPPLY_STATUS_CHARGING:
->> +			charging_status = BSDO_BATTERY_INFO_CHARGING;
->> +			break;
->> +		case POWER_SUPPLY_STATUS_DISCHARGING:
->> +			charging_status = BSDO_BATTERY_INFO_DISCHARGING;
->> +			break;
->> +		case POWER_SUPPLY_STATUS_NOT_CHARGING:
->> +		case POWER_SUPPLY_STATUS_FULL:
->> +			charging_status = BSDO_BATTERY_INFO_IDLE;
->> +			break;
->> +		default:
->> +			charging_status = BSDO_BATTERY_INFO_RSVD;
->> +			break;
->> +		}
->> +	}
->> +
->> +send_status:
->> +
->> +	bsdo = BSDO(present_charge, charging_status, batt_present, invalid_ref);
->> +	msg.payload[0] = cpu_to_le32(bsdo);
->> +	msg.header = PD_HEADER_LE(PD_DATA_BATT_STATUS,
->> +				  port->pwr_role,
->> +				  port->data_role,
->> +				  port->negotiated_rev,
->> +				  port->message_id,
->> +				  1);
->> +
->>   	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
->>   }
->>   
->> @@ -3854,6 +3981,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
->>   {
->>   	enum pd_ext_msg_type type = pd_header_type_le(msg->header);
->>   	unsigned int data_size = pd_ext_header_data_size_le(msg->ext_msg.header);
->> +	const struct pd_chunked_ext_message_data *ext_msg = &msg->ext_msg;
->>   
->>   	/* stopping VDM state machine if interrupted by other Messages */
->>   	if (tcpm_vdm_ams(port)) {
->> @@ -3862,7 +3990,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
->>   		mod_vdm_delayed_work(port, 0);
->>   	}
->>   
->> -	if (!(le16_to_cpu(msg->ext_msg.header) & PD_EXT_HDR_CHUNKED)) {
->> +	if (!(le16_to_cpu(ext_msg->header) & PD_EXT_HDR_CHUNKED)) {
->>   		tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
->>   		tcpm_log(port, "Unchunked extended messages unsupported");
->>   		return;
->> @@ -3887,9 +4015,17 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
->>   					     NONE_AMS, 0);
->>   		}
->>   		break;
->> +	case PD_EXT_GET_BATT_STATUS:
->> +		if (data_size >= 1) {
->> +			port->batt_request_id = ext_msg->data[0];
->> +			tcpm_pd_handle_msg(port, PD_MSG_DATA_BATT_STATUS,
->> +					   GETTING_BATTERY_STATUS);
->> +		} else {
->> +			tcpm_set_state(port, SOFT_RESET_SEND, 0);
->> +		}
->> +		break;
->>   	case PD_EXT_SOURCE_CAP_EXT:
->>   	case PD_EXT_GET_BATT_CAP:
->> -	case PD_EXT_GET_BATT_STATUS:
->>   	case PD_EXT_BATT_CAP:
->>   	case PD_EXT_GET_MANUFACTURER_INFO:
->>   	case PD_EXT_MANUFACTURER_INFO:
->> @@ -4100,6 +4236,14 @@ static bool tcpm_send_queued_message(struct tcpm_port *port)
->>   					 ret);
->>   			tcpm_ams_finish(port);
->>   			break;
->> +		case PD_MSG_DATA_BATT_STATUS:
->> +			ret = tcpm_pd_send_batt_status(port);
->> +			if (ret)
->> +				tcpm_log(port,
->> +					 "Failed to send battery status ret=%d",
->> +					 ret);
->> +			tcpm_ams_finish(port);
->> +			break;
->>   		default:
->>   			break;
->>   		}
->> @@ -8597,6 +8741,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
->>   	hrtimer_cancel(&port->vdm_state_machine_timer);
->>   	hrtimer_cancel(&port->state_machine_timer);
->>   
->> +	power_supply_put_array(port->fixed_batt, port->fixed_batt_cnt);
->>   	tcpm_reset_port(port);
->>   
->>   	tcpm_port_unregister_pd(port);
->> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
->> index 337a5485af7c..afb9c2c65588 100644
->> --- a/include/linux/usb/pd.h
->> +++ b/include/linux/usb/pd.h
->> @@ -724,4 +724,33 @@ void usb_power_delivery_unlink_device(struct usb_power_delivery *pd, struct devi
->>   
->>   #endif /* CONFIG_TYPEC */
->>   
->> +/* Battery Status Data Object */
->> +#define BSDO_PRESENT_CAPACITY				GENMASK(31, 16)
->> +#define BSDO_CHG_STATUS					GENMASK(11, 10)
->> +#define BSDO_BATTERY_PRESENT				BIT(9)
->> +#define BSDO_INVALID_BATTERY_REFERENCE			BIT(8)
->> +
->> +/*
->> + * Battery Charge Status: Battery Charging Status Values as defined in
->> + * "USB PD Spec Rev3.1 Ver1.8", "Table 6-46 Battery Status Data Object (BSDO)".
->> + */
->> +#define BSDO_BATTERY_INFO_CHARGING			0x0
->> +#define BSDO_BATTERY_INFO_DISCHARGING			0x1
->> +#define BSDO_BATTERY_INFO_IDLE				0x2
->> +#define BSDO_BATTERY_INFO_RSVD				0x3
->> +
->> +/**
->> + * BSDO() - Pack data into Battery Status Data Object format.
->> + * @batt_charge: Battery's present state of charge in 0.1WH increment.
->> + * @chg_status: Battery charge status.
->> + * @batt_present: Indicates that battery is present/attached when set else absent when unset.
->> + * @invalid_ref: Indicates that an invalid battery reference was made in the Get_Battery_Status
->> + *		 request.
->> + */
->> +#define BSDO(batt_charge, chg_status, batt_present, invalid_ref)	\
->> +	((FIELD_PREP(BSDO_PRESENT_CAPACITY, batt_charge)) |		\
->> +	 (FIELD_PREP(BSDO_CHG_STATUS, chg_status)) |			\
->> +	 ((batt_present) ? BSDO_BATTERY_PRESENT : 0) |			\
->> +	 ((invalid_ref) ? BSDO_INVALID_BATTERY_REFERENCE : 0))
->> +
->>   #endif /* __LINUX_USB_PD_H */
->>
->
-> Regards,
->
-> Hans
->
->
+Best Regards,
+Dylan
 
