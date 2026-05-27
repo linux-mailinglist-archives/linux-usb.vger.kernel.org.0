@@ -1,173 +1,323 @@
-Return-Path: <linux-usb+bounces-38094-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38095-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aHo4A5e1FmrFpgcAu9opvQ
-	(envelope-from <linux-usb+bounces-38094-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 11:12:55 +0200
+	id CH/iIuTAFmrOqgcAu9opvQ
+	(envelope-from <linux-usb+bounces-38095-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:01:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 802DA5E19AD
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 11:12:54 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88BE15E24DF
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:01:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C9730308AD68
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 09:08:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8388F30072B9
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 09:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962BB3955C8;
-	Wed, 27 May 2026 09:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9269C3ECBCF;
+	Wed, 27 May 2026 09:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5IFILxR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LQEvmrtY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4458D3E5A3F
-	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 09:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0577396579;
+	Wed, 27 May 2026 09:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779872902; cv=none; b=S14Dyj3QwSmgPd3tZ+BUTaRsk80plP7bKTTyVtWGCv66ByxdReSBwcNQKDe15+ZsiqsrGWVquH88Xb9t+zf43y5FFrmsDGRTfo2IjaeuYDzyMnPW4f1wv9BZCEjB7BafXVSH1ovdCLGOe5osRv8YbFs9hvxM12DrnHQsqQ/Q8NY=
+	t=1779875576; cv=none; b=UfIDVHw3BuChyMINjPXwnr6nD7FmCuUHOhHlWfQq9GwxQaRxPjLmf8y8wTbZRxpCxD71lTt+jqlZ7KvYpHPS5kJa0+yOm+u3Pdbc46T3vDk62aNJJ8f8wAdfWlkcs//OWBZ82omiyCnURb+9yuU7T7g0r1EtRwP/qCBSwlb22eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779872902; c=relaxed/simple;
-	bh=NL5zz6TFFz1J+zzzYXCP00XF8j2Vn94QtKRSoPtjcs0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hFf88Nyr+qXB8c2f3xhL4Hu0PJMTy0UpLJ7wZga3eDC1c/ORbLF3GC8C+5xYSLMd6pfHrWth2YX8jKwEgmhHE8vJgS2T4HBEhnGc8QPhr+Ifc082TyuI+Tdw71jzNXWuzP4K13rgZQAciDc/bwcPpSD6VKvM8ktQiBVqezbtO6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b5IFILxR; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48e69e60063so12783535e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 02:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779872898; x=1780477698; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rvde6FtFOf0EYIyR46MKaWJ3tuuQPRR4ZTiztVWCj2w=;
-        b=b5IFILxRseEz7Cjf9dX9/h7Nf1vjd9yuNxye/4suldv1HLWR2KFnXltd/oxhX2kTBE
-         Bm3yVfpdVhvgFRAZYZqUgyLZvzVjItMcKf3QkIY1mtp9gdMxKmTrRUfYCocHeUA0ep43
-         vzx7kYGKkB3FWw7kjQuylp28xeWt/YUWOFbIHUlUFZdpl8WwbiGNPQ4GIAKdXnoKndvb
-         0/w+mOWNFYdbj2on4u3wtyMYW2PH+zDNUArWIKqZm3rExWz/9Gm01lpZwK0RklNtc+y9
-         W0AGTpxC9nAD/ReY9gHFRXk8tfpErq3nRFRRvc5UBgp4hLQnynIe2ha/9ZvuVRgOxsB4
-         Gd8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779872898; x=1780477698;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rvde6FtFOf0EYIyR46MKaWJ3tuuQPRR4ZTiztVWCj2w=;
-        b=Cc6xvv+PYBMC9MBksblH1FFXg8BxCJUj0gcYIO+GWrAZGzcyOlgIZQUiBSc/NVk07a
-         FCghBFGxZkheupJTLwS9sNVyLs2abl9eEkzNtWPfUk7UNs9WsYSMbrcspjKS+jN51eiQ
-         dYz4oy0PcSI2xv1J8jRPy3EFU4Y2r4ytrE8RRBWKGUazT7JGMZNEIJ50mh9u+MjuX98n
-         ZGEy/E/28JvgYREpsUYWYu0YgDOmiRrNEDqluRw0LsHYn8aY+zeNg5KFkRslvshZW5i4
-         cuZxB4e/zVrqlKnB6pwCzHd8h9+kvu8nXBcKgD+QIcmrKxm55pAGM5QeN1Qsl6HYI7Mp
-         OPjQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/3xzcek3rA1uY6ZcRYMUU8y1jAuMzxFRRllpdOIjSRCktOJrOPv4DjPuqOhoN/mYM3HCtRDow8Dhg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYtf2kDBioRs2/3u60a9Y1x4kCCaTgbZpQJ1i85GrwCzy0zqku
-	EyW+ysBc86p81UxjdZzeCNiMTjhqup6er0/vzha6Gl+5YMCRfFiH06c=
-X-Gm-Gg: Acq92OE01AUqRsKFsN9E3cnim8Rmi4KjYr8ICuvLAzd98soKb3Ee/uZratDsDNsQjtK
-	ZhNz4LmMvJGf3cKqQWVy79gskmZnUitpvyFeAGJI1WYPCo+kk8bCJdLw3MWQHyWPRw5OKmrdBES
-	O4G7IloiNWskPcY14nxQhakrVXc0wlVDnz3sTWDhGtN8gO+O5C6X9ekME8HSOEgbgHUDZPePEnw
-	uh6/GEyuKEjPMLFLvJYfq9VEUPXGFBr8ETxaaGtE3X7ARITWSKIZfd6g39bHgdv36AAY6hKIyTU
-	uAXK+9b+eAF7aLigI9RjXFzDdVsy3W35mSb3anxzal2F8naISRiK1bAvmWC1cBByp4wkRx0gDzy
-	gzy/Q+FIs4kvbdIqWPK3419OnjDn1ZrCmcKdg4Qkq/hqRYmf6Nz/WXEFBihkapHCSsPO2ap9pRC
-	FHUmLCkohyOMq0Id/RGgQNCZuz8U9skyPMU8T3Y5G/92iAW672Pto0HH6ve2lx
-X-Received: by 2002:a05:600c:4706:b0:490:3fdd:d344 with SMTP id 5b1f17b1804b1-490424851e1mr170501175e9.1.1779872897560;
-        Wed, 27 May 2026 02:08:17 -0700 (PDT)
-Received: from localhost (32.red-80-39-29.staticip.rima-tde.net. [80.39.29.32])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4904526c926sm685108205e9.1.2026.05.27.02.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 02:08:17 -0700 (PDT)
-From: Xose Vazquez Perez <xose.vazquez@gmail.com>
-To: 
-Cc: Xose Vazquez Perez <xose.vazquez@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	USB-ML <linux-usb@vger.kernel.org>,
-	NETDEV-ML <netdev@vger.kernel.org>
-Subject: [PATCH] net: usb: asix: ax88772: identify 0x2001/0x1a02 correctly
-Date: Wed, 27 May 2026 11:08:15 +0200
-Message-ID: <20260527090816.100854-1-xose.vazquez@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	s=arc-20240116; t=1779875576; c=relaxed/simple;
+	bh=yW/IQw++XLRR/CzMzjAfkfnR8Kxglizdpzl8dv8jzWs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N/Fqu9i5wJkI/hEcxbnHZawmC9ascgM+xjpG51CgeJt7TSTVeh2mFgnWFXNowfx1/npud+RC9a1MrzbA1etLNbhEz0T1rVmAhA9k9lsNJUn1NaQ5KH6xyTg45+GEO3AjAVvd3lJnfAosAEemuDTZPlJy9Ijp4M0Xnv1eCzo1L+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LQEvmrtY; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE521F000E9;
+	Wed, 27 May 2026 09:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779875574;
+	bh=xpicSIcdbRhMqvRSlfdrldSbJ0CuDgnbN5bHk5btR/A=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=LQEvmrtYip53xWNPKa/Whmxwlm3VB0QUSV2IBsngQMSGy5bf7NoQ3y61LVPgeFmKP
+	 AogLUEfYFZOH+A7OzWYq+DJJh0LgEKlUoY7Md8Y02X+H5uw3BSX/6H85GSWyEWA2Is
+	 s+QxOHYv511DmVx5GGfSEikzJGnbZoR4MdV23nnZdvNYv+u3n/SwMiXaW45LF1kRfP
+	 6kXQV0NI+79s57HwNqSZa8j4gQp8KK0tVTerL3v4F/TJpgG7uuh4X7jMeUP+HPZCas
+	 bV/x2XMi7XcXiB5VxNf7xNc8r9qws5tDXnMiCqHFVRnfPyIYROlV8Nub4lNzWq62sr
+	 ta4RCLhU1lR8w==
+Message-ID: <6f53fb78-ec28-4765-be66-0d6abd022216@kernel.org>
+Date: Wed, 27 May 2026 11:52:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] power: supply: Add helpers to get and put arrays
+ of power supply handles
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+ Purism Kernel Team <kernel@puri.sm>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Peter Griffin <peter.griffin@linaro.org>, RD Babiera <rdbabiera@google.com>,
+ Kyle Tso <kyletso@google.com>
+References: <20260527-batt-status-v2-0-4282985165f3@google.com>
+ <20260527-batt-status-v2-1-4282985165f3@google.com>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <20260527-batt-status-v2-1-4282985165f3@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38094-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38095-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xosevazquez@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FROM_NEQ_ENVFROM(0.00)[hansg@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.978];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lunn.ch:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,grinkin.ru:url,davemloft.net:email,archive.org:url]
-X-Rspamd-Queue-Id: 802DA5E19AD
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 88BE15E24DF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-It's 88772B, and s/spaces/tab.
+Hi,
 
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: USB-ML <linux-usb@vger.kernel.org>
-Cc: NETDEV-ML <netdev@vger.kernel.org>
-Signed-off-by: Xose Vazquez Perez <xose.vazquez@gmail.com>
----
-Sources:
-http://grinkin.ru/dlink-DUB-E100.html
-https://web.archive.org/web/20221021183537/https://grokbase.com/t/centos/centos/13axyyat31/c6-4-d-link-usb-network-device-2001-1a02-not-work
-https://support.dlink.com/resource/PRODUCTS/DUB-E100/REVC/DUB-E100_REVC_DRIVER_LINUX_v1.02_2.6.14.zip
----
- drivers/net/usb/asix_devices.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thank you for the new version.
 
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index 293ef80c4e30..af19c57c6216 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -1550,9 +1550,9 @@ static const struct usb_device_id	products [] = {
- 	USB_DEVICE (0x2001, 0x3c05),
- 	.driver_info = (unsigned long) &ax88772_info,
- }, {
--       // DLink DUB-E100 H/W Ver C1
--       USB_DEVICE (0x2001, 0x1a02),
--       .driver_info = (unsigned long) &ax88772_info,
-+	// DLink DUB-E100 H/W Ver C1
-+	USB_DEVICE (0x2001, 0x1a02),
-+	.driver_info = (unsigned long) &ax88772b_info,
- }, {
- 	// Linksys USB1000
- 	USB_DEVICE (0x1737, 0x0039),
--- 
-2.54.0
+On 27-May-26 02:02, Amit Sunil Dhamne via B4 Relay wrote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
+> 
+> Add power_supply_get_battery_all() to allow drivers to obtain a list of
+> registered battery type power supply references in the system. Also add
+> power_supply_put_array() to release references to the power supplies
+> when no longer needed.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ---
+>  drivers/power/supply/power_supply_core.c | 137 +++++++++++++++++++++++++++++++
+>  include/linux/power_supply.h             |  12 +++
+>  2 files changed, 149 insertions(+)
+> 
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index a446d3d086fc..04e5c1083e8f 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -482,6 +482,127 @@ struct power_supply *power_supply_get_by_name(const char *name)
+>  }
+>  EXPORT_SYMBOL_GPL(power_supply_get_by_name);
+>  
+> +static int __power_supply_get_num_battery(struct power_supply *epsy, void *data)
+> +{
+> +	int *count = data;
+> +
+> +	if (epsy->desc->type == POWER_SUPPLY_TYPE_BATTERY)
+> +		(*count)++;
+> +
+> +	return 0;
+> +}
+> +
+> +static int power_supply_get_num_battery(struct device *dev)
+> +{
+> +	int ret, count = 0;
+> +
+> +	ret = power_supply_for_each_psy(&count, __power_supply_get_num_battery);
+> +
+> +	dev_dbg(dev, "%s: count: %d ret %d\n", __func__, count, ret);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +struct psy_get_supplies_data {
+> +	int cnt;
+> +	int size;
+> +	struct power_supply **psys;
+> +};
+> +
+> +static int __power_supply_populate_battery_array(struct power_supply *epsy,
+> +						 void *_data)
+> +{
+> +	struct psy_get_supplies_data *data = _data;
+> +
+> +	if (epsy->desc->type == POWER_SUPPLY_TYPE_BATTERY) {
+> +		if (data->size <= data->cnt)
+> +			return -EOVERFLOW;
+> +
+> +		get_device(&epsy->dev);
+> +		data->psys[data->cnt] = epsy;
+> +		atomic_inc(&epsy->use_cnt);
+> +		data->cnt++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int power_supply_populate_battery_array(struct device *dev, int size,
+> +					       struct power_supply **batteries)
+> +{
+> +	int ret;
+> +
+> +	struct psy_get_supplies_data data = {
+> +		.cnt = 0,
+> +		.size = size,
+> +		.psys = batteries,
+> +	};
+> +
+> +	ret = power_supply_for_each_psy(&data, __power_supply_populate_battery_array);
+> +
+> +	dev_dbg(dev, "%s Found %d batteries with array size %d ret %d\n",
+> +		__func__, data.cnt, data.size, ret);
+> +
+> +	if (ret < 0) {
+> +		power_supply_put_array(batteries, data.cnt);
+> +		return ret;
+> +	}
+> +
+> +	return data.cnt;
+> +}
+> +
+> +/**
+> + * power_supply_get_battery_all() - Fetches references to all battery type power
+> + *                                  supplies.
+> + * @dev: Pointer to device requesting the power supply refs.
+> + * @psys: Pointer to an array of power supply refs.
+> + *
+> + * Helper function to get handles to all battery type power supplies.
+> + * If acquiring a ref to a power supply fails, then the search for battery
+> + * type power supplies will abort and the acquired power supply references will
+> + * be released.
+> + *
+> + * Return: Indicates the number of battery type power supplies returned on
+> + * success or a negative error code on failure.
+> + *
+> + * The caller should invoke power_supply_put_array() on the returned array
+> + * of psy refs and free the array returned by this function using kfree()
+> + * after use.
+> + */
+> +int __must_check power_supply_get_battery_all(struct device *dev,
+> +					      struct power_supply ***psys)
+> +{
+> +	int ret;
+> +
+> +	if (!psys)
+> +		return -EINVAL;
+> +
+> +	ret = power_supply_get_num_battery(dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (!ret) {
+> +		*psys = NULL;
+> +		return 0;
+> +	}
+> +
+> +	*psys = kzalloc_objs(**psys, ret);
+> +	if (!*psys)
+> +		return -ENOMEM;
+> +
+> +	ret = power_supply_populate_battery_array(dev, ret, *psys);
+> +	if (ret <= 0) {
+> +		kfree(*psys);
+> +		*psys = NULL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_get_battery_all);
+> +
+>  /**
+>   * power_supply_put() - Drop reference obtained with power_supply_get_by_name
+>   * @psy: Reference to put
+> @@ -496,6 +617,22 @@ void power_supply_put(struct power_supply *psy)
+>  }
+>  EXPORT_SYMBOL_GPL(power_supply_put);
+>  
+> +/**
+> + * power_supply_put_array() - Drop references to an array of power supplies.
+> + * @psys: Array of power supply references to put.
+> + * @count: Number of elements in the array.
+> + */
+> +void power_supply_put_array(struct power_supply **psys, int count)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < count; i++) {
+> +		if (psys[i])
+> +			power_supply_put(psys[i]);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_put_array);
+> +
+
+I think it would be better to call this: power_supply_put_battery_all()
+and move it to directly below power_supply_get_battery_all()and also
+have it call kfree(psys) so that it does all the teardown of what
+power_supply_get_battery_all() has done.
+
+Regards,
+
+Hans
+
+
+
+>  static int power_supply_match_device_fwnode(struct device *dev, const void *data)
+>  {
+>  	return dev->parent && dev_fwnode(dev->parent) == data;
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 7a5e4c3242a0..026412164a88 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -806,11 +806,23 @@ extern int power_supply_reg_notifier(struct notifier_block *nb);
+>  extern void power_supply_unreg_notifier(struct notifier_block *nb);
+>  #if IS_ENABLED(CONFIG_POWER_SUPPLY)
+>  extern struct power_supply *power_supply_get_by_name(const char *name);
+> +extern int __must_check power_supply_get_battery_all(struct device *dev,
+> +						     struct power_supply ***psys);
+> +extern void power_supply_put_array(struct power_supply **psys, int count);
+>  extern void power_supply_put(struct power_supply *psy);
+>  #else
+>  static inline void power_supply_put(struct power_supply *psy) {}
+>  static inline struct power_supply *power_supply_get_by_name(const char *name)
+>  { return NULL; }
+> +static inline int __must_check power_supply_get_battery_all(struct device *dev,
+> +							    struct power_supply ***psys)
+> +{
+> +	if (psys)
+> +		*psys = NULL;
+> +	return 0;
+> +}
+> +
+> +static inline void power_supply_put_array(struct power_supply **psys, int count) {}
+>  #endif
+>  extern struct power_supply *power_supply_get_by_reference(struct fwnode_handle *fwnode,
+>  							  const char *property);
+> 
 
 
