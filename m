@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-38095-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38096-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CH/iIuTAFmrOqgcAu9opvQ
-	(envelope-from <linux-usb+bounces-38095-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:01:08 +0200
+	id mObJNObFFmpVrwcAu9opvQ
+	(envelope-from <linux-usb+bounces-38096-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:22:30 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88BE15E24DF
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:01:06 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55F0D5E28F5
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:22:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8388F30072B9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 09:52:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2D16330D70D1
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 10:15:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9269C3ECBCF;
-	Wed, 27 May 2026 09:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE703EEAF7;
+	Wed, 27 May 2026 10:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LQEvmrtY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9b3EjrT"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0577396579;
-	Wed, 27 May 2026 09:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE27D3EDACD;
+	Wed, 27 May 2026 10:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779875576; cv=none; b=UfIDVHw3BuChyMINjPXwnr6nD7FmCuUHOhHlWfQq9GwxQaRxPjLmf8y8wTbZRxpCxD71lTt+jqlZ7KvYpHPS5kJa0+yOm+u3Pdbc46T3vDk62aNJJ8f8wAdfWlkcs//OWBZ82omiyCnURb+9yuU7T7g0r1EtRwP/qCBSwlb22eE=
+	t=1779876915; cv=none; b=TVc6pg1Jy9UwCz3PoULxGUl4jUMSjbYi5cjoT27MozdyZY1gFwLlPIKW/1omxD//xXVViPc0KLadWcntMuh9kgMDU08fcyqF69TK8m9cu461v4cqkXyiBMZn0GVTOJEI3RIpuWGCn+bkOuiuBkAzBP9wxtv7PEtH8CZj23C7pxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779875576; c=relaxed/simple;
-	bh=yW/IQw++XLRR/CzMzjAfkfnR8Kxglizdpzl8dv8jzWs=;
+	s=arc-20240116; t=1779876915; c=relaxed/simple;
+	bh=odLnlqPYTASV+EtwsbzUGSlGl1tWj2GFgWZX9ThT4kg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N/Fqu9i5wJkI/hEcxbnHZawmC9ascgM+xjpG51CgeJt7TSTVeh2mFgnWFXNowfx1/npud+RC9a1MrzbA1etLNbhEz0T1rVmAhA9k9lsNJUn1NaQ5KH6xyTg45+GEO3AjAVvd3lJnfAosAEemuDTZPlJy9Ijp4M0Xnv1eCzo1L+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LQEvmrtY; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE521F000E9;
-	Wed, 27 May 2026 09:52:51 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mFeyWh9B4A6NMidqua6AlX/8fESGBz60dUsfugGvdPqOiKpXqq5CWou36sfRV8z2qiXchCL5lE24ykwV+z1j1T8gJm/2dZnYV8U4MaZKO/VrEI13b+P8mtHji/Hn8qSjlR0DSBwERs9DbN9XNpSW17ygwk9V4gPJaJQqa1ZEB0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9b3EjrT; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126401F000E9;
+	Wed, 27 May 2026 10:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779875574;
-	bh=xpicSIcdbRhMqvRSlfdrldSbJ0CuDgnbN5bHk5btR/A=;
+	s=k20260515; t=1779876909;
+	bh=CTWZHF5tNrXZ7VWokvp32tUlqBcYKNofyWm7llLw8Sk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=LQEvmrtYip53xWNPKa/Whmxwlm3VB0QUSV2IBsngQMSGy5bf7NoQ3y61LVPgeFmKP
-	 AogLUEfYFZOH+A7OzWYq+DJJh0LgEKlUoY7Md8Y02X+H5uw3BSX/6H85GSWyEWA2Is
-	 s+QxOHYv511DmVx5GGfSEikzJGnbZoR4MdV23nnZdvNYv+u3n/SwMiXaW45LF1kRfP
-	 6kXQV0NI+79s57HwNqSZa8j4gQp8KK0tVTerL3v4F/TJpgG7uuh4X7jMeUP+HPZCas
-	 bV/x2XMi7XcXiB5VxNf7xNc8r9qws5tDXnMiCqHFVRnfPyIYROlV8Nub4lNzWq62sr
-	 ta4RCLhU1lR8w==
-Message-ID: <6f53fb78-ec28-4765-be66-0d6abd022216@kernel.org>
-Date: Wed, 27 May 2026 11:52:49 +0200
+	b=U9b3EjrTDG8c8LMIFyidZKECy3Lm9/NOQYYOzQlDZO54ZwjKHSnbs979UP+oamRMq
+	 okzWl2h1lyD7mgvS6MkOKhEc7jZdYs2BWxclMUHUWmgR1wxCt0Ob5KON4FpDkHu1NV
+	 6wO0gPXPrFZ4fuLemBCnzhPuIn2W1kCKvkbZdja7wwfy9PRpzVNzUdSBMBp3gxnBfT
+	 g8lHWqafZv+Q818Nx9Q4pTzl+fcPc+WkPYjL8FCxoZERRu5ErbzzalLXlLm2gV6uyb
+	 HdaiTLFcDaIAr6SHekIizQJhvPmT+CRJgufYp6ROBnaLDR33ahGsCVTzhn5gOJDBH4
+	 rxUR3bdbHtneA==
+Message-ID: <4e4a63a4-9d07-4b77-a8dc-ba19c9a803f7@kernel.org>
+Date: Wed, 27 May 2026 12:15:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] power: supply: Add helpers to get and put arrays
- of power supply handles
+Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Add support for Battery Status
+ response message
 To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
  Badhri Jagan Sridharan <badhri@google.com>,
  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -69,29 +69,29 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  Peter Griffin <peter.griffin@linaro.org>, RD Babiera <rdbabiera@google.com>,
  Kyle Tso <kyletso@google.com>
 References: <20260527-batt-status-v2-0-4282985165f3@google.com>
- <20260527-batt-status-v2-1-4282985165f3@google.com>
+ <20260527-batt-status-v2-2-4282985165f3@google.com>
 From: Hans de Goede <hansg@kernel.org>
 Content-Language: en-US, nl
-In-Reply-To: <20260527-batt-status-v2-1-4282985165f3@google.com>
+In-Reply-To: <20260527-batt-status-v2-2-4282985165f3@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38095-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-38096-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[hansg@kernel.org,linux-usb@vger.kernel.org];
@@ -100,224 +100,341 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 88BE15E24DF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 55F0D5E28F5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 Hi,
 
-Thank you for the new version.
-
 On 27-May-26 02:02, Amit Sunil Dhamne via B4 Relay wrote:
 > From: Amit Sunil Dhamne <amitsd@google.com>
 > 
-> Add power_supply_get_battery_all() to allow drivers to obtain a list of
-> registered battery type power supply references in the system. Also add
-> power_supply_put_array() to release references to the power supplies
-> when no longer needed.
+> Add support for responding to a Get_Battery_Status request with a
+> Battery_Status message. The port partner shall request the status of a
+> port's battery by providing an index in the Get_Battery_Status AMS. In
+> case of failure to identify the battery, the port shall reply with an
+> appropriate message indicating so.
+> 
+> Support for Battery_Status message is required for sinks that contain
+> battery as specified in USB PD Rev3.1 v1.8
+> ("Applicability of Data Messages" section).
 > 
 > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 > ---
->  drivers/power/supply/power_supply_core.c | 137 +++++++++++++++++++++++++++++++
->  include/linux/power_supply.h             |  12 +++
->  2 files changed, 149 insertions(+)
+>  drivers/usb/typec/tcpm/tcpm.c | 151 +++++++++++++++++++++++++++++++++++++++++-
+>  include/linux/usb/pd.h        |  29 ++++++++
+>  2 files changed, 177 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> index a446d3d086fc..04e5c1083e8f 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -482,6 +482,127 @@ struct power_supply *power_supply_get_by_name(const char *name)
->  }
->  EXPORT_SYMBOL_GPL(power_supply_get_by_name);
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index dfbb94ddc98a..ee45d90dbf98 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -232,7 +232,8 @@ enum pd_msg_request {
+>  	PD_MSG_DATA_SINK_CAP,
+>  	PD_MSG_DATA_SOURCE_CAP,
+>  	PD_MSG_DATA_REV,
+> -	PD_MSG_EXT_SINK_CAP_EXT
+> +	PD_MSG_EXT_SINK_CAP_EXT,
+> +	PD_MSG_DATA_BATT_STATUS
+>  };
 >  
-> +static int __power_supply_get_num_battery(struct power_supply *epsy, void *data)
+>  enum adev_actions {
+> @@ -389,6 +390,14 @@ struct pd_timings {
+>  /* Convert microwatt to watt */
+>  #define UW_TO_W(pow)					((pow) / 1000000)
+>  
+> +/*
+> + * As per USB PD Spec Rev 3.18 (Sec. 6.5.13.11), the number of fixed batteries
+> + * that a port can be queried is restricted to 4.
+> + */
+> +#define MAX_NUM_FIXED_BATT				4
+> +
+> +#define BATTERY_PROPERTY_UNKNOWN			0xffff
+> +
+>  /*
+>   * struct pd_identifier - Contains info about PD identifiers
+>   * @vid: Vendor ID (assigned by USB-IF)
+> @@ -683,6 +692,9 @@ struct tcpm_port {
+>  
+>  	struct pd_identifier pd_ident;
+>  	struct sink_caps_ext_data sink_caps_ext;
+> +	struct power_supply *fixed_batt[MAX_NUM_FIXED_BATT];
+> +	u32 fixed_batt_cnt;
+
+Why not just have a struct power_supply **fixed_batt here
+and directly pass that to power_supply_get_battery_all() ?
+
+And then call power_supply_put_battery_all() at cleanup /
+driver-remove time ?
+
+
+> +	u32 batt_request_id;
+>  #ifdef CONFIG_DEBUG_FS
+>  	struct dentry *dentry;
+>  	struct mutex logbuffer_lock;	/* log buffer access lock */
+> @@ -1391,6 +1403,37 @@ static int tcpm_pd_send_revision(struct tcpm_port *port)
+>  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
+>  }
+>  
+> +static void tcpm_init_fixed_batt(struct tcpm_port *port)
 > +{
-> +	int *count = data;
+> +	struct power_supply **batteries;
+> +	int ret, i;
 > +
-> +	if (epsy->desc->type == POWER_SUPPLY_TYPE_BATTERY)
-> +		(*count)++;
+> +	if (port->fixed_batt_cnt > 0)
+> +		return;
 > +
-> +	return 0;
-> +}
+> +	ret = power_supply_get_battery_all(port->dev, &batteries);
+> +	if (ret < 0) {
+> +		tcpm_log(port, "Failed to fetch batteries refs ret=%d", ret);
+> +		return;
+> +	}
 > +
-> +static int power_supply_get_num_battery(struct device *dev)
-> +{
-> +	int ret, count = 0;
+> +	for (i = 0; i < ret; i++) {
+> +		if (!batteries[i])
+> +			continue;
 > +
-> +	ret = power_supply_for_each_psy(&count, __power_supply_get_num_battery);
+> +		if (port->fixed_batt_cnt < MAX_NUM_FIXED_BATT)
+> +			port->fixed_batt[port->fixed_batt_cnt++] = batteries[i];
+> +		else
+> +			break;
+> +	}
 > +
-> +	dev_dbg(dev, "%s: count: %d ret %d\n", __func__, count, ret);
+> +	if (i < ret)
+> +		power_supply_put_array(batteries + i, ret - i);
 > +
 > +	if (ret)
-> +		return ret;
-> +
-> +	return count;
+> +		kfree(batteries);
 > +}
-> +
-> +struct psy_get_supplies_data {
-> +	int cnt;
-> +	int size;
-> +	struct power_supply **psys;
-> +};
-> +
-> +static int __power_supply_populate_battery_array(struct power_supply *epsy,
-> +						 void *_data)
-> +{
-> +	struct psy_get_supplies_data *data = _data;
-> +
-> +	if (epsy->desc->type == POWER_SUPPLY_TYPE_BATTERY) {
-> +		if (data->size <= data->cnt)
-> +			return -EOVERFLOW;
-> +
-> +		get_device(&epsy->dev);
-> +		data->psys[data->cnt] = epsy;
-> +		atomic_inc(&epsy->use_cnt);
-> +		data->cnt++;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int power_supply_populate_battery_array(struct device *dev, int size,
-> +					       struct power_supply **batteries)
-> +{
-> +	int ret;
-> +
-> +	struct psy_get_supplies_data data = {
-> +		.cnt = 0,
-> +		.size = size,
-> +		.psys = batteries,
-> +	};
-> +
-> +	ret = power_supply_for_each_psy(&data, __power_supply_populate_battery_array);
-> +
-> +	dev_dbg(dev, "%s Found %d batteries with array size %d ret %d\n",
-> +		__func__, data.cnt, data.size, ret);
-> +
-> +	if (ret < 0) {
-> +		power_supply_put_array(batteries, data.cnt);
-> +		return ret;
-> +	}
-> +
-> +	return data.cnt;
-> +}
-> +
-> +/**
-> + * power_supply_get_battery_all() - Fetches references to all battery type power
-> + *                                  supplies.
-> + * @dev: Pointer to device requesting the power supply refs.
-> + * @psys: Pointer to an array of power supply refs.
-> + *
-> + * Helper function to get handles to all battery type power supplies.
-> + * If acquiring a ref to a power supply fails, then the search for battery
-> + * type power supplies will abort and the acquired power supply references will
-> + * be released.
-> + *
-> + * Return: Indicates the number of battery type power supplies returned on
-> + * success or a negative error code on failure.
-> + *
-> + * The caller should invoke power_supply_put_array() on the returned array
-> + * of psy refs and free the array returned by this function using kfree()
-> + * after use.
-> + */
-> +int __must_check power_supply_get_battery_all(struct device *dev,
-> +					      struct power_supply ***psys)
-> +{
-> +	int ret;
-> +
-> +	if (!psys)
-> +		return -EINVAL;
-> +
-> +	ret = power_supply_get_num_battery(dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (!ret) {
-> +		*psys = NULL;
-> +		return 0;
-> +	}
-> +
-> +	*psys = kzalloc_objs(**psys, ret);
-> +	if (!*psys)
-> +		return -ENOMEM;
-> +
-> +	ret = power_supply_populate_battery_array(dev, ret, *psys);
-> +	if (ret <= 0) {
-> +		kfree(*psys);
-> +		*psys = NULL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_get_battery_all);
-> +
->  /**
->   * power_supply_put() - Drop reference obtained with power_supply_get_by_name
->   * @psy: Reference to put
-> @@ -496,6 +617,22 @@ void power_supply_put(struct power_supply *psy)
->  }
->  EXPORT_SYMBOL_GPL(power_supply_put);
->  
-> +/**
-> + * power_supply_put_array() - Drop references to an array of power supplies.
-> + * @psys: Array of power supply references to put.
-> + * @count: Number of elements in the array.
-> + */
-> +void power_supply_put_array(struct power_supply **psys, int count)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < count; i++) {
-> +		if (psys[i])
-> +			power_supply_put(psys[i]);
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_put_array);
 > +
 
-I think it would be better to call this: power_supply_put_battery_all()
-and move it to directly below power_supply_get_battery_all()and also
-have it call kfree(psys) so that it does all the teardown of what
-power_supply_get_battery_all() has done.
+If you do as I suggest above this entire function can go away.
+
+>  static int tcpm_pd_send_source_caps(struct tcpm_port *port)
+>  {
+>  	struct pd_message msg;
+> @@ -1476,6 +1519,8 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
+>  
+>  	if (!port->self_powered)
+>  		data->spr_op_pdp = operating_snk_watt;
+> +	else
+> +		tcpm_init_fixed_batt(port);
+
+And you can just call power_supply_get_battery_all() here and store
+count int fixed_batt_cnt (make fixed_batt_cnt an int so that negative
+errors don't turn into a big number.
+
+>  
+>  	/*
+>  	 * SPR Sink Minimum PDP indicates the minimum power required to operate
+> @@ -1502,6 +1547,7 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
+>  	skedb.load_step = data->load_step;
+>  	skedb.load_char = cpu_to_le16(data->load_char);
+>  	skedb.compliance = data->compliance;
+> +	skedb.batt_info = port->fixed_batt_cnt;
+>  	skedb.modes = data->modes;
+>  	skedb.spr_min_pdp = data->spr_min_pdp;
+>  	skedb.spr_op_pdp = data->spr_op_pdp;
+> @@ -1520,6 +1566,87 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
+>  					   port->message_id,
+>  					   data_obj_cnt,
+>  					   1 /* Denotes if ext header */));
+> +
+> +	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
+> +}
+> +
+> +static int tcpm_pd_send_batt_status(struct tcpm_port *port)
+> +{
+> +	u16 present_charge = BATTERY_PROPERTY_UNKNOWN;
+> +	bool batt_present = false, invalid_ref = true;
+> +	u32 batt_id = port->batt_request_id;
+> +	union power_supply_propval val;
+> +	struct power_supply *batt;
+> +	u8 charging_status = 0;
+> +	struct pd_message msg;
+> +	int ret, charge_now;
+> +	u64 energy_now;
+> +	u32 bsdo;
+> +
+> +	memset(&msg, 0, sizeof(msg));
+> +
+> +	if (batt_id >= port->fixed_batt_cnt || !port->fixed_batt[batt_id])
+> +		goto send_status;
+
+And here you can then additionally check against MAX_NUM_FIXED_BATT .
+
+Also drop the NULL check here, power_supply_get_battery_all() never
+leaves holes / NULL entries in the array.
+
+
+> +
+> +	invalid_ref = false;
+> +	batt = port->fixed_batt[batt_id];
+> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_PRESENT, &val);
+> +	if (ret)
+> +		tcpm_log(port,
+> +			 "Failed to fetch power_supply_prop_present ret %d",
+> +			 ret);
+> +	else
+> +		batt_present = val.intval > 0;
+> +
+> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_CHARGE_NOW,
+> +					&val);
+> +	if (!ret) {
+> +		charge_now = val.intval;
+> +
+> +		ret = power_supply_get_property(batt,
+> +						POWER_SUPPLY_PROP_VOLTAGE_AVG,
+> +						&val);
+> +		if (!ret) {
+> +			energy_now = ((u64)charge_now * val.intval) / 1000000;
+> +
+> +			/*
+> +			 * Battery Present Charge is reported in
+> +			 * increments of 0.1WH.
+> +			 */
+> +			present_charge = (u16)UW_TO_W(energy_now * 10);
+> +		}
+> +	}
+> +
+> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_STATUS, &val);
+> +	if (!ret) {
+> +		switch (val.intval) {
+> +		case POWER_SUPPLY_STATUS_CHARGING:
+> +			charging_status = BSDO_BATTERY_INFO_CHARGING;
+> +			break;
+> +		case POWER_SUPPLY_STATUS_DISCHARGING:
+> +			charging_status = BSDO_BATTERY_INFO_DISCHARGING;
+> +			break;
+> +		case POWER_SUPPLY_STATUS_NOT_CHARGING:
+> +		case POWER_SUPPLY_STATUS_FULL:
+> +			charging_status = BSDO_BATTERY_INFO_IDLE;
+> +			break;
+> +		default:
+> +			charging_status = BSDO_BATTERY_INFO_RSVD;
+> +			break;
+> +		}
+> +	}
+> +
+> +send_status:
+> +
+> +	bsdo = BSDO(present_charge, charging_status, batt_present, invalid_ref);
+> +	msg.payload[0] = cpu_to_le32(bsdo);
+> +	msg.header = PD_HEADER_LE(PD_DATA_BATT_STATUS,
+> +				  port->pwr_role,
+> +				  port->data_role,
+> +				  port->negotiated_rev,
+> +				  port->message_id,
+> +				  1);
+> +
+>  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
+>  }
+>  
+> @@ -3854,6 +3981,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
+>  {
+>  	enum pd_ext_msg_type type = pd_header_type_le(msg->header);
+>  	unsigned int data_size = pd_ext_header_data_size_le(msg->ext_msg.header);
+> +	const struct pd_chunked_ext_message_data *ext_msg = &msg->ext_msg;
+>  
+>  	/* stopping VDM state machine if interrupted by other Messages */
+>  	if (tcpm_vdm_ams(port)) {
+> @@ -3862,7 +3990,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
+>  		mod_vdm_delayed_work(port, 0);
+>  	}
+>  
+> -	if (!(le16_to_cpu(msg->ext_msg.header) & PD_EXT_HDR_CHUNKED)) {
+> +	if (!(le16_to_cpu(ext_msg->header) & PD_EXT_HDR_CHUNKED)) {
+>  		tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
+>  		tcpm_log(port, "Unchunked extended messages unsupported");
+>  		return;
+> @@ -3887,9 +4015,17 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
+>  					     NONE_AMS, 0);
+>  		}
+>  		break;
+> +	case PD_EXT_GET_BATT_STATUS:
+> +		if (data_size >= 1) {
+> +			port->batt_request_id = ext_msg->data[0];
+> +			tcpm_pd_handle_msg(port, PD_MSG_DATA_BATT_STATUS,
+> +					   GETTING_BATTERY_STATUS);
+> +		} else {
+> +			tcpm_set_state(port, SOFT_RESET_SEND, 0);
+> +		}
+> +		break;
+>  	case PD_EXT_SOURCE_CAP_EXT:
+>  	case PD_EXT_GET_BATT_CAP:
+> -	case PD_EXT_GET_BATT_STATUS:
+>  	case PD_EXT_BATT_CAP:
+>  	case PD_EXT_GET_MANUFACTURER_INFO:
+>  	case PD_EXT_MANUFACTURER_INFO:
+> @@ -4100,6 +4236,14 @@ static bool tcpm_send_queued_message(struct tcpm_port *port)
+>  					 ret);
+>  			tcpm_ams_finish(port);
+>  			break;
+> +		case PD_MSG_DATA_BATT_STATUS:
+> +			ret = tcpm_pd_send_batt_status(port);
+> +			if (ret)
+> +				tcpm_log(port,
+> +					 "Failed to send battery status ret=%d",
+> +					 ret);
+> +			tcpm_ams_finish(port);
+> +			break;
+>  		default:
+>  			break;
+>  		}
+> @@ -8597,6 +8741,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
+>  	hrtimer_cancel(&port->vdm_state_machine_timer);
+>  	hrtimer_cancel(&port->state_machine_timer);
+>  
+> +	power_supply_put_array(port->fixed_batt, port->fixed_batt_cnt);
+>  	tcpm_reset_port(port);
+>  
+>  	tcpm_port_unregister_pd(port);
+> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> index 337a5485af7c..afb9c2c65588 100644
+> --- a/include/linux/usb/pd.h
+> +++ b/include/linux/usb/pd.h
+> @@ -724,4 +724,33 @@ void usb_power_delivery_unlink_device(struct usb_power_delivery *pd, struct devi
+>  
+>  #endif /* CONFIG_TYPEC */
+>  
+> +/* Battery Status Data Object */
+> +#define BSDO_PRESENT_CAPACITY				GENMASK(31, 16)
+> +#define BSDO_CHG_STATUS					GENMASK(11, 10)
+> +#define BSDO_BATTERY_PRESENT				BIT(9)
+> +#define BSDO_INVALID_BATTERY_REFERENCE			BIT(8)
+> +
+> +/*
+> + * Battery Charge Status: Battery Charging Status Values as defined in
+> + * "USB PD Spec Rev3.1 Ver1.8", "Table 6-46 Battery Status Data Object (BSDO)".
+> + */
+> +#define BSDO_BATTERY_INFO_CHARGING			0x0
+> +#define BSDO_BATTERY_INFO_DISCHARGING			0x1
+> +#define BSDO_BATTERY_INFO_IDLE				0x2
+> +#define BSDO_BATTERY_INFO_RSVD				0x3
+> +
+> +/**
+> + * BSDO() - Pack data into Battery Status Data Object format.
+> + * @batt_charge: Battery's present state of charge in 0.1WH increment.
+> + * @chg_status: Battery charge status.
+> + * @batt_present: Indicates that battery is present/attached when set else absent when unset.
+> + * @invalid_ref: Indicates that an invalid battery reference was made in the Get_Battery_Status
+> + *		 request.
+> + */
+> +#define BSDO(batt_charge, chg_status, batt_present, invalid_ref)	\
+> +	((FIELD_PREP(BSDO_PRESENT_CAPACITY, batt_charge)) |		\
+> +	 (FIELD_PREP(BSDO_CHG_STATUS, chg_status)) |			\
+> +	 ((batt_present) ? BSDO_BATTERY_PRESENT : 0) |			\
+> +	 ((invalid_ref) ? BSDO_INVALID_BATTERY_REFERENCE : 0))
+> +
+>  #endif /* __LINUX_USB_PD_H */
+> 
+
 
 Regards,
 
 Hans
 
-
-
->  static int power_supply_match_device_fwnode(struct device *dev, const void *data)
->  {
->  	return dev->parent && dev_fwnode(dev->parent) == data;
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 7a5e4c3242a0..026412164a88 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -806,11 +806,23 @@ extern int power_supply_reg_notifier(struct notifier_block *nb);
->  extern void power_supply_unreg_notifier(struct notifier_block *nb);
->  #if IS_ENABLED(CONFIG_POWER_SUPPLY)
->  extern struct power_supply *power_supply_get_by_name(const char *name);
-> +extern int __must_check power_supply_get_battery_all(struct device *dev,
-> +						     struct power_supply ***psys);
-> +extern void power_supply_put_array(struct power_supply **psys, int count);
->  extern void power_supply_put(struct power_supply *psy);
->  #else
->  static inline void power_supply_put(struct power_supply *psy) {}
->  static inline struct power_supply *power_supply_get_by_name(const char *name)
->  { return NULL; }
-> +static inline int __must_check power_supply_get_battery_all(struct device *dev,
-> +							    struct power_supply ***psys)
-> +{
-> +	if (psys)
-> +		*psys = NULL;
-> +	return 0;
-> +}
-> +
-> +static inline void power_supply_put_array(struct power_supply **psys, int count) {}
->  #endif
->  extern struct power_supply *power_supply_get_by_reference(struct fwnode_handle *fwnode,
->  							  const char *property);
-> 
 
 
