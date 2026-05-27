@@ -1,440 +1,276 @@
-Return-Path: <linux-usb+bounces-38096-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38097-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mObJNObFFmpVrwcAu9opvQ
-	(envelope-from <linux-usb+bounces-38096-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:22:30 +0200
+	id UB/9C/PZFmpVtgcAu9opvQ
+	(envelope-from <linux-usb+bounces-38097-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 13:48:03 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F0D5E28F5
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 12:22:30 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E82A5E39B4
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 13:48:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2D16330D70D1
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 10:15:30 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 473C8301B307
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 11:46:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE703EEAF7;
-	Wed, 27 May 2026 10:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5652F400E17;
+	Wed, 27 May 2026 11:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9b3EjrT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWOfGpm8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE27D3EDACD;
-	Wed, 27 May 2026 10:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760E9400E02
+	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 11:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779876915; cv=none; b=TVc6pg1Jy9UwCz3PoULxGUl4jUMSjbYi5cjoT27MozdyZY1gFwLlPIKW/1omxD//xXVViPc0KLadWcntMuh9kgMDU08fcyqF69TK8m9cu461v4cqkXyiBMZn0GVTOJEI3RIpuWGCn+bkOuiuBkAzBP9wxtv7PEtH8CZj23C7pxg=
+	t=1779882383; cv=none; b=F8GJPOaXwCbSaePF8rcHdBLr1oPYIcPRFVPW08G+sJstHOgPVTnfuKN6lmQ8nyT5tJ0+NMeuXacaqCtkK9uRbXrnCbm18Jkn1phZWKDCw12HOYHQa4F8TVfwOIxyWO0uspAgB9WQzZGkMg0iqcuu184/dXaeUaUR2l8UrPnmUuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779876915; c=relaxed/simple;
-	bh=odLnlqPYTASV+EtwsbzUGSlGl1tWj2GFgWZX9ThT4kg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mFeyWh9B4A6NMidqua6AlX/8fESGBz60dUsfugGvdPqOiKpXqq5CWou36sfRV8z2qiXchCL5lE24ykwV+z1j1T8gJm/2dZnYV8U4MaZKO/VrEI13b+P8mtHji/Hn8qSjlR0DSBwERs9DbN9XNpSW17ygwk9V4gPJaJQqa1ZEB0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9b3EjrT; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126401F000E9;
-	Wed, 27 May 2026 10:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779876909;
-	bh=CTWZHF5tNrXZ7VWokvp32tUlqBcYKNofyWm7llLw8Sk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=U9b3EjrTDG8c8LMIFyidZKECy3Lm9/NOQYYOzQlDZO54ZwjKHSnbs979UP+oamRMq
-	 okzWl2h1lyD7mgvS6MkOKhEc7jZdYs2BWxclMUHUWmgR1wxCt0Ob5KON4FpDkHu1NV
-	 6wO0gPXPrFZ4fuLemBCnzhPuIn2W1kCKvkbZdja7wwfy9PRpzVNzUdSBMBp3gxnBfT
-	 g8lHWqafZv+Q818Nx9Q4pTzl+fcPc+WkPYjL8FCxoZERRu5ErbzzalLXlLm2gV6uyb
-	 HdaiTLFcDaIAr6SHekIizQJhvPmT+CRJgufYp6ROBnaLDR33ahGsCVTzhn5gOJDBH4
-	 rxUR3bdbHtneA==
-Message-ID: <4e4a63a4-9d07-4b77-a8dc-ba19c9a803f7@kernel.org>
-Date: Wed, 27 May 2026 12:15:04 +0200
+	s=arc-20240116; t=1779882383; c=relaxed/simple;
+	bh=g3K3kjzo4h4Yw4PI3ZebZ1RdrnLML8MPT0Kp1gm7o8k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sd2hVSg1fwzO6/QT6cK3w5orJFqsyjGmkegw1/AhvcY1XLuQGWPR6PTzpOUUPw+f1xkbiDcYASvrXeiDZBdb/o1PUXBzlxHrR8j0lOjs47LYwPGJtP+XPohcaNhnvOJs1fuu9LiGuzxDjlOuqkj0y0TsXUAIgHi4aIDiLuS5cz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWOfGpm8; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8acb856a674so141140246d6.0
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 04:46:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779882381; x=1780487181; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=irXQtbhRBkvp9yH1UkJ164KDCO7pyrFnYr4plfnFx/E=;
+        b=JWOfGpm8ytu58drOsdYRRZIO6HET2mcbRd3G5T5aIbs1ESdFpZ5dyvmJlaWHCdYZRv
+         WsWjOLCgO6GgJEaWmAM+svQRqc5wR7NHheiXpZB2/MjoxKRn9FoVEt5wLBTm2XsZm/kd
+         /HHAS9D1J9TMYawYT7B8MxRv0eJ7Yhm8g/F3UwURdwYKK4wVJhUiBQHsU7Bo3a7Rets6
+         2u9y+Fd8gWAPDS51wkT42TJhv+GMd4DRCsNZgZaK6q+R3+RuRvIyMTBfDIX0A6AglDL6
+         /RzkEUCw0pi4tpTw79RAWMuZ74V6qGe9rgNc7aD02nLPu/Bb294y+ywGG2O9TcLxxKh+
+         Txrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779882381; x=1780487181;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=irXQtbhRBkvp9yH1UkJ164KDCO7pyrFnYr4plfnFx/E=;
+        b=QvinLnu1bLLZVkSmEu9aK2kklhzCjdosP+1UC5Yy4yK+bUEuiA1TBQIcQZvnamjQw+
+         QLVgVFVFEMjUPdO1FGjRODrJ/CXejHqeQfx9Toe7or0IjLxOPEy/SqqwT0/yAKqJs3Nh
+         dsGjSQcjBrWrHZaa96O/y86WziXsRX77vmNnbq1MyjYIyBfyEiyFuiAgx0vK5mc5P9uR
+         DYHKHhK9WMeN6EQCTpUs4ViREvShAX9hFheln53V3bna0EGrYOhqrU2cGY5Be3X8QH9K
+         Jv4DwkwlKJamPMWYJrdP5lAbRBJelIyLOvsT9Cal8alK6cR6kMv1XukLWSUWLPIaAD7H
+         Tgdg==
+X-Gm-Message-State: AOJu0Yz8P26DN4oyicbVndTcvhgV/6advONCRt1JNXaUw4WWX73rZZgb
+	RwaYyC4WXaKA6krhW/S+VHtCl4Ef1Y6UHRR7KTXOxtmq3BWaEtLAvb3F
+X-Gm-Gg: Acq92OGeTG4JvPCCcT6MorAx91zkb5z/+7N19qMwA5x5Wfl/OrTW2MuLJcj3SaBOtCR
+	areY2JraBnAbJOhCMeeHO+maCRt+Y4+oG1AEWCAN2MJpbNSFXckOEboHI5ClrC/A1Rpo6LW1mL6
+	yiYpXNsso+LqDjuESNrk7UZClTMEGWuFCBf49dzZPMjXZgssJgyiS3u0vPwKCKJX8mxu8zONYKl
+	9nByLMqhJHRaZzp3azo4es/4m58/q0Csu8OIilhVf+CUDbI1gOqmSiPADDsOuHDvoyT6Vu+PqHH
+	TFEA5KIuUOcHPR9gcre39OF9dhW4omjQSE62ARug4omvNf9HwD5OGY6Da4EtETCioJFeubpRtWP
+	6vAinbWTsPcrZdcoxh7Q4Zl+SshxLZgVRYJITCTvVgzxXjAQ2FFMu7Vc9kn5MOc6GwsPscekUWb
+	0HKB4gPkWlWx6ZPVs3fiK6/AVmVYptASotk4/qRvdTWd0QOdT6xo522QCe0YKNM64YWFASZV/+2
+	AU2YktD1glC5CeZ2faQIDa4CwCnn8eQz6ALObfMLB75aSMGwwiCYg==
+X-Received: by 2002:a05:6214:5403:b0:8cb:e6bf:d473 with SMTP id 6a1803df08f44-8cc6e708327mr358801106d6.35.1779882381376;
+        Wed, 27 May 2026 04:46:21 -0700 (PDT)
+Received: from server0.tail6e7dd.ts.net (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cc8132c625sm163933166d6.48.2026.05.27.04.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 04:46:20 -0700 (PDT)
+From: Michael Bommarito <michael.bommarito@gmail.com>
+To: Mika Westerberg <westeri@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] thunderbolt: prevent XDomain delayed work use-after-free on disconnect
+Date: Wed, 27 May 2026 07:46:04 -0400
+Message-ID: <20260527114604.1197561-1-michael.bommarito@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260525125736.1268929-1-michael.bommarito@gmail.com>
+References: <20260525125736.1268929-1-michael.bommarito@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Add support for Battery Status
- response message
-To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
- Peter Griffin <peter.griffin@linaro.org>, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20260527-batt-status-v2-0-4282985165f3@google.com>
- <20260527-batt-status-v2-2-4282985165f3@google.com>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <20260527-batt-status-v2-2-4282985165f3@google.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-38097-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38096-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[kernel.org,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hansg@kernel.org,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michaelbommarito@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 55F0D5E28F5
+	RCPT_COUNT_FIVE(0.00)[5]
+X-Rspamd-Queue-Id: 3E82A5E39B4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+tb_xdp_handle_request() runs on system_wq and queues
+xd->state_work via queue_delayed_work() in three request handlers:
+PROPERTIES_CHANGED_REQUEST, UUID_REQUEST (via start_handshake),
+and LINK_STATE_CHANGE_REQUEST.  Similarly, update_xdomain() queues
+xd->properties_changed_work when local properties change.
 
-On 27-May-26 02:02, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
-> 
-> Add support for responding to a Get_Battery_Status request with a
-> Battery_Status message. The port partner shall request the status of a
-> port's battery by providing an index in the Get_Battery_Status AMS. In
-> case of failure to identify the battery, the port shall reply with an
-> appropriate message indicating so.
-> 
-> Support for Battery_Status message is required for sinks that contain
-> battery as specified in USB PD Rev3.1 v1.8
-> ("Applicability of Data Messages" section).
-> 
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 151 +++++++++++++++++++++++++++++++++++++++++-
->  include/linux/usb/pd.h        |  29 ++++++++
->  2 files changed, 177 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index dfbb94ddc98a..ee45d90dbf98 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -232,7 +232,8 @@ enum pd_msg_request {
->  	PD_MSG_DATA_SINK_CAP,
->  	PD_MSG_DATA_SOURCE_CAP,
->  	PD_MSG_DATA_REV,
-> -	PD_MSG_EXT_SINK_CAP_EXT
-> +	PD_MSG_EXT_SINK_CAP_EXT,
-> +	PD_MSG_DATA_BATT_STATUS
->  };
->  
->  enum adev_actions {
-> @@ -389,6 +390,14 @@ struct pd_timings {
->  /* Convert microwatt to watt */
->  #define UW_TO_W(pow)					((pow) / 1000000)
->  
-> +/*
-> + * As per USB PD Spec Rev 3.18 (Sec. 6.5.13.11), the number of fixed batteries
-> + * that a port can be queried is restricted to 4.
-> + */
-> +#define MAX_NUM_FIXED_BATT				4
-> +
-> +#define BATTERY_PROPERTY_UNKNOWN			0xffff
-> +
->  /*
->   * struct pd_identifier - Contains info about PD identifiers
->   * @vid: Vendor ID (assigned by USB-IF)
-> @@ -683,6 +692,9 @@ struct tcpm_port {
->  
->  	struct pd_identifier pd_ident;
->  	struct sink_caps_ext_data sink_caps_ext;
-> +	struct power_supply *fixed_batt[MAX_NUM_FIXED_BATT];
-> +	u32 fixed_batt_cnt;
+Concurrently, tb_xdomain_remove() calls stop_handshake() which does
+cancel_delayed_work_sync() on both delayed works.  Later,
+tb_xdomain_unregister() calls device_unregister() which eventually
+frees the xdomain.  Since commit 559c1e1e0134 ("thunderbolt: Run
+tb_xdp_handle_request() in system workqueue") moved the request
+handler off tb->wq, the handler and the remove path are no longer
+serialized.  If queue_delayed_work() executes after
+cancel_delayed_work_sync() but before the xdomain is freed, the
+delayed work fires on a freed object.
 
-Why not just have a struct power_supply **fixed_batt here
-and directly pass that to power_supply_get_battery_all() ?
+Add xd->removing that tb_xdomain_remove() sets under xd->lock
+before calling stop_handshake().  Each external queue site holds
+the same lock and checks removing before calling
+queue_delayed_work().  This provides the mutual exclusion needed:
+either the queue site acquires the lock first and queues work that
+the subsequent cancel will see, or the remove path acquires the
+lock first and the queue site observes removing == true and skips
+the queue.
 
-And then call power_supply_put_battery_all() at cleanup /
-driver-remove time ?
+Fixes: 559c1e1e0134 ("thunderbolt: Run tb_xdp_handle_request() in system workqueue")
+Cc: stable@vger.kernel.org
+Assisted-by: Claude:claude-opus-4-7
+Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
+---
+v2: Rebased onto thunderbolt.git/next per Mika's request. Verified
+    the race persists on next: tb_xdp_handle_request still runs on
+    system_wq, the remove/unregister split does not add
+    synchronization with the queue sites. Updated commit message to
+    reflect that tb_xdomain_unregister() now does the
+    device_unregister (split from tb_xdomain_remove on next).
 
+ drivers/thunderbolt/xdomain.c | 41 ++++++++++++++++++++++++++---------
+ include/linux/thunderbolt.h   |  3 +++
+ 2 files changed, 34 insertions(+), 10 deletions(-)
 
-> +	u32 batt_request_id;
->  #ifdef CONFIG_DEBUG_FS
->  	struct dentry *dentry;
->  	struct mutex logbuffer_lock;	/* log buffer access lock */
-> @@ -1391,6 +1403,37 @@ static int tcpm_pd_send_revision(struct tcpm_port *port)
->  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
->  }
->  
-> +static void tcpm_init_fixed_batt(struct tcpm_port *port)
-> +{
-> +	struct power_supply **batteries;
-> +	int ret, i;
-> +
-> +	if (port->fixed_batt_cnt > 0)
-> +		return;
-> +
-> +	ret = power_supply_get_battery_all(port->dev, &batteries);
-> +	if (ret < 0) {
-> +		tcpm_log(port, "Failed to fetch batteries refs ret=%d", ret);
-> +		return;
-> +	}
-> +
-> +	for (i = 0; i < ret; i++) {
-> +		if (!batteries[i])
-> +			continue;
-> +
-> +		if (port->fixed_batt_cnt < MAX_NUM_FIXED_BATT)
-> +			port->fixed_batt[port->fixed_batt_cnt++] = batteries[i];
-> +		else
-> +			break;
-> +	}
-> +
-> +	if (i < ret)
-> +		power_supply_put_array(batteries + i, ret - i);
-> +
-> +	if (ret)
-> +		kfree(batteries);
-> +}
-> +
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index 781d88d06b935..fe6c5ac703f4d 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -803,9 +803,13 @@ static void tb_xdp_handle_request(struct work_struct *work)
+ 		 * the xdomain related to this connection as well in
+ 		 * case there is a change in services it offers.
+ 		 */
+-		if (xd && device_is_registered(&xd->dev))
+-			queue_delayed_work(tb->wq, &xd->state_work,
+-					   msecs_to_jiffies(XDOMAIN_SHORT_TIMEOUT));
++		if (xd) {
++			mutex_lock(&xd->lock);
++			if (!xd->removing && device_is_registered(&xd->dev))
++				queue_delayed_work(tb->wq, &xd->state_work,
++						   msecs_to_jiffies(XDOMAIN_SHORT_TIMEOUT));
++			mutex_unlock(&xd->lock);
++		}
+ 		break;
+ 
+ 	case UUID_REQUEST_OLD:
+@@ -818,8 +822,12 @@ static void tb_xdp_handle_request(struct work_struct *work)
+ 		 * received UUID request from the remote host.
+ 		 */
+ 		if (!ret && xd && xd->state == XDOMAIN_STATE_ERROR) {
+-			dev_dbg(&xd->dev, "restarting handshake\n");
+-			start_handshake(xd);
++			mutex_lock(&xd->lock);
++			if (!xd->removing) {
++				dev_dbg(&xd->dev, "restarting handshake\n");
++				start_handshake(xd);
++			}
++			mutex_unlock(&xd->lock);
+ 		}
+ 		break;
+ 
+@@ -885,9 +893,13 @@ static void tb_xdp_handle_request(struct work_struct *work)
+ 
+ 			ret = tb_xdp_link_state_change_response(ctl, route,
+ 								sequence, 0);
+-			xd->target_link_width = lsc->tlw;
+-			queue_delayed_work(tb->wq, &xd->state_work,
+-					   msecs_to_jiffies(XDOMAIN_SHORT_TIMEOUT));
++			mutex_lock(&xd->lock);
++			if (!xd->removing) {
++				xd->target_link_width = lsc->tlw;
++				queue_delayed_work(tb->wq, &xd->state_work,
++						   msecs_to_jiffies(XDOMAIN_SHORT_TIMEOUT));
++			}
++			mutex_unlock(&xd->lock);
+ 		} else {
+ 			tb_xdp_error_response(ctl, route, sequence,
+ 					      ERROR_NOT_READY);
+@@ -971,8 +983,12 @@ static int update_xdomain(struct device *dev, void *data)
+ 
+ 	xd = tb_to_xdomain(dev);
+ 	if (xd) {
+-		queue_delayed_work(xd->tb->wq, &xd->properties_changed_work,
+-				   msecs_to_jiffies(50));
++		mutex_lock(&xd->lock);
++		if (!xd->removing)
++			queue_delayed_work(xd->tb->wq,
++					   &xd->properties_changed_work,
++					   msecs_to_jiffies(50));
++		mutex_unlock(&xd->lock);
+ 	}
+ 
+ 	return 0;
+@@ -2200,6 +2216,11 @@ static int unregister_service(struct device *dev, void *data)
+ void tb_xdomain_remove(struct tb_xdomain *xd)
+ {
+ 	tb_xdomain_debugfs_remove(xd);
++
++	mutex_lock(&xd->lock);
++	xd->removing = true;
++	mutex_unlock(&xd->lock);
++
+ 	stop_handshake(xd);
+ 	tb_xdomain_link_exit(xd);
+ 
+diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
+index b5659f8835171..feb1af175cfde 100644
+--- a/include/linux/thunderbolt.h
++++ b/include/linux/thunderbolt.h
+@@ -213,6 +213,8 @@ enum tb_link_width {
+  * @link_width: Width of the downstream facing link
+  * @link_usb4: Downstream link is USB4
+  * @is_unplugged: The XDomain is unplugged
++ * @removing: Set by tb_xdomain_remove() under @lock to prevent
++ *	      concurrent delayed work queueing
+  * @needs_uuid: If the XDomain does not have @remote_uuid it will be
+  *		queried first
+  * @service_ids: Used to generate IDs for the services
+@@ -262,6 +264,7 @@ struct tb_xdomain {
+ 	enum tb_link_width link_width;
+ 	bool link_usb4;
+ 	bool is_unplugged;
++	bool removing;
+ 	bool needs_uuid;
+ 	struct ida service_ids;
+ 	struct ida in_hopids;
 
-If you do as I suggest above this entire function can go away.
-
->  static int tcpm_pd_send_source_caps(struct tcpm_port *port)
->  {
->  	struct pd_message msg;
-> @@ -1476,6 +1519,8 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
->  
->  	if (!port->self_powered)
->  		data->spr_op_pdp = operating_snk_watt;
-> +	else
-> +		tcpm_init_fixed_batt(port);
-
-And you can just call power_supply_get_battery_all() here and store
-count int fixed_batt_cnt (make fixed_batt_cnt an int so that negative
-errors don't turn into a big number.
-
->  
->  	/*
->  	 * SPR Sink Minimum PDP indicates the minimum power required to operate
-> @@ -1502,6 +1547,7 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
->  	skedb.load_step = data->load_step;
->  	skedb.load_char = cpu_to_le16(data->load_char);
->  	skedb.compliance = data->compliance;
-> +	skedb.batt_info = port->fixed_batt_cnt;
->  	skedb.modes = data->modes;
->  	skedb.spr_min_pdp = data->spr_min_pdp;
->  	skedb.spr_op_pdp = data->spr_op_pdp;
-> @@ -1520,6 +1566,87 @@ static int tcpm_pd_send_sink_cap_ext(struct tcpm_port *port)
->  					   port->message_id,
->  					   data_obj_cnt,
->  					   1 /* Denotes if ext header */));
-> +
-> +	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
-> +}
-> +
-> +static int tcpm_pd_send_batt_status(struct tcpm_port *port)
-> +{
-> +	u16 present_charge = BATTERY_PROPERTY_UNKNOWN;
-> +	bool batt_present = false, invalid_ref = true;
-> +	u32 batt_id = port->batt_request_id;
-> +	union power_supply_propval val;
-> +	struct power_supply *batt;
-> +	u8 charging_status = 0;
-> +	struct pd_message msg;
-> +	int ret, charge_now;
-> +	u64 energy_now;
-> +	u32 bsdo;
-> +
-> +	memset(&msg, 0, sizeof(msg));
-> +
-> +	if (batt_id >= port->fixed_batt_cnt || !port->fixed_batt[batt_id])
-> +		goto send_status;
-
-And here you can then additionally check against MAX_NUM_FIXED_BATT .
-
-Also drop the NULL check here, power_supply_get_battery_all() never
-leaves holes / NULL entries in the array.
-
-
-> +
-> +	invalid_ref = false;
-> +	batt = port->fixed_batt[batt_id];
-> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_PRESENT, &val);
-> +	if (ret)
-> +		tcpm_log(port,
-> +			 "Failed to fetch power_supply_prop_present ret %d",
-> +			 ret);
-> +	else
-> +		batt_present = val.intval > 0;
-> +
-> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_CHARGE_NOW,
-> +					&val);
-> +	if (!ret) {
-> +		charge_now = val.intval;
-> +
-> +		ret = power_supply_get_property(batt,
-> +						POWER_SUPPLY_PROP_VOLTAGE_AVG,
-> +						&val);
-> +		if (!ret) {
-> +			energy_now = ((u64)charge_now * val.intval) / 1000000;
-> +
-> +			/*
-> +			 * Battery Present Charge is reported in
-> +			 * increments of 0.1WH.
-> +			 */
-> +			present_charge = (u16)UW_TO_W(energy_now * 10);
-> +		}
-> +	}
-> +
-> +	ret = power_supply_get_property(batt, POWER_SUPPLY_PROP_STATUS, &val);
-> +	if (!ret) {
-> +		switch (val.intval) {
-> +		case POWER_SUPPLY_STATUS_CHARGING:
-> +			charging_status = BSDO_BATTERY_INFO_CHARGING;
-> +			break;
-> +		case POWER_SUPPLY_STATUS_DISCHARGING:
-> +			charging_status = BSDO_BATTERY_INFO_DISCHARGING;
-> +			break;
-> +		case POWER_SUPPLY_STATUS_NOT_CHARGING:
-> +		case POWER_SUPPLY_STATUS_FULL:
-> +			charging_status = BSDO_BATTERY_INFO_IDLE;
-> +			break;
-> +		default:
-> +			charging_status = BSDO_BATTERY_INFO_RSVD;
-> +			break;
-> +		}
-> +	}
-> +
-> +send_status:
-> +
-> +	bsdo = BSDO(present_charge, charging_status, batt_present, invalid_ref);
-> +	msg.payload[0] = cpu_to_le32(bsdo);
-> +	msg.header = PD_HEADER_LE(PD_DATA_BATT_STATUS,
-> +				  port->pwr_role,
-> +				  port->data_role,
-> +				  port->negotiated_rev,
-> +				  port->message_id,
-> +				  1);
-> +
->  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
->  }
->  
-> @@ -3854,6 +3981,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
->  {
->  	enum pd_ext_msg_type type = pd_header_type_le(msg->header);
->  	unsigned int data_size = pd_ext_header_data_size_le(msg->ext_msg.header);
-> +	const struct pd_chunked_ext_message_data *ext_msg = &msg->ext_msg;
->  
->  	/* stopping VDM state machine if interrupted by other Messages */
->  	if (tcpm_vdm_ams(port)) {
-> @@ -3862,7 +3990,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
->  		mod_vdm_delayed_work(port, 0);
->  	}
->  
-> -	if (!(le16_to_cpu(msg->ext_msg.header) & PD_EXT_HDR_CHUNKED)) {
-> +	if (!(le16_to_cpu(ext_msg->header) & PD_EXT_HDR_CHUNKED)) {
->  		tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
->  		tcpm_log(port, "Unchunked extended messages unsupported");
->  		return;
-> @@ -3887,9 +4015,17 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
->  					     NONE_AMS, 0);
->  		}
->  		break;
-> +	case PD_EXT_GET_BATT_STATUS:
-> +		if (data_size >= 1) {
-> +			port->batt_request_id = ext_msg->data[0];
-> +			tcpm_pd_handle_msg(port, PD_MSG_DATA_BATT_STATUS,
-> +					   GETTING_BATTERY_STATUS);
-> +		} else {
-> +			tcpm_set_state(port, SOFT_RESET_SEND, 0);
-> +		}
-> +		break;
->  	case PD_EXT_SOURCE_CAP_EXT:
->  	case PD_EXT_GET_BATT_CAP:
-> -	case PD_EXT_GET_BATT_STATUS:
->  	case PD_EXT_BATT_CAP:
->  	case PD_EXT_GET_MANUFACTURER_INFO:
->  	case PD_EXT_MANUFACTURER_INFO:
-> @@ -4100,6 +4236,14 @@ static bool tcpm_send_queued_message(struct tcpm_port *port)
->  					 ret);
->  			tcpm_ams_finish(port);
->  			break;
-> +		case PD_MSG_DATA_BATT_STATUS:
-> +			ret = tcpm_pd_send_batt_status(port);
-> +			if (ret)
-> +				tcpm_log(port,
-> +					 "Failed to send battery status ret=%d",
-> +					 ret);
-> +			tcpm_ams_finish(port);
-> +			break;
->  		default:
->  			break;
->  		}
-> @@ -8597,6 +8741,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
->  	hrtimer_cancel(&port->vdm_state_machine_timer);
->  	hrtimer_cancel(&port->state_machine_timer);
->  
-> +	power_supply_put_array(port->fixed_batt, port->fixed_batt_cnt);
->  	tcpm_reset_port(port);
->  
->  	tcpm_port_unregister_pd(port);
-> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> index 337a5485af7c..afb9c2c65588 100644
-> --- a/include/linux/usb/pd.h
-> +++ b/include/linux/usb/pd.h
-> @@ -724,4 +724,33 @@ void usb_power_delivery_unlink_device(struct usb_power_delivery *pd, struct devi
->  
->  #endif /* CONFIG_TYPEC */
->  
-> +/* Battery Status Data Object */
-> +#define BSDO_PRESENT_CAPACITY				GENMASK(31, 16)
-> +#define BSDO_CHG_STATUS					GENMASK(11, 10)
-> +#define BSDO_BATTERY_PRESENT				BIT(9)
-> +#define BSDO_INVALID_BATTERY_REFERENCE			BIT(8)
-> +
-> +/*
-> + * Battery Charge Status: Battery Charging Status Values as defined in
-> + * "USB PD Spec Rev3.1 Ver1.8", "Table 6-46 Battery Status Data Object (BSDO)".
-> + */
-> +#define BSDO_BATTERY_INFO_CHARGING			0x0
-> +#define BSDO_BATTERY_INFO_DISCHARGING			0x1
-> +#define BSDO_BATTERY_INFO_IDLE				0x2
-> +#define BSDO_BATTERY_INFO_RSVD				0x3
-> +
-> +/**
-> + * BSDO() - Pack data into Battery Status Data Object format.
-> + * @batt_charge: Battery's present state of charge in 0.1WH increment.
-> + * @chg_status: Battery charge status.
-> + * @batt_present: Indicates that battery is present/attached when set else absent when unset.
-> + * @invalid_ref: Indicates that an invalid battery reference was made in the Get_Battery_Status
-> + *		 request.
-> + */
-> +#define BSDO(batt_charge, chg_status, batt_present, invalid_ref)	\
-> +	((FIELD_PREP(BSDO_PRESENT_CAPACITY, batt_charge)) |		\
-> +	 (FIELD_PREP(BSDO_CHG_STATUS, chg_status)) |			\
-> +	 ((batt_present) ? BSDO_BATTERY_PRESENT : 0) |			\
-> +	 ((invalid_ref) ? BSDO_INVALID_BATTERY_REFERENCE : 0))
-> +
->  #endif /* __LINUX_USB_PD_H */
-> 
-
-
-Regards,
-
-Hans
-
+base-commit: d73a08958e66849ea713d2f458b2fcf7b183f987
+-- 
+2.53.0
 
 
