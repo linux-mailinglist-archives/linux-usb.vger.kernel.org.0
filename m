@@ -1,299 +1,171 @@
-Return-Path: <linux-usb+bounces-38091-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38092-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QAZ+BHasFmp/oQcAu9opvQ
-	(envelope-from <linux-usb+bounces-38091-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 10:33:58 +0200
+	id SDvZB6etFmpHoQcAu9opvQ
+	(envelope-from <linux-usb+bounces-38092-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 10:39:03 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C49585E12BB
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 10:33:57 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C6A75E13AB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 10:39:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6B59D30589E6
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 08:32:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DD9883009B15
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 08:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8DDD3CB2DB;
-	Wed, 27 May 2026 08:32:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2903DFC88;
+	Wed, 27 May 2026 08:37:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SSPDs2zB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buYKQNrc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799F83DD874
-	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 08:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABCB383C7C
+	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 08:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779870749; cv=none; b=ePQGzsaM7+o/CW3RFTNXzV0KjG26zq5SaInQ1Vhse5X1RileHRJue7CdFN4kJwFTxk5w/OJxz9iUjrXjQX4A6FEilnjs+/4IlhfKiXJihp2z5mSbWA9fnp2vybtI2j0OIElKvtuRm+mgKfrMqFIKSJJsWUXbJYawWlTrJVfc+WU=
+	t=1779871052; cv=none; b=P2XReldcTdjGN4DSkJuf40WutjCW6iLvtIdw0HjLUhTQpSZhom1MtALd/3H1ExiDq941nqEpV5Oe/In7l4gYE3thrcuArdBYX7p10YtfMkijhEbRR7051x3XAqZlY+uWdcGipu/gqf7Q5yImI3F8ATOOD6Z8gdsA3MYFgMy/4Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779870749; c=relaxed/simple;
-	bh=cwHIjHAe8KJf/GMsGK3Swi8r1zcSw/mau5aBaAmzT30=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iCjxJIPRv68sB3321UpFgqzWQ1qUoLSlk17I8BEF+9tPH6yooJu3kEy2riv7O2m0Dmm2ZTiuCirIwcGSvNupU+W6DovLOUKSMvhDEIELt/7B58r6oDJYAsH+AY6CiN8menfEHx7tHHTHW69Nr2Nm/VjneTQtP5eL1WOtrzVqJew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SSPDs2zB; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1779871052; c=relaxed/simple;
+	bh=KqmcM5wjpzIIpE7M9ZJHP3JYmC0sdYhOOdrFBUm6YhE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W/UusS1mzhkZ8NghZ2a/KabM1KwtbNGGI0JGsf6UH/V69K4qLn09T7ZtaiOTSSQq8U+DHSXtlsQvCcWt5mrLgHjzJ0i4oXWR65yn9nP8AaidtVRVG/4JfCOV3rTeHUryIBDLqKQ1gb9gT3D3M6vXALZdhsqzoUhbGL7v7k2LymU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buYKQNrc; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-449de065cb3so11232095f8f.2
-        for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 01:32:27 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4906869f0cbso29768335e9.1
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 01:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779870746; x=1780475546; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7dy1tdo3WsNXJ1hXO7TcI9ffqFZPej1pmbFWn2tPCdc=;
-        b=SSPDs2zBYgZg0BihPYW2TJowzlUdzhGHkeL9ziT7Nt8egtgg0jmYAnCCYoXENdFyQq
-         +D520CyTwSJNYgkfYBrbQVAq51ELthYO7eH7UNUqQ81vInyidjyY6n4Uc6noiKBiPAJg
-         mrpfIW45qihGHbWeLyq8Qt6JdJ/fhxjgV379PN6FU6gQSaS5I/emIAPkmtALH+R6UVSg
-         5r6/CTlLqS3+WOtrVe72/V70rqQIjrER/kud6g3xa1b7vvtoI8nK5XvNGRt/WGI3cnE9
-         FiXz4K30l46YsnXIdgPNUq+qU9r0jGjDkHWGdzg0Mfmfrn+6bz73sugYJyU5w0LYyNOz
-         3oJQ==
+        d=gmail.com; s=20251104; t=1779871049; x=1780475849; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dd63B64j/8tYt7JtZPFcGeZ7Eicxm9sULbtAClwSATc=;
+        b=buYKQNrcX1Jf8lnDxw/fm2hmChhKjvpkbm1nRtLAe9x2ya6OqEgR4F4TD6lDtqDP2l
+         F3zourjfBDw0BXcsLTePrLn0+cMPLPNUmO7FjWVrSGHJnE5tFlpAZhY7z9n8ks7aC3Cs
+         IHp6OB/7E4zYEVWoELHDV5/Kg54QK72yyPfKyfQOK9wN5TDBZNkcOErAtFXKtlfXYPvs
+         ajb/DeI4pZqhrMjJHZ8HCwHpwDiOAbTFT++1kdRRJJsxKdJToQ7NON325Pgi7jo23Ww8
+         m7Vnli6WiVvKt7eSrqH7svbXBJVXZ92QjJqjyR35dSkQXZQZsNDjHove4NZWHmM/fJ6E
+         ztgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779870746; x=1780475546;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7dy1tdo3WsNXJ1hXO7TcI9ffqFZPej1pmbFWn2tPCdc=;
-        b=nWen+WtfeMGdfOS42Bpw28SvIOysJzfYW4qDohpma/Y6OnMM9A02mXrePNkTH/HA8O
-         g6d8aBoKdhj8SFghmNLZhwF0nCmOU274Sv9mfn81HLh45Hzx2Yzcjn37/poDZENdc9+f
-         pX2+lpRM0pGPR4Z0aXMA/W6UORLsIIRbPkbQ+ODN1qbdYQIm8PjWoa91Sf6WORY9yUkQ
-         //NFtKGS60oIXkKiNoi/fAgcFA5Ohv5LJXscyDJqeU/8WCHzOsBczb6p84WQbl6SZFMe
-         KzV6w2LkCyfJQpiDcCApazYoisIgG7iJCpLoIMaDCenpds2XraClPz3S1daeRD6tIZVv
-         LvIQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9DyVOfxCP7UEj9xg+4xvy8pfphn2arxf8NHFNe4rSCZUkkftISr6bku1WnmBhEEcNWMq0Tk4Ofa9M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZlP/iOr+nh2r5m/5H9VArzmAe8LRN8kQmMnfWrAfEylZ5vadg
-	qm0/iExyYw04gn1uMQVndTawRCqpaj0cLBt9H22XJAQKWBcaARu1qFmJ
-X-Gm-Gg: Acq92OET28IHu08LfP+dwpsB2btCmNvscOAIzJg1/fQm11UqHhmZeKR6I2rwE94zNl2
-	6O5kj5WKuH1zH3t35FoNt8wz/Wmrahv6tpft5GgbJH83mx+buzr74ShHsd/KOsFQhwGvn/PIOa+
-	w1ZuKG8pCBSWI8MwRLRVSUGpAjIaCDjtextlQfP33s2EzyEVOGVy+wEpNOfozsPfVSPS6uDYBMF
-	mfd8j+FYNqU4sJ9zSFUVVmkPvvhO9hqPawOQLGthrq1m4p3QDuzSq5pGTrJ0OvBNaR1QhfJq3N5
-	QAGiOKRqXAkkzVxQSEq9Nb39mvu3gBy+5DTZi15c7mV5+FgmwHNrIouy6Gb5sdu8xKfOUt8GwRr
-	w6xDF8f5CTxtRxIk6KjHBPZvvrT20c6RPCKc5OEojTjw5LqbGJOChp1iYcXm4a32B0OcSULb6MI
-	vOR23yWd0l/yKEwGbw7bPLDFcFuwgdAFtCLBE=
-X-Received: by 2002:a05:6000:25e3:b0:45e:73b4:85cc with SMTP id ffacd0b85a97d-45eb38a6b5amr32754854f8f.35.1779870745674;
-        Wed, 27 May 2026 01:32:25 -0700 (PDT)
-Received: from foxbook (bfe246.neoplus.adsl.tpnet.pl. [83.28.42.246])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb557679sm7444880f8f.10.2026.05.27.01.32.24
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 27 May 2026 01:32:25 -0700 (PDT)
-Date: Wed, 27 May 2026 10:32:21 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Desnes Nunes <desnesn@redhat.com>, David Woodhouse
- <dwmw2@infradead.org>, Lu Baolu <baolu.lu@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- gregkh@linuxfoundation.org, mathias.nyman@intel.com,
- stable@vger.kernel.org, iommu@lists.linux.dev
-Subject: Re: [PATCH RFT RFC] usb: xhci: Kill hosts with HCE or HSE on
- command timeout
-Message-ID: <20260527103221.7f8b15b0.michal.pecio@gmail.com>
-In-Reply-To: <CACaw+ezMnQh2_oqbZ0jF99+wOADMU2vSMqxh9BoJoefjAC_ixw@mail.gmail.com>
-References: <20260430014817.2006885-1-desnesn@redhat.com>
-	<CACaw+eyKh7buHDoDyTOe8O65FP5cSXYdzCcQvwqKw=1DwX26oA@mail.gmail.com>
-	<20260502235517.089ba5bf.michal.pecio@gmail.com>
-	<CACaw+ewOTVh49tnkz+cRr0SD_Z-LmYrMWhFUrsik6YF83mPBtA@mail.gmail.com>
-	<20260503071749.6abda137.michal.pecio@gmail.com>
-	<CACaw+ew8uV5g1G-6qZGtVBEYZ3k+fvFrOq3XMyq-Nuhbq5mdnA@mail.gmail.com>
-	<20260503213111.117db3a1.michal.pecio@gmail.com>
-	<20260504093118.615ff480.michal.pecio@gmail.com>
-	<20260518083339.507e24bd.michal.pecio@gmail.com>
-	<CACaw+ewSWTo72fSk2Q7ZzCM8pNuyrX5ua+qA=SZOQuNNMKSA5Q@mail.gmail.com>
-	<20260522110328.0d3eecd8.michal.pecio@gmail.com>
-	<CACaw+ezqEO_PgjGeYCLq5hA2eKczFXgmZLa8qjPtVJZCGwsdsg@mail.gmail.com>
-	<20260523022944.59799d83.michal.pecio@gmail.com>
-	<CACaw+exPdwXVsJc5Xr=vN1WJt8XR46=X0-8PP=+5dWY5zUrKeQ@mail.gmail.com>
-	<20260523102815.5c05c70a.michal.pecio@gmail.com>
-	<CACaw+ezMnQh2_oqbZ0jF99+wOADMU2vSMqxh9BoJoefjAC_ixw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1779871049; x=1780475849;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dd63B64j/8tYt7JtZPFcGeZ7Eicxm9sULbtAClwSATc=;
+        b=SumRbDBJtsbJUiEPAEa62P+WNIxKEx9bfI1MN9xDFXnNGAROh59D9OQ1qsDWlWbr2G
+         anf/AqAEb9c6mgvhCXa0QNW803zl07n1k1P4Fm+rrKUD8dwbCurJQ4gZZvZNYHSDN8si
+         RyLCqU4rDcAHXG4NcVaEPu/bAuUxp+krJn53EqoMmGgRaJdf776FIPHyMSvncq3Ju1+1
+         L3YbwfV4tktWnfl5wLgEscId5GYCbzLA76Qfb/U9kPkVxLvHNHz5cf8mha94YmNZD84e
+         k1CmN13IrAWkV2LIM0fcxXZ0YcxhwE5x+6i7BuLLKhV90EuaZm1YKjypL0Sq1kJazRTh
+         hMlQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/qxneP4opVq7zdqfecCdyf8IQC/fq7FnizeFme21vbi5bAoLS1MPO5wb+1NGN4M5lbTOvfmxHvkI8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkGZottuxdbR9ZwJ979BcJnZparlVOQWnXRsGX7Y3dG7UVX2PR
+	vIHpK1JVZOUlwIX4rB88/icNgbYNMQvV51mRTrkmV/19AP3+2WB01L87AfEoOQOG
+X-Gm-Gg: Acq92OESNRtx3RerRJNiQYVBe3hZ1BvI+NNm7oFdyHBxFcSLLY3YQfsE4GOFcGAeQMb
+	DAY0go2+ZdfhvN0rj867u/VA8rdOWsrgIhLqaUDH/fEuQzS8FG33tGGdyCZ/QoGMCuOtWN01+v5
+	sL+Rj+VJroVXrfuWFqgQkICO31afpLHRnwWcjEYf77Ya9QQtXXodxe01XLuGK0Nux4HuyAMxwNV
+	z06KPGE58oxP7xULQH0EIeSvz1qd+zGyw0/FrhXPE80es/VfGg5COS/NW+Yu8HiQtz3DXwhyqDo
+	LjOUoUawjDU4H2MeZ5i2Q3dJpgZw4H+athlhrh/OUbrsfd5BSZ3B36GXRb0XgX3KjyfCSnzywW5
+	HQSy39vZI5nydrr82oBi8ElFqMB4wSvKJCmeSoi+f5KggP/iBa4rYIbOd1GiPdD1ESnrtLFdP+F
+	UJ6GAzPD74UOSk0BMSYZPqqRGvtwKpX+1sXWU=
+X-Received: by 2002:a05:600c:1992:b0:48a:9428:5522 with SMTP id 5b1f17b1804b1-490426bc7dcmr362225525e9.16.1779871049109;
+        Wed, 27 May 2026 01:37:29 -0700 (PDT)
+Received: from [192.168.1.10] ([95.43.220.235])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4904526c926sm682068395e9.1.2026.05.27.01.37.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 May 2026 01:37:28 -0700 (PDT)
+Message-ID: <f44f2c8e-accd-4ea8-8184-7da610340a9f@gmail.com>
+Date: Wed, 27 May 2026 11:37:27 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] usb: gadget: u_ether NULL deref in eth_stop after
+ gether_detach_gadget
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: khtsai@google.com, sashal@kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <89e19e6e-7ee7-4bb0-abd6-60971b7fd601@gmail.com>
+ <2026052726-vagrancy-lilac-bf72@gregkh>
+Content-Language: en-GB
+From: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+In-Reply-To: <2026052726-vagrancy-lilac-bf72@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-38091-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	URIBL_MULTI_FAIL(0.00)[tor.lore.kernel.org:server fail];
+	TAGGED_FROM(0.00)[bounces-38092-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[ivogdimitrov75@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: C49585E12BB
+X-Rspamd-Queue-Id: 8C6A75E13AB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Adding Intel IOMMU people.
 
-Context:
 
-Desnes reported xHCI issues duing crash kernel boot after SysRq
-triggered panic. Turns out, the chip gets an IOMMU fault, some other
-devices also do. Faulting address is a successful dma_alloc_coherent()
-allocation in xhci_alloc_erst(), no evidence that it's freed before
-the fault occurs. No problems during normal boot.
+On 27.05.26 г. 11:03 ч., Greg Kroah-Hartman wrote:
+> On Tue, May 26, 2026 at 08:56:15AM +0300, Ivaylo Dimitrov wrote:
+>> on linux 6.18.31 I am seeing a NULL pointer dereference during RNDIS gadget
+>> teardown.
+> 
+> Does this also happen on the latest 7.1-rc release?
+> 
 
-On Wed, 27 May 2026 00:47:53 -0300, Desnes Nunes wrote:
-> # grep "alloc ERST\|free ERST\|ERST\|Device context\|fault addr" kexec-dmesg.log
-> [Tue May 26 08:41:56 2026] DMAR: [DMA Write NO_PASID] Request device
-> [80:1f.6] fault addr 0x106f06000 [fault reason 0x39] SM: Present bit
-> in Root Entry is clear
-> [Tue May 26 08:41:56 2026] DMAR: [DMA Write NO_PASID] Request device
-> [80:1f.6] fault addr 0x106f19000 [fault reason 0x39] SM: Present bit
-> in Root Entry is clear
-> [Tue May 26 08:41:57 2026] DMAR: [DMA Write NO_PASID] Request device
-> [80:1f.6] fault addr 0x106f1c000 [fault reason 0x39] SM: Present bit
-> in Root Entry is clear
-> [...]
-> [Tue May 26 08:42:01 2026] xhci_hcd 0000:80:14.0: alloc ERST at
-> 0x0000001075140000
-> [Tue May 26 08:42:01 2026] xhci_hcd 0000:80:14.0: ERST deq = 64'h107513e000
-> [Tue May 26 08:42:02 2026] DMAR: [DMA Read NO_PASID] Request device
-> [80:14.0] fault addr 0x1075140000 [fault reason 0x39] SM: Present bit
-> in Root Entry is clear
+I didn't test this on current -rc (this is a mobile phone and not 
+particularly easy to run latest Linux on), however this looks more like 
+an object lifetime contract issue than something specific to 6.18.y.
+
+Also, the suspected patch was backported to 6.18.y together with 
+e002e92e88e12457373ed096b18716d97e7bbb20 ("usb: gadget: u_ether: Fix 
+NULL pointer deref in eth_get_drvinfo"), which fixes a similar issue, so 
+I strongly suspect the issue exists in current -rc as well.
+
+>> I suspect the reason is commit:
+>>
+>>    usb: gadget: f_ncm: Fix net_device lifecycle with device_move
 > 
-> ^ PS: Different address alloc on kdump though
+> Do you have a proposed fix for this issue?
 > 
-> > Otherwise, it seems you were right that you have some IOMMU problem.  
-> 
-> Thus, I started to investigate this front now. This time I gave some
-> more attention to these dmar messages:
-> 
->      [Tue May 19 08:17:49 2026] DMAR: Intel-IOMMU force enabled due to
-> platform opt in
->      [Tue May 19 08:17:49 2026] DMAR: No RMRR found
->      [Tue May 19 08:17:49 2026] DMAR: No ATSR found
->      [Tue May 19 08:17:49 2026] DMAR: dmar0: Using Queued invalidation
-> => [Tue May 19 08:17:49 2026] DMAR: Translation already enabled -  
-> trying to copy translation structures
-> => [Tue May 19 08:17:49 2026] DMAR: Copied translation tables from  
-> previous kernel for dmar0
->      [Tue May 19 08:17:49 2026] DMAR: dmar1: Using Queued invalidation
-> => [Tue May 19 08:17:49 2026] DMAR: Translation already enabled -  
-> trying to copy translation structures
-> => [Tue May 19 08:17:49 2026] DMAR: Copied translation tables from  
-> previous kernel for dmar1
-> 
-> I started wondering if maybe on my system these translation tables
-> can't be fully trusted for some reason during kdump?
-> Maybe iommu is copying root_entries with the Present bit clear, and
-> thus generating the fault reason 0x39?
->    -> bus 0x80's? Both ethernet and xhci_hcd fault addr were on this bus  
-> 
-> So, to test this theory out, I tried to disable translation and
-> allocate a clean root-entry table right away if I am running a kdump
-> kernel:
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index e236c7ec221f..de673f34f4e1 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -2135,24 +2135,31 @@ static int __init init_dmars(void)
->                 if (translation_pre_enabled(iommu)) {
->                         pr_info("Translation already enabled - trying
-> to copy translation structures\n");
-> 
-> -                       ret = copy_translation_tables(iommu);
-> -                       if (ret) {
-> -                               /*
-> -                                * We found the IOMMU with translation
-> -                                * enabled - but failed to copy over the
-> -                                * old root-entry table. Try to proceed
-> -                                * by disabling translation now and
-> -                                * allocating a clean root-entry table.
-> -                                * This might cause DMAR faults, but
-> -                                * probably the dump will still succeed.
-> -                                */
-> -                               pr_err("Failed to copy translation
-> tables from previous kernel for %s\n",
-> -                                      iommu->name);
-> +                       if (is_kdump_kernel()) {
-> +                               pr_info("DESNES V2 IOMMU kdump kernel,
-> disabilng translation and allocating clean root-entry for %s\n",
-> +                                       iommu->name);
->                                 iommu_disable_translation(iommu);
->                                 clear_translation_pre_enabled(iommu);
->                         } else {
-> -                               pr_info("Copied translation tables
-> from previous kernel for %s\n",
-> -                                       iommu->name);
-> +                               ret = copy_translation_tables(iommu);
-> +                               if (ret) {
-> +                                       /*
-> +                                        * We found the IOMMU with translation
-> +                                        * enabled - but failed to copy over the
-> +                                        * old root-entry table. Try to proceed
-> +                                        * by disabling translation now and
-> +                                        * allocating a clean root-entry table.
-> +                                        * This might cause DMAR faults, but
-> +                                        * probably the dump will still succeed.
-> +                                        */
-> +                                       pr_err("DESNES V2 Failed to
-> copy translation tables from previous kernel for %s\n",
-> +                                              iommu->name);
-> +                                       iommu_disable_translation(iommu);
-> +                                       clear_translation_pre_enabled(iommu);
-> +                               } else {
-> +                                       pr_info("DESNES V2 Copied
-> translation tables from previous kernel for %s\n",
-> +                                               iommu->name);
-> +                               }
->                         }
->                 }
-> 
-> Didn't had time to check ERST or HSE yet, but with this I didn't had
-> any DMAR faults, vmcore was collected normally and system rebooted
-> smoothly afterwards:
-> 
->      [Tue May 26 22:52:58 2026] DMAR: Intel-IOMMU force enabled due to
-> platform opt in
->      [Tue May 26 22:52:58 2026] DMAR: No RMRR found
->      [Tue May 26 22:52:58 2026] DMAR: No ATSR found
->      [Tue May 26 22:52:58 2026] DMAR: dmar0: Using Queued invalidation
-> => [Tue May 26 22:52:58 2026] DMAR: Translation already enabled -  
-> trying to copy translation structures
-> => [Tue May 26 22:52:58 2026] DMAR: DESNES V2 IOMMU kdump kernel,  
-> disabilng translation and allocating clean root-entry for dmar0
->      [Tue May 26 22:52:58 2026] DMAR: dmar1: Using Queued invalidation
-> => [Tue May 26 22:52:58 2026] DMAR: Translation already enabled -  
-> trying to copy translation structures
-> => [Tue May 26 22:52:58 2026] DMAR: DESNES V2 IOMMU kdump kernel,  
-> disabilng translation and allocating clean root-entry for dmar1
-> 
-> Seems like a lead on this iommu front.
-> 
-> The funny thing is that the comment in this section literaly says that
-> doing this could cause faults, but here clearing it actually seemed to
-> solve them and made kdump succeed - commit
-> 091d42e43d21b6ca7ec39bf5f9e17bc0bd8d4312 ("iommu/vt-d: Copy
-> translation tables from old kernel")
-> 
-> Let me do some more tests to dump and check the root-entry table
-> before clearing, as well as to check ERST allocations and HSE value,
-> and I'll get back to you Michal.
-> 
-> Best Regards,
-> 
-> Desnes
-> 
+
+Not really, as checking whether dev->gadget is NULL before calling DBG() 
+looks more like a workaround than a proper fix to me. I also don't know 
+the subsystem well enough to judge whether switching to netdev_dbg() 
+instead of DBG() would be appropriate here, or whether that would defeat 
+the purpose of the existing debug messages (or cause confusion by mixing 
+gadget and netdev based logging).
+
+I could use some maintainer advice on what they think the proper fix 
+should look like, and then I'll try to put together a fix.
+
+Thanks,
+Ivo
 
