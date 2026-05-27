@@ -1,196 +1,177 @@
-Return-Path: <linux-usb+bounces-38100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38101-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2HpQEbb+FmoJ0QcAu9opvQ
-	(envelope-from <linux-usb+bounces-38100-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 16:24:54 +0200
+	id iNVUORQBF2p80wcAu9opvQ
+	(envelope-from <linux-usb+bounces-38101-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 16:35:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B300C5E5D25
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 16:24:53 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5535E5F2E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 16:35:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 302AB30932AD
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 14:21:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4A4803061272
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2026 14:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CCB410D0F;
-	Wed, 27 May 2026 14:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A4E4266AA;
+	Wed, 27 May 2026 14:32:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3rrHUpw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KmOTCCMS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F590341057;
-	Wed, 27 May 2026 14:21:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFF13644BD
+	for <linux-usb@vger.kernel.org>; Wed, 27 May 2026 14:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779891699; cv=none; b=Yx5/Hmhnm0tUjOL8jHRLvzJi7op1ZMR1bLtPdWxFHSkA9C7uqaIgYaXAjaWKUqqt8rvdivrSDPQCMESeXglLcGJXUMIXX5088f2PF4rx4fIa4BwDEFGL+qUBLpbo+TjyA0ZABfuURvWbEeXd7osIfnz7pkuCzG3HdwSRtMd/LHk=
+	t=1779892329; cv=none; b=FR/lxhtwL/KbxrVpbh/XO1Po4upZQEPwbcqI52NYtpd/BqiMQuuZJ6j+2KxPermCJLBqDO30hxvVdUSFc2JSi6GYYm1g14SWS4TsVdQgQC3cJTU+kM4VhMAa5fGTDchiDpxjv5EpCl4ua7850J4QRwp7585rrXHsBnWD0OSORwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779891699; c=relaxed/simple;
-	bh=iJzYdVZEnCbrdzpe1lcSn2GKplITdK0Mf1UHiXiJLdM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=deFb8CPgyOlLNrgg2CjD37brAI0NrXJnO17bxjahslZy3KZ1X9wyREi92OZSiUA/jzaGcWY+rKjs8DWuJ83M2670z7qNTB7ANRTtuUWiYAv0jkUALb42vDroFewzg15A6dVFXaqgAFsn8xV0tr8KPjl4YeqJSx1x4NJzkWPITnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3rrHUpw; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3005C1F000E9;
-	Wed, 27 May 2026 14:21:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779891696;
-	bh=ANDedZ88UDoS2DCptby4vnta2saKo5cQ6BlVu2FmU78=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=N3rrHUpweBiRQUm5OWI7xxO+TBntkWo9t0sOE+q7LobC1n5tRh5euCN/inw2gilnD
-	 ZyrVuneoZtqPJCI1qOHs84GGmGVROmOmysws45d9mpvMBOnfpf/f4jDMEg16YqSPSx
-	 IhHkMYhdb1Fdbg0ldlncLTSB7R23MVP9JB/SQ7Wg6kGgw99jxETPH87K0/osmkVeMP
-	 fk9rjjL+9EmfMXFExj0KB993gUtuStv6W7jBwOdCaL0898Nxocb6vvYqJ0Z+aNcr9Z
-	 tINemi4dMtDaLvwdcfeeyqWhyawXcnnEKAA1Mv4XCg42y9Db2cRjkCgeiuspOShcNO
-	 MU4UzkmEG3XeA==
-Date: Wed, 27 May 2026 16:21:33 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Kuen-Han Tsai <khtsai@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Vratislav Bendel <vbendel@redhat.com>
-Subject: Re: [PATCH] usb: hub: Make usb_hub_wq type depend on
- isolcpus/nohz_full setting
-Message-ID: <ahb97cx_4dqPayDW@localhost.localdomain>
-References: <20260521170659.984284-1-longman@redhat.com>
+	s=arc-20240116; t=1779892329; c=relaxed/simple;
+	bh=prCok3ZhpoOiyrEO8UpFmI/kjtdZ01F9es3aVwjj3Lw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=u4Dfe2rzDhSZ6nGFvPNbq1Tn+vzy7cN5QFxfYyVUUnMFmqtPIW4Dws2t4dYUQYPnjfw4c8Ty98WxpyFmJI4kvHV/T9sP6rfEyQgHanRpS9kQ+7+dNszMCNtxiMSscLUiakHHASKTZd4n2uu689ES3a6OjN9WyZm0Gqwju5ohI6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KmOTCCMS; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779892328; x=1811428328;
+  h=date:from:to:cc:subject:message-id;
+  bh=prCok3ZhpoOiyrEO8UpFmI/kjtdZ01F9es3aVwjj3Lw=;
+  b=KmOTCCMSxLlvnNbPaluFPS0uWU7FQKnxg2rX6XZO/V6pVHqUhgHQfgDT
+   X/5J7IP1wGf1/rGxznzFyC6SG+xsMCYTYv7R3X2WLc/wBf7Y70AuIw+IQ
+   JhniRAsVcmJ4+x4pnwg/9xXy7LtpteBW2SWj0osYxcJBjYitgqtUNDpEn
+   SR/qnDCw5hbLD4B4WkaCD0bsh327Q8IPQDvQQEA9Qagc2bVrq6u64Elv9
+   FEG/wSosrcSNA9o7H+DH0rLvY3x/Ef7ZWY8Hb1GzWIArG/JMjPIUIq1CE
+   k3Jdi7zmR+C9X8poOFo1Mqh+Jk/Gdi4wLl+2Nye5wlA3uZsDnWW7L8MUk
+   A==;
+X-CSE-ConnectionGUID: q1OKI0nDRM+aK/u6dFW1cA==
+X-CSE-MsgGUID: lJx4BF19RB68xtoqRvAX4g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="92196517"
+X-IronPort-AV: E=Sophos;i="6.24,171,1774335600"; 
+   d="scan'208";a="92196517"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 07:32:07 -0700
+X-CSE-ConnectionGUID: N03vBK/ORimtjMaaTwUyUQ==
+X-CSE-MsgGUID: PSTcIynATL2ibviPpW6d6g==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 27 May 2026 07:32:06 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wSFIi-0000000043W-0IdH;
+	Wed, 27 May 2026 14:32:04 +0000
+Date: Wed, 27 May 2026 22:31:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
+ 4db2bd2ed4785dbadaeeab9f4e346b21ac5fb8eb
+Message-ID: <202605272219.DjUPANAs-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260521170659.984284-1-longman@redhat.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38100-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38101-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[frederic@kernel.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,localhost.localdomain:mid]
-X-Rspamd-Queue-Id: B300C5E5D25
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 8D5535E5F2E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Le Thu, May 21, 2026 at 01:06:59PM -0400, Waiman Long a écrit :
-> A Red Hat customer reports a kernel stability problem where hung tasks
-> are reported with occasional kernel panics. Analysis of the core dump
-> indicates that USB work items are running on isolcpus+nohz_full cores
-> competing with RT-class tasks running on those core while holding
-> usb_hub device mutex transitively blocking other kworkers waiting for
-> the same mutex leading to hung_task reports.
-> 
-> As the usb_hub_wq uses the WQ_PERCPU flag, it will run the work items on
-> the same CPU that queues them. For many use cases, it is a more efficient
-> setup leading to higher throughput as it reduces cacheline bouncing.
-> 
-> It is a different story if the system needs to run latency sensitive RT
-> workload on dedicated isolated CPUs. Having the kworkers processing work
-> items on the same set of isolated CPUs will likely break the low latency
-> requirements of the RT tasks. As the RT tasks have higher priority,
-> not much CPU time will be left running the kworkers to process work
-> items which, in turn, will block other tasks that have dependency on
-> the completion of those work items. In this case, using a WQ_UNBOUND
-> workqueue to avoid running on isolated CPUs will be more beneficial.
-> 
-> One solution to get the best of both worlds is to make the workqueue
-> type depending on whether the "isolcpus" or "nohz_full" boot command
-> line options have been specified. If at least one of those options are
-> present, usb_hub_wq will be created as an unbound workqueue. Otherwise,
-> it will remain as a percpu workqueue.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  drivers/usb/core/hub.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 24960ba9caa9..f79e5edd627a 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -33,6 +33,7 @@
->  #include <linux/random.h>
->  #include <linux/pm_qos.h>
->  #include <linux/kobject.h>
-> +#include <linux/sched/isolation.h>
->  
->  #include <linux/bitfield.h>
->  #include <linux/uaccess.h>
-> @@ -6066,6 +6067,8 @@ static struct usb_driver hub_driver = {
->  
->  int usb_hub_init(void)
->  {
-> +	unsigned int wq_flags;
-> +
->  	if (usb_register(&hub_driver) < 0) {
->  		printk(KERN_ERR "%s: can't register hub driver\n",
->  			usbcore_name);
-> @@ -6077,8 +6080,17 @@ int usb_hub_init(void)
->  	 * USB-PERSIST port handover. Otherwise it might see that a full-speed
->  	 * device was gone before the EHCI controller had handed its port
->  	 * over to the companion full-speed controller.
-> +	 *
-> +	 * Create WQ_UNBOUND workqueue instead of WQ_PERCPU if either isolcpus
-> +	 * or nohz_full boot option is specified.
->  	 */
-> -	hub_wq = alloc_workqueue("usb_hub_wq", WQ_FREEZABLE | WQ_PERCPU, 0);
-> +	if (housekeeping_enabled(HK_TYPE_DOMAIN) ||
-> +	    housekeeping_enabled(HK_TYPE_KERNEL_NOISE))
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
+branch HEAD: 4db2bd2ed4785dbadaeeab9f4e346b21ac5fb8eb  thunderbolt: Limit XDomain response copy to actual frame size
 
-HK_TYPE_DOMAIN is supposed to be a subset of HK_TYPE_KERNEL_NOISE anyway so
-the first should be enough.
+elapsed time: 1346m
 
-> +		wq_flags = WQ_UNBOUND;
-> +	else
-> +		wq_flags = WQ_PERCPU;
-> +
-> +	hub_wq = alloc_workqueue("usb_hub_wq", WQ_FREEZABLE | wq_flags, 0);
+configs tested: 54
+configs skipped: 1
 
-But then what happens if no isolcpus= is passed but later cpuset creates
-an isolated partition?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Tejun and Marco thought about introducing a WQ_PREFER_PERCPU flag that would
-do what you want above. And the workqueue code should also handle dynamic
-isolation, that is switch from per-cpu workqueues to unbound ones or vice-versa
-dynamically.
+tested configs:
+alpha         allnoconfig    gcc-15.2.0
+alpha        allyesconfig    gcc-15.2.0
+arc          allmodconfig    gcc-15.2.0
+arc           allnoconfig    gcc-15.2.0
+arc          allyesconfig    gcc-15.2.0
+arm           allnoconfig    clang-23
+arm          allyesconfig    gcc-15.2.0
+arm64        allmodconfig    clang-19
+arm64         allnoconfig    gcc-15.2.0
+csky         allmodconfig    gcc-15.2.0
+csky          allnoconfig    gcc-15.2.0
+hexagon      allmodconfig    clang-17
+hexagon       allnoconfig    clang-23
+i386         allmodconfig    gcc-14
+i386          allnoconfig    gcc-14
+i386         allyesconfig    gcc-14
+loongarch    allmodconfig    clang-19
+loongarch     allnoconfig    clang-23
+m68k         allmodconfig    gcc-15.2.0
+m68k          allnoconfig    gcc-15.2.0
+m68k         allyesconfig    gcc-15.2.0
+microblaze    allnoconfig    gcc-15.2.0
+microblaze   allyesconfig    gcc-15.2.0
+mips         allmodconfig    gcc-15.2.0
+mips          allnoconfig    gcc-15.2.0
+mips         allyesconfig    gcc-15.2.0
+nios2        allmodconfig    gcc-11.5.0
+nios2         allnoconfig    gcc-11.5.0
+openrisc     allmodconfig    gcc-15.2.0
+openrisc      allnoconfig    gcc-15.2.0
+parisc       allmodconfig    gcc-15.2.0
+parisc        allnoconfig    gcc-15.2.0
+parisc       allyesconfig    gcc-15.2.0
+powerpc      allmodconfig    gcc-15.2.0
+powerpc       allnoconfig    gcc-15.2.0
+riscv        allmodconfig    clang-23
+riscv         allnoconfig    gcc-15.2.0
+riscv        allyesconfig    clang-16
+s390         allmodconfig    clang-18
+s390          allnoconfig    clang-23
+s390         allyesconfig    gcc-15.2.0
+sh           allmodconfig    gcc-15.2.0
+sh            allnoconfig    gcc-15.2.0
+sh           allyesconfig    gcc-15.2.0
+sparc         allnoconfig    gcc-15.2.0
+sparc64      allmodconfig    clang-23
+um           allmodconfig    clang-19
+um            allnoconfig    clang-23
+um           allyesconfig    gcc-14
+x86_64       allmodconfig    clang-20
+x86_64        allnoconfig    clang-20
+x86_64       allyesconfig    clang-20
+x86_64      rhel-9.4-rust    clang-20
+xtensa        allnoconfig    gcc-15.2.0
 
-Marco is working on it.
-
-Thanks.
-
->  	if (hub_wq)
->  		return 0;
->  
-> -- 
-> 2.54.0
-> 
-> 
-
--- 
-Frederic Weisbecker
-SUSE Labs
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
