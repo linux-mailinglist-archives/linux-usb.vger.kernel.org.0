@@ -1,176 +1,205 @@
-Return-Path: <linux-usb+bounces-38125-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38126-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CJTpAaf9F2oTYQgAu9opvQ
-	(envelope-from <linux-usb+bounces-38125-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:32:39 +0200
+	id GJ5CL8H/F2rgYggAu9opvQ
+	(envelope-from <linux-usb+bounces-38126-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:41:37 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A17E5EEA05
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:32:37 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22CA15EECD2
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:41:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DEDC830BB5DE
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 08:28:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 059DC3217EB6
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 08:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4633793DE;
-	Thu, 28 May 2026 08:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD745382F13;
+	Thu, 28 May 2026 08:33:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PZuI9t41"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTt3A5I5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6A23783B5
-	for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 08:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D94380FC9
+	for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 08:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779956879; cv=none; b=B+TUA4bEb8CaNaMIOiSx4RdvgJxpaR4X/GQiu+qZ9ICK8jCdR7NLFcxAmljvfraBeRr3Exl0SxS0qF50y1Q9oQpbBwyv/hbUjfWlD72laBdQXw8BHHkr0n9nlWEU+uyzJzzdbvidVvHAZAxuOA3mbvAbjHst6zVlDnKJQg2Od5U=
+	t=1779957229; cv=none; b=jOU1ZbrlGjFPDkbczPtfh6m2u4rCJAX+SB3521ZjInY7cPhIg/yFe+wJgGKYh8NJpLjTDWrNSu3vkus/yWXD+t/Zqm6GUJcmaeXOxjOSogDj/vqbLDUAoPLTMgnizfGJJw9Ltz8JaDfKYtI5VgQaLymm1Tg5sqg0DIlbHC38Wko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779956879; c=relaxed/simple;
-	bh=9lzfWbEtfKy7yDDPQwvEs6SwC+ACFHPxG5KOg5RBgKc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VhPT2sBrprlrOMdCQv3gXTtzX5pNedPLZle4RJUJeRfsimObq2uM+fQuQMVI8BGtNGrOLUaIDvmS752jhaWhVmWikbkWwtnKKXGDuenwbeHsX2vAMYyHd0ppcRRu8sHDzSWT1lSKajfP2pZVaBTjXiOL9qQSjxigVHi3357Rzmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PZuI9t41; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82fa8d6425bso5790940b3a.0
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 01:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779956876; x=1780561676; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iE1V6ZSM8goQIoTUw/VcFHWcLJtCjNGG+PWVULPfe6g=;
-        b=PZuI9t41Fc4TiMnhpRnPzADPu+z39ZTZ6fSJZa/r5b+uP5QegxOEIgMNrIY8nEUyDj
-         AF1VM/hOqnDOT26cZKpUg/JC37OWXjYWcgvkg3SC5vJdcJcENHeND89SLcNqfTHVnBEO
-         ZHiDExDsV24nonqN3mNpCX8W6hX1Dy+Gd2WNvD3QnObbKntxXK0D7I21i8Ffx9vANUXL
-         YiPNMf8v2RvLa+CLZXvcvl1MxDCHiVX4tlfcfH1919jdcGWzNi+XQOIvobIXJMPxeYUP
-         PykxKFnF6+yUeAEtsNnjJcBf6CE/D34SLh2DHlAMw6tNtE9ma+DB85p3/L3sq32mNBQ1
-         +izQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779956876; x=1780561676;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iE1V6ZSM8goQIoTUw/VcFHWcLJtCjNGG+PWVULPfe6g=;
-        b=An0nW5lNcm/DvIolhgHbavsfak2Fgv9w+5CrJfBcSY5+sF159gSOfR56rrY1gUHOkU
-         WvqsZI53HNiEA9P/AE1eAro57tohnMZQjLIKAGrZgQVPJpRwfFrG44cqsJoliJcvvp3G
-         QrqezgkIVYEAlbo24elW/ypDk4pZqDdYdDhLHmYD9baSLzoj8HTe2LIpzQpvjMZgdohH
-         fYIl0bg+BKfBb1KH3KBTcorigYvfVieHzr6EU37L5eIx6zfsT8Vw3xEqFX9D8e2F5INY
-         /j/BCHvAEI7KGOjTb+uTM17D+34EnxduQ6su/IAKo81icrBIinhVSy1hD4z4DSvaO2mG
-         JzsA==
-X-Gm-Message-State: AOJu0YzOVkuzb+dasvhZqt17V9/q8lxaYFnq+Pup6W9bMbMv3tgyAgP7
-	Rlts9GsNkbpvEK0KRVDn6blJdR0HF/eQEHr3698JnGXmZq1UkpPMR2+jCKq59g==
-X-Gm-Gg: Acq92OFKCws6boLQxqfLgflDrUfIyMimquIhiEYwMxB730Ilb89WxZ1e0CbM94GxtKv
-	vA7ahRq5+rwlSiBcT7mSBKj84bb6nWspndNMw+S7h47ZzV/naxoo2vAy8sRcICe6JvGKA7zv9LS
-	ue0XHm5myIil6C5uCrZMLX3cJnQC23zWLVi8RsM1HsGIRAeHbJfVvHdw1KWgkJMi04IsWr2s7n0
-	7BBKcLFgo0YNDb3F38JuaZTUiTw2JYIARv/hC/jM7BEOqmA7L74Gl8me2cZXX6/53bPJS0IVyBR
-	0LnKYKHEDA/OqI61db7U/WHEKTFoB8BIgTx3NEsnw6wtkmKrYHtJ6USxCwADFpmAdlUnEWiVx38
-	oEzt9SydwQpyDlpxjZPdX1rNNGbPGomATGLvu0hRxiN4cbPuSqFiZDZuNd0AQZ+GILvgLjsPFdc
-	4oTjZVDQ6YKeHMNXDCp2Rcn9HNS9++Q6RtNK36Rg==
-X-Received: by 2002:a05:6a00:189e:b0:82f:316:3206 with SMTP id d2e1a72fcca58-8415f54464cmr25889213b3a.34.1779956875704;
-        Thu, 28 May 2026 01:27:55 -0700 (PDT)
-Received: from cqian-s3.. ([175.159.214.250])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d730b6c0sm4198156b3a.61.2026.05.28.01.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 01:27:55 -0700 (PDT)
-From: Junzhe Li <ginger.jzllee@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: misc: yurex: fix ordering of usb_deregister_dev() and usb_set_intfdata()
-Date: Thu, 28 May 2026 16:27:51 +0800
-Message-Id: <20260528082751.204898-1-ginger.jzllee@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1779957229; c=relaxed/simple;
+	bh=3UE1ukep6rVlGvZk5YzSNt1eDdxkKrWNxxGuKxbk0mA=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=enCUm6Wxgg+7ksZOmi7JnWTgX+yIu/YQ73vKUkyWv3jaAVeq8PV5tF8eedvCaD2jrI4+G5Xms4vBzyV6qHrwkk+YEJg0ciTqma1ew6sG+EHfy2OOgSp1RFBHJrYlper35iwStqtKoCtE8DS+74VLnHo8y2lIBfhSkEHYIzgrMx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTt3A5I5; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A66751F00A3F
+	for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 08:33:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779957227;
+	bh=3UE1ukep6rVlGvZk5YzSNt1eDdxkKrWNxxGuKxbk0mA=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc;
+	b=BTt3A5I5n0ay2ZpJFPy9zqNZYf0SojnpzrK4eah8mJc1JrtcSKBdyXfYnZKqB7v+1
+	 cJLNn4UDEiXORzdYWVSkX4eeLYPzPhaNMqjEvax1BVzK7L1cz0DqXz/UOa8EV+Z6rN
+	 yTdE4+WdcYo+gaOQOmxVVacAmQ5q9Gp+5uix2RG02SVi7+pp6OgsiNhZA1+rK74r33
+	 JTqMlW5PU0iF2M+895YI9bhzwpqDxkIHY+ZUpczOuSVAnAER159bipf1NKIRzHLe0y
+	 fdJJU2LIm6esC8gOEkfQ5MEqX3JovcoLJRyklBoj+9Gg3BWdgsJaGszzzrB4YZ2s97
+	 5Ha7lPil6GKPw==
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-39378db197aso125536831fa.3
+        for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 01:33:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ9CZMxDYMh1RFW5e6o7L7I7hKjL/fdqYD2mdHpeuESOd8PY+Q2O54KHkxjZee7tf8H08JOFp+THpcM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHJEsNUo1FbYbCFqoWL2pz66Ul571lyKUHmyIC2BM64JfuFr8V
+	YAUJnQCu5tVGnWxx1PHUCNB9Q/XXga5XrzcuJLYFGwThjHgi2HpvkesKYiw0lum6irsjLm78hZ3
+	Dz26MuuIcmNIynytxC/q+szv4NiWLInG04ZPzBZ/KsA==
+X-Received: by 2002:a2e:8957:0:b0:38d:e220:8dc2 with SMTP id
+ 38308e7fff4ca-395d8cef4abmr68081351fa.20.1779957226354; Thu, 28 May 2026
+ 01:33:46 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 28 May 2026 04:33:44 -0400
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 28 May 2026 04:33:44 -0400
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <CAGXv+5GbW0bx3nKdZt2+tHuHyQ-J-1-Z79nMzHAwjmEPGKT02A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.66 / 15.00];
+References: <20260515090149.3169406-1-wenst@chromium.org> <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
+ <CAGXv+5HC3dqgcE3KnKzakHHWFHB6m_X42orOkNUvZvp=SL_O8g@mail.gmail.com>
+ <CAMRc=Med-_0GSYzoFBRiwFzBCK0DZqJD8_SEBxi+zwR20GS-HA@mail.gmail.com> <CAGXv+5GbW0bx3nKdZt2+tHuHyQ-J-1-Z79nMzHAwjmEPGKT02A@mail.gmail.com>
+Date: Thu, 28 May 2026 04:33:44 -0400
+X-Gmail-Original-Message-ID: <CAMRc=McADm0F4bwhj5qoigfUT-AV6CVpo+FAaqoBnZ3PrjBc7Q@mail.gmail.com>
+X-Gm-Features: AVHnY4JaLBmctUhYgIAJpJojKGEMDv_BBPh6vAfJvyQAFJsp1fEnomeZ5fRkbMM
+Message-ID: <CAMRc=McADm0F4bwhj5qoigfUT-AV6CVpo+FAaqoBnZ3PrjBc7Q@mail.gmail.com>
+Subject: Re: [PATCH RFC 00/12] arm64: mediatek: Add M.2 E-key slot on Chromebooks
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Manivannan Sadhasivam <mani@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-38126-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38125-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gingerjzllee@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_NONE(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org,linuxfoundation.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 7A17E5EEA05
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 22CA15EECD2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-In yurex_disconnect(), usb_set_intfdata(interface, NULL) was called 
-before usb_deregister_dev(interface, &yurex_class).
-This opens a race window with usb_open() in the USB core:
+On Wed, 27 May 2026 18:21:00 +0200, Chen-Yu Tsai <wenst@chromium.org> said:
+> On Tue, May 26, 2026 at 11:48=E2=80=AFAM Bartosz Golaszewski <brgl@kernel=
+.org> wrote:
+>>
+>> On Sun, May 24, 2026 at 10:06=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.or=
+g> wrote:
+>> >
+>> > > >
+>> > > > I expect some discussion on this patch, because a) it adds some
+>> > > > OF-specific code into an otherwise generic (core) driver, and
+>> > > > b) it doesn't yet handle USB 2.0 / 3.x shared ports; it ends up po=
+wering
+>> > > > on the port twice, which negates the port reset part.
+>> > > >
+>> > >
+>> > > I understand that you do this because the port device has no OF node
+>> > > assigned. If we wanted to call pwrseq_get() for the port device, is
+>> > > there really no other way to associate it with the correct pwrseq
+>> > > provider?
+>> >
+>> > I suppose we could tie the "port@X" node to the usb port device, but
+>> > AFAIK no other subsystem does this so we would be introducing a new
+>> > pattern.
+>> >
+>> > In the M.2 pwrseq driver, we would have to match by port node instead
+>> > of its parent device node. We may end up with different behavior for
+>> > the USB target vs the other targets.
+>> >
+>>
+>> I imagine, we can check the bus type of the parent device to know if
+>> this is USB?
+>
+> The "bus type" type is probably not exported. However since the DT bindin=
+g
+> explicitly says which port on the M.2 slot is for which connection type,
+> I think the matching can do a special case check for the USB port.
+> The next obstacle is that the target string is not given to the provider
+> match function.
+>
+>> > Also, the "port@X" nodes only exist for the OF graph connections to
+>> > connectors and/or muxes (this series doesn't deal with the latter).
+>> > For directly connected devices, there is a "device@X" child node
+>> > directly under the USB hub node. That node is what gets tied to the
+>> > the USB device.
+>> >
+>>
+>> Is this a problem? I don't think I understand what you're saying here.
+>
+> It shouldn't be. I'm just saying there would be different behavior on
+> the USB side for connectors vs onboard devices (like hubs) device nodes.
+>
+> I talked to Greg earlier, and he said not to touch the hub driver; the
+> hub driver should only deal with features from the USB spec. The
+> "onboard USB devices" driver is what should be used. And this would
+> be a proper case of adding an auxiliary device to the M.2 slot driver.
+>
 
-  T0 (yurex_disconnect)               T1 (usb_open)
-  --------------------------           -------------------------
-  usb_set_intfdata(iface, NULL) [t0]
-                                       fops = usb_minors[minor]  [t1]
-                                       /* fops still valid here */
-  usb_deregister_dev()
-    usb_minors[minor] = NULL   [t2]
-                                       file->f_op->open(inode, file)
-                                         yurex_open()
-                                           dev = usb_get_intfdata() [t3]
-                                           /* dev is NULL! */
+The onboard USB device is what initially inspired the PCI pwrctl code so it
+doesn't surprise me we circle back to it.
 
-Because t0 precedes t1 precedes t2 precedes t3, T1 can obtain the
-file_operations pointer for the device (t1, while the minor is still
-registered), then continue into yurex_open() where it calls
-usb_get_intfdata() and gets NULL back, leading to a NULL dereference.
+> However this seems to completely decouple the power sequencing from the
+> USB core. Take the USB A connector for example, it was recently added to
+> the onboard USB devices driver. However the connector has a device node
+> that is not a child node of any USB host controller or hub; it is connect=
+ed
+> through OF graph. At the same time, since it typically sits at the top
+> level of the device tree, a platform device is directly created and the
+> driver subsequently binds to that device. This is totally different from
+> how the hub and other directly connected onboard USB devices work. In
+> the onboard device case, the device node is a child node of the USB hub
+> or controller, and the corresponding platform device only gets created
+> when the USB hub driver probes, thereby sort of tying it into the USB
+> device topology.
+>
 
-Fix the race by calling usb_deregister_dev() first, which removes the
-device from usb_minors[] before the interface data pointer is cleared.
-Any concurrent usb_open() that arrives after usb_deregister_dev()
-returns will fail to look up the fops and will never reach yurex_open().
+Which is precisely what we do for PCI pwrctl. Though I'm not sure how we co=
+uld
+replicate this behavior without touching the hub driver.
 
-Reported-by: Junzhe Li <ginger.jzllee@gmail.com>
-Closes: https://lore.kernel.org/linux-usb/2026042718-unwieldy-dicing-626f@gregkh
-Signed-off-by: Junzhe Li <ginger.jzllee@gmail.com>
----
- drivers/usb/misc/yurex.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> If the power sequencing ends up not connected to the USB subsystem, then
+> maybe the M.2 slot driver could just check if the USB port (port@3) was
+> used, and just enable the USB / BT pwrseq target at probe time? That
+> would mean less changes needed.
+>
 
-diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
-index 7a482cdee1e9..136272ac24ba 100644
---- a/drivers/usb/misc/yurex.c
-+++ b/drivers/usb/misc/yurex.c
-@@ -310,11 +310,12 @@ static void yurex_disconnect(struct usb_interface *interface)
- 	int minor = interface->minor;
- 
- 	dev = usb_get_intfdata(interface);
--	usb_set_intfdata(interface, NULL);
- 
- 	/* give back our minor */
- 	usb_deregister_dev(interface, &yurex_class);
- 
-+	usb_set_intfdata(interface, NULL);
-+
- 	/* prevent more I/O from starting */
- 	usb_poison_urb(dev->urb);
- 	usb_poison_urb(dev->cntl_urb);
--- 
-2.34.1
+That sounds sane to me.
 
+Bartosz
 
