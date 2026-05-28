@@ -1,166 +1,168 @@
-Return-Path: <linux-usb+bounces-38120-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38121-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CBPAAT/uF2p8VwgAu9opvQ
-	(envelope-from <linux-usb+bounces-38120-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 09:26:55 +0200
+	id 2MIbA4v6F2oWXwgAu9opvQ
+	(envelope-from <linux-usb+bounces-38121-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:19:23 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A18EC5EDA54
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 09:26:54 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 996B95EE711
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:19:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3CA023186E40
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 07:23:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3C8483013B8E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 08:19:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DEEF32D0CF;
-	Thu, 28 May 2026 07:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C212D378D70;
+	Thu, 28 May 2026 08:19:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cLeGCz2a"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="f8a4FuBJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17602302165;
-	Thu, 28 May 2026 07:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B41E314D07;
+	Thu, 28 May 2026 08:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779953026; cv=none; b=K3iAskE0zxikRx1Jwv+tgsha2y6mI8xrmRTDtFlU0pG9Z5cMi7rp5Iy3erIJ6izmN9WXc0UPlsaA0Dq1NecRzDoWy7YejczkHm1eXf8JF1UE3/6oxSTl1i/4Q3qqvVEMjcV4C7JHrDEuR4UDJ55fSqSUuBJmm6eV4GJURMIgcSY=
+	t=1779956357; cv=none; b=TtwS5fmVC7WwObzdCD3s0UN+zniHycTb1Qxi3obhdyDcEJEZxeKX+Vus2A1mFn56xeSr1koy1Tqukolt3qML1uUAlXZUnhcoFICLJe5wALtjgjR+R7IDcODx5czYWYlW5omG7AWvofLOowWxQzUoV5WMVFB08Zj6nfcdceJ9tJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779953026; c=relaxed/simple;
-	bh=Zy5v+QiVqPaiWY6X6etBKWrLzURWCG9Oa3/2r6VHqGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lvFXGZfbKCxw+txcvM5CVi/z8ZjpG82p8YMufNuW10o4yhU7e/SaTPvfJsmerkSvBbjsG8drBB793srLHkS4uR+PW1KbF21HRBk3Vjr58VGjpZu6S+qJTZuXqLaXJnL7+JJYIfoQnN/dSrIC2VJyBVRnNse0NWFtiry+dyZ5IPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cLeGCz2a; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6955A1F000E9;
-	Thu, 28 May 2026 07:23:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779953024;
-	bh=geJsUxa2oXdzbMeenZeNEivegTBsADtrNWwGH2tR0dg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cLeGCz2aaMXcd769PORmRrjGRS4DeiTKAZven9bOCaW52bbBf85xPxbUDCC7TQETM
-	 p7R2w5KQwvCjZq71l4Kp/3zQj/8zHgjDS2eWnEzmCV82WQPtXFRH64k8UXgnDvIlNP
-	 ydjCgJ3cbf3dYFP3mg4ozvflzMdPOKVXOQd0fp2/Sci//4BU59oK5o5pXanxe8VjnI
-	 Xu8wGwFxKj3P+9qhB7sCdB0TcwqfA9aMmn9TC2P3x8keJt320uCsN4KGb5SlQv9kZt
-	 Liudc5QcUE+9SNYKJVMk5QGiZn+rOUtyJHXmnT+jkIJfymKkJkEOYl7PWONd6V9egN
-	 dseUkrDQ1rcqg==
-Date: Thu, 28 May 2026 15:23:39 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>, Xu Yang <xu.yang_2@nxp.com>,
-	Peng Fan <peng.fan@nxp.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] usb: chipidea: tegra: Avoid controller/PHY init
- if bus is externally controlled
-Message-ID: <ahfte9D4TsbgzFQx@nchen-desktop>
-References: <20260523083013.46372-1-clamor95@gmail.com>
- <20260523083013.46372-4-clamor95@gmail.com>
- <CAPVz0n0jpnPFh0f=CWHufzZ+e24xsem5DFTKdFu6sczCLk08Fg@mail.gmail.com>
+	s=arc-20240116; t=1779956357; c=relaxed/simple;
+	bh=nT7vtUkFVweXht3a+NAlINTXWJpVZFgV0zikEEBICyQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=jdfthhDzlrTYb4Pnc/+OCqerPFrRv1i29tzJURV+SNCKHMvg+cmyJrOFYStoPqkSrfMJ4ZIXzdMwFaALVdL47+1/po2KrhoH+rtCwSt2XR/QbiSQILNgPrXRCHhCqtp/aDqLv3PC9dflOzc6F6HlfbO70AVmTT4H+QBXrpRyeJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=f8a4FuBJ; arc=none smtp.client-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1779956344;
+	bh=KWr/K5mP2Y58tJXieQkFjga7owiMuJEyUtjw67tfJ78=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=f8a4FuBJXZg4BEBiUyFpKXX4tG4lbgfol21Tg9Gn9ZSQJ94mHtpTAAOTVhYOuZGsk
+	 XBkMyeEOs9WIplPDjI3JF0WqhHAIuvZyPWY/b+stGa6mV6jeyiLcqD9OOGTCza4PRA
+	 wVo1DZW+zEB5mZzXKniz/052ovWwbofTZaPF8fW4=
+X-QQ-mid: zesmtpgz3t1779956333t6885fce0
+X-QQ-Originating-IP: xIOo1WjjSFuC3rAr/TU7gIVukxxul7/cimwAROAwV+o=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 28 May 2026 16:18:51 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 434068552171632037
+EX-QQ-RecipientCnt: 15
+From: Haowen Tu <tuhaowen@uniontech.com>
+To: rafael@kernel.org
+Cc: lenb@kernel.org,
+	pavel@kernel.org,
+	linux-pm@vger.kernel.org,
+	laurent.pinchart@ideasonboard.com,
+	hansg@kernel.org,
+	mchehab@kernel.org,
+	linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	stern@rowland.harvard.edu,
+	oneukum@suse.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@uniontech.com,
+	Haowen Tu <tuhaowen@uniontech.com>
+Subject: [PATCH v2 0/2] PM: hibernate: skip UVC resume after snapshot
+Date: Thu, 28 May 2026 16:18:38 +0800
+Message-Id: <20260528081840.3528089-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20260428080513.1833515-1-tuhaowen@uniontech.com>
+References: <20260428080513.1833515-1-tuhaowen@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPVz0n0jpnPFh0f=CWHufzZ+e24xsem5DFTKdFu6sczCLk08Fg@mail.gmail.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: NrJTIfBrO/QTz6vBxvXQhyPUzTGs9U+QQK/Rvi4nVcW5zeshmCiHBukq
+	e7rkU1ah9+FUFkx0Cw+Kc9UwpbFeKUlGUeUiGo5RTR/uoTybXKFkjW90oEGDGMQ9DszJPSN
+	TK+BVnnAIz2Uzl2TJdRxFDqh+ijBxJTdFyTG0PdMCO7Rl46zJPglBCj9rZPGuCxRh/rIelT
+	2e0K3d26/lil+cibGhp0mUL49kScd3EfEmz0F1y2zu3f+3VVHAJ3hb+YDwD/pHM4DHfG+jH
+	EmbbRKctBpUpci+Y2fMpodA8NhE6Y588ap/z9LM2DSuGulEXaqqFkqndqeo4Gk7yQr8g9ff
+	lqsPg6OQdIbxcLNPjZmzQv1HkfCww/zrbHMdeJsV8EIUoh8I/rHxGKJTMwvfmnaiLtX/Qb1
+	g7sGn+lNEISk6ziYiRPUJdrjdNg0qwZNGFgFwwv49zCfBnG+6nq221i0Nb9QYZ2Ca33n6GS
+	SL0has35DXfq54qViidPWDIeohE8fIqA+tNDxmByuOevFpUnC1rkNKxjkGjxwZW/N+WapqS
+	IPwTxYGhBQvvZteVgMLP/38ZU3CZ2BI1PTY5xGztsOSYcLH58f7ZJcIfFZ7dPgbpqfXNiH6
+	NnZNV6aznxJ+w6sRKMihN0jDXU9P8lcjpvYDuAnFHCFk4D9qFCM+oHhDwEf4fiVXjF0+SKT
+	uYV36KrvOtozSQw0inZn0cySbhKIeER8Lamlghp8gRhY4xKw87FENpu3K7e0E11dsBhBts/
+	D/rfS7AGKLRktbnpAP4Mf4GXmZQTZiEO5+3RVNIiexq0h1aUA8YXz/A9xeOJfYqpJC4hETU
+	QaYDzPeg6av6VeOX9ZKmZtA7s/iXCMQ9rMErRakDiJa8GVHOnB84/+NtscmXKqwCFgqey5y
+	ah6bExJvSFm5yCdG4zZ+X6QaAg9/OcQQkK9XwmnRfca8DHaXpfSxE7h0eN3KQE0GfKPib8U
+	tj25Fx+549adXw7HWgGqZs9qzgw5APlaUKlHblLg3hOBKaicO15xVMdW4qXL8aBGjU2uBBw
+	ArQhLWumMWZ/Sdo1LNIpbVe+J/oIT7fWFroBdViQ==
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+X-QQ-RECHKSPAM: 0
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38120-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-38121-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[tuhaowen@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: A18EC5EDA54
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:mid,uniontech.com:dkim,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 996B95EE711
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 26-05-25 17:43:42, Svyatoslav Ryhel wrote:
-> сб, 23 трав. 2026 р. о 11:30 Svyatoslav Ryhel <clamor95@gmail.com> пише:
-> >
-> > If the USB controller and PHY are externally controlled, then the
-> > registration of the controller and the PHY initialization should be
-> > skipped, since these configurations must be done by the device that
-> > controls the bus to work correctly.
-> >
-> > Since USB PHY in Tegra controls clock gates required by the controller
-> > itself, Chipidea core PHY management is not suitable for Tegra.
-> >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
-> >  drivers/usb/chipidea/ci_hdrc_tegra.c | 32 ++++++++++++++++++----------
-> >  1 file changed, 21 insertions(+), 11 deletions(-)
-> >
-> 
-> Hello there!
-> 
-> This patch is required because I could not find an acceptable way to
-> manually remove and add a platform device. I will explain the details
-> below and hope that someone can give me some suggestions on how to
-> handle this situation.
-> 
-> The Tegra USB controller is the root node, and it is bound and probed
-> automatically. This is perfectly fine for ordinary use cases. On the
-> other hand, the modem used in Tegra 3 devices requires the USB
-> controller to be registered at the exact moment when the modem is
-> ready to handle USB. If this window is not respected, the modem will
-> not expose the USB device, and all you get is a cascade of enumeration
-> failures.
+During hibernation, after the memory snapshot has been created, the
+kernel briefly resumes devices with PMSG_THAW to write the snapshot to
+storage before powering off.  USB driver resume callbacks do not receive
+the hibernation PM message, so uvcvideo cannot distinguish this transient
+image-write phase from the final restore path.
 
-Could you add USB controller device node as the child node for modem,
-and dynamic creating USB controller device during modem probe?
+This series adds pm_hibernation_snapshot_done() and uses it in uvcvideo
+to avoid reinitializing the camera during the image-write phase.
 
-Peter
+This is not intended to make every leaf driver special-case hibernation
+THAW.  A generic USB-core skip would not be safe because some USB
+interfaces may be part of the storage path, or otherwise be required by
+dependencies during image writeout.  The helper is an opt-in mechanism
+for drivers with a concrete reason to avoid reinitializing hardware in
+this transient phase.  In this case, uvcvideo has a user-visible side
+effect, the camera indicator LED, while the camera is not part of the
+image writeout path.
 
-> 
-> The solution as I see it right now: The modem has a power sequencing
-> driver, and the USB controller can either be autoprobed and
-> unregistered in the pseq probe and then registered/unregistered in the
-> on/off sequences, or it can have a status = "reserved" set in the USB
-> node and manually register/unregister it during the pseq on/off
-> sequences. This would eliminate the need for this patch.
-> 
-> The problem I have faced is that I cannot properly and manually
-> control the USB controller driver to bind -> probe it and remove ->
-> unbind it from within powerseq.
-> 
-> Help is appreciated. Thanks!
-> 
-> Best regards,
-> Svyatoslav R.
+Changes in v2:
+- Rename pm_hibernation_storing_image() to
+  pm_hibernation_snapshot_done().
+- Clear in_suspend before releasing snapshot memory on the hibernation
+  failure paths and after swsusp_write() returns.
+- Update the uvcvideo call site for the new helper name.
+
+Haowen Tu (2):
+  PM: hibernate: add pm_hibernation_snapshot_done() helper
+  media: uvcvideo: skip resume after hibernation snapshot
+
+ drivers/media/usb/uvc/uvc_video.c | 12 ++++++++++++
+ include/linux/suspend.h           |  2 ++
+ kernel/power/hibernate.c          | 31 +++++++++++++++++++++++++++----
+ 3 files changed, 41 insertions(+), 4 deletions(-)
 
 -- 
-
-Best regards,
-Peter
+2.20.1
 
