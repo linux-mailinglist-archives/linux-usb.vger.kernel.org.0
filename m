@@ -1,332 +1,319 @@
-Return-Path: <linux-usb+bounces-38136-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38137-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CI2GKnEtGGqyfQgAu9opvQ
-	(envelope-from <linux-usb+bounces-38136-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 13:56:33 +0200
+	id 6H2KMgRkGGpEjggAu9opvQ
+	(envelope-from <linux-usb+bounces-38137-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 17:49:24 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D7995F1AA8
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 13:56:33 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 710295F49EB
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 17:49:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AE59030C40D2
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 11:52:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DC5333056BEB
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 15:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5D4E3E5576;
-	Thu, 28 May 2026 11:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F883EF66B;
+	Thu, 28 May 2026 15:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6WDVu7K"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="Gv+tohvh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B064030BF67
-	for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 11:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223CB2EBB9E;
+	Thu, 28 May 2026 15:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779969150; cv=pass; b=osLdndptUlzM6wQEz0fZ5gtxMdK3OQuX31uWNkPG6tIf5UZmNVTBCj9p/ay5FHYrEl5UE3/7ZLo/xk9y0XorrhHVbAJMCnVPt6qR+2u8d/yUsmOYoebCY52Ix8/0rDfjuYnqCG5URCAK3Gk8xMMyQePXNTjsWFiihfDpBHs2Dgw=
+	t=1779982700; cv=pass; b=b2nEiAS0zONc2b2/iKT70DezN/ps/uu2LqFTCU0FyDqQAhkaEQMeyPigjF0DFHo/ozUiY4YlwyCf2J6M+uX5vHxRSyo6nyRZacWU303he/RUhHoYrUPqrdUast6m3OSdIsuHRLjfzbmajQeb4VCtiBdC0dIVARDqWCPjc1nXebo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779969150; c=relaxed/simple;
-	bh=JcjVS6KyLKbZqopsqn3BOtxXjVAlpBXYbyokr+pvFTg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LA5frju4BrReROhKnhrYJGCwSLTGRTj7lUpDZk+kRRav8LjtHP3VVvolsa+ZlbXq8h8XWEJlm3lLBACyzTX0TjuDKD1ow8FfIDqjp2H93gV4eeANV8JceFqZpSTyKNqSzwd/je4R/IHeLSZcZ16Vo9lBMJHmckzFSuEPyYPn4K4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d6WDVu7K; arc=pass smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-8b1f2b7f1bcso191843886d6.1
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 04:52:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779969148; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aAvnlllkRDYHciEHs5wNaTrYyu+oGti2lDVH2d5GaWdBw5MmouDgZFdF8uKm6rsx0m
-         0Bqs2fqtG1Zo68fVPBQ3Yaxi60UTjJKR8AwwjwbjcX2lqsnH/dsJ8jtC407yCf56TnW0
-         CA1p1Wra1D1dTvXmhNVut215zjTKU3iR5jwJFZ2vu4Ce6R7i55/5QOEd5RTYF7eTfCuB
-         OLE3oDDqeXqzWeTAQAiM2HOPQTNmakjdf7yCWIH+sjfSiWctEWpgO0UOgjYHRv2yce8E
-         1e5Ug7ZAQ1qSTUmipxVFuP7DXAQtH+fnAE8IhSX1zhuhG335FvyVpn2zQPkh1JZolExE
-         qZxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JeDf1nO8AnPCJfXXSbBMPR0RtNsl6Tp8g3d1EFDsX9M=;
-        fh=DJ99Es+DGk7nlHYh/Yr2PN+7Wb/rBr8WXQQWckgdMNc=;
-        b=f9d7SEHu8m6SeEP/ReDrs+Tk1J3vPZ8hqIuprbrC296MdmfrjvaOzLUA0cEb/YLrPl
-         0ArG/v/ddUPas3ZQiOdI3uEawaTKtys5CisAM5Pwfpu88KUA48vKnUhqLQJ0ZO8eUDIa
-         rlPOfqXUdYCqCzsLGWc6271m0ZA0J/8Rbx8k4Q+Az/UblpuOpqqPflSyHugphyqJYiIQ
-         RRJevfHFuDW05foI34/Bt71OTIoFYUyIKOJUiqn1xrS96gbSuoBjdaXsxa8YPPpz9cd2
-         9zRqQ1CmjmycCXISi3D/Uz7Hqm/uf4/g3C9e+96n3kpS/9GqrmBzq0gkd22MJGrFh/Gr
-         IBPw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779969148; x=1780573948; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JeDf1nO8AnPCJfXXSbBMPR0RtNsl6Tp8g3d1EFDsX9M=;
-        b=d6WDVu7K7PUwv7kdFFi+xV0pdaAIybL1Hr99dZCY48WDXPlc482ljW2LHwT76Q8b0Z
-         9xj7RUiWkWqmg7o/vWeVHPa9P7CKLn9qsp+eFTiXCs2zALDdhq1ZG3/vB2/8WDT8N0Qg
-         XH6fPFEsV9R4PWifEdX5CNsCTa+e5G6HwE3lBJXjxEgXILi50P5mS7HA9Sk6RdLMzrwa
-         0F++IR2uLUoVbbXRrQHOC6mtClIjTT2YFRZiRuN/jhtYqL5crNPZ6gXeblNAEeRV0luD
-         cTQ+oUX4s/5HIOwv8qXvpK9Xv9LhvTr7hj/zABtdWyv9V3HJSaYH9HCHga2iILbwy7i2
-         fHPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779969148; x=1780573948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JeDf1nO8AnPCJfXXSbBMPR0RtNsl6Tp8g3d1EFDsX9M=;
-        b=Zd3mPkko20rj/nD+Cp9R0mLwEM3bPlwUNRTFtSviMoalMleNNmAbrQ8I8hnAumd5+B
-         uiNvKxPA1LQG+Fv3vHi/S6CYr9nME/DjcTIO62cBJQfhwjME5rhKP9hVM90zc7lgcwzI
-         MATC4aQG7pmFSH80/TqQsB59f5H3vQy+UBRB2TW02AI4K4Bu1yekLMhlaFHUsM1aMecb
-         Dxo1AIpLYkWTg/zNqroRdUzdVFfm8OXPO8VtcpuFKFKZEIWmiFYYg138hRdDT9PhTBiJ
-         s2ApSxVrZZLPD2d7qxsHYwyDrYeIp9EghWmfSVYRFrOUfsZn449neP1gJKzst/WRE+or
-         9qTA==
-X-Forwarded-Encrypted: i=1; AFNElJ+Mz4kA3t7CHpt9bVXpUGdOPqMs7SuBHIfiGc7orGjGzT7f+Fi4MqptQp+lwhB/Yuf4QEhMCb9xCFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwP0GdjeLTY+gSUZeA+16wUW9/7wN0fEb+HVFTrw+ubvMG9WlXl
-	Lb5wU3XWwGB9gqoHwtAafesx7GxAO/wLXYzFOCXcXmm/Y4TjAAnyj09LJ+xCIFWEtOeusNMp2ZT
-	A8Z6TkkNOoQnKcX4P/ep4JYtoWpU7LHE=
-X-Gm-Gg: Acq92OEmVfF/icRnnnGkRHDL/E6mNTNOW/zMh3Kdw98xe6E9YtUmYK+8PfG6jJ/Q7pS
-	9U9Lfg3/o8I2/aHjQju8L+oosjb23PI94Z5mEM1jbUUGYOxFAWmJr+YebYecuig5iqLu8RUf+/1
-	E5eVLEpJCsYKRDb0NXRUCtu3LoP5Ar3bSPDCntT3qFGKfREk5QCAmWPRIKkvxRi326P4uc5DQns
-	Xj456/JsyHt7rGB3Gyh8Wf3JobVSLbRtPTBvhM0Kd0DYygvM8xZPlx3JDxpieI+6goYB8aBbzOv
-	OUoBOpAXdIYSvrvhSjypzAm1a//TNywKPp7dgU9EQ0EMfDkX
-X-Received: by 2002:a05:6214:2607:b0:8cc:d74a:8dff with SMTP id
- 6a1803df08f44-8ccd8abed09mr13579896d6.5.1779969147600; Thu, 28 May 2026
- 04:52:27 -0700 (PDT)
+	s=arc-20240116; t=1779982700; c=relaxed/simple;
+	bh=61/ijVewiKf3w7vgF/KrUdtuG2oBcmlFlPpRG0y5IEs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=orF7bA16qH6p6/G2gEdoXaWsS9EQOEGsvVMmgnE/RAsOJf/7CLtNzP0WVJi2CUMa9qp7PTjMXCiZdtVZ/CDPFjrsMz2Dnf2pvQRI6FUjMcs7bMYmQJqTJYgSbaa4DXTU0nDSuJ+Q1WOzfXt0VcF+JZ4ls5KicXikm1mAXDFmg94=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=Gv+tohvh; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1779982643; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=UmekvXYN7RRSnHTCLJ9nmNGs86iZ9e9cQ/O+BAx9wNHc7Rf2nDJ1pbe+O+WB7u4hfl8CrX1IcE7UhWWdqTV2PvlYIX+fVS4VqW2wa++vgK9bgyVwTECevZ0liE7xYX8bfXvuXYYM/fXbM98eXNxP+oA4Ifc9518B9Vvv86haNhY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1779982643; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=hx6IngChPzu8wVFfFvPOU9rvJKQ/Ut7ytcKKn5x2rGo=; 
+	b=Yztq4r7PXpI/bsIIkuyyunCgThBDvC8hO44keh1DfewMNqOrW9KJ/qcikqsRMTUjXnv4vy6JSdcOTUfqjE6eiPxM+zOLkq4njm2IGn0WIpmUjSIFnzMMz3pOhVgaDqUYOMk1mFsPb7NgiscAh1rT01aqadQEENOeecYntiuoLEo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1779982643;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=hx6IngChPzu8wVFfFvPOU9rvJKQ/Ut7ytcKKn5x2rGo=;
+	b=Gv+tohvhN+Q91PScXFZSx7Yqg3dd2TPLxKiFsIK9A7Qx4du0tJ3PLa19oqdrMlG/
+	J8zxhIsPW3tBY5qn1bHUw5Iot5mzRvPkRA3IR4fnluUtb+DvGo6Z/SJdcHgtH3hrQWK
+	LtrRp0QQyYArHz1vZJNxzlzeTk13hX0E1izuf6BM=
+Received: by mx.zohomail.com with SMTPS id 1779982641704569.2331869375547;
+	Thu, 28 May 2026 08:37:21 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Peter Chen <hzpeterchen@gmail.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>, Hugh Cole-Baker <sigmaris@gmail.com>,
+ dri-devel@lists.freedesktop.org, Chaoyi Chen <kernel@airkyi.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ dri-devel@lists.freedesktop.org, Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Subject:
+ Re: [PATCH v15 1/9] drm/bridge: Implement generic USB Type-C DP HPD bridge
+Date: Thu, 28 May 2026 17:37:10 +0200
+Message-ID: <q6ufdWF5QJ60i9KlIiE_AA@collabora.com>
+In-Reply-To: <20260304094152.92-2-kernel@airkyi.com>
+References:
+ <20260304094152.92-1-kernel@airkyi.com>
+ <20260304094152.92-2-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+_z3hRjPnQOrEp7uXsNsu6wzqQp9O6FT18i=XcSC7k74Xd2QA@mail.gmail.com>
- <20260330020749.18fbe433.michal.pecio@gmail.com> <CA+_z3hRTD-QAgv3jZhOZUUPA0sNZ8946jfYwYsZ=RnQJ0LG7cw@mail.gmail.com>
- <20260404152438.582f0451.michal.pecio@gmail.com> <CA+_z3hTMfggtv+u_A_SRyb2FRzVjm=Nav5NRCTuhmEthb8x0jw@mail.gmail.com>
- <20260509180603.6f67c9d8.michal.pecio@gmail.com> <CA+_z3hT_n09fAszT+DkoTHLzracB7fQZwkiiTxGGBJxhFcD8hg@mail.gmail.com>
- <20260512120334.4eef3d0b.michal.pecio@gmail.com> <fc2d9862-6c46-4161-8fd5-68b9e6c2e8bb@linux.intel.com>
-In-Reply-To: <fc2d9862-6c46-4161-8fd5-68b9e6c2e8bb@linux.intel.com>
-From: Martin Alderson <martinalderson@gmail.com>
-Date: Thu, 28 May 2026 12:52:16 +0100
-X-Gm-Features: AVHnY4KsOd5qfNreK3dMVzO5r6Xi1Bh4TRNDJmm76iF9iWI0_UR3eEaXbJzg6xc
-Message-ID: <CA+_z3hRdXfZm2ziCmsXEDEY-i8XJjxnw2oe6mkTf+O+B0fx91A@mail.gmail.com>
-Subject: Re: xhci_hcd: AMD Raphael/Granite Ridge USB 2.0 xHCI [1022:15b8] dies
- on resume from suspend
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Michal Pecio <michal.pecio@gmail.com>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	CTE_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38136-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-38137-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[linux.intel.com,linuxfoundation.org,oss.qualcomm.com,gmail.com,bootlin.com,kernel.org,sntech.de,rock-chips.com,intel.com,linaro.org,ideasonboard.com,kwiboo.se,suse.de,ffwll.ch,google.com,manjaro.org,cknow.org,lists.freedesktop.org,airkyi.com];
+	RCPT_COUNT_TWELVE(0.00)[42];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[martinalderson@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mail.gmail.com:mid,intel.com:email]
-X-Rspamd-Queue-Id: 3D7995F1AA8
+	FROM_NEQ_ENVFROM(0.00)[nicolas.frattaroli@collabora.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[collabora.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,collabora.com:email,collabora.com:mid,collabora.com:dkim]
+X-Rspamd-Queue-Id: 710295F49EB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Caught a fresh failure on kernel 7.0.9-205.fc44.x86_64 with xhci_hcd.dyndbg=
-=3D+p:
-
-Timeline (single suspend cycle):
-
-  11:09:45  xhci_suspend: stopping usb1/3/5 port polling
-  11:09:50  xhci_hcd 0000:0f:00.0: xHCI host not responding to stop
-endpoint command
-  11:09:50  xhci_hcd 0000:0f:00.0: xHCI host controller not
-responding, assume dead
-  11:09:50  xhci_hcd 0000:0f:00.0: HC died; cleaning up
-  11:09:52  xhci_hcd 0000:0e:00.3: port resume event for port 1
-(keyboard wake)
-
-5-second gap between suspend start and HC died - the stop endpoint
-timeout you predicted.
-
-Command ring state at death:
-
-  0xffffe070: Stop Ring Command: slot 1 sp 1 ep 1 flags C   (completed)
-  0xffffe080: Stop Ring Command: slot 1 sp 0 ep 1 flags C   <- dequeue (stu=
-ck)
-  0xffffe090: empty                                          <- enqueue
-
-  enqueue - dequeue =3D 1 TRB pending
-  USBCMD =3D 0x0   USBSTS =3D 0x1 (HCHalted)
-  port01 portsc =3D 0x663  Link=3DU3 CCS PP PED
-
-
-I have the full snapshot: command-ring/event-ring TRB dumps, all xhci
-debugfs registers, dmesg with full dyndbg trace, and the kernel
-journal for the cycle. I'm not sure the best way to send it though if
-you need it?
-
- Martin
-
-
-On Tue, May 12, 2026 at 3:01=E2=80=AFPM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 5/12/26 13:03, Michal Pecio wrote:
-> > On Sun, 10 May 2026 17:29:26 +0100, Martin Alderson wrote:
-> >> 1. The timing is during suspend in every single failure I have logs
-> >> for. I went back through 7 weeks of persistent journals and pulled the
-> >> context around every "HC died" event. All 9 failures show the same
-> >> sequence:
-> >>
-> >>    xhci_hcd 0000:0f:00.0: xHCI host not responding to stop endpoint co=
-mmand
-> >>    xhci_hcd 0000:0f:00.0: xHCI host controller not responding, assume =
-dead
-> >>    xhci_hcd 0000:0f:00.0: HC died; cleaning up
-> >>    PM: suspend devices took 5.5--6.1 seconds      <-- elevated
-> >>    amdgpu 0000:03:00.0: MODE1 reset
-> >>    ACPI: PM: Preparing to enter system sleep state S3
-> >>
-> >> So it's reliably during suspend, before S3 entry, and the elevated
-> >> "suspend devices took" matches the 5s xHCI stop-endpoint timeout. A
-> >> clean suspend on the same boot takes ~0.46s.
-> >
-> > The S3 state probably doesn't matter, chances are that it would also
-> > happen with s2idle or hibernation.
-> >
-> > Could you enable dynamic debug before every suspend (or permanently
-> > on every boot) and collect a dmesg log of this happening again?
-> > And maybe also a snapshot of debugfs directory after resume but before
-> > unbinding xhci_hcd. These may contain clues what triggered it.
->
-> It's possible there is a race between queuing a command and suspend.
-> It looks like nothing is preventing a new command from being queued while
-> suspend stops the host from running, thus causing commands to timeout.
->
-> Suspend isn't checking if there are pending commands, or if command timer
-> is running either.
->
-> I wrote some debugging code, can be found in my debug_hc_died_cmdring_rac=
-e branch:
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git debug_hc_di=
-ed_cmdring_race
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=3D=
-debug_hc_died_cmdring_race
->
-> If it prints
->    "Can't queue command, xHC not accessible (stopped?)"
-> or
->    "Suspending and stopping xHC with pending command(s)!!!"
-> Then we have a queue_command - suspend race.
->
-> Code below for reference
-> Mathias
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index e47e644b296e..50ce4a4a7fe3 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -4353,6 +4353,7 @@ static int queue_command(struct xhci_hcd *xhci, str=
-uct xhci_command *cmd,
->                          u32 field3, u32 field4, bool command_must_succee=
-d)
->   {
->         int reserved_trbs =3D xhci->cmd_ring_reserved_trbs;
-> +       struct usb_hcd *hcd =3D xhci_to_hcd(xhci);
->         int ret;
->
->         if ((xhci->xhc_state & XHCI_STATE_DYING) ||
-> @@ -4362,6 +4363,14 @@ static int queue_command(struct xhci_hcd *xhci, st=
-ruct xhci_command *cmd,
->                 return -ESHUTDOWN;
->         }
->
-> +       if (!HCD_HW_ACCESSIBLE(hcd)) {
-> +               xhci_err(xhci, "Can't queue command, xHC not accessible (=
-stopped?)\n");
-> +               xhci_err(xhci, "called by %pS from %pS\n",
-> +                        __builtin_return_address(0),
-> +                        __builtin_return_address(1));
-> +               return -ESHUTDOWN;
-> +       }
+On Wednesday, 4 March 2026 10:41:44 Central European Summer Time Chaoyi Chen wrote:
+> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+> 
+> The HPD function of Type-C DP is implemented through
+> drm_connector_oob_hotplug_event(). For embedded DP, it is required
+> that the DRM connector fwnode corresponds to the Type-C port fwnode.
+> 
+> To describe the relationship between the DP controller and the Type-C
+> port device, we usually using drm_bridge to build a bridge chain.
+> 
+> Now several USB-C controller drivers have already implemented the DP
+> HPD bridge function provided by aux-hpd-bridge.c, it will build a DP
+> HPD bridge on USB-C connector port device.
+> 
+> But this requires the USB-C controller driver to manually register the
+> HPD bridge. If the driver does not implement this feature, the bridge
+> will not be create.
+> 
+> So this patch implements a generic DP HPD bridge based on
+> aux-hpd-bridge.c. It will monitor Type-C bus events, and when a
+> Type-C port device containing the DP svid is registered, it will
+> create an HPD bridge for it without the need for the USB-C controller
+> driver to implement it.
+> 
+> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+> 
+> (no changes since v14)
+> 
+> Changes in v13:
+> - Only register drm dp hpd bridge for typec port altmode device.
+> 
+> (no changes since v12)
+> 
+> Changes in v11:
+> - Switch to using typec bus notifiers.
+> 
+> (no changes since v10)
+> 
+> Changes in v9:
+> - Remove the exposed DRM_AUX_HPD_BRIDGE option, and select
+> DRM_AUX_HPD_TYPEC_BRIDGE when it is available.
+> - Add more commit comment about problem background.
+> 
+> Changes in v8:
+> - Merge generic DP HPD bridge into one module.
+> ---
+> 
+>  drivers/gpu/drm/bridge/Kconfig                | 10 ++++
+>  drivers/gpu/drm/bridge/Makefile               |  1 +
+>  .../gpu/drm/bridge/aux-hpd-typec-dp-bridge.c  | 49 +++++++++++++++++++
+>  3 files changed, 60 insertions(+)
+>  create mode 100644 drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+> 
+> diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+> index a250afd8d662..559487aa09a9 100644
+> --- a/drivers/gpu/drm/bridge/Kconfig
+> +++ b/drivers/gpu/drm/bridge/Kconfig
+> @@ -30,6 +30,16 @@ config DRM_AUX_HPD_BRIDGE
+>  	  Simple bridge that terminates the bridge chain and provides HPD
+>  	  support.
+>  
+> +if DRM_AUX_HPD_BRIDGE
+> +config DRM_AUX_HPD_TYPEC_BRIDGE
+> +	tristate
+> +	depends on TYPEC || !TYPEC
+> +	default TYPEC
+> +	help
+> +	  Simple bridge that terminates the bridge chain and provides HPD
+> +	  support. It build bridge on each USB-C connector device node.
+> +endif
 > +
->         if (!command_must_succeed)
->                 reserved_trbs++;
->
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index a54f5b57f205..04279fbbe1dd 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -949,6 +949,34 @@ static bool xhci_pending_portevent(struct xhci_hcd *=
-xhci)
->         return false;
->   }
->
-> +static void xhci_dump_ring(struct xhci_hcd *xhci, struct xhci_ring *ring=
-)
+>  menu "Display Interface Bridges"
+>  	depends on DRM && DRM_BRIDGE
+>  
+> diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
+> index c7dc03182e59..a3a0393d2e72 100644
+> --- a/drivers/gpu/drm/bridge/Makefile
+> +++ b/drivers/gpu/drm/bridge/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_DRM_AUX_BRIDGE) += aux-bridge.o
+>  obj-$(CONFIG_DRM_AUX_HPD_BRIDGE) += aux-hpd-bridge.o
+> +obj-$(CONFIG_DRM_AUX_HPD_TYPEC_BRIDGE) += aux-hpd-typec-dp-bridge.o
+>  obj-$(CONFIG_DRM_CHIPONE_ICN6211) += chipone-icn6211.o
+>  obj-$(CONFIG_DRM_CHRONTEL_CH7033) += chrontel-ch7033.o
+>  obj-$(CONFIG_DRM_CROS_EC_ANX7688) += cros-ec-anx7688.o
+> diff --git a/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+> new file mode 100644
+> index 000000000000..d915e0fb0668
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+> @@ -0,0 +1,49 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+
+Having a copyright statement added here is likely required.
+Something like
+
+/*
+ * Copyright (C) 2026 Rockchip Electronics Co., Ltd.
+ *
+ * Author: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+ */
+
+will suffice. While I hope it's never relevant for a driver this
+small, explicit copyright statements in this form have a legal
+effect in some jurisdictions like the US, where by law it
+automatically dismisses the defense that the copyright holder
+wasn't known.
+
+> +#include <linux/of.h>
+> +#include <linux/usb/typec_altmode.h>
+> +#include <linux/usb/typec_dp.h>
+> +
+> +#include <drm/bridge/aux-bridge.h>
+> +
+> +static int drm_typec_bus_event(struct notifier_block *nb,
+> +			       unsigned long action, void *data)
 > +{
-> +       struct xhci_segment     *seg;
-> +       union xhci_trb          *trb;
-> +       dma_addr_t              dma;
-> +       char                    str[XHCI_MSG_MAX];
-> +       int                     i, j;
+> +	struct device *dev = (struct device *)data;
+
+Small nitpick: The explicit (struct device *) cast of data isn't
+needed here. Just
+
+    struct device *dev = data;
+
+will work fine. The benefit is that if the type of "data" ever changes
+(e.g. from void *data to const void *data) then we're not silencing
+a warning/error through an explicit cast.
+
+> +	struct typec_altmode *alt = to_typec_altmode(dev);
 > +
-> +       seg =3D ring->first_seg;
-> +       dma =3D  xhci_trb_virt_to_dma(ring->deq_seg, ring->dequeue);
+> +	if (action != BUS_NOTIFY_ADD_DEVICE)
+> +		goto done;
 > +
-> +        xhci_err(xhci, "Dequeue: %pad\n", &dma);
+> +	/*
+> +	 * alt->dev.parent->parent : USB-C controller device
+> +	 * alt->dev.parent         : USB-C connector device
+> +	 */
+> +	if (is_typec_port_altmode(&alt->dev) && alt->svid == USB_TYPEC_DP_SID)
+> +		drm_dp_hpd_bridge_register(alt->dev.parent->parent,
+> +					   to_of_node(alt->dev.parent->fwnode));
 > +
-> +       for (i =3D 0; i < ring->num_segs; i++) {
-> +               for (j =3D 0; j < TRBS_PER_SEGMENT; j++) {
-> +                       trb =3D &seg->trbs[j];
-> +                       dma =3D seg->dma + j * sizeof(*trb);
-> +                       xhci_err(xhci, "%pad: %s\n", &dma,
-> +                                xhci_decode_trb(str, XHCI_MSG_MAX,
-> +                                                le32_to_cpu(trb->generic=
-.field[0]),
-> +                                                le32_to_cpu(trb->generic=
-.field[1]),
-> +                                                le32_to_cpu(trb->generic=
-.field[2]),
-> +                                                le32_to_cpu(trb->generic=
-.field[3])));
-> +               }
-> +               seg =3D seg->next;
-> +       }
+> +done:
+> +	return NOTIFY_OK;
+> +}
+
+Nitpicking: the "done" label and "goto done" here is redundant.
+You could remove the label and replace the goto with another
+"return NOTIFY_OK;". There's no functional change here though.
+
+> +
+> +static struct notifier_block drm_typec_event_nb = {
+> +	.notifier_call = drm_typec_bus_event,
+> +};
+> +
+> +static void drm_aux_hpd_typec_dp_bridge_module_exit(void)
+> +{
+> +	bus_unregister_notifier(&typec_bus, &drm_typec_event_nb);
 > +}
 > +
->   /*
->    * Stop HC (not bus-specific)
->    *
-> @@ -999,6 +1027,12 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wak=
-eup)
->         /* step 1: stop endpoint */
->         /* skipped assuming that port suspend has done */
->
-> +       /* Check if command ring is empty */
-> +       if (!list_empty(&xhci->cmd_list)) {
-> +               xhci_err(xhci, "Suspending and stopping xHC with pending =
-command(s)!!!\n");
-> +               xhci_dump_ring(xhci, xhci->cmd_ring);
-> +       }
+> +static int __init drm_aux_hpd_typec_dp_bridge_module_init(void)
+> +{
+> +	bus_register_notifier(&typec_bus, &drm_typec_event_nb);
 > +
->         /* step 2: clear Run/Stop bit */
->         command =3D readl(&xhci->op_regs->command);
->         command &=3D ~CMD_RUN;
+> +	return 0;
+> +}
+> +
+> +module_init(drm_aux_hpd_typec_dp_bridge_module_init);
+> +module_exit(drm_aux_hpd_typec_dp_bridge_module_exit);
+> +
+> +MODULE_DESCRIPTION("DRM TYPEC DP HPD BRIDGE");
+> +MODULE_LICENSE("GPL");
+> 
+
+Feel free to add yourself as MODULE_AUTHOR here. :)
+
+With those things changed:
+
+Reviewed-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
+Kind regards,
+Nicolas Frattaroli
+
+
 
