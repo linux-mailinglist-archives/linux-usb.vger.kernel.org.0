@@ -1,205 +1,155 @@
-Return-Path: <linux-usb+bounces-38129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38130-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UDPKDDcBGGrUYwgAu9opvQ
-	(envelope-from <linux-usb+bounces-38129-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:47:51 +0200
+	id 4AcDC/cRGGrKbggAu9opvQ
+	(envelope-from <linux-usb+bounces-38130-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 11:59:19 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0C925EEE9E
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 10:47:49 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E39F5F0153
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 11:59:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1FC6E30D94A3
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 08:40:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A30B430C7A2D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2026 09:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0303806D7;
-	Thu, 28 May 2026 08:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF70B3B6377;
+	Thu, 28 May 2026 09:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cXGfUXPo"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QFUzIx8p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDED37187B
-	for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 08:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779957607; cv=pass; b=kFnEpYR4XLDtYfmoIf6SHX+QkAQaT8hegX9OjpJowj6Cl0zN+iCpvZcbf+y2QeC0XWok98TgY+F/tFQFQpPxA0pA7Adw7o2U2iZoyODZ49PPbZj//NWLnhYEUksc/8kSfNZDt6VBTjqsbDZRKpfiv3A1DUxbtExkNF2DDlFTs/s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779957607; c=relaxed/simple;
-	bh=bMVYCHW2rA/kKGjqYMY6NUZrWJ1hytGHa1uCrkcH62k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZA3YbBb6i3xttIKNWa7hvbNfrfSjm4bfv6LvMg+KG6PFbym1BbBEjH+I+uyld6kTeO+lErv5RjVWuXfaekDxpCxoNVvTCiuNBG89cdKD5wmkUR9gFTkEd8MEaAiz84elQg1SSbOP81vd69c0KlbIxP0jFSleTPflkX8mFj9E9XA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cXGfUXPo; arc=pass smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5a40b2bc96dso7297209e87.3
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 01:40:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779957604; cv=none;
-        d=google.com; s=arc-20240605;
-        b=K/PT8k5r7ancfd1xlLV12BwMzWS4KG/OVoYjb36e5+VLp6YS1VBuWGOS4uaIAhNtvm
-         Ufb8ggJt1LdgKntLu7dDBw0n7XXHLohOv/1yBt42c+1TO48jeSW/axqcHfOH2FrN0cb8
-         ZcKlfDOyoDI8ZT7+vhH+QbZm/cx8SBCUBZJyXQQHsaitvPGliQoBrufKdO8y3V+Tcy2Y
-         WNP6jdldQPZHjEMpdVCoD5rEQBt5oql2T/+6/JIQyK8HfoTONtsEIoOJWd0IVcx+/1N7
-         6RZZvKIt+vmgyT8j2yKomTRf5dFZeyWU6ZUf8Wc1bgR2afiAkkNsAWfVnR39OkjrN4qp
-         wccw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=I3ozGp08XBKPc3Oc1CPTjccxZqkmofz+VaCJR4hZhDE=;
-        fh=pG+gzIt3WEfUEC+5P/I/i7M8A2cpnYogoVyJFwlQwjk=;
-        b=cuQ/9Ts9EPsXY/ReG+b8ceTxiSrquLF4QihRIs63mXlxXvSkGG6H8Dq5Br2/rbdszp
-         cFB18TqHfFeQ3UJH0vJ9hEKOKrYmUzzQEPVCciunwSGlm1JQEcRDkgRxR7r0o4bflw4k
-         JtJpVnj57hO+0WC+Cc+rdl/i8AnC9EbtgnBhcxWZPROzlpDKAT5UC3pOZMBF314nFXZ8
-         p34qKJaW2MmLG+waJBbFNQadryvljYwFxvEls6vnx9+TKY7GjZd9r5xnAo8Iq5BXVLQX
-         NI0xnbza55egaP63aLIwOPtdsTOEBUCzuFC3yWh8I64mca+IYKJxp480TuTs3qQGBKk9
-         F/yg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4EFF3B47D7
+	for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 09:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779962223; cv=none; b=NPCkcqPOypdDdMd4Yom45Z/I6YQ8PVCI/SLNmaGSauDstShePgZjRPwR6IYx7R2QVdlUy5z0EeUOawHLQmZnSp9UJQG3QWAX1VA64exO1k7Pn0cmbxD9B8OcuAVw4UF55fwd+PmvaC1C8TDkkZz9ovKQYUSs992HAadU6HCUwlA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779962223; c=relaxed/simple;
+	bh=6iyY+VWpWK7RjeJO5ZIKek+NCJJXEjC6sQPd343u7OE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KrszKKlw2N0lS/muLJJExTY6ML4I59e7f9aORMMB/8gpWRuXuxFA3K8eSUzA7i1B74X4DQ7qi6ZZshai+ajRYd4ZJdXRTFxVtn/rWiGqrDlIxSVWwoLCTzBUILbgD18QmUQqza+M9VoSVo84LtGFCuWqHacQSLETFEqZAW/aCII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QFUzIx8p; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-490426d72f7so59044415e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 28 May 2026 02:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1779957604; x=1780562404; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I3ozGp08XBKPc3Oc1CPTjccxZqkmofz+VaCJR4hZhDE=;
-        b=cXGfUXPor2b1Nakp3P0r8YwatpnWa5ja4K3M7lsC9HsERO15z7WxUBx5Tl63C3srvd
-         8HUB3N66ZWmcqB/PENV3t4Oq/7gXoxnmeh5XuomDFMRcaBf8A7qUCuISyS2w3VmIidCS
-         9tB9VkPhpYvwAyC6eS40t+Cz6X0BEaNsYSqOI=
+        d=suse.com; s=google; t=1779962217; x=1780567017; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UksBgfe71dRRTKPOD06jM/48YsZk+2Jj0c99vtBZapI=;
+        b=QFUzIx8p5RfBo2tI0DU9sTeaPZeHFDKuiHGxOFbnqn6zZo3QWcwK7KHTN+a5iSYN1y
+         cvi09NlxgqmxhPNqRmC4pMUFh/dcnW5hdtlL6aCOKbY0yn1AV9CO8DbLmAGzJmNSQBGN
+         +CG+s5Kgw24RHfmckB30i7eodyM8I1UCkaEALgpn27/FsMuX3gcZ3JucjExPpkT71wVB
+         0XEQew+CRNw+pSHLNHwzgM5V7/K4A8ZPujoPpz+0GPut0Ek2EpmJUiSzVg1lJlf3pdXj
+         MFyL/s+A7WhGP91AzQd4jqOpybHepZL6z7IPlVebi1D5W90fR3DM8qit2+myxSVZXhxT
+         bOqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779957604; x=1780562404;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=I3ozGp08XBKPc3Oc1CPTjccxZqkmofz+VaCJR4hZhDE=;
-        b=Rr6kJVOpYQCFHDQNImcPMiKimZ+qM7e9wxP54DODQUx8UbjDRbCxB3RDn9e5JAHcJl
-         m68KHz+WgafEgHLC+/c0ZLKOw2gdd1JG4+0mz3lK8daWxWcSKZtNg6maUVm86A2llafQ
-         N8g2TjxPOxGIBvIuYXFKp5zjcxGEnrf0eDbM0L6q/DExbQ8stGy6xZzpImpz72pD7cOT
-         JCvYQjckuHP84MhFljO+pQFCmgfHAMhLhXxDAsnvy9y3aI3vuxxcKCmS/alG9SVcrDp2
-         DDNNEe3Rckj5UNin+PIoqE9BsyXBrgtOuk0g+Kke+pC4bpf6AkjH7lrH7M+BKB2dZtu0
-         YFrg==
-X-Forwarded-Encrypted: i=1; AFNElJ/AVooVauTzB2n7cpEblZW8Z1uPdbm9b7Ty8y04nFDYpNS4hlx0REt6Mus/3hDeFRuOhtJwnYPjV/0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDIywTOnO57lI5G7PMqfbi4rUeCmZ05Tq7xRsV6GMHMWibiz4J
-	r5cz0lorsIEqWj7iQYD7+z606bOO5NUZxXz/26sGb05A3oCRFL7HUc1S+/xm/fexlBcaMvRHzJb
-	DzLBIeu5Bts5j3oLYLmnVnzOans4UuPmxvbvFbWtE
-X-Gm-Gg: Acq92OFBRHl4/6h8CpX1ZloJ/P+3oFryaop146cKuusWMEQrMfT2wvvlf5+1FOGeJLo
-	N7lTp7tXIinMlCMBALoGpVYGg3DGC7Bi6aXM9XPkiy1K9jh60uC8zGpEAUICWpyIas/UQ+yDVVF
-	RzkXtmuqMqLaxkRQpsOQh/Yo0ZBqrU6ysJiUT6eENFWpgLBHVjOb8DYzQkutlJx7UcZdZY14rkH
-	HzNeFy+xMQze5Qzd80fZIKovf8GT32HQZTowKkkf09oeFFQ0YbViMxSwUjmCO8mImk5UCImhvs7
-	7mfHzGSbJz7ak4gL7WwQa69mTlaX
-X-Received: by 2002:a05:6512:3ca9:b0:5a8:afc8:c37 with SMTP id
- 2adb3069b0e04-5aa32369fccmr7817435e87.4.1779957603539; Thu, 28 May 2026
- 01:40:03 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779962217; x=1780567017;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UksBgfe71dRRTKPOD06jM/48YsZk+2Jj0c99vtBZapI=;
+        b=UAWd4In/qm3Kdyc96BJZHkOowU6Qi3NcbsfKP6/3Raj5V5OGSWjMEMAGhhmuoiXtna
+         FdMEkA5Nu4B+0I8NhIU0pa8xdKQom8W2LmOB47DL0S+j7ykbv2OOo02uTEjhgshOhvHa
+         tKQzgK8TRz0uxxc+QyRYcTMPfo8Cdyt21efbYtr+tfgmdQ2UTzo1AzcheK5Fjh9bVqbR
+         9AM0g5mPNDjGp/3qIUeYW4Q3nZbLx3IykNcYjH6O9gCPqO3a2l8l13LGDg135uolvL+g
+         Tl5RqpxQSF9c+EBMS/Q3NFd6RUPlIt0Eq46YijhssLhrgwES/XD+a3Lrvd6peo546RD0
+         OHOA==
+X-Gm-Message-State: AOJu0Yzbcmro9azToJIApMOaUTEquzNOpWZpr7j6u460OHsvzYrORsIx
+	uysxWesBN6Ra/9ZCwDX/Z21PgXYCMy2XUpDoi0h8T4Bvyd0dNpn+i+G4HgSVjzgat+M=
+X-Gm-Gg: Acq92OE4AsT025fAm2MwbkU88Wrgy2oA0L4vgTCYl8spLLvXVTpMfagcl0FzxziiLoA
+	VkxR9xTlUAHIkx2fNS9X1vYH37y50W1CPRjdpGUHzQ53DfelPhjsmYyYJ4BvfAFLD4YvTHiPn/R
+	KOzKvZeWhz7gUMavYuuGQt2HUnE91gsTR7iBiZtIDdb3t+HrjD6wsOu4e0hryaIAh8tasG+UWZh
+	y8U5OjCo83l6lf2j3KYWu2rWA7W/WKz+co5UwyWXKpRDzb6uck/115cNX61wXrEvlUAOlWXhR9c
+	uO0pm4FR46oC8/Xe/etZZWkhA454+pHMbMUXpxRJUE2V9wp7oZH7kaDiqP8lw/bMusjv/+KX8Rz
+	jV8g2RCzmy7R0uLcTmYT+dEWP7yPw0nmuroPkBSm/YKQgOC0w+kRXJfmSkGijMMA/Mve6pwOxHB
+	FRyGbinb59HXhZvgQZvcIB8rHkcZcGnC4pNKy3Q02RE7RzG62mhFQXqdpv+L4JpquVpTHVD6qXC
+	wIATpwZsKBP1w==
+X-Received: by 2002:a05:600c:1550:b0:490:48a0:b87a with SMTP id 5b1f17b1804b1-49048a0b90dmr417866725e9.9.1779962217425;
+        Thu, 28 May 2026 02:56:57 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13de:8701:3ac2:500e:384:fbe1? ([2001:a61:13de:8701:3ac2:500e:384:fbe1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4908ecb5238sm13644335e9.24.2026.05.28.02.56.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 May 2026 02:56:56 -0700 (PDT)
+Message-ID: <5099d6cc-c8bc-4fdc-97cf-31e96a57e0c1@suse.com>
+Date: Thu, 28 May 2026 11:56:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515090149.3169406-1-wenst@chromium.org> <CAMRc=MdnjRRMVzxPkkrPhQ4dz7rsK8-HKUp9cQ0z11apL3escQ@mail.gmail.com>
- <CAGXv+5HC3dqgcE3KnKzakHHWFHB6m_X42orOkNUvZvp=SL_O8g@mail.gmail.com>
- <CAMRc=Med-_0GSYzoFBRiwFzBCK0DZqJD8_SEBxi+zwR20GS-HA@mail.gmail.com>
- <CAGXv+5GbW0bx3nKdZt2+tHuHyQ-J-1-Z79nMzHAwjmEPGKT02A@mail.gmail.com>
- <2026052710-flagship-unsmooth-ce82@gregkh> <CAMRc=Me=ujnscSOKhHDLz+ccMDyLyCfZnpqobF2BJ4YowgXB5A@mail.gmail.com>
-In-Reply-To: <CAMRc=Me=ujnscSOKhHDLz+ccMDyLyCfZnpqobF2BJ4YowgXB5A@mail.gmail.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Thu, 28 May 2026 10:39:52 +0200
-X-Gm-Features: AVHnY4ImlKiDtiu3PtJAJE_NOkB4Apdo_R0OjsOkU3xKzZOWZm2qt_u0g9B3V2M
-Message-ID: <CAGXv+5HKxhfZuAHTZECsVFp4S9yTN2rXW_Nps2TcoV=r9KgfEQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/12] arm64: mediatek: Add M.2 E-key slot on Chromebooks
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Manivannan Sadhasivam <mani@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: misc: yurex: fix ordering of usb_deregister_dev()
+ and usb_set_intfdata()
+To: Junzhe Li <ginger.jzllee@gmail.com>, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260528082751.204898-1-ginger.jzllee@gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20260528082751.204898-1-ginger.jzllee@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38129-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38130-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wenst@chromium.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[chromium.org:+];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: A0C925EEE9E
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,suse.com:mid,suse.com:dkim]
+X-Rspamd-Queue-Id: 8E39F5F0153
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, May 28, 2026 at 10:36=E2=80=AFAM Bartosz Golaszewski <brgl@kernel.o=
-rg> wrote:
->
-> On Wed, 27 May 2026 19:41:30 +0200, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> said:
-> > On Wed, May 27, 2026 at 06:21:00PM +0200, Chen-Yu Tsai wrote:
->
-> ...
->
-> >>
-> >> However this seems to completely decouple the power sequencing from th=
-e
-> >> USB core. Take the USB A connector for example, it was recently added =
-to
-> >> the onboard USB devices driver. However the connector has a device nod=
-e
-> >> that is not a child node of any USB host controller or hub; it is conn=
-ected
-> >> through OF graph. At the same time, since it typically sits at the top
-> >> level of the device tree, a platform device is directly created and th=
-e
-> >> driver subsequently binds to that device. This is totally different fr=
-om
-> >> how the hub and other directly connected onboard USB devices work. In
-> >> the onboard device case, the device node is a child node of the USB hu=
-b
-> >> or controller, and the corresponding platform device only gets created
-> >> when the USB hub driver probes, thereby sort of tying it into the USB
-> >> device topology.
-> >
-> > Hm, did we mess this up?  If so, we can always change it if you think
-> > this should be done differently.
-> >
-> > Hubs should be dealing with the power issues for their ports, so maybe
-> > rethinking this might be wise.  I'm just loath to add hardware-specific
-> > hacks to the hub common code for obvious reasons.  Anything we can do t=
-o
-> > pull it out to a separate driver is best so it doesn't affect the 99% o=
-f
-> > the users that don't have that crazy hardware :)
-> >
->
-> IIUC what we discussed with Chen-Yu yesterday, the only thing that needs =
-to be
-> done in the USB hub driver is attaching the port firmware nodes (if prese=
-nt) to
-> the port devices we instantiate. The rest can be handled elsewhere.
->
-> Chen-Yu: correct me if I'm wrong.
-
-The above, plus adding pwrseq_get(), pwrseq_power_on(), pwrseq_power_off()
-calls to the appropriate places in the hub driver.
 
 
-ChenYu
+On 28.05.26 10:27, Junzhe Li wrote:
+> In yurex_disconnect(), usb_set_intfdata(interface, NULL) was called
+> before usb_deregister_dev(interface, &yurex_class).
+> This opens a race window with usb_open() in the USB core:
+> 
+>    T0 (yurex_disconnect)               T1 (usb_open)
+>    --------------------------           -------------------------
+>    usb_set_intfdata(iface, NULL) [t0]
+>                                         fops = usb_minors[minor]  [t1]
+>                                         /* fops still valid here */
+>    usb_deregister_dev()
+>      usb_minors[minor] = NULL   [t2]
+>                                         file->f_op->open(inode, file)
+>                                           yurex_open()
+>                                             dev = usb_get_intfdata() [t3]
+>                                             /* dev is NULL! */
+
+Yes, but yurex_open() checks for dev == NULL
+Could you please elaborate?
+
+	Regards
+		Oliver
+
 
