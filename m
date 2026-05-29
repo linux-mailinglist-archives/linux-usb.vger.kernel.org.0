@@ -1,170 +1,177 @@
-Return-Path: <linux-usb+bounces-38161-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38162-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gIWAAfuWGWrVxggAu9opvQ
-	(envelope-from <linux-usb+bounces-38161-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 15:39:07 +0200
+	id IDLxJXybGWq7xwgAu9opvQ
+	(envelope-from <linux-usb+bounces-38162-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 15:58:20 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D29A602F37
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 15:39:04 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 124E66032B8
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 15:58:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4A4D130860B7
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 13:30:46 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1895430241AE
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 13:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1610733ADA4;
-	Fri, 29 May 2026 13:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B67FC3DBD44;
+	Fri, 29 May 2026 13:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ScKluDid"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L34BpxqF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03481A317D;
-	Fri, 29 May 2026 13:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780061443; cv=none; b=T1V6kLjXj0VYsCpKlLUqgFoaKLSf5NxThQaYlsxwoAaIodtfJ/lW6t/T7f1u6Y5/OjYxpM6XnPMElio2K9htBdZCbLnMWsaOLtpUOxFoZbBhzuI5cW163mWoSPBTTrPABDqxB/+8QUplXlCLrfcmKFrArOQQMAuxxXt9sr7f8Go=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780061443; c=relaxed/simple;
-	bh=l4FtlYAFVGGwJ01QQvvbOOFq6kUcwolrPH7wRgellI4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Igk+vZdjzzMR4hQTmC7vghdd7L4fwM/qiYfUVM4abJEML+jOC1OCnlIa94hRMagvcqAJhUn2Rqa5UWUu4exrVPFe0DudqDlwe/QSJi2i3QgPTYHlnRN5H2IZX5QMvH3+Aqc5reHMpIrhCFCkVhr3uVpf2jBw3T75nK+a9CaSlt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ScKluDid; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:Content-Description
-	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=73WSiQahK0e7pTM/jXl4tkpRquFkFACnnUUVn2QgnN8=; b=ScKluDidZLxT1Y0WVeZ3MEhYsl
-	QBbjoRh5C6lH8vSUG+3oPOT5HMGm83GBvZU/gvmSEJXvTHGq042l5O2+lwOWjrqye4ECLXKmUqMVC
-	FnEnj8aAcqiSZT52nF1VMk1y9D3NIYu3q5XmBDYvcx6Omf87FsRsHhEozeGQEdBPDxIxVBqlwRgUq
-	iERRJsP97v/Fzx4s5r2sXj2hvULOxcP8vPoIiDCZv0jKfqBNrsnwphKls6s+1PPPXJD16CBIw/0jd
-	0QZVcfe55Wbg1YRBBhCXSRALRdK2sM05MDK0YJltqjJlrEFCBpapoE9wQ0rjeJOH+el3+b7gnyeFw
-	cF+ZiIzg==;
-Received: from 177-136-90-227.vmaxnet.com.br ([177.136.90.227] helo=[192.168.1.54])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wSxIF-009sTG-6d; Fri, 29 May 2026 15:30:31 +0200
-From: Heitor Alves de Siqueira <halves@igalia.com>
-Date: Fri, 29 May 2026 10:27:35 -0300
-Subject: [PATCH] usbip: Fix use-after-free in event_handler workqueue
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A2C33BBCB
+	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 13:55:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780062946; cv=pass; b=TsztIhM94lfZemYQAM74rULqsBiPtZ/tcLP2DBQZT901812iEiAFg4t3uPo/9IEcfXZuhXYHceGhwQl7Sx8XCUBhsqBzyfZ9BPrxEGPW/C9Uur7Fn222ZudSbSZtwHSAjNACNajwIQY/V10gIZw7jVrYrmPs6lNi6e+IiB1fxx4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780062946; c=relaxed/simple;
+	bh=5PmsSwNmFu5rM5sQIi7uJjLndzgLivt0NR4J02TMjC0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AdW/+Te5navANDBpAK6HDz+fKB8g0UDSODwWHgtZXFZF8qlVvK93EfSKsMEOETB4liWMMULAF3xnQIborbjv4X/2wk8oEjwqbcgCSfBhwKuto5SoI0yrpuJHmuNvgAl8id42CQJ4cPcnJiy/1sPzU7i9tC5XsjTWA+Yz9W3ulzk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L34BpxqF; arc=pass smtp.client-ip=74.125.224.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-6587cee8b57so15371838d50.2
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 06:55:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780062941; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ElaHCQuZRUllPXwvwL5nmoY0ZkYWw2d5iE+blNzEwtLqUdQKxqkgSAFX1ogF2umpqQ
+         SXkL3GHrhAI34c5IDZOOI0Ir8PxGOXLbE9EgK609XNXnkBkPnRwP3mLmTovuvQ27f+wK
+         XXPaZ9y6jZlXxV0tVFUdKNxTbduqAjFbBWJ3Q4//HlAmg+JnfgG4DyLBiN1JWHK+tJ9S
+         IqAOTCezksFeMyoZXcachJq9hKK7QzEAQPD72j5ikrmoeILUtE+88ghhp7QMtHXXPTAp
+         /z41qn03HpEqM7Nq7NP9TVgjz4oO90D5K7rk+CcJF/XiT/9dH0xgCaYE4a0psT5FvSsM
+         vzUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yT81wUkrHXZfR96odZooKlpRhvygrL4C0xiPKSli0I0=;
+        fh=ETasJDgZ4xrSp3PjRqNrjuDjEa6lhBcmifjH2ABkff8=;
+        b=Cxa13CwGICY9c6B+elTZOhVz7nZHf1+WEDNrv71B2CG1OdSJkgoXx2z4G+ks6VbRLm
+         XlpPWnyC27ov6gO9wxZIQfpbzYLx0hghXbzeX/uRwyjz12M/3/N+rA4Iag7M0ZD8L6cR
+         FKkR1Zu4im425+N+5X9rRCKlYkNWIIJE2/IK5eMS9cixE+EqRXhPfHt/fzsUjX4EO1Rz
+         rGEWTxiweM/QSpjYU55dEbny7iSMCwmcbXdrCIyXU13X6VS5kMf6mB8Ttk7oboLOobKG
+         rldJShGs2NcPNm33o7lsMe+CccarA54mt97+/Mvs0aRdLL62o+6g6+eLruHWtaaOSMrP
+         UuTw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780062941; x=1780667741; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yT81wUkrHXZfR96odZooKlpRhvygrL4C0xiPKSli0I0=;
+        b=L34BpxqFdWeGuHwWbYvta1Bc9tOyFsxHq1H9P5MNe+va3j9IlhfHw8W4Ky+cKs1Zh5
+         Nn1FDW3hwTZZL6m1U0GkTFo178Pwt3FAjC2SadB8rDrG92gE8dkFmTnZ6+GtvYIQF+vP
+         g5BU0G5GY3kAEbAgmmKKJk4luX+Dj9cxIcjoyz7wW8lJnkORBNX5g9453MxFbHmRqXJO
+         arVnzi5VIfzeGkshcdsL1/R6nGee7Wp7y5/pTK9fJbSS/emDqWWQEUSkFiSzXrtlO+si
+         A9mPAn4wdgtW7lGFWSHf1zULSEdBeSGTd4s3k/BCtUVWot+6sE+RrabiLW8b2K8oa3IP
+         sivQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780062941; x=1780667741;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yT81wUkrHXZfR96odZooKlpRhvygrL4C0xiPKSli0I0=;
+        b=HVQQeLAvEzHHf129ssBq881Ems1hzDCHCUyZrHe4K2ptOSmgvYdj9Prk7boHjDvatw
+         BcJf/JkfBPFLjc58xzv3rOgHR0eRYR5EvqUk6e8at8ykVhezeTymSzKvGjrxyzmW1YD2
+         2iuybw3TpAN5wmQw5XjwRGQS0/WXnON52LgDQX1RltxDdNlqf377YzIOTg3w7HV6hvKo
+         a7SbnKed0J1yD+GPgBsp7+39EePl1qEL1eWV5EjJ7t7gyVWLE8u2ccSXg88QeKQ39DB8
+         08eOBz51HNqJ2MnzBzsL7aoI/b/IuYsOFQeTpg5ZTIDPkXSkRfmogz0L4x/EJ3LIx8sp
+         B+ew==
+X-Forwarded-Encrypted: i=1; AFNElJ/djm3i/g8TMfrGUf2hlzE/7Az7GOE9hNunH97mpfrvMf5dF+SoktbwBayYZFiqpvgLxr+ll09BzxI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxukeQwAOYg7EyxRLwscWj1b7rq9xFzcSGLMi2onUM2gAK6If8M
+	R128+8651BX20HTJ5k/6P30UG/R2kHx682bS49JBIJnEiKBSD2nxAu1KdiEh/qGqbJDKKfvAT47
+	ZyHtaA+dmgFQZHud0rXecxvznbwDevf6axAIj
+X-Gm-Gg: Acq92OGW+JRNooMn6duJ7MJEcUNhGtxIo4kNrBHGCODC0828cRc/PrilikAaza/0EId
+	eqgNag9685btYVEdPsAdT/iPsB03ns8g8jdCVDy1FsQ+kJjNoq61r5ggYt60JHxouLsRn7gDmsG
+	Qhk7BoGYnInfiiNPjyy5Bm4ZE0gzThmCvgVZ9o83DV4IiebbuWnhxsJuruyAWp5LIPI3fBcB1Qe
+	KkF8+dmU7k7SuYEZxxdOfjZXWZFM5M1pkI8Jf6tZyplp1lLaMY4SwGRzU1cI6kJte2MnXiXuu8f
+	GW2MvhX8PuO9+EDKYB0=
+X-Received: by 2002:a05:690e:1444:b0:660:5694:9e58 with SMTP id
+ 956f58d0204a3-6605694a0ddmr1409061d50.7.1780062941469; Fri, 29 May 2026
+ 06:55:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260529-b4-usbip_eh-v1-1-582e931cc7e4@igalia.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMTQ5AMBBA4avIrDWp+om6iohoTRkLpINIxN0Vy
- 2/x3gWMnpChii7weBDTMgckcQR27OYBBfXBoKQqZK60MJnY2dDa4ii0U4lOtS1N3kEoVo+Ozu9
- WN795NxPa7V3AfT/Nl+Z0bwAAAA==
-X-Change-ID: 20260529-b4-usbip_eh-9f21939c8b5a
-To: Valentina Manea <valentina.manea.m@gmail.com>, 
- Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Nobuo Iwata <nobuo.iwata@fujixerox.co.jp>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel-dev@igalia.org, 
- syzbot+62c1aa73226b3ac3b107@syzkaller.appspotmail.com, stable@kernel.org
-X-Mailer: b4 0.15.2
-X-Spamd-Result: default: False [1.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+References: <20260528082751.204898-1-ginger.jzllee@gmail.com>
+ <5099d6cc-c8bc-4fdc-97cf-31e96a57e0c1@suse.com> <CAGp+u1ZoHA52vPL5msC29BM5g3xT9c8-A20tAs2LHStnuwMmbQ@mail.gmail.com>
+ <7f78b968-3cb3-4194-b709-28e45946697c@suse.com>
+In-Reply-To: <7f78b968-3cb3-4194-b709-28e45946697c@suse.com>
+From: Ginger <ginger.jzllee@gmail.com>
+Date: Fri, 29 May 2026 21:55:29 +0800
+X-Gm-Features: AVHnY4KH_r1r6hD0_2Jv0MNnXVWg8FttfnDLqAluXshTkZ-0Snw0Fs8cmUdmnTA
+Message-ID: <CAGp+u1YOYe_H8d1NRz7ig-tV+EhQ9djr=f4q1FFtpxc120+NDw@mail.gmail.com>
+Subject: Re: [PATCH] usb: misc: yurex: fix ordering of usb_deregister_dev()
+ and usb_set_intfdata()
+To: Oliver Neukum <oneukum@suse.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38161-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,zenithal.me,linuxfoundation.org,fujixerox.co.jp];
+	TAGGED_FROM(0.00)[bounces-38162-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[igalia.com:-];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.846];
-	FROM_NEQ_ENVFROM(0.00)[halves@igalia.com,linux-usb@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,62c1aa73226b3ac3b107];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,appspotmail.com:email,syzkaller.appspot.com:url,igalia.com:mid,igalia.com:email]
-X-Rspamd-Queue-Id: 8D29A602F37
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gingerjzllee@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,suse.com:email]
+X-Rspamd-Queue-Id: 124E66032B8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-In vhci_stop(), the driver calls usbip_stop_eh() and waits until event
-flags are cleared before proceeding with cleanup. The event_handler thread
-clears event flags before calling wake_up(&ud->eh_waitq), opening a race
-window where wait_event_interruptible() can return before the event_handler
-thread finishes. This causes the teardown path to free usbip structures,
-leading to a use-after-free when accessing ud->eh_waitq.
+On Fri, May 29, 2026 at 6:31=E2=80=AFPM Oliver Neukum <oneukum@suse.com> wr=
+ote:
+>
+> On 29.05.26 08:58, Ginger wrote:
+>
+> > I think the intuition is that the global exposure (i.e., the
+> > 'usb_minors') of usb fops should be disabled first, so that the
+> > subsequent nullification of internal fields can be considered local to
+> > prevent concurrent accesses.
+>
+> Hi,
+>
+> if I understand the logic correctly, the order in yurex_disconnect()
+> makes sure if yurex_open() and yurex_disconnect() race, yurex_open()
+> will never see an unregistered device with intfdata !=3D NULL.
+> That is, precisely because without a lock the race is unavoidable
+> the newly opening task will be guaranteed to know that it has
+> lost the race.
+>
+>         Regards
+>                 Oliver
+>
 
-Fix by flushing usbip_work in usbip_stop_eh(). This ensures the work item
-has finished before the driver cleans up the usbip_device struct.
+Hi,
 
-Fixes: bb7871ad99ea ("usbip: event handler as one thread")
-Reported-by: syzbot+62c1aa73226b3ac3b107@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=62c1aa73226b3ac3b107
-Cc: stable@kernel.org
-Signed-off-by: Heitor Alves de Siqueira <halves@igalia.com>
----
- drivers/usb/usbip/usbip_event.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Yes, I believe we are on the same page about this patch.
 
-diff --git a/drivers/usb/usbip/usbip_event.c b/drivers/usb/usbip/usbip_event.c
-index 0e00c2d000f8..2d041b7ee7cf 100644
---- a/drivers/usb/usbip/usbip_event.c
-+++ b/drivers/usb/usbip/usbip_event.c
-@@ -97,6 +97,11 @@ static void event_handler(struct work_struct *work)
- 	}
- }
- 
-+#define WORK_QUEUE_NAME "usbip_event"
-+
-+static struct workqueue_struct *usbip_queue;
-+static DECLARE_WORK(usbip_work, event_handler);
-+
- int usbip_start_eh(struct usbip_device *ud)
- {
- 	init_waitqueue_head(&ud->eh_waitq);
-@@ -116,15 +121,12 @@ void usbip_stop_eh(struct usbip_device *ud)
- 		usbip_dbg_eh("usbip_eh waiting completion %lx\n", pending);
- 
- 	wait_event_interruptible(ud->eh_waitq, !(ud->event & ~USBIP_EH_BYE));
-+	flush_work(&usbip_work);
-+
- 	usbip_dbg_eh("usbip_eh has stopped\n");
- }
- EXPORT_SYMBOL_GPL(usbip_stop_eh);
- 
--#define WORK_QUEUE_NAME "usbip_event"
--
--static struct workqueue_struct *usbip_queue;
--static DECLARE_WORK(usbip_work, event_handler);
--
- int usbip_init_eh(void)
- {
- 	usbip_queue = create_singlethread_workqueue(WORK_QUEUE_NAME);
-
----
-base-commit: 8fde5d1d47f69db6082dfa34500c27f8485389a5
-change-id: 20260529-b4-usbip_eh-9f21939c8b5a
-
-Best regards,
---  
-Heitor Alves de Siqueira <halves@igalia.com>
-
+Regards,
+Junzhe
 
