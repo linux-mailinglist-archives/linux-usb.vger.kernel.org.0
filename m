@@ -1,192 +1,154 @@
-Return-Path: <linux-usb+bounces-38156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38157-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uCKpOpRqGWrGwQgAu9opvQ
-	(envelope-from <linux-usb+bounces-38156-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:29:40 +0200
+	id OA55LN5rGWrGwQgAu9opvQ
+	(envelope-from <linux-usb+bounces-38157-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:35:10 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BEEB600D24
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:29:39 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2522F600E79
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:35:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C8FCD30185B0
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 10:22:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1D8B330AB1E9
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 10:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2FB0334C0D;
-	Fri, 29 May 2026 10:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438FA3C942B;
+	Fri, 29 May 2026 10:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eu2thMku"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="g41+KBg0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A96F288B1
-	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 10:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8607433FE36
+	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 10:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780050137; cv=none; b=mmamSYgvTApAl7dhpiYk2nFY/QpSCYNZaq+ui7bLX9AKVhRnmLm9YAU0eTN3MY+TxAfh3x0nNUHwvkoEGzGF3lAREV+wW6K2yMhFni0fkX91asUD4ZD1huJgHtr+Nh4ArMNohJ+iSQp13ZLwXB2vo9keREFiFTZ43C5cF5EqV+M=
+	t=1780050671; cv=none; b=o1/8pINITKnZEmC/nK1cWxaLtbbRyrWfP/56pIy3/1/beLcm3q5sl4AN8Id6oTjUrb0GNrSEZiE/5nkQ/QIu0Eyxnu3JKN7bSY2jAx3lBB1Gbo8klaYBeriHxjDSNyy0n6Nia9vHReqI9qG+zhQr4X41xFUfMOOWbjGa+VJVl4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780050137; c=relaxed/simple;
-	bh=swNaRLGpmCCNK7W25eaUSW7IfC1gM7H2TkDSocBO9rw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h6psgmkmkfQSqsKrl1cMzmhpThbHoYH56pjH8veDM8XmWNUA9mVQRWEOJK24nZtGYrQXoZZTlecgqy9KnM0+tQzV/DVt03dzJTqANyeRwQS/NICD3XtyvQpRqbbR2DQHA2AGRsW0eePqA0sGA/rbOOck7VJs5DTSzRxZN6wsuA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eu2thMku; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4905529b933so54145575e9.0
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 03:22:15 -0700 (PDT)
+	s=arc-20240116; t=1780050671; c=relaxed/simple;
+	bh=TnQ9Pz7fsUBXLgOheDV2t6F0iPGT1NGiYVSE4Vaf550=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Kr4Wj0nG5CMPyLkBpNcmAgb1swc8K6ZgNEILpOY1tbOEWPhcAISWidzmkzcfHonrKGOgKkx5SNfdiV0nYTx3eqRhR8CMkXLLdqQZX15/uMpnfMGhMsxENuti2Ffc5aCDfYkdsWA8jDk1z8OD1F1NEw03vNeyyozXV+VUsr4fYwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=g41+KBg0; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49041fb8c23so59309785e9.0
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 03:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780050134; x=1780654934; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lnpfhPyxnJ7Kh0lmRKEyIf0TDS5gHxTUz0M9525P3r0=;
-        b=eu2thMkui2fK+c9cBiW5YgqD1bcQVAOsTTwYtkzt5JJxHF33hYMru7vwy3kWGHE8wA
-         w0uQAR08QoGSiwfN61yP/L2RrmWVqm10MLG5FzZR0IXSHVrTN1aiG4SnP3z/a3fi0zfS
-         0tl/R2mj8EL4PxMXFvvtgqAuY11qKbSlbtOSq+dVdJ45dTY/6kGbY/HCut0A5o1VKXj2
-         By527Ljt51d/FFb6gRp9t/U2LtB09cRRpdPKv23L7y0e1CbRsezVgO1I9PfnuKiBw6JL
-         RilAGKNtkw+vo/6qMAkHdvPsCvUUTVkCjNfxC7h96enCenDRKmQuFLguEcjPPzwZ4yI2
-         vBKQ==
+        d=suse.com; s=google; t=1780050669; x=1780655469; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AnWegkTJYjsTiRlpCjBocEuV+DyykuuRTv5OiUPKgrc=;
+        b=g41+KBg0McHkaVSlua/ACtPi0rdk+DcJM9lpfLqgZbBkY57djQ2Cic04p+d2PMYGVv
+         T0z8H6L0yOUX9v53bus3/O7LSwXxz12SHIe9Ogq8rOkx4fpdWE37q9Kc3RAbUfCxchEH
+         DmY9p7GokJIrtIwLXc6OMApvo2lSXtlsS6auG1LLTxg142+P0uFSl7aaMDRnZGUvDg96
+         Z9i2xMS3evossShX7ImceOUYlFSpBpB5SkWxpSIIRPVZX8tMSjjjs2M5yNY3rNTtbnkz
+         rxCHWy21Ej6tzYA+Rr7AZnqUI+xBfR6F8+jvumzIyv4aXHspd8z8FkhZVtnGi+CIp0Ho
+         XQ9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780050134; x=1780654934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lnpfhPyxnJ7Kh0lmRKEyIf0TDS5gHxTUz0M9525P3r0=;
-        b=eRQ+j1GrwYZs7ERkNd1GnQSYvHxfjbn7YX4X9jP56JvVcHz6i2WzYfiQX/mvn1JZnI
-         eWet4PgRdkWis4T6ppaju8oX0QpzntgvnljM4gsd5/Xy6Lueqx/NTnyD/T552wIKYnQn
-         KBj0fEPe+zS69hZfnuSZcp0p2jiH6YgdzOPsJzaOlN1mztfjE597BkJwL6qjmNhcEiHy
-         0a4YsWOU9BFCpoPuKwYimXjLa0jXiNsoUZ4xQRTC4rwE+K9Z+R/OM4qWz+Zcy8Ey6xLx
-         ihhOHBFjRAsQ0fDTpPsGY3DgnLSqpTGEliyFJvr4LcEVZwLIBDRYETFRoT5SCQ3eBndC
-         X+zg==
-X-Forwarded-Encrypted: i=1; AFNElJ/f0SU9dqk83hokuvQFspNMolfHEjMgSw5pImRxyWir3iKFm256IRnpd7QU06dalEnXgMwPXutJGa0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJPou98Zs8/JHOmla0y5RUbUXWo6k6QjNfcyboSOlu9MiRP9io
-	WtvkZuMqBfyuLBAZSNci6cZtxS3VyeUB72ynEuDGTSeTWh//uOM2XGIAOl07dw==
-X-Gm-Gg: Acq92OGbKj7AJPECjQ5Ativ5d9ReuzEk8D85jSfyKCkmMBHMnLbJHDm/b6gzuOOoKtd
-	DjlUQdtmk6cC4r3eIafr4juOmEnhq5PxMCpFaFXEhC1UIZVB3aJFdumugq4+6+yDtolQ0Y7Zu5Z
-	g2YChIAfvfgnnKbpQ1saPhUYTXKsXvHvJKZoWSqd6OPCDK53suORLadKk3nnpOMNlUYuCPTuN3i
-	PvIugIOZEUsLJhgerh3jvyowEJTwEFOoQdBnHo+89eTogSAF7dIv2GuS23TqhyqLLeSACkDLQ/0
-	eLPfDPlpBhnMsCl8Dh9sGf8CfzoS3P+7eTBsOlk0gAMzBR2RISxMpKcXocFA2g6FWKWB1+MyyOH
-	LAM45H6rmLn7chxZ5G0ptAaPawqXy+nTFU9pJFk+A8H5v7GzvPucw9phrDVrdnodoDrBIxyBT6f
-	pSd3xd5PYd4pdSiEZzSDrhug8zItmDHJ46Dr6KKlBFf0+Naw==
-X-Received: by 2002:a05:600c:348f:b0:490:9df1:f0d4 with SMTP id 5b1f17b1804b1-4909df1f2b1mr30467635e9.10.1780050134332;
-        Fri, 29 May 2026 03:22:14 -0700 (PDT)
-Received: from foxbook (bfe246.neoplus.adsl.tpnet.pl. [83.28.42.246])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909cab0e79sm64696335e9.13.2026.05.29.03.22.13
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 29 May 2026 03:22:14 -0700 (PDT)
-Date: Fri, 29 May 2026 12:22:10 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Martin Alderson <martinalderson@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, linux-usb@vger.kernel.org
-Subject: Re: xhci_hcd: AMD Raphael/Granite Ridge USB 2.0 xHCI [1022:15b8]
- dies on resume from suspend
-Message-ID: <20260529122210.6d2c5543.michal.pecio@gmail.com>
-In-Reply-To: <CA+_z3hQF-EGKr11Yaa5vwMLt9TUB1mL9ESUAQU5Rnd=UZDXrBQ@mail.gmail.com>
-References: <CA+_z3hRjPnQOrEp7uXsNsu6wzqQp9O6FT18i=XcSC7k74Xd2QA@mail.gmail.com>
-	<20260330020749.18fbe433.michal.pecio@gmail.com>
-	<CA+_z3hRTD-QAgv3jZhOZUUPA0sNZ8946jfYwYsZ=RnQJ0LG7cw@mail.gmail.com>
-	<20260404152438.582f0451.michal.pecio@gmail.com>
-	<CA+_z3hTMfggtv+u_A_SRyb2FRzVjm=Nav5NRCTuhmEthb8x0jw@mail.gmail.com>
-	<20260509180603.6f67c9d8.michal.pecio@gmail.com>
-	<CA+_z3hT_n09fAszT+DkoTHLzracB7fQZwkiiTxGGBJxhFcD8hg@mail.gmail.com>
-	<20260512120334.4eef3d0b.michal.pecio@gmail.com>
-	<fc2d9862-6c46-4161-8fd5-68b9e6c2e8bb@linux.intel.com>
-	<CA+_z3hRdXfZm2ziCmsXEDEY-i8XJjxnw2oe6mkTf+O+B0fx91A@mail.gmail.com>
-	<20260529001057.1e0403c4.michal.pecio@gmail.com>
-	<CA+_z3hQF-EGKr11Yaa5vwMLt9TUB1mL9ESUAQU5Rnd=UZDXrBQ@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1780050669; x=1780655469;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AnWegkTJYjsTiRlpCjBocEuV+DyykuuRTv5OiUPKgrc=;
+        b=MfOVOoPD20GX2082IhwhHb1KoGAaQ/6hHhxG/7rTVIOv5voatZHz4jcAusDST9x0Lf
+         MaCQY8ummFVwwIeeoKfHL/W2rJRsprx7hl0tP9FuTiE8vGAiUNAErliGwHJ8nydDKxBI
+         8XMcasp/SV2m4oJwzr34uxCsgqpWXCWquEqAjm1O8fC53h4HqSU9lG5p3a4eNK29Zvaw
+         WqLl5HBd1m4lgom/pupNFw73ZMEmY0N4UZVJBlAt8p7BVzXVzSsQqD2c/on/0Pbf9A6+
+         xDjgvpr8csD9eBF88UijIjIBiS2uDrsYnQjXzZwkOMk92CFFDU3aESFVmJVgr3F91fgK
+         3mOg==
+X-Forwarded-Encrypted: i=1; AFNElJ92BbrSy2mgka3QZ8Agn5R7S6JrDm23J/UT86LRvEPk/+RkfopshgZ0bNBarjHjqUeI/u5wx1+zm4k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcS+wFcYkvLywxr4oJoP8hFd7X13/7sR1QC/DKKZpvJ+cG7R7F
+	768JCuSOKziQ9AThc8lZzJHCV8eP7oyxNkvPPljmJyYmPEEz9Ivn+5flhL6aVvHAW5VAKQD77hX
+	Dtozt
+X-Gm-Gg: Acq92OEDSulNT0lPh0ZGQp548AKfTzZ0Gy2zsXssXqicXY4ipKgebUjwO4X8sBqD04j
+	Mbg5tvEoVLcYDFp8vkYCzgJ7s1gtdqBs8HXpqCoqUod5WaNIlecR3erXbG7yeZoICCgsdWyirEW
+	Csmpis0KCIRe0rFe8keO2ZBpNZgWxh4/noW1BrfY18c3vEAwUPI7FGMUQzNRvB8BOVicdW5SQtl
+	JuPa8b3aqF/kzlVu4D7tsSjdn5UX0FmUJkEEOr9BQFxnTF2q5WteANVBhKo3Pd6MFY0MmaB2h/n
+	pbhdXjO5qCcen7W9cVdHrsaRSLZXApx26c9PxKyBwkE5N5FZi89oAnTynsAYUlXKI5eeZBR/88W
+	+krxi3IMYd26S9GVS3bq5B5ppu6esbK3ZEiG+9vOH7kdB7W9VoOsRJoY85DyArFxgo4hOUy/Xw6
+	Rz6LKNuFOuIJG4bGVAu5qhjxuuTR65o0sFE5cJtoEikE6uNPxoFiUJxvC9j07fFwOCWREMAJCeN
+	Ck=
+X-Received: by 2002:a05:600c:250:b0:48a:5821:5ff2 with SMTP id 5b1f17b1804b1-4909c0813a2mr26657805e9.8.1780050668957;
+        Fri, 29 May 2026 03:31:08 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13e8:2801:7422:57b5:ac0:e7e6? ([2001:a61:13e8:2801:7422:57b5:ac0:e7e6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34b47eesm2827353f8f.9.2026.05.29.03.31.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2026 03:31:08 -0700 (PDT)
+Message-ID: <7f78b968-3cb3-4194-b709-28e45946697c@suse.com>
+Date: Fri, 29 May 2026 12:31:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: misc: yurex: fix ordering of usb_deregister_dev()
+ and usb_set_intfdata()
+To: Ginger <ginger.jzllee@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260528082751.204898-1-ginger.jzllee@gmail.com>
+ <5099d6cc-c8bc-4fdc-97cf-31e96a57e0c1@suse.com>
+ <CAGp+u1ZoHA52vPL5msC29BM5g3xT9c8-A20tAs2LHStnuwMmbQ@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CAGp+u1ZoHA52vPL5msC29BM5g3xT9c8-A20tAs2LHStnuwMmbQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38156-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38157-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 6BEEB600D24
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 2522F600E79
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, 29 May 2026 00:06:33 +0100, Martin Alderson wrote:
-> Hi, please see this attachment. Thanks for all your help!
+On 29.05.26 08:58, Ginger wrote:
 
-Let's go through it.
+> I think the intuition is that the global exposure (i.e., the
+> 'usb_minors') of usb fops should be disabled first, so that the
+> subsequent nullification of internal fields can be considered local to
+> prevent concurrent accesses.
 
-grep xhci_suspend 20260528T100954Z/dmesg.txt 
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0e:00.4: xhci_suspend: stopping usb5 port polling.
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0c:00.0: xhci_suspend: stopping usb1 port polling.
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0e:00.3: xhci_suspend: stopping usb3 port polling.
+Hi,
 
-Several HCs are suspending, but not 0000:0f:00.0. It seems that the
-kernel is aware that "something" is still going on with its child USB
-devices and it defers suspend until "something" finishes.
+if I understand the logic correctly, the order in yurex_disconnect()
+makes sure if yurex_open() and yurex_disconnect() race, yurex_open()
+will never see an unregistered device with intfdata != NULL.
+That is, precisely because without a lock the race is unavoidable
+the newly opening task will be guaranteed to know that it has
+lost the race.
 
-grep 0000:0f:00.0 20260528T100954Z/dmesg.txt 
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Cancel URB 00000000f24bbb02, dev 1, ep 0x83, starting at offset 0xfffe5c70
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: // Ding dong!
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Stopped on Transfer TRB for slot 1 ep 6
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Removing canceled TD starting at 0xfffe5c70 (dma) in stream 0 URB 00000000f24bbb02
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Set TR Deq ptr 0xfffe5c80, cycle 0
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: // Ding dong!
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: xhci_giveback_invalidated_tds: Keep cancelled URB 00000000f24bbb02 TD as cancel_status is 2
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Successful Set TR Deq Ptr cmd, deq = @fffe5c80
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: xhci_handle_cmd_set_deq: Giveback cancelled URB 00000000f24bbb02 TD
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Giveback URB 00000000f24bbb02, len = 0, expected = 32, status = -115
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: xhci_handle_cmd_set_deq: All TDs cleared, ring doorbell
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: // Ding dong!
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Stopped on No-op or Link TRB for slot 1 ep 4
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Stopped on No-op or Link TRB for slot 1 ep 2
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Stopped on No-op or Link TRB for slot 1 ep 0
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Set port 7-1 link state, portsc: 0x603, write 0x10661
+	Regards
+		Oliver
 
-Some device under 0000:0f:00.0 is suspended after having a 32 byte URB
-unlinked from EP 3 IN and a few other (idle?) endpoints stopped.
-
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: Cancel URB 00000000e74c9e14, dev 1, ep 0x0, starting at offset 0xffff4060
-[Thu May 28 11:09:45 2026] xhci_hcd 0000:0f:00.0: // Ding dong!
-[Thu May 28 11:09:50 2026] xhci_hcd 0000:0f:00.0: Command timeout, USBSTS: 0x00000000
-[Thu May 28 11:09:50 2026] xhci_hcd 0000:0f:00.0: xHCI host not responding to stop endpoint command
-
-Then some URB is unlinked from the same device's control endpoint with
-no indication that the port has been resumed. Not 100% sure whether the
-URB was submitted before or after device suspend. Either way, software
-shouldn't do such things and your HW doesn't handle it gracefully.
-
-It seems we will need to figure out how the offending URB gets there.
-Can we identify the problematic device? Please post the output of:
-
-lsusb -v |sed '/0000:0f:00.0/,/root hub/ !d'
-
-Regards,
-Michal
 
