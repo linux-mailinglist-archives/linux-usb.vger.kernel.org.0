@@ -1,873 +1,291 @@
-Return-Path: <linux-usb+bounces-38150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38151-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8JaMFHpOGWrzuQgAu9opvQ
-	(envelope-from <linux-usb+bounces-38150-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 10:29:46 +0200
+	id KC7RCm9XGWqCvggAu9opvQ
+	(envelope-from <linux-usb+bounces-38151-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 11:07:59 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78FEF5FF2DC
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 10:29:45 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 287185FFAF7
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 11:07:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id EE521305E2B9
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 08:29:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 44AF0304B32B
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 09:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2663B2FDB;
-	Fri, 29 May 2026 08:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CFC3BBA0E;
+	Fri, 29 May 2026 09:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="QUF8xyqS"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Mrf0nCSJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m32118.qiye.163.com (mail-m32118.qiye.163.com [220.197.32.118])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0317E36D9F6;
-	Fri, 29 May 2026 08:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAB6224D6;
+	Fri, 29 May 2026 09:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780043367; cv=none; b=t/wfooyFCZweeSgvoXJzS2oVTgm0Q77L8n4B9WmBmkiAC/OpCN0E/AqLuUyZOZLZt4DF0vxNKRmv07PomX90BIDOw76JZ0KnRlg67SUG0gBpyBZ8skCf+DHO5JjOb9lwGz6kDzB4T2lJJyJKnqMUsFJQjm1NeBB1B8U8KA4Uu1A=
+	t=1780045429; cv=none; b=feod0bXAey8TborfAESpGQEsB90/5OLdu4pta/jJJfvZDg9co/KztNBDzm66809ZXPuHRZLy7HgVaiQ2tZN3HO/fVCNQdMDIsr58JdD/WJGp875FyI3dUCJIvO4r2CyBirmnjlv7JdbsXyDieg6v5950i/ng0ihr6Ou2iPEilYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780043367; c=relaxed/simple;
-	bh=+SqFwtlPlP18B+h7MMnwoUeucckpJM3U+vd69fpDH7s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DXCf9mxsb3TvCA5CAYj1H0kRhF/TM0SZq7MY7W8bbYNMTQKHrM8poHmvT3e9l3Nt2nHlrCg1wstF7y45FnoE5AndX9GNKP03kYldCClHtVQmb4OOtm3+7VeBZPhCJ80SUqcIRiseT0ZpGnRgWESBecKAS259Bo6lkTX8h1Jc0nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=QUF8xyqS; arc=none smtp.client-ip=220.197.32.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.90] (unknown [61.154.14.86])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 404f0f4b2;
-	Fri, 29 May 2026 16:13:50 +0800 (GMT+08:00)
-Message-ID: <fc49e911-cb55-4b48-a4db-28fc6d519dfc@rock-chips.com>
-Date: Fri, 29 May 2026 16:13:50 +0800
+	s=arc-20240116; t=1780045429; c=relaxed/simple;
+	bh=AlSEPnpcb0HBxyxjGbqXGFcaN1VoPiCTT2ZNTI5MDkQ=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=BCoEe+pT+GJJjl4jUt7O4h1y6XQKKF7vWbIp8V7jgZ17iqLoVIcW2qX+gIlKYeqj6cCk+Vvxr43AGs9PZMnqEQi2CCj9jQaapuA/QqQFL4XOIFabxfnwUsX6y1CeaJKuKIW6qPARqJyJYCLP+dE0yqWQ/6VvUANcOgrvkxPP7CI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Mrf0nCSJ; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+	In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=RWcYBp7pC9MapLksyaubaE2KsH7xqh7gV8ow4SFcVV8=; b=Mrf0nCSJDbg6i1jSzMvZk9q54N
+	uZi/PCZ5f0dVwi7z4ZoEZcLD/W/xWtl9TViWexSc1hLlyr5gZt2GrW28Of9ljGcldkbX4Oh/wJeVE
+	v+TKbJQr/ia3Fv58+cHt/Dz4v8kGUs/sgtcxqFy4snn+t/GgTKvRAP4otQL1g6pjOI70Cl85aSR9H
+	PVgaz4HU3YLJItOuJud9X/JbxD4n8p7HbPQPdouSPB42ZTH20pr+eicfliGN2mV8/v9JX1kddEuJU
+	GTncJjVA6ukE+sgt1yKAJGz65ULHDjrgy8GvBc/zP9a6TSsKk5dq1dxD7sGbu74R0DFL3RfmS4RJn
+	h2jStYGQ==;
+Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
+	by fanzine2.igalia.com with esmtps 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wSt7v-009mn2-Cj; Fri, 29 May 2026 11:03:35 +0200
+Received: from webmail.service.igalia.com ([192.168.21.45])
+	by mail.igalia.com with esmtp (Exim)
+	id 1wSt7s-001wWo-Lo; Fri, 29 May 2026 11:03:35 +0200
+Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
+	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
+	(envelope-from <uajain@igalia.com>)
+	id 1wSt7r-00000005CFk-4AG6;
+	Fri, 29 May 2026 11:03:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 4/9] phy: rockchip: phy-rockchip-typec: Add
- typec_mux/typec_switch support
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, Hugh Cole-Baker <sigmaris@gmail.com>,
- dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, Chaoyi Chen <chaoyi.chen@rock-chips.com>
-References: <20260304094152.92-1-kernel@airkyi.com>
- <20260304094152.92-5-kernel@airkyi.com>
- <Ueak618ET1-5Ceu6vq06lg@collabora.com>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <Ueak618ET1-5Ceu6vq06lg@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Date: Fri, 29 May 2026 09:03:32 +0000
+From: Umang Jain <uajain@igalia.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lucas De Marchi
+ <demarchi@kernel.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+Subject: Re: [PATCH] usb: early: xhci-dbc: Ensure correct memory size for
+ early_ioremap()
+In-Reply-To: <2cbaa1b8-6ae3-4aa6-adeb-4b7e73be1400@linux.intel.com>
+References: <20260520094804.2981960-1-uajain@igalia.com>
+ <2026052001-ruined-pesticide-9de7@gregkh>
+ <81d706a4d1977ed39529336b2a8bc15f@igalia.com>
+ <2026052001-regally-dizziness-2271@gregkh>
+ <329c3970d932c21ca0ead6a84e573bd2@igalia.com>
+ <2cbaa1b8-6ae3-4aa6-adeb-4b7e73be1400@linux.intel.com>
+Message-ID: <3f3ec387cba2eea8f26766d324a605c4@igalia.com>
+X-Sender: uajain@igalia.com
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9e72cbf87303a7kunm8d17b1e4f7c15
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDTE4ZVkgYTx4ZTxhLSxpPTVYVFA
-	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlNSlVKTk9VSk9VQ01ZV1kWGg8SFR0UWUFZT0tIVUpLSE
-	pKQk1VSktLVUpCWQY+
-DKIM-Signature: a=rsa-sha256;
-	b=QUF8xyqSmre5VD/vXIT7b56gurvEH6i6MRCuHbRpVFruG0FKBDLyH1zsVF4h1/OloBGTRPn8hpLONZ+pJxh6LCP6xPU6Ynent/B8tnxozoF8vdPwyRrrI3IH2peiHPlj7rxKcFDvhZNSUjbmoBSY1EWZeiUS7DH2As6Iv1fNU9s=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=Km8syU7sNWPmSFqtQf7swgnDwm4sT3XqooNSj110eqI=;
-	h=date:mime-version:subject:message-id:from;
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spam-Report: NO, Score=-5.5, Tests=ALL_TRUSTED=-3,AWL=-3.301,BAYES_50=0.8,URIBL_BLOCKED=0.001,URIBL_DBL_BLOCKED_OPENDNS=0.001,URIBL_ZEN_BLOCKED_OPENDNS=0.001
+X-Spam-Score: -54
+X-Spam-Bar: -----
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
-	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-38151-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38150-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[41];
-	FREEMAIL_CC(0.00)[linux.intel.com,linuxfoundation.org,oss.qualcomm.com,gmail.com,bootlin.com,kernel.org,sntech.de,rock-chips.com,intel.com,linaro.org,ideasonboard.com,kwiboo.se,suse.de,ffwll.ch,google.com,manjaro.org,cknow.org,lists.freedesktop.org,vger.kernel.org,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[igalia.com:-];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chaoyi.chen@rock-chips.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[rock-chips.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FROM_NEQ_ENVFROM(0.00)[uajain@igalia.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.982];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,rock-chips.com:email,rock-chips.com:mid,rock-chips.com:dkim]
-X-Rspamd-Queue-Id: 78FEF5FF2DC
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:url,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,steamdeck:email]
+X-Rspamd-Queue-Id: 287185FFAF7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello Nicolas,
+Hi,
 
-Thank you for your review! :) In the next version, I will follow your
-suggestions to make the changes and split this patch into a new series.
+Followup question on this:
 
-On 5/29/2026 4:16 AM, Nicolas Frattaroli wrote:
-> On Wednesday, 4 March 2026 10:41:47 Central European Summer Time Chaoyi Chen wrote:
->> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>
->> This patch add support for Type-C Port Controller Manager. Each PHY
->> will register typec_mux and typec_switch when external Type-C
->> controller is present. Type-C events are handled by TCPM without
->> extcon.
->>
->> The extcon device should still be supported.
->>
->> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->> ---
->>
->> (no changes since v7)
->>
->> Changes in v6:
->> - Fix depend in Kconfig.
->> - Check DP svid in tcphy_typec_mux_set().
->> - Remove mode setting in tcphy_orien_sw_set().
->>
->> (no changes since v5)
->>
->> Changes in v4:
->> - Remove notify DP HPD state by USB/DP PHY.
->>
->> (no changes since v3)
->>
->> Changes in v2:
->> - Fix compile error when CONFIG_TYPEC is not enabled.
->> - Notify DP HPD state by USB/DP PHY.
->> ---
->>
->>  drivers/phy/rockchip/Kconfig              |   1 +
->>  drivers/phy/rockchip/phy-rockchip-typec.c | 368 +++++++++++++++++++++-
->>  2 files changed, 353 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
->> index 14698571b607..db4adc7c53da 100644
->> --- a/drivers/phy/rockchip/Kconfig
->> +++ b/drivers/phy/rockchip/Kconfig
->> @@ -119,6 +119,7 @@ config PHY_ROCKCHIP_SNPS_PCIE3
->>  config PHY_ROCKCHIP_TYPEC
->>  	tristate "Rockchip TYPEC PHY Driver"
->>  	depends on OF && (ARCH_ROCKCHIP || COMPILE_TEST)
->> +	depends on TYPEC || TYPEC=n
->>  	select EXTCON
->>  	select GENERIC_PHY
->>  	select RESET_CONTROLLER
->> diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
->> index d9701b6106d5..1f5b4142cbe4 100644
->> --- a/drivers/phy/rockchip/phy-rockchip-typec.c
->> +++ b/drivers/phy/rockchip/phy-rockchip-typec.c
->> @@ -54,6 +54,8 @@
->>  
->>  #include <linux/mfd/syscon.h>
->>  #include <linux/phy/phy.h>
->> +#include <linux/usb/typec_dp.h>
->> +#include <linux/usb/typec_mux.h>
->>  
->>  #define CMN_SSM_BANDGAP			(0x21 << 2)
->>  #define CMN_SSM_BIAS			(0x22 << 2)
->> @@ -286,12 +288,23 @@
->>  #define RX_DIAG_SC2C_DELAY		(0x81e1 << 2)
->>  
->>  #define PMA_LANE_CFG			(0xc000 << 2)
->> +#define PMA_LANE3_DP_LANE_SEL(x)	(((x) & 0x3) << 14)
->> +#define PMA_LANE3_INTERFACE_SEL(x)	(((x) & 0x1) << 12)
->> +#define PMA_LANE2_DP_LANE_SEL(x)	(((x) & 0x3) << 10)
->> +#define PMA_LANE2_INTERFACE_SEL(x)	(((x) & 0x1) << 8)
->> +#define PMA_LANE1_DP_LANE_SEL(x)	(((x) & 0x3) << 6)
->> +#define PMA_LANE1_INTERFACE_SEL(x)	(((x) & 0x1) << 4)
->> +#define PMA_LANE0_DP_LANE_SEL(x)	(((x) & 0x3) << 2)
->> +#define PMA_LANE0_INTERFACE_SEL(x)	(((x) & 0x1) << 0)
->>  #define PIPE_CMN_CTRL1			(0xc001 << 2)
->>  #define PIPE_CMN_CTRL2			(0xc002 << 2)
->>  #define PIPE_COM_LOCK_CFG1		(0xc003 << 2)
->>  #define PIPE_COM_LOCK_CFG2		(0xc004 << 2)
->>  #define PIPE_RCV_DET_INH		(0xc005 << 2)
->>  #define DP_MODE_CTL			(0xc008 << 2)
->> +#define PHY_DP_POWER_STATE_ACK_MASK	GENMASK(7, 4)
->> +#define PHY_DP_POWER_STATE_ACK_SHIFT	4
->> +#define PHY_DP_POWER_STATE_MASK		GENMASK(3, 0)
->>  #define DP_CLK_CTL			(0xc009 << 2)
->>  #define STS				(0xc00F << 2)
->>  #define PHY_ISO_CMN_CTRL		(0xc010 << 2)
->> @@ -327,8 +340,15 @@
->>  
->>  #define DP_MODE_A0			BIT(4)
->>  #define DP_MODE_A2			BIT(6)
->> -#define DP_MODE_ENTER_A0		0xc101
->> -#define DP_MODE_ENTER_A2		0xc104
->> +
->> +#define DP_MODE_MASK			0xf
->> +#define DP_MODE_ENTER_A0		BIT(0)
->> +#define DP_MODE_ENTER_A2		BIT(2)
->> +#define DP_MODE_ENTER_A3		BIT(3)
->> +#define DP_MODE_A0_ACK			BIT(4)
->> +#define DP_MODE_A2_ACK			BIT(6)
->> +#define DP_MODE_A3_ACK			BIT(7)
->> +#define DP_LINK_RESET_DEASSERTED	BIT(8)
->>  
->>  #define PHY_MODE_SET_TIMEOUT		100000
->>  
->> @@ -340,6 +360,31 @@
->>  #define MODE_DFP_USB			BIT(1)
->>  #define MODE_DFP_DP			BIT(2)
->>  
->> +enum phy_dp_lane_num {
->> +	PHY_DP_LANE_0 = 0,
->> +	PHY_DP_LANE_1,
->> +	PHY_DP_LANE_2,
->> +	PHY_DP_LANE_3,
->> +};
->> +
->> +enum phy_pma_if {
->> +	PMA_IF_PIPE_PCS = 0,
->> +	PMA_IF_PHY_DP,
->> +};
->> +
->> +enum phy_typec_role {
->> +	TYPEC_PHY_USB = 0,
->> +	TYPEC_PHY_DP,
->> +	TYPEC_PHY_MAX,
->> +};
->> +
->> +enum phy_dp_power_state {
->> +	PHY_DP_POWER_STATE_A0 = 0,
->> +	PHY_DP_POWER_STATE_A1,
->> +	PHY_DP_POWER_STATE_A2,
->> +	PHY_DP_POWER_STATE_A3,
->> +};
->> +
->>  struct usb3phy_reg {
->>  	u32 offset;
->>  	u32 enable_bit;
->> @@ -372,18 +417,22 @@ struct rockchip_typec_phy {
->>  	struct device *dev;
->>  	void __iomem *base;
->>  	struct extcon_dev *extcon;
->> +	struct typec_mux_dev *mux;
->> +	struct typec_switch_dev *sw;
->>  	struct regmap *grf_regs;
->>  	struct clk *clk_core;
->>  	struct clk *clk_ref;
->>  	struct reset_control *uphy_rst;
->>  	struct reset_control *pipe_rst;
->>  	struct reset_control *tcphy_rst;
->> +	struct phy *phys[TYPEC_PHY_MAX];
->>  	const struct rockchip_usb3phy_port_cfg *port_cfgs;
->>  	/* mutex to protect access to individual PHYs */
->>  	struct mutex lock;
->>  
->>  	bool flip;
->>  	u8 mode;
->> +	u8 new_mode;
->>  };
->>  
->>  struct phy_reg {
->> @@ -454,6 +503,99 @@ static const struct rockchip_usb3phy_port_cfg rk3399_usb3phy_port_cfgs[] = {
->>  	{ /* sentinel */ }
->>  };
->>  
->> +static int tcphy_cfg_usb3_to_usb2_only(struct rockchip_typec_phy *tcphy,
->> +				       bool value);
->> +
+On 2026-05-25 21:01, Mathias Nyman wrote:
+> On 20/05/2026 15.54, Umang Jain wrote:
+>> On 2026-05-20 12:42, Greg Kroah-Hartman wrote:
+>>> On Wed, May 20, 2026 at 12:27:39PM +0000, Umang Jain wrote:
+>>>> Hi Greg,
+>>>>
+>>>> On 2026-05-20 11:22, Greg Kroah-Hartman wrote:
+>>>>> On Wed, May 20, 2026 at 03:18:04PM +0530, Umang Jain wrote:
+>>>>>> early_ioremap() checks and fail, if the memory size exceeds the fixed
+>>>>>> boot-time mappings (dictated by NR_FIX_BTMAPS macro). We should ensure
+>>>>>> the correct maximum memory size is passed to early_ioremap() in the
+>>>>>> driver.
+>>>>>>
+>>>>>> Without this check and page size being 4K(4096), enabling xhci-dbc
+>>>>>> on steamdeck seems to issue the warning:
+>>>>>>
+>>>>>> steamdeck kernel: xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+>>>>>> steamdeck kernel: ------------[ cut here ]------------
+>>>>>> ay 19 13:42:57 steamdeck kernel: WARNING: CPU: 0 PID: 0 at mm/early_ioremap.c:139 __early_ioremap+0xae/0x180
+>>>>>> steamdeck kernel: Modules linked in:
+>>>>>> steamdeck kernel: CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.18.25-valve1-gcab630e7af50 #13 PREEMPT(undef)  4b70872d9de6788b7f2d10dce46ada89e6cd177b
+>>>>>> steamdeck kernel: RIP: 0010:__early_ioremap+0xae/0x180
+>>>>>> steamdeck kernel: Code: 60 ba 3f a0 4c 89 ca 48 81 e3 00 f0 ff ff 48 81 e2 00 f0 ff ff 48 29 d3 48 89 14 24 48 89 da 48 c1 ea 0c 89 d5 83 fa 40 76 04 <0f> 0b eb a2 6b c0 c0 4d 89 ce 41 81 e6 ff 0f 00 00 44 8d b8 ff 05
+>>>>>> steamdeck kernel: RSP: 0000:ffffffff9fa03cb8 EFLAGS: 00010006 ORIG_RAX: 0000000000000000
+>>>>>> steamdeck kernel: RAX: 0000000000000000 RBX: 0000000000100000 RCX: 0000000000100000
+>>>>>> steamdeck kernel: RDX: 0000000000000100 RSI: 0000000000100000 RDI: 0000000080200000
+>>>>>> steamdeck kernel: RBP: 0000000000000100 R08: 0000000000000000 R09: 0000000080200000
+>>>>>> steamdeck kernel: R10: 0000000000000004 R11: ffffffff9fa03ad0 R12: 8000000000000163
+>>>>>> steamdeck kernel: R13: 0000000000000000 R14: 0000000080200000 R15: 0000000000000000
+>>>>>> steamdeck kernel: FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
+>>>>>> steamdeck kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>> steamdeck kernel: CR2: ffff888000000413 CR3: 000000020ed02000 CR4: 00000000000000b0
+>>>>>> steamdeck kernel: Call Trace:
+>>>>>> steamdeck kernel:  <TASK>
+>>>>>> steamdeck kernel:  ? early_xdbc_parse_parameter+0x32c/0x360
+>>>>>> steamdeck kernel:  ? setup_early_printk+0x4f5/0x520
+>>>>>> steamdeck kernel:  ? do_early_param+0x44/0x70
+>>>>>> steamdeck kernel:  ? parse_args+0x233/0x420
+>>>>>> steamdeck kernel:  ? __pfx_do_early_param+0x10/0x10
+>>>>>> steamdeck kernel:  ? parse_early_options+0x29/0x30
+>>>>>> steamdeck kernel:  ? __pfx_do_early_param+0x10/0x10
+>>>>>> steamdeck kernel:  ? parse_early_param+0x64/0xc0
+>>>>>> steamdeck kernel:  ? setup_arch+0x542/0xbc0
+>>>>>> steamdeck kernel:  ? _printk+0x6b/0x90
+>>>>>> steamdeck kernel:  ? start_kernel+0x66/0x9a0
+>>>>>> steamdeck kernel:  ? x86_64_start_reservations+0x24/0x30
+>>>>>> steamdeck kernel:  ? x86_64_start_kernel+0xcc/0xd0
+>>>>>> steamdeck kernel:  ? common_startup_64+0x13e/0x141
+>>>>>> steamdeck kernel:  </TASK>
+>>>>>> steamdeck kernel: ---[ end trace 0000000000000000 ]---
+>>>>>>
+>>>>>> Signed-off-by: Umang Jain <uajain@igalia.com>
+>>>>>> ---
+>>>>>>   drivers/usb/early/xhci-dbc.c | 8 ++++++++
+>>>>>>   1 file changed, 8 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+>>>>>> index 41118bba9197..699a9ac6d6c3 100644
+>>>>>> --- a/drivers/usb/early/xhci-dbc.c
+>>>>>> +++ b/drivers/usb/early/xhci-dbc.c
+>>>>>> @@ -76,6 +76,14 @@ static void __iomem * __init xdbc_map_pci_mmio(u32 bus, u32 dev, u32 func)
+>>>>>>     	sz64 = 1ULL << __ffs64(sz64);
+>>>>>>   +	/*
+>>>>>> +	 * Check that size does not exceed fixed boot-time mappings
+>>>>>> +	 * dictated by NR_FIX_BTMAPS. early_ioremap() will WARN_ON()
+>>>>>> +	 * and not map memory in those cases.
+>>>>>> +	 */
+>>>>>> +	if (sz64 > (NR_FIX_BTMAPS << PAGE_SHIFT))
+>>>>>> +		sz64 = NR_FIX_BTMAPS << PAGE_SHIFT;
+>>>>>
+>>>>> You are bounding the size here, but does this mean that the hardware
+>>>>> itself is just broken and should be fixed up to properly report the
+>>>>> correct size?  Does this hardware actually have a debug controller?
+>>>>
+>>>> Hmm, to answer your first question as far as I have read, the size is
+>>>> inferred from PCI config with base address. My understanding here is
+>>>> that
+>>>> for early xhci debugging - the page mappings are fixed, so we need to
+>>>> bound the size for early_ioremap().
+>>>
+>>> So the device is providing the wrong size here?  Why is this an issue
+>>> only for this hardware and not other hardware?
+>>>
+>>>> The second answer is, yes the hardware has debug controller. We can
+>>>> configure it after boot
+>>>> and it works with USB3.1 Superspeed cable with host:
+>>>>
+>>>> (on target)
+>>>> (A+)(root@steamdeck ~)# echo enable  >
+>>>> /sys/devices/pci0000:00/0000:00:08.1/0000:04:00.3/dbc
+>>>> (A+)(root@steamdeck ~)# dmesg | grep DbC
+>>>> [  366.276124] xhci_hcd 0000:04:00.3: DbC connected
+>>>> [  366.637223] xhci_hcd 0000:04:00.3: DbC configured
+>>>>
+>>>> (on host)
+>>>> [114288.650481] usb 4-2: new SuperSpeed USB device number 55 using
+>>>> xhci_hcd
+>>>> [114288.662907] usb 4-2: New USB device found, idVendor=1d6b,
+>>>> idProduct=0010, bcdDevice= 0.10
+>>>> [114288.662935] usb 4-2: New USB device strings: Mfr=1, Product=2,
+>>>> SerialNumber=3
+>>>> [114288.662945] usb 4-2: Product: Linux USB Debug Target
+>>>> [114288.662953] usb 4-2: Manufacturer: Linux Foundation
+>>>> [114288.662960] usb 4-2: SerialNumber: 0001
+>>>> [114288.666320] usb_debug 4-2:1.0: xhci_dbc converter detected
+>>>> [114288.666474] usb 4-2: xhci_dbc converter now attached to ttyUSB0
+>>>>   
+>>>>>
+>>>>> And what changed to cause this to start complaining?  Does it fix a
+>>>>> specific commit?  This hardware has been around for a long time, did we
+>>>>> mess something up in the kernel for it recently?
+>>>>
+>>>> This fix/patch is only for early xdbc. As mentioned above, it can be
+>>>> used/configured after boot.
+>>>> So yes, the hardware has been around but I don't think that early xdbc
+>>>> capability was investigated at any point in time. I don't see recents
+>>>> commits early xhci as well so maybe it was hidden all this time.
+>>>
+>>> Ok, but it is good to figure out what is "wrong" here that this hardware
+>>> is causing this warning to happen, yet other hardware does not.  Either
+>>> the kernel has always been wrong (totally a possibility), or this
+>>> hardware is reporting invalid ranges.  Figuring out which is true would
+>>> be good to figure out here.
+>> 
+>> Oh yes definitely.
+>> 
+>> I, although don't have any order hardware so I will look around. I
+>> haven't investigated the ranges yet, so I will investigate that too. My
+>> logic initially was that it's the "early boot" that is forcing a
+>> pages/size capping so we need to fit there.
+>>  From __early_ioremap() in mm/early_ioremap.c
+>> 
+>> ...
+>> 	/*
+>> 	 * Mappings have to fit in the FIX_BTMAP area.
+>> 	 */
+>> 	nrpages = size >> PAGE_SHIFT;
+>> 	if (WARN_ON(nrpages > NR_FIX_BTMAPS))
+>> 		return NULL;
+>> 
+>> ...
+>> 
 > 
-> If possible, please avoid forward declarations of this static
-> function and just move the implementation here if it needs to
-> be declared earlier.
->
+> Sometimes a xHC controller report a larger size than early ioremap supports.
+> This is because xHC from different vendors supports different extended
+> capabilities, both standard ones like DbC and vendor specific ones, all at vendor chosen offsets.
+> 
+> To find offset of a extended capability we need to walk the extended capability list. If we limit the size here in software then we need to very carefully walk the capability list, making sure we don't go over that limit.
 
-Then I also need to move "property_enable()" to here.
-Okay, I will fix this in next version.
+The offset part is fine, but if I am reading the spec correctly [1] the
+dbc information size is just the "56 bytes" ?
 
->> +static int tcphy_dp_set_power_state(struct rockchip_typec_phy *tcphy,
->> +				    enum phy_dp_power_state state)
->> +{
->> +	u32 ack, reg, sts = BIT(state);
->> +	int ret;
->> +
->> +	/*
->> +	 * Power state changes must not be requested until after the cmn_ready
->> +	 * signal has gone active.
->> +	 */
->> +	reg = readl(tcphy->base + PMA_CMN_CTRL1);
->> +	if (!(reg & CMN_READY)) {
->> +		dev_err(tcphy->dev, "cmn_ready in the inactive state\n");
->> +		return -EINVAL;
->> +	}
-> 
-> You can use readl in the if condition directly here, since reg
-> isn't used otherwise, but I'm also fine with it as-is if you think
-> it helps readability.
->
+Should we only map 56 bytes in early_ioremap() ? After finding the
+offset?
 
-Hmmm. From the context, the current version should be more readable.
+[1]: Table 7-2 xHCI Extended Capability Codes (Page 517)
+https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf
 
->> +
->> +	reg = readl(tcphy->base + DP_MODE_CTL);
->> +	reg &= ~PHY_DP_POWER_STATE_MASK;
->> +	reg |= sts;
->> +	writel(reg, tcphy->base + DP_MODE_CTL);
->> +
->> +	ret = readl_poll_timeout(tcphy->base + DP_MODE_CTL,
->> +				 ack, (((ack & PHY_DP_POWER_STATE_ACK_MASK) >>
->> +				 PHY_DP_POWER_STATE_ACK_SHIFT) == sts), 10,
->> +				 PHY_MODE_SET_TIMEOUT);
-> 
-> Here please use FIELD_GET() from <linux/bitfield.h> like this:
-> 
-> 	ret = readl_poll_timeout(tcphy->base + DP_MODE_CTL, ack,
-> 				 FIELD_GET(PHY_DP_POWER_STATE_ACK_MASK, ack) == sts,
-> 				 10, PHY_MODE_SET_TIMEOUT);
-> 
-> PHY_DP_POWER_STATE_ACK_SHIFT is then no longer needed.
->
 
-Great. Will fix in next version.
 
->> +	if (ret < 0) {
 > 
-> Nitpick: `if (ret) {` suffices here, readl_poll_timeout returns 0 on
-> success and negative errno on failure.
+> There was some debugging done here in this thread
 > 
->> +		dev_err(tcphy->dev, "failed to enter power state %d\n", state);
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +/*
->> + * For the TypeC PHY, the 4 lanes are mapping to the USB TypeC receptacle pins
->> + * as follows:
->> + *   -------------------------------------------------------------------
->> + *	PHY Lanes/Module Pins			TypeC Receptacle Pins
->> + *   -------------------------------------------------------------------
->> + *	Lane0 (tx_p/m_ln_0)			TX1+/TX1- (pins A2/A3)
->> + *	Lane1 (tx_rx_p/m_ln_1)			RX1+/RX1- (pins B11/B10)
->> + *	Lane2 (tx_rx_p/m_ln_2)			RX2+/RX2- (pins A11/A10)
->> + *	Lane3 (tx_p/m_ln_3)			TX2+/TX2- (pins B2/B3)
->> + *   -------------------------------------------------------------------
->> + *
->> + * USB and DP lanes mapping to TypeC PHY lanes for each of pin assignment
->> + * options (normal connector orientation) described in the VESA DisplayPort
->> + * Alt Mode on USB TypeC Standard as follows:
->> + *
->> + * ----------------------------------------------------------------------
->> + *	PHY Lanes	A	B	C	D	E	F
->> + * ----------------------------------------------------------------------
->> + *	  0	       ML1     SSTX    ML2     SSTX    ML2     SSTX
->> + *	  1	       ML3     SSRX    ML3     SSRX    ML3     SSRX
->> + *	  2	       ML2     ML1     ML0     ML0     ML0     ML0
->> + *	  3	       ML0     ML0     ML1     ML1     ML1     ML1
->> + * ----------------------------------------------------------------------
->> + */
->> +static void tcphy_set_lane_mapping(struct rockchip_typec_phy *tcphy, u8 mode)
->> +{
->> +	/*
->> +	 * The PMA_LANE_CFG register is used to select whether a PMA lane
->> +	 * is mapped for USB or PHY DP. The PMA_LANE_CFG register is
->> +	 * configured based on a normal connector orientation. Logic in the
->> +	 * PHY automatically handles the flipped connector case based on the
->> +	 * setting of orientation of TypeC PHY.
->> +	 */
->> +	if (mode == MODE_DFP_DP) {
->> +		/* This maps to VESA DP Alt Mode pin assignments C and E. */
->> +		writel(PMA_LANE3_DP_LANE_SEL(PHY_DP_LANE_1) |
->> +		       PMA_LANE3_INTERFACE_SEL(PMA_IF_PHY_DP) |
->> +		       PMA_LANE2_DP_LANE_SEL(PHY_DP_LANE_0) |
->> +		       PMA_LANE2_INTERFACE_SEL(PMA_IF_PHY_DP) |
->> +		       PMA_LANE1_DP_LANE_SEL(PHY_DP_LANE_3) |
->> +		       PMA_LANE1_INTERFACE_SEL(PMA_IF_PHY_DP) |
->> +		       PMA_LANE0_DP_LANE_SEL(PHY_DP_LANE_2) |
->> +		       PMA_LANE0_INTERFACE_SEL(PMA_IF_PHY_DP),
->> +		       tcphy->base + PMA_LANE_CFG);
->> +	} else {
->> +		/* This maps to VESA DP Alt Mode pin assignments D and F. */
->> +		writel(PMA_LANE3_DP_LANE_SEL(PHY_DP_LANE_1) |
->> +		       PMA_LANE3_INTERFACE_SEL(PMA_IF_PHY_DP) |
->> +		       PMA_LANE2_DP_LANE_SEL(PHY_DP_LANE_0) |
->> +		       PMA_LANE2_INTERFACE_SEL(PMA_IF_PHY_DP) |
->> +		       PMA_LANE1_INTERFACE_SEL(PMA_IF_PIPE_PCS) |
->> +		       PMA_LANE0_INTERFACE_SEL(PMA_IF_PIPE_PCS),
->> +		       tcphy->base + PMA_LANE_CFG);
->> +	}
->> +}
->> +
->>  static void tcphy_cfg_24m(struct rockchip_typec_phy *tcphy)
->>  {
->>  	u32 i, rdata;
->> @@ -743,8 +885,10 @@ static int tcphy_phy_init(struct rockchip_typec_phy *tcphy, u8 mode)
->>  	tcphy_dp_aux_set_flip(tcphy);
->>  
->>  	tcphy_cfg_24m(tcphy);
->> +	tcphy_set_lane_mapping(tcphy, mode);
->>  
->>  	if (mode == MODE_DFP_DP) {
->> +		tcphy_cfg_usb3_to_usb2_only(tcphy, true);
->>  		tcphy_cfg_dp_pll(tcphy);
->>  		for (i = 0; i < 4; i++)
->>  			tcphy_dp_cfg_lane(tcphy, i);
+> https://lore.kernel.org/linux-usb/4e6d9b62-b9d0-4a05-99a9-143899547664@linux.intel.com/
 > 
-> Is there a difference between the values tcphy_set_lane_mapping() writes
-> to PMA_LANE_CFG, and what this if block writes to PMA_LANE_CFG at the
-> end (either PIN_ASSIGN_C_E or PIN_ASSIGN_D_F)?
-> 
-> If not, then I think think the second write to it may be redundant.
->
-
-That's right. I will remove them.
-
->> @@ -768,7 +912,10 @@ static int tcphy_phy_init(struct rockchip_typec_phy *tcphy, u8 mode)
->>  		writel(PIN_ASSIGN_D_F, tcphy->base + PMA_LANE_CFG);
->>  	}
->>  
->> -	writel(DP_MODE_ENTER_A2, tcphy->base + DP_MODE_CTL);
->> +	val = readl(tcphy->base + DP_MODE_CTL);
->> +	val &= ~DP_MODE_MASK;
->> +	val |= DP_MODE_ENTER_A2 | DP_LINK_RESET_DEASSERTED;
->> +	writel(val, tcphy->base + DP_MODE_CTL);
->>  
->>  	reset_control_deassert(tcphy->uphy_rst);
->>  
->> @@ -811,8 +958,9 @@ static int tcphy_get_mode(struct rockchip_typec_phy *tcphy)
->>  	u8 mode;
->>  	int ret, ufp, dp;
->>  
->> +	/* If extcon not exist, try to use tcpm mode */
->>  	if (!edev)
->> -		return MODE_DFP_USB;
->> +		return tcphy->new_mode;
->>  
->>  	ufp = extcon_get_state(edev, EXTCON_USB);
->>  	dp = extcon_get_state(edev, EXTCON_DISP_DP);
->> @@ -850,6 +998,71 @@ static int tcphy_get_mode(struct rockchip_typec_phy *tcphy)
->>  	return mode;
->>  }
->>  
->> +#if IS_ENABLED(CONFIG_TYPEC)
->> +static int tcphy_orien_sw_set(struct typec_switch_dev *sw,
->> +			      enum typec_orientation orien)
->> +{
->> +	struct rockchip_typec_phy *tcphy = typec_switch_get_drvdata(sw);
->> +
->> +	mutex_lock(&tcphy->lock);
-> 
-> Instead of this you can use
-> 
-> 	guard(mutex)(&tcphy->lock);
-> 
-> from <linux/cleanup.h>
-> 
-> and get rid of the manual unlock and goto. The lock held by the guard
-> statement will be dropped as soon as the scope of automatic variable
-> declaration is left, so no manual goto unwind needs to be done.
->
-
-Thanks. I will try it.
-
->> +
->> +	if (orien == TYPEC_ORIENTATION_NONE) {
->> +		tcphy->new_mode = MODE_DISCONNECT;
->> +		goto unlock_ret;
->> +	}
->> +
->> +	tcphy->flip = (orien == TYPEC_ORIENTATION_REVERSE) ? true : false;
->> +
->> +unlock_ret:
->> +	mutex_unlock(&tcphy->lock);
->> +	return 0;
->> +}
->> +
->> +static void udphy_orien_switch_unregister(void *data)
->> +{
->> +	struct rockchip_typec_phy *tcphy = data;
->> +
->> +	typec_switch_unregister(tcphy->sw);
->> +}
->> +
->> +static int tcphy_setup_orien_switch(struct rockchip_typec_phy *tcphy)
->> +{
->> +	struct typec_switch_desc sw_desc = { };
->> +	struct device_node *np;
->> +	int ret = 0;
->> +
->> +	np = of_get_child_by_name(tcphy->dev->of_node, "usb3-port");
->> +	if (!np)
->> +		return 0;
->> +
->> +	if (!of_property_read_bool(np, "orientation-switch"))
->> +		goto put_np;
-> 
-> np isn't needed after this check. Instead of manual freeing of np
-> with a goto, you can use the `__free(device_node)` attribute.
-> 
-> 	static int foo(struct rockchip_typec_phy *tcphy)
-> 	{
-> 		/* if return can happen before np assigned, NULL-init it here */
-> 		struct device_node __free(device_node) *np;
-> 		
-> 		np = of_get_child_by_name(tcphy->dev->of_node, "usb3-port");
-> 		if (!np)
-> 			return 0;
-> 
-> 		if (!of_property_read_bool(np, "orientation-switch"))
-> 			return 0; /* no more manual put needed, done when scope left */
-> 
-> 		/* ... etc etc. ... */
-> 
-> 		return devm_add_action_or_reset(tcphy->dev, ...)
-> 	}
->
-
-Will fix in next version.
-
->> +
->> +	sw_desc.drvdata = tcphy;
->> +	sw_desc.fwnode = device_get_named_child_node(tcphy->dev, "usb3-port");
->> +	sw_desc.set = tcphy_orien_sw_set;
->> +
->> +	tcphy->sw = typec_switch_register(tcphy->dev, &sw_desc);
->> +	if (IS_ERR(tcphy->sw)) {
->> +		dev_err(tcphy->dev, "Error register typec orientation switch: %ld\n",
->> +			PTR_ERR(tcphy->sw));
-> 
-> Instead of %ld, use %pe and drop the `PTR_ERR()`, so just:
-> 
-> 	dev_err(tcphy->dev, "Error register typec orientation switch: %pe\n",
-> 	        tcphy->sw);
->
-
-Will fix in next version.
-
->> +		ret = PTR_ERR(tcphy->sw);
->> +		goto put_np;
->> +	}
->> +
->> +	ret = devm_add_action_or_reset(tcphy->dev, udphy_orien_switch_unregister, tcphy);
->> +
->> +put_np:
->> +	of_node_put(np);
->> +	return ret;
->> +}
->> +#else
->> +static int tcphy_setup_orien_switch(struct rockchip_typec_phy *tcphy)
->> +{
->> +	return 0;
->> +}
->> +#endif
->> +
->>  static int tcphy_cfg_usb3_to_usb2_only(struct rockchip_typec_phy *tcphy,
->>  				       bool value)
->>  {
->> @@ -989,14 +1202,9 @@ static int rockchip_dp_phy_power_on(struct phy *phy)
->>  
->>  	tcphy_dp_aux_calibration(tcphy);
->>  
->> -	writel(DP_MODE_ENTER_A0, tcphy->base + DP_MODE_CTL);
->> -
->> -	ret = readx_poll_timeout(readl, tcphy->base + DP_MODE_CTL,
->> -				 val, val & DP_MODE_A0, 1000,
->> -				 PHY_MODE_SET_TIMEOUT);
->> -	if (ret < 0) {
->> -		writel(DP_MODE_ENTER_A2, tcphy->base + DP_MODE_CTL);
->> -		dev_err(tcphy->dev, "failed to wait TCPHY enter A0\n");
->> +	ret = tcphy_dp_set_power_state(tcphy, PHY_DP_POWER_STATE_A0);
->> +	if (ret) {
->> +		dev_err(tcphy->dev, "failed to enter A0 power state\n");
->>  		goto power_on_finish;
->>  	}
->>  
->> @@ -1013,6 +1221,7 @@ static int rockchip_dp_phy_power_on(struct phy *phy)
->>  static int rockchip_dp_phy_power_off(struct phy *phy)
->>  {
->>  	struct rockchip_typec_phy *tcphy = phy_get_drvdata(phy);
->> +	int ret;
->>  
->>  	mutex_lock(&tcphy->lock);
->>  
->> @@ -1021,7 +1230,11 @@ static int rockchip_dp_phy_power_off(struct phy *phy)
->>  
->>  	tcphy->mode &= ~MODE_DFP_DP;
->>  
->> -	writel(DP_MODE_ENTER_A2, tcphy->base + DP_MODE_CTL);
->> +	ret = tcphy_dp_set_power_state(tcphy, PHY_DP_POWER_STATE_A2);
->> +	if (ret) {
->> +		dev_err(tcphy->dev, "failed to enter A2 power state\n");
->> +		goto unlock;
->> +	}
->>  
->>  	if (tcphy->mode == MODE_DISCONNECT)
->>  		tcphy_phy_deinit(tcphy);
->> @@ -1037,6 +1250,93 @@ static const struct phy_ops rockchip_dp_phy_ops = {
->>  	.owner		= THIS_MODULE,
->>  };
->>  
->> +#if IS_ENABLED(CONFIG_TYPEC)
->> +static int tcphy_typec_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
->> +{
->> +	struct rockchip_typec_phy *tcphy = typec_mux_get_drvdata(mux);
->> +	struct typec_displayport_data *data;
->> +	int hpd = 0;
-> 
-> hpd doesn't need to be initialised here.
->
-
-That's right.
-
->> +
->> +	mutex_lock(&tcphy->lock);
-> 
-> Prefer guard(mutex)(&tcphy->lock); here to combat potential for
-> future lock leaking bugs.
->
-
-Will fix in next version.
-
->> +
->> +	switch (state->mode) {
->> +	case TYPEC_STATE_SAFE:
->> +		fallthrough;
->> +	case TYPEC_STATE_USB:
->> +		tcphy->new_mode = MODE_DFP_USB;
->> +		phy_set_bus_width(tcphy->phys[TYPEC_PHY_DP], 0);
->> +		break;
->> +	case TYPEC_DP_STATE_C:
->> +	case TYPEC_DP_STATE_E:
->> +		if (state->alt->svid != USB_TYPEC_DP_SID)
->> +			break;
->> +		tcphy->new_mode = MODE_DFP_DP;
->> +		data = state->data;
->> +		hpd = !!(data->status & DP_STATUS_HPD_STATE);
->> +		phy_set_bus_width(tcphy->phys[TYPEC_PHY_DP], hpd ? 4 : 0);
->> +		break;
->> +	case TYPEC_DP_STATE_D:
->> +		if (state->alt->svid != USB_TYPEC_DP_SID)
->> +			break;
->> +		tcphy->new_mode = MODE_DFP_DP | MODE_DFP_USB;
->> +		data = state->data;
->> +		hpd = !!(data->status & DP_STATUS_HPD_STATE);
->> +		phy_set_bus_width(tcphy->phys[TYPEC_PHY_DP], hpd ? 2 : 0);
->> +		break;
->> +	default:
->> +		break;
-> 
-> Might be good to return -EINVAL here. No additional ret local needed
-> with above guard statement. :)
->
-
-It make sense. Will fix in next version.
-
->> +	}
->> +
->> +	mutex_unlock(&tcphy->lock);
->> +
->> +	return 0;
->> +}
->> +
->> +static void tcphy_typec_mux_unregister(void *data)
->> +{
->> +	struct rockchip_typec_phy *tcphy = data;
->> +
->> +	typec_mux_unregister(tcphy->mux);
->> +}
->> +
->> +static int tcphy_setup_typec_mux(struct rockchip_typec_phy *tcphy)
->> +{
->> +	struct typec_mux_desc mux_desc = {};
->> +	struct device_node *np;
->> +	int ret = 0;
->> +
->> +	np = of_get_child_by_name(tcphy->dev->of_node, "dp-port");
->> +	if (!np)
->> +		return 0;
->> +
->> +	if (!of_property_read_bool(np, "mode-switch"))
->> +		goto put_np;
-> 
-> __free attribute on np can get rid of the manual goto put_np stuff
-> here as well.
->
-
-Will fix in next version.
-
->> +
->> +	mux_desc.drvdata = tcphy;
->> +	mux_desc.fwnode = device_get_named_child_node(tcphy->dev, "dp-port");
->> +	mux_desc.set = tcphy_typec_mux_set;
->> +
->> +	tcphy->mux = typec_mux_register(tcphy->dev, &mux_desc);
->> +	if (IS_ERR(tcphy->mux)) {
->> +		dev_err(tcphy->dev, "Error register typec mux: %ld\n",
->> +			PTR_ERR(tcphy->mux));
-> 
-> %pe format specifier again.
->
-
-Will fix in next version.
-
->> +		ret = PTR_ERR(tcphy->mux);
->> +		goto put_np;
->> +	}
->> +
->> +	ret = devm_add_action_or_reset(tcphy->dev, tcphy_typec_mux_unregister, tcphy);
->> +
->> +put_np:
->> +	of_node_put(np);
->> +	return ret;
->> +}
->> +#else
->> +static int tcphy_setup_typec_mux(struct rockchip_typec_phy *tcphy)
->> +{
->> +	return 0;
->> +}
->> +#endif
->> +
->>  static int tcphy_parse_dt(struct rockchip_typec_phy *tcphy,
->>  			  struct device *dev)
->>  {
->> @@ -1095,6 +1395,25 @@ static void typec_phy_pre_init(struct rockchip_typec_phy *tcphy)
->>  	tcphy->mode = MODE_DISCONNECT;
->>  }
->>  
->> +static int typec_dp_lane_get(struct rockchip_typec_phy *tcphy)
->> +{
->> +	int dp_lanes;
->> +
->> +	switch (tcphy->new_mode) {
->> +	case MODE_DFP_DP:
->> +		dp_lanes = 4;
->> +		break;
->> +	case MODE_DFP_DP | MODE_DFP_USB:
->> +		dp_lanes = 2;
->> +		break;
->> +	default:
->> +		dp_lanes = 0;
->> +		break;
->> +	}
->> +
->> +	return dp_lanes;
-> 
-> dp_lanes local doesn't need to exist here, you
-> can just return from the switch statement directly:
-> 
-> 	static int typec_dp_lane_get(struct rockchip_typec_phy *tcphy)
-> 	{
-> 		switch (tcphy->new_mode) {
-> 		case MODE_DFP_DP:
-> 			return 4;
-> 		case MODE_DFP_DP | MODE_DFP_USB:
-> 			return 2;
-> 		default:
-> 			return 0;
-> 		}
-> 	}
-> 
->
-
-Exactly. Will fix in next version.
-
->> +}
->> +
->>  static int rockchip_typec_phy_probe(struct platform_device *pdev)
->>  {
->>  	struct device *dev = &pdev->dev;
->> @@ -1142,6 +1461,7 @@ static int rockchip_typec_phy_probe(struct platform_device *pdev)
->>  		return ret;
->>  
->>  	tcphy->dev = dev;
->> +	tcphy->new_mode = MODE_DFP_USB;
->>  	platform_set_drvdata(pdev, tcphy);
->>  	mutex_init(&tcphy->lock);
->>  
->> @@ -1151,6 +1471,7 @@ static int rockchip_typec_phy_probe(struct platform_device *pdev)
->>  	if (IS_ERR(tcphy->extcon)) {
->>  		if (PTR_ERR(tcphy->extcon) == -ENODEV) {
->>  			tcphy->extcon = NULL;
->> +			dev_info(dev, "extcon not exist, try to use typec mux\n");
->>  		} else {
->>  			if (PTR_ERR(tcphy->extcon) != -EPROBE_DEFER)
->>  				dev_err(dev, "Invalid or missing extcon\n");
->> @@ -1158,19 +1479,34 @@ static int rockchip_typec_phy_probe(struct platform_device *pdev)
->>  		}
->>  	}
->>  
->> +	ret = tcphy_setup_orien_switch(tcphy);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = tcphy_setup_typec_mux(tcphy);
->> +	if (ret)
->> +		return ret;
-> 
-> If they are just used in the probe function, you can make the error
-> prints in tcphy_setup_orien_switch() and tcphy_setup_typec_mux()
-> use dev_err_probe instead. That way, if the probe function fails,
-> the error message is shown in the devices_deferred debugfs file.
->
-
-Nice, I will use it in next version.
-
->> +
->>  	pm_runtime_enable(dev);
->>  
->>  	for_each_available_child_of_node(np, child_np) {
->>  		struct phy *phy;
->>  
->> -		if (of_node_name_eq(child_np, "dp-port"))
->> +		if (of_node_name_eq(child_np, "dp-port")) {
->>  			phy = devm_phy_create(dev, child_np,
->>  					      &rockchip_dp_phy_ops);
->> -		else if (of_node_name_eq(child_np, "usb3-port"))
->> +			if (!IS_ERR(phy)) {
->> +				tcphy->phys[TYPEC_PHY_DP] = phy;
->> +				phy_set_bus_width(phy, typec_dp_lane_get(tcphy));
->> +			}
->> +		} else if (of_node_name_eq(child_np, "usb3-port")) {
->>  			phy = devm_phy_create(dev, child_np,
->>  					      &rockchip_usb3_phy_ops);
->> -		else
->> +			if (!IS_ERR(phy))
->> +				tcphy->phys[TYPEC_PHY_USB] = phy;
->> +		} else {
->>  			continue;
->> +		}
->>  
->>  		if (IS_ERR(phy)) {
->>  			dev_err(dev, "failed to create phy: %pOFn\n",
->>
-> 
-> Kind regards,
-> Nicolas Frattaroli
-> 
-> 
-> 
-
--- 
-Best, 
-Chaoyi
+> Thanks
+> Mathias
 
