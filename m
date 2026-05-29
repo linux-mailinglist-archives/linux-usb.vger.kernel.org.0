@@ -1,291 +1,181 @@
-Return-Path: <linux-usb+bounces-38151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38152-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KC7RCm9XGWqCvggAu9opvQ
-	(envelope-from <linux-usb+bounces-38151-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 11:07:59 +0200
+	id uMGTGlhYGWqtvggAu9opvQ
+	(envelope-from <linux-usb+bounces-38152-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 11:11:52 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 287185FFAF7
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 11:07:58 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C098A5FFBCE
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 11:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 44AF0304B32B
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 09:03:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A0D5630908B7
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 09:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CFC3BBA0E;
-	Fri, 29 May 2026 09:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CAD33F8AA;
+	Fri, 29 May 2026 09:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Mrf0nCSJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pKyCcyXK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAB6224D6;
-	Fri, 29 May 2026 09:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BCA23B83FB
+	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 09:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780045429; cv=none; b=feod0bXAey8TborfAESpGQEsB90/5OLdu4pta/jJJfvZDg9co/KztNBDzm66809ZXPuHRZLy7HgVaiQ2tZN3HO/fVCNQdMDIsr58JdD/WJGp875FyI3dUCJIvO4r2CyBirmnjlv7JdbsXyDieg6v5950i/ng0ihr6Ou2iPEilYI=
+	t=1780045518; cv=none; b=NzlFkV3/qUP8WREDxb8mjuyrxauc1divT8ue2lyi6YhcJ9LELKbAdEe3fjfeGwULXEjPfjJhsVP4OTbYAFlO9/Nru0/7FBfbd4gMOiHppLgFVs6fpsTLQqFPlyD2x7ErRtyEWlZwM6a8PPUIfeoxl9b4H1L6GVC4/7la4f6Cf3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780045429; c=relaxed/simple;
-	bh=AlSEPnpcb0HBxyxjGbqXGFcaN1VoPiCTT2ZNTI5MDkQ=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=BCoEe+pT+GJJjl4jUt7O4h1y6XQKKF7vWbIp8V7jgZ17iqLoVIcW2qX+gIlKYeqj6cCk+Vvxr43AGs9PZMnqEQi2CCj9jQaapuA/QqQFL4XOIFabxfnwUsX6y1CeaJKuKIW6qPARqJyJYCLP+dE0yqWQ/6VvUANcOgrvkxPP7CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Mrf0nCSJ; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
-	In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=RWcYBp7pC9MapLksyaubaE2KsH7xqh7gV8ow4SFcVV8=; b=Mrf0nCSJDbg6i1jSzMvZk9q54N
-	uZi/PCZ5f0dVwi7z4ZoEZcLD/W/xWtl9TViWexSc1hLlyr5gZt2GrW28Of9ljGcldkbX4Oh/wJeVE
-	v+TKbJQr/ia3Fv58+cHt/Dz4v8kGUs/sgtcxqFy4snn+t/GgTKvRAP4otQL1g6pjOI70Cl85aSR9H
-	PVgaz4HU3YLJItOuJud9X/JbxD4n8p7HbPQPdouSPB42ZTH20pr+eicfliGN2mV8/v9JX1kddEuJU
-	GTncJjVA6ukE+sgt1yKAJGz65ULHDjrgy8GvBc/zP9a6TSsKk5dq1dxD7sGbu74R0DFL3RfmS4RJn
-	h2jStYGQ==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-	by fanzine2.igalia.com with esmtps 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wSt7v-009mn2-Cj; Fri, 29 May 2026 11:03:35 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-	by mail.igalia.com with esmtp (Exim)
-	id 1wSt7s-001wWo-Lo; Fri, 29 May 2026 11:03:35 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
-	(envelope-from <uajain@igalia.com>)
-	id 1wSt7r-00000005CFk-4AG6;
-	Fri, 29 May 2026 11:03:32 +0200
+	s=arc-20240116; t=1780045518; c=relaxed/simple;
+	bh=6/4ydw5s/iaq6poXIuJBHDyGmmyhrg0/yKjMttGBOBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jedqiSL3ONlyxvpwmN/rGcrecvmbMt1lOugZDb7y4lYWLWZhgUj3jQsHEQsNeRdHIl7lGyGOjqGhP2mL+u5bpzGN02iGQogADduuqKWkqFU5Lyl+v6gL1Vw/96EGpKvqICgUO/6j7fRQdkQqDKOuvVjvtmtflPdJahnfiYZSDpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pKyCcyXK; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-459bf19e87bso8275451f8f.1
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 02:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780045516; x=1780650316; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YHQcc7Z4aI0VEcc8CWWx1n+N4u8iP52vYgOu5CKwS8s=;
+        b=pKyCcyXKV8C6D4divL2SLjcOiXJnJ7NhAcjsJ+f8SHfQdhTLsS+JuuP20NSQS5ShSo
+         XEAkvDULoyU25CexVjFWH9V5Wmig69kd1z7FGcckPZzGbz6ifsclyzZMfsvNQtcEWTnN
+         M2JgJAHVbU6LT0u7moNq94qXZ3q7FZ0wbApp8zh4tw/+GaDNF4fpgvF1nrv7goDLxLZ0
+         rCkhqARaZn6StpMQ1Yei2IWYGJrZNd23DgUInCtMmW3Ch65t7mMcH8XthkJQg8jGZegp
+         aHYgFxJzK7ZPm09JEGbBBKo7fSk3j/jgepY9lxWueoFoAKlGibnjJp89ZMfmvalzHyMb
+         SXqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780045516; x=1780650316;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YHQcc7Z4aI0VEcc8CWWx1n+N4u8iP52vYgOu5CKwS8s=;
+        b=tYroTJqRFQ97IfMXCVd9E6BeTo2s1/8p7vzmoXTmxRrrLEsI+gJtHmd86OIpQoFXqa
+         obC/r+RP0UpuCKmQTY6oNdZRmsYRtDqFOaEHe0Ms8helWzMn3sRZSDGnUc8JiZnsQ0OR
+         k79G8oOl3+ArJPifZAeMkwEXc6epdbnaZeaQkkSyfBqR2ERnp301T2TTgQ33/QpynU9c
+         y8ikqfxmskM2pgnrwWcvlWFm1tPMb0dSUvAc4CgpYzM3xh0bYBMgvH1We/RmzTtcxLPu
+         NmQIxMN8B14PqW984ypTrPc7/ezYVRpbWm2WPxd7lIuWBNGdoiUZh7JI3HQJHSY7K3u4
+         Pfaw==
+X-Gm-Message-State: AOJu0Ywfb7kSqxo1Q+OQcaHgqwvtFKXbN8iBrqMz9AWGOv7hpQNYQ+YP
+	xtESEHrh2ZBzFn7y6ufVxMldYpIGQ/4kXNMyxUkvA6cRGnXlFItN1rGz
+X-Gm-Gg: Acq92OGzAwxdZgjmU6VmM09w0ksefTwEJQhOHV1LDjKoGicw5PQz9u4roOTFPvOfOx3
+	tZ5qwPZ18x5qCsLV8w1LDjoOpxk9SjvAx7WymlsPus35V2wbEiHZNhtPZqjMp2nOSWhKTNHfhzU
+	cUE60I3QCwrrescrzKlAWMy0BZvckDQaWfCUwQPo0AvGJOo5dEmenBrBlN+PJGmrcYoVCfhcoYB
+	LsyNeh0I9e4YgzNADBb5Pj9PoDxk9mvSabf/jFXQmHIFrptbraVieibv8vL6KWiaKcD/C4MJ77N
+	MUzIkx8namGH3DX9W+1JXKKDW96dMnuw0FsfiWBBN7eb7qizfow0yxzXuzdzcP9Ywixq2ZZylYj
+	zEsM4sZNCACZtZ1gCEGAhOh3gunCATu1yrCgv2F2PqOLj4F8LWwp5gCfZN6VJT51FQLSbCADpof
+	voWf3JvvocVEwFLiAIpicSoJ3GPGmO1g2oVW0lqXC1RpHaYeNbK9CIFKK8
+X-Received: by 2002:a05:600c:6287:b0:48a:58ae:993b with SMTP id 5b1f17b1804b1-4909c0ac81bmr36499935e9.16.1780045515518;
+        Fri, 29 May 2026 02:05:15 -0700 (PDT)
+Received: from foxbook (bfe246.neoplus.adsl.tpnet.pl. [83.28.42.246])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34bcc30sm1987465f8f.12.2026.05.29.02.05.14
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 29 May 2026 02:05:15 -0700 (PDT)
+Date: Fri, 29 May 2026 11:05:10 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: xhci: Simplify xhci_quiesce()
+Message-ID: <20260529110510.64115fce.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 29 May 2026 09:03:32 +0000
-From: Umang Jain <uajain@igalia.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Lucas De Marchi
- <demarchi@kernel.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-dev@igalia.com
-Subject: Re: [PATCH] usb: early: xhci-dbc: Ensure correct memory size for
- early_ioremap()
-In-Reply-To: <2cbaa1b8-6ae3-4aa6-adeb-4b7e73be1400@linux.intel.com>
-References: <20260520094804.2981960-1-uajain@igalia.com>
- <2026052001-ruined-pesticide-9de7@gregkh>
- <81d706a4d1977ed39529336b2a8bc15f@igalia.com>
- <2026052001-regally-dizziness-2271@gregkh>
- <329c3970d932c21ca0ead6a84e573bd2@igalia.com>
- <2cbaa1b8-6ae3-4aa6-adeb-4b7e73be1400@linux.intel.com>
-Message-ID: <3f3ec387cba2eea8f26766d324a605c4@igalia.com>
-X-Sender: uajain@igalia.com
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Report: NO, Score=-5.5, Tests=ALL_TRUSTED=-3,AWL=-3.301,BAYES_50=0.8,URIBL_BLOCKED=0.001,URIBL_DBL_BLOCKED_OPENDNS=0.001,URIBL_ZEN_BLOCKED_OPENDNS=0.001
-X-Spam-Score: -54
-X-Spam-Bar: -----
-X-Spamd-Result: default: False [-0.36 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38151-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[igalia.com:-];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[uajain@igalia.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.982];
+	TAGGED_FROM(0.00)[bounces-38152-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:url,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,steamdeck:email]
-X-Rspamd-Queue-Id: 287185FFAF7
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: C098A5FFBCE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+The function reads USBCMD, clears some bits and writes it back.
+Its treatment of the Run bit is weird: the bit is usually written
+as 0, as we would expect, but it may also be written as 1 if both
+its current value and USBSTS.HCHalted are observed as 1.
 
-Followup question on this:
+Per xHCI 5.4.2, HCHalted is 0 whenever Run is 1, so the above can
+only happen due to buggy HW or SW, e.g. concurrent xhci_quiesce()
+and xhci_start() execution.
 
-On 2026-05-25 21:01, Mathias Nyman wrote:
-> On 20/05/2026 15.54, Umang Jain wrote:
->> On 2026-05-20 12:42, Greg Kroah-Hartman wrote:
->>> On Wed, May 20, 2026 at 12:27:39PM +0000, Umang Jain wrote:
->>>> Hi Greg,
->>>>
->>>> On 2026-05-20 11:22, Greg Kroah-Hartman wrote:
->>>>> On Wed, May 20, 2026 at 03:18:04PM +0530, Umang Jain wrote:
->>>>>> early_ioremap() checks and fail, if the memory size exceeds the fixed
->>>>>> boot-time mappings (dictated by NR_FIX_BTMAPS macro). We should ensure
->>>>>> the correct maximum memory size is passed to early_ioremap() in the
->>>>>> driver.
->>>>>>
->>>>>> Without this check and page size being 4K(4096), enabling xhci-dbc
->>>>>> on steamdeck seems to issue the warning:
->>>>>>
->>>>>> steamdeck kernel: xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
->>>>>> steamdeck kernel: ------------[ cut here ]------------
->>>>>> ay 19 13:42:57 steamdeck kernel: WARNING: CPU: 0 PID: 0 at mm/early_ioremap.c:139 __early_ioremap+0xae/0x180
->>>>>> steamdeck kernel: Modules linked in:
->>>>>> steamdeck kernel: CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.18.25-valve1-gcab630e7af50 #13 PREEMPT(undef)  4b70872d9de6788b7f2d10dce46ada89e6cd177b
->>>>>> steamdeck kernel: RIP: 0010:__early_ioremap+0xae/0x180
->>>>>> steamdeck kernel: Code: 60 ba 3f a0 4c 89 ca 48 81 e3 00 f0 ff ff 48 81 e2 00 f0 ff ff 48 29 d3 48 89 14 24 48 89 da 48 c1 ea 0c 89 d5 83 fa 40 76 04 <0f> 0b eb a2 6b c0 c0 4d 89 ce 41 81 e6 ff 0f 00 00 44 8d b8 ff 05
->>>>>> steamdeck kernel: RSP: 0000:ffffffff9fa03cb8 EFLAGS: 00010006 ORIG_RAX: 0000000000000000
->>>>>> steamdeck kernel: RAX: 0000000000000000 RBX: 0000000000100000 RCX: 0000000000100000
->>>>>> steamdeck kernel: RDX: 0000000000000100 RSI: 0000000000100000 RDI: 0000000080200000
->>>>>> steamdeck kernel: RBP: 0000000000000100 R08: 0000000000000000 R09: 0000000080200000
->>>>>> steamdeck kernel: R10: 0000000000000004 R11: ffffffff9fa03ad0 R12: 8000000000000163
->>>>>> steamdeck kernel: R13: 0000000000000000 R14: 0000000080200000 R15: 0000000000000000
->>>>>> steamdeck kernel: FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
->>>>>> steamdeck kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>> steamdeck kernel: CR2: ffff888000000413 CR3: 000000020ed02000 CR4: 00000000000000b0
->>>>>> steamdeck kernel: Call Trace:
->>>>>> steamdeck kernel:  <TASK>
->>>>>> steamdeck kernel:  ? early_xdbc_parse_parameter+0x32c/0x360
->>>>>> steamdeck kernel:  ? setup_early_printk+0x4f5/0x520
->>>>>> steamdeck kernel:  ? do_early_param+0x44/0x70
->>>>>> steamdeck kernel:  ? parse_args+0x233/0x420
->>>>>> steamdeck kernel:  ? __pfx_do_early_param+0x10/0x10
->>>>>> steamdeck kernel:  ? parse_early_options+0x29/0x30
->>>>>> steamdeck kernel:  ? __pfx_do_early_param+0x10/0x10
->>>>>> steamdeck kernel:  ? parse_early_param+0x64/0xc0
->>>>>> steamdeck kernel:  ? setup_arch+0x542/0xbc0
->>>>>> steamdeck kernel:  ? _printk+0x6b/0x90
->>>>>> steamdeck kernel:  ? start_kernel+0x66/0x9a0
->>>>>> steamdeck kernel:  ? x86_64_start_reservations+0x24/0x30
->>>>>> steamdeck kernel:  ? x86_64_start_kernel+0xcc/0xd0
->>>>>> steamdeck kernel:  ? common_startup_64+0x13e/0x141
->>>>>> steamdeck kernel:  </TASK>
->>>>>> steamdeck kernel: ---[ end trace 0000000000000000 ]---
->>>>>>
->>>>>> Signed-off-by: Umang Jain <uajain@igalia.com>
->>>>>> ---
->>>>>>   drivers/usb/early/xhci-dbc.c | 8 ++++++++
->>>>>>   1 file changed, 8 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
->>>>>> index 41118bba9197..699a9ac6d6c3 100644
->>>>>> --- a/drivers/usb/early/xhci-dbc.c
->>>>>> +++ b/drivers/usb/early/xhci-dbc.c
->>>>>> @@ -76,6 +76,14 @@ static void __iomem * __init xdbc_map_pci_mmio(u32 bus, u32 dev, u32 func)
->>>>>>     	sz64 = 1ULL << __ffs64(sz64);
->>>>>>   +	/*
->>>>>> +	 * Check that size does not exceed fixed boot-time mappings
->>>>>> +	 * dictated by NR_FIX_BTMAPS. early_ioremap() will WARN_ON()
->>>>>> +	 * and not map memory in those cases.
->>>>>> +	 */
->>>>>> +	if (sz64 > (NR_FIX_BTMAPS << PAGE_SHIFT))
->>>>>> +		sz64 = NR_FIX_BTMAPS << PAGE_SHIFT;
->>>>>
->>>>> You are bounding the size here, but does this mean that the hardware
->>>>> itself is just broken and should be fixed up to properly report the
->>>>> correct size?  Does this hardware actually have a debug controller?
->>>>
->>>> Hmm, to answer your first question as far as I have read, the size is
->>>> inferred from PCI config with base address. My understanding here is
->>>> that
->>>> for early xhci debugging - the page mappings are fixed, so we need to
->>>> bound the size for early_ioremap().
->>>
->>> So the device is providing the wrong size here?  Why is this an issue
->>> only for this hardware and not other hardware?
->>>
->>>> The second answer is, yes the hardware has debug controller. We can
->>>> configure it after boot
->>>> and it works with USB3.1 Superspeed cable with host:
->>>>
->>>> (on target)
->>>> (A+)(root@steamdeck ~)# echo enable  >
->>>> /sys/devices/pci0000:00/0000:00:08.1/0000:04:00.3/dbc
->>>> (A+)(root@steamdeck ~)# dmesg | grep DbC
->>>> [  366.276124] xhci_hcd 0000:04:00.3: DbC connected
->>>> [  366.637223] xhci_hcd 0000:04:00.3: DbC configured
->>>>
->>>> (on host)
->>>> [114288.650481] usb 4-2: new SuperSpeed USB device number 55 using
->>>> xhci_hcd
->>>> [114288.662907] usb 4-2: New USB device found, idVendor=1d6b,
->>>> idProduct=0010, bcdDevice= 0.10
->>>> [114288.662935] usb 4-2: New USB device strings: Mfr=1, Product=2,
->>>> SerialNumber=3
->>>> [114288.662945] usb 4-2: Product: Linux USB Debug Target
->>>> [114288.662953] usb 4-2: Manufacturer: Linux Foundation
->>>> [114288.662960] usb 4-2: SerialNumber: 0001
->>>> [114288.666320] usb_debug 4-2:1.0: xhci_dbc converter detected
->>>> [114288.666474] usb 4-2: xhci_dbc converter now attached to ttyUSB0
->>>>   
->>>>>
->>>>> And what changed to cause this to start complaining?  Does it fix a
->>>>> specific commit?  This hardware has been around for a long time, did we
->>>>> mess something up in the kernel for it recently?
->>>>
->>>> This fix/patch is only for early xdbc. As mentioned above, it can be
->>>> used/configured after boot.
->>>> So yes, the hardware has been around but I don't think that early xdbc
->>>> capability was investigated at any point in time. I don't see recents
->>>> commits early xhci as well so maybe it was hidden all this time.
->>>
->>> Ok, but it is good to figure out what is "wrong" here that this hardware
->>> is causing this warning to happen, yet other hardware does not.  Either
->>> the kernel has always been wrong (totally a possibility), or this
->>> hardware is reporting invalid ranges.  Figuring out which is true would
->>> be good to figure out here.
->> 
->> Oh yes definitely.
->> 
->> I, although don't have any order hardware so I will look around. I
->> haven't investigated the ranges yet, so I will investigate that too. My
->> logic initially was that it's the "early boot" that is forcing a
->> pages/size capping so we need to fit there.
->>  From __early_ioremap() in mm/early_ioremap.c
->> 
->> ...
->> 	/*
->> 	 * Mappings have to fit in the FIX_BTMAP area.
->> 	 */
->> 	nrpages = size >> PAGE_SHIFT;
->> 	if (WARN_ON(nrpages > NR_FIX_BTMAPS))
->> 		return NULL;
->> 
->> ...
->> 
-> 
-> Sometimes a xHC controller report a larger size than early ioremap supports.
-> This is because xHC from different vendors supports different extended
-> capabilities, both standard ones like DbC and vendor specific ones, all at vendor chosen offsets.
-> 
-> To find offset of a extended capability we need to walk the extended capability list. If we limit the size here in software then we need to very carefully walk the capability list, making sure we don't go over that limit.
+It's unclear why we should treat such cases specially and write
+the bit as 1. The logic comes from original PoC implementation
+and has never been explained. Just write 0 every time, which
+looks like the safer choice when the intent is to stop the xHC.
 
-The offset part is fine, but if I am reading the spec correctly [1] the
-dbc information size is just the "56 bytes" ?
+We could get in trouble if clearing Run causes some very broken
+xHC to start running after it was halted, but no such case has
+been documented. It seems the logic was just poorly thought out.
 
-Should we only map 56 bytes in early_ioremap() ? After finding the
-offset?
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+---
 
-[1]: Table 7-2 xHCI Extended Capability Codes (Page 517)
-https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf
+Hi Mathias,
 
+I'm not aware of this causing any problem. But I wasted a few minutes
+trying to understand the point of this code, until I was forced to
+conclude that it doesn't seem to have any point whatsoever.
 
+Maybe getting rid of it will save somebody else another few minutes.
+The removal seems harmless.
 
-> 
-> There was some debugging done here in this thread
-> 
-> https://lore.kernel.org/linux-usb/4e6d9b62-b9d0-4a05-99a9-143899547664@linux.intel.com/
-> 
-> Thanks
-> Mathias
+ drivers/usb/host/xhci.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index ccd07e4495cb..acdc9254b92c 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -102,17 +102,10 @@ int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us)
+  */
+ void xhci_quiesce(struct xhci_hcd *xhci)
+ {
+-	u32 halted;
+ 	u32 cmd;
+-	u32 mask;
+-
+-	mask = ~(XHCI_IRQS);
+-	halted = readl(&xhci->op_regs->status) & STS_HALT;
+-	if (!halted)
+-		mask &= ~CMD_RUN;
+ 
+ 	cmd = readl(&xhci->op_regs->command);
+-	cmd &= mask;
++	cmd &= ~(CMD_RUN | XHCI_IRQS);
+ 	writel(cmd, &xhci->op_regs->command);
+ }
+ 
+-- 
+2.48.1
 
