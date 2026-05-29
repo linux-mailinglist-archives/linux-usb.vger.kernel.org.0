@@ -1,235 +1,229 @@
-Return-Path: <linux-usb+bounces-38165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38166-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yLcgMo6tGWpyyQgAu9opvQ
-	(envelope-from <linux-usb+bounces-38165-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 17:15:26 +0200
+	id WG3ZH6ruGWoW0AgAu9opvQ
+	(envelope-from <linux-usb+bounces-38166-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 21:53:14 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B27A604682
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 17:15:25 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEB156080D7
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 21:53:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2E77E344AC9D
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 15:04:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 76BD43097F51
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 19:50:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6BF140FDA2;
-	Fri, 29 May 2026 14:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jdknypbD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4AB53F1ABA;
+	Fri, 29 May 2026 19:50:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-oi1-f207.google.com (mail-oi1-f207.google.com [209.85.167.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF724344D83
-	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 14:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780066714; cv=pass; b=BvaUcRWSH5bqjT0Ce31/K7fRonVqa7SqQpSWdwMgHnxJTQ4Idq4SPRTD2x5TGoldwm1SYfizTnIsQGO+cHSi4QyhRQ+52gE1RGSJaNU1cnbWnnqClLh/RJ0NW/tmOloGIoJtzA0INNo+Tssg9GQqVr3aDUgzJfHqb2crjT45Buk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780066714; c=relaxed/simple;
-	bh=Ahm7wwN7gT9Tdg7MhigiWgrVAwRBRLvlQpRrmshYWXw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oyktUXx3ntwczHYcZ7YdHKMUZm2a4djF7c/hmQbXIe1YaCs46TNFpRYyNDgY9vEU0dY3+atPFf/oU78dO+eQvGwZdmpmmeOWNPYuFDDKBCiIud74MISKXFUZrESPEXgIWxylw9LFn6Boj7xEVSqVnrHPCBwuS0UubuDpKXzUEwo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jdknypbD; arc=pass smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-304d555293aso974299eec.0
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 07:58:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780066712; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ea6i2NQkqtagxMCLDLFkDWs0+wDuZAtrf2TjFbi1GmrNq7MajabwIz6i71dmTqGJmT
-         B1Gehr1qwA2WK0aunz10wvXT2divRrGIgaMAbbANEfYMoQtMahC1orLJDwcJuYreuxYz
-         OUcEjVk/Tv8/emyvWkaVROfq3XPr/njxx2Nv80bB/aD4nSenMbF8ajBy0YzKdPVIuirF
-         X8L+GNQmKrgd0laszssn+wSns2faPIawh5SV2bN+dsLFpzsXB8ehVgXIZSY3mLBGvo5Q
-         LlNuGXz/R3xkZU6Fyp13BsxuecAYzNy1LwqWEZcf2dulhUdhYjUIx0kF7VyFj+/xpF1i
-         5PvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=B2m5uck2ux9YJhiKWVIGIxilYfiZI8IMVJ+BiI1fBMk=;
-        fh=vFd6hUqmB4ZogzDP8i1KLBf5fTyGnM1uuClhJkVdAVI=;
-        b=i1cYQY7TO8AtdHGdru3NWXhEi5DG7yHxtnRrzIurCwOS5hWzABTM2esqE+j7n1ZAY8
-         eQsFsH7UbdJJ1Ob3VwgA+NcwgymEzXPHZUVE2+9Y6FzW5i8zUCu8klGtXxxwGJLNxX2T
-         FkzI+nIBjz2Thed4mcXp0te4md/miht9ttgF/vxHgeX8H/J2SOIhEXnR7Y20+CsJ1Ati
-         7PMnDk5PlCFsqpw16GjKql3Nh/++6djVte1WqdjvMaqXZVwgvZWnfDlMsDqFjrxww4Mx
-         fZnF59v2t2PpqXPULpkkzf1rKJjx9RDKYkK8K9QhuS9Ht+Y6+tqZreXDtCfqywjQ0zK+
-         BKxw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780066712; x=1780671512; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B2m5uck2ux9YJhiKWVIGIxilYfiZI8IMVJ+BiI1fBMk=;
-        b=jdknypbDjlfMKAY9K7xQLWJHozqtvAqBjy30F2cUiT0FVlyDVnXb9Kna5Y8/l/svgM
-         SON6T3tuCD5pQOTngygOEX84iSDwUTUGLVg5QF3h/Sj36N1WntvWnjWhd4Ca270pTPPI
-         GB78CzV8lZYH/cdxtT6GGbi5Y6I/64JFDK5ACLjIVc99ZoHOhvaHzQth64RZxKelX3Tw
-         oTXrphnDTF9nNJoxFama2xVOk6urTl52fh/mK+6ChEXMHs4MXDpNC8jqXw0hQpm5pL9w
-         N0UapB6D3PMm1/1EcNNTk9tBzQHsNWnuHBBkI1Vl7xSU7GoIErs8nYrp6yC+l5R3RwGR
-         MfTA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF5E35F5E6
+	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 19:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.207
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780084228; cv=none; b=AIwhlllXZYDQITZREGF2TZ7TulqbKfCPktAERcgJMTGBE526EkorL5TQDM+9rMQWpnVdeiI4iAzWZ/k5nAj0Wgnf6VagUfk9Dq+GPtdBFz2XDG5YFOBVTGdRFbgz7oA+Lz96pTxDlRUUclJX2A0am/6pH4m4//Zdf2dvx7+VuWw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780084228; c=relaxed/simple;
+	bh=okeRFmu4Wkr6tCBbAkBczsru7or+CgoIJj5Gt4nYbBQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=hUhwDGWrMe8EvyVAcHM73P8IYPeNa7KsjkPfGPv+PcUXcPCwgrBi98Tehzmg50Ue6HghdaRL506igxNarTNnPfHJeerBFND7tF99/jcfvhPH7tEtXIPfUZehQ9coo6YE7HtJ9AUzk0YSGLpTbBdMY8pDAh7lvWoO39/dhpVJgtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f207.google.com with SMTP id 5614622812f47-4855ad52165so11659054b6e.0
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 12:50:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780066712; x=1780671512;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=B2m5uck2ux9YJhiKWVIGIxilYfiZI8IMVJ+BiI1fBMk=;
-        b=hQPiQCXXfsILEZdXrf2B4FWou7bmhhOJLkZ7ESDyAnEpyKmQg4yXrPeQmVo9ZEhTWh
-         Jz4lTlSQouhU1msm/NObQRcvd1ZE9OgY4cMZyfedlSg/5QPqUMBSMQy1PKbXloYyvdCC
-         F2+YjhmzAYoWRc5rh4IodGp4xlhOHMpFlKxmwdSyKSDPBfPTRzIq44oL1YHwpsfVth//
-         SxCTNsGNVwoTKxeZdMboCA5EPQdigPppJRkLJJT7Pr4meTE1pk/h3AmAUFasY5tFmQdY
-         9rDiKwoMIRR0vh4dHDJeKazQZz/Lei7IATEClkAEl/klGvu5hKAFACBKAQReMSVFVwS/
-         ytqw==
-X-Forwarded-Encrypted: i=1; AFNElJ9UL3BTdh0S02Jcb1PyqstWcwYZ6o4FMs7XAFfgqiZ7PIUcNQsQ4tnLFYUHW5Xt7eA0WHmPvjx5N3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwlbCt1621+O7oNZHvNzLrzJzbqZnuOXLORTaKCriBv7extyzv
-	IUfhAn+Z6qlhqdqpQijhadUKtWzcTvWPQUTYQXw59wwAQceSr0AzPs5oEUm66pgbD/O5fMs/LJI
-	tHJbouS3bvX83Oq4Xpj4AyVgjLid16ck=
-X-Gm-Gg: Acq92OH3dOk84+3y0eyXuVAazCE8P7Bqzf/wZ+WMcVgvD5CkwLW9BjN/tHYLsYT8ylN
-	XE/Ws894tnqaHE4glMjY/tyaTEdAtYuRPdFMtxG6wd5Drlq1YWE/v0omrAGXW1ALlmmAcZLfuoq
-	nX3xrVosCNhr1fxQ71T8a1Hj5ogFAJRQW+8VRzcFW1blW9Z9GNwjgJ/ULXiNvjuS4CNym0tD5RB
-	Nvu85W1ufEgLKDWgsCint4VviF9BJWWRKfv2OcI6tvMLw+lSE7/7H4G7xWqBsIl6puTRBGtMIxK
-	mOHmkV4RgsDdqQXoiOk=
-X-Received: by 2002:a05:7301:5803:b0:2d9:6373:ad22 with SMTP id
- 5a478bee46e88-304fa4ff6ebmr84685eec.12.1780066711924; Fri, 29 May 2026
- 07:58:31 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780084226; x=1780689026;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HeFiy9RoAews+QfJRMoGc96HJ5JINbNMGghSsA32I3w=;
+        b=H39gp18WykJ5BWD8HVH314tlOusYhGdRJodplirHcD3TEeI6vzPlpXoFju5YFdf9gX
+         X4xxtO54Kn0qSmv6ntBwrvSnWMXOi66bd1uqSf9dnP498w+cDA1TRdTZJn0Ib0cWbhLA
+         it/7w3N5xmhW2P7VJxclxSUMTKfGm6rEFDyX5HB9epHKI5lPD46ZO2CIEEPA32odbe3l
+         ybaZJHsXbdi1vlN4ZC5Y9xe5Pxcz6r+22MzVo5xPfuUwt9HZuVB95HZuUutpFasFqfYf
+         yrB5dUgogLGs7sPtZau0DxAxxwyBNIz9iySXhFvMum8YsYe3nXa/V6XVq47tqG83eGcN
+         0q5g==
+X-Forwarded-Encrypted: i=1; AFNElJ8aLt69vuMn49a/Wb2uEDb05McuNrRFGU1ADPBajPLj1OvtoPQVBhrn89/hx2SS1sCxgosHEbErrz4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3rBmG27+hpps4vL+WG1GuLcAI5hnEsNw/QR4+6esPL1kyNAoc
+	dp6XHwXwT9ytP6jeb1eW1ZHOx2DmAFK9U8GfAVHoZ+b+k55IvTPM5Uh7AcfV7eb8ErzzbxWoGRo
+	9pNNYJITzu6MWpXtxlieJdyu/9t5zpkUeEHz4rg2km9+6WXtDnJylp4ZolYw=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260523084408.50346-1-clamor95@gmail.com>
-In-Reply-To: <20260523084408.50346-1-clamor95@gmail.com>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Fri, 29 May 2026 17:58:20 +0300
-X-Gm-Features: AVHnY4K7CEePsHXKgJoKhVenrbgr-KoCglYNTN1RuRaSjnz6Zt-v8XpgPPiCcOo
-Message-ID: <CAPVz0n3GAgR7N9kAJCN_ycsgFi3B92iz2thoYcwACpd4Y6K5Vg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Add support for Infineon/Intel XMM6260 modem
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-Received: by 2002:a05:6820:4df9:b0:69e:2fa:a5d8 with SMTP id
+ 006d021491bc7-69e10305b0dmr442081eaf.18.1780084225966; Fri, 29 May 2026
+ 12:50:25 -0700 (PDT)
+Date: Fri, 29 May 2026 12:50:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a19ee01.c16d89a8.217f2c.0007.GAE@google.com>
+Subject: [syzbot] [usb?] [media?] WARNING in igorplugusb_cmd/usb_submit_urb
+From: syzbot <syzbot+2599e08a22e4565ea9f9@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-0.36 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=a834c6344141a58b];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38165-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,netdev,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 3B27A604682
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-38166-lists,linux-usb=lfdr.de,2599e08a22e4565ea9f9];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[syzkaller.appspot.com:url,storage.googleapis.com:url,goo.gl:url,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,googlegroups.com:email,appspotmail.com:email]
+X-Rspamd-Queue-Id: EEB156080D7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-=D1=81=D0=B1, 23 =D1=82=D1=80=D0=B0=D0=B2. 2026=E2=80=AF=D1=80. =D0=BE 11:4=
-4 Svyatoslav Ryhel <clamor95@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> The Infineon/Intel XMM6260 is a 3G-focused, slim modem platform designed
-> for smartphones, data cards, and Machine-to-Machine (M2M) applications.
->
-> The modem is typically connected via the application processor's USB line
-> in HSIC mode. To function correctly, the modem must control this line, as
-> it requires precise timing to initiate or de-initialize the USB connectio=
-n.
-> This control is necessary to successfully enumerate the next stage of the
-> USB device loader (moving from firmware loading to the actual device
-> interface for example).
->
-> Patchset adds support for the generic portion of the Infineon XMM6260
-> baseband modem, which was used in many Tegra-, OMAP-, and Exynos-based
-> devices circa 2012. This driver provides generic power sequences,
-> manages initial communication with the application processor, handles the
-> SoC-specific modem powersequence, and verifies that the modem USB device
-> appears correctly.
->
-> While current support is relatively basic, this configuration already
-> allows the modem device to appear in the dmesg of my device
-> (LG Optimus Vu (P895)):
->
-> [    9.427014] ci_hdrc ci_hdrc.1: EHCI Host Controller
-> [    9.431488] ci_hdrc ci_hdrc.1: new USB bus registered, assigned bus nu=
-mber 1
-> [    9.457197] ci_hdrc ci_hdrc.1: USB 2.0 started, EHCI 1.00
-> [    9.460370] usb usb1: New USB device found, idVendor=3D1d6b, idProduct=
-=3D0002, bcdDevice=3D 6.16
-> [    9.468470] usb usb1: New USB device strings: Mfr=3D3, Product=3D2, Se=
-rialNumber=3D1
-> [    9.475597] usb usb1: Product: EHCI Host Controller
-> [    9.480508] usb usb1: Manufacturer: Linux 6.16.0+ ehci_hcd
-> [    9.485913] usb usb1: SerialNumber: ci_hdrc.1
-> [    9.490862] hub 1-0:1.0: USB hub found
-> [    9.494005] hub 1-0:1.0: 1 port detected
-> [    9.657191] usb 1-1: new high-speed USB device number 2 using ci_hdrc
-> [    9.844726] usb 1-1: New USB device found, idVendor=3D1519, idProduct=
-=3D0020, bcdDevice=3D12.74
-> [    9.850530] usb 1-1: New USB device strings: Mfr=3D1, Product=3D2, Ser=
-ialNumber=3D3
-> [    9.857594] usb 1-1: Product: HSIC Device
-> [    9.861606] usb 1-1: Manufacturer: Comneon
-> [    9.865627] usb 1-1: SerialNumber: 0123456789
-> [    9.908739] cdc_acm 1-1:1.0: ttyACM0: USB ACM device
->
-> This patchset is a part of larger series aiming to bring XMM6260 modem
-> support for Tegra devices:
-> https://lore.kernel.org/lkml/20260511135703.62470-1-clamor95@gmail.com/
->
-> ---
-> Changes in v2:
-> - changed phy to pwrseq in schema
-> - adjusted Kconfig dependencies
-> - implemented bitmap for modem state tracking
-> - switched from phy to power sequencing
-> - in notifier added chech to filter only USB events
-> - in notifier added USB_DEVICE_REMOVE
-> - added tracking for regulator, rfkill access, usb device
->   presence and poweroff calls using bitops
-> - moved pseq on call from work to irq handler
-> - improved rfkill registration logic
-> ---
->
-> Svyatoslav Ryhel (2):
->   dt-bindings: net: Document Infineon/Intel XMM6260 modem
->   net: usb: Add Infineon XMM6260 Baseband modem support
->
->  .../bindings/net/infineon,xmm6260.yaml        |  74 ++++
->  drivers/net/usb/Kconfig                       |  15 +
->  drivers/net/usb/Makefile                      |   1 +
->  drivers/net/usb/baseband-xmm6260.c            | 378 ++++++++++++++++++
->  4 files changed, 468 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/infineon,xmm626=
-0.yaml
->  create mode 100644 drivers/net/usb/baseband-xmm6260.c
->
-> --
-> 2.51.0
->
+Hello,
 
-Hello there! There will be no v3. Sorry for disturbing LKML with 15
-year old obsolete tech. My mistake.
+syzbot found the following issue on:
+
+HEAD commit:    4b4362973b6f Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=167361a6580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a834c6344141a58b
+dashboard link: https://syzkaller.appspot.com/bug?extid=2599e08a22e4565ea9f9
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=174841a6580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17498e2e580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f69f86c90ee5/disk-4b436297.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/79fa7b33aaab/vmlinux-4b436297.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ef080156d0de/Image-4b436297.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2599e08a22e4565ea9f9@syzkaller.appspotmail.com
+
+input: IgorPlug-USB IR Receiver as /devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.0/rc/rc0/input5
+------------[ cut here ]------------
+usb 1-1: BOGUS control dir, pipe 80000580 doesn't match bRequestType 20
+WARNING: drivers/usb/core/urb.c:413 at usb_submit_urb+0x1190/0x1454 drivers/usb/core/urb.c:411, CPU#1: kworker/1:3/4432
+Modules linked in:
+CPU: 1 UID: 0 PID: 4432 Comm: kworker/1:3 Not tainted syzkaller #0 PREEMPT 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/18/2026
+Workqueue: usb_hub_wq hub_event
+pstate: 63400005 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+pc : usb_submit_urb+0x1190/0x1454 drivers/usb/core/urb.c:411
+lr : usb_submit_urb+0x1190/0x1454 drivers/usb/core/urb.c:411
+sp : ffff800099ce6d00
+x29: ffff800099ce6d40 x28: 0000000080000580 x27: ffff0000cdd9a058
+x26: ffff0000d1d95898 x25: ffff800087065dc0 x24: dfff800000000000
+x23: ffff0000d04fbf40 x22: ffff0000d04a0fe0 x21: 1fffe0001a3b2b13
+x20: 0000000000000820 x19: ffff0000d04fbf00 x18: 1fffe00035c23420
+x17: ffff8000888eb000 x16: ffff80008899dba0 x15: ffff0001ae11a10c
+x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000000
+x11: 0000000000000000 x10: 0000000000ff0100 x9 : 2212e0c7e7291f00
+x8 : 2212e0c7e7291f00 x7 : ffff80008047caa0 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff8000802f1374
+x2 : 0000000100000000 x1 : ffff0000d3d68000 x0 : 0000000000000000
+Call trace:
+ usb_submit_urb+0x1190/0x1454 drivers/usb/core/urb.c:411 (P)
+ igorplugusb_cmd+0xa0/0x144 drivers/media/rc/igorplugusb.c:127
+ igorplugusb_probe+0x5fc/0x940 drivers/media/rc/igorplugusb.c:225
+ usb_probe_interface+0x2fc/0x788 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x2a8/0x7e8 drivers/base/dd.c:709
+ __driver_probe_device+0x1e0/0x33c drivers/base/dd.c:871
+ driver_probe_device+0x6c/0x19c drivers/base/dd.c:901
+ __device_attach_driver+0x194/0x2f4 drivers/base/dd.c:1029
+ bus_for_each_drv+0x144/0x1dc drivers/base/bus.c:500
+ __device_attach+0x250/0x394 drivers/base/dd.c:1101
+ device_initial_probe+0x90/0xcc drivers/base/dd.c:1156
+ bus_probe_device+0x58/0x120 drivers/base/bus.c:613
+ device_add+0x6c4/0x9e4 drivers/base/core.c:3706
+ usb_set_configuration+0x1170/0x1588 drivers/usb/core/message.c:2268
+ usb_generic_driver_probe+0x8c/0x144 drivers/usb/core/generic.c:250
+ usb_probe_device+0x118/0x2b8 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x2a8/0x7e8 drivers/base/dd.c:709
+ __driver_probe_device+0x1e0/0x33c drivers/base/dd.c:871
+ driver_probe_device+0x6c/0x19c drivers/base/dd.c:901
+ __device_attach_driver+0x194/0x2f4 drivers/base/dd.c:1029
+ bus_for_each_drv+0x144/0x1dc drivers/base/bus.c:500
+ __device_attach+0x250/0x394 drivers/base/dd.c:1101
+ device_initial_probe+0x90/0xcc drivers/base/dd.c:1156
+ bus_probe_device+0x58/0x120 drivers/base/bus.c:613
+ device_add+0x6c4/0x9e4 drivers/base/core.c:3706
+ usb_new_device+0x7a8/0x1214 drivers/usb/core/hub.c:2695
+ hub_port_connect drivers/usb/core/hub.c:5567 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x1f7c/0x3b20 drivers/usb/core/hub.c:5953
+ process_one_work kernel/workqueue.c:3314 [inline]
+ process_scheduled_works+0x79c/0x1098 kernel/workqueue.c:3397
+ worker_thread+0x754/0xba0 kernel/workqueue.c:3478
+ kthread+0x2f8/0x3c8 kernel/kthread.c:436
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:842
+irq event stamp: 36390
+hardirqs last  enabled at (36389): [<ffff80008048000c>] vprintk_store+0x900/0xb70 kernel/printk/printk.c:2385
+hardirqs last disabled at (36390): [<ffff80008673aac0>] el1_brk64+0x20/0x54 arch/arm64/kernel/entry-common.c:429
+softirqs last  enabled at (36334): [<ffff800084ac3a58>] __alloc_skb+0x1c0/0x5f8 net/core/skbuff.c:696
+softirqs last disabled at (36332): [<ffff800084ac3a40>] local_bh_disable include/linux/bottom_half.h:20 [inline]
+softirqs last disabled at (36332): [<ffff800084ac3a40>] __alloc_skb+0x1a8/0x5f8 net/core/skbuff.c:695
+---[ end trace 0000000000000000 ]---
+igorplugusb 1-1:0.0: submit urb failed: -53
+usb 1-1: new high-speed USB device number 7 using dummy_hcd
+usb 1-1: config index 0 descriptor too short (expected 23569, got 27)
+usb 1-1: config 0 interface 0 altsetting 0 endpoint 0x81 has invalid wMaxPacketSize 0
+usb 1-1: New USB device found, idVendor=03eb, idProduct=0002, bcdDevice=ba.c0
+usb 1-1: New USB device strings: Mfr=5, Product=0, SerialNumber=0
+usb 1-1: Manufacturer: syz
+usb 1-1: config 0 descriptor??
+Registered IR keymap rc-hauppauge
+rc_core: Loaded IR protocol module ir-rc5-decoder, but protocol rc-5 still not available
+rc rc0: IgorPlug-USB IR Receiver as /devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.0/rc/rc0
+input: IgorPlug-USB IR Receiver as /devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.0/rc/rc0/input7
+igorplugusb 1-1:0.0: submit urb failed: -53
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
