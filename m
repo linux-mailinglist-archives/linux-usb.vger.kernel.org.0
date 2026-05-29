@@ -1,154 +1,193 @@
-Return-Path: <linux-usb+bounces-38157-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38158-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OA55LN5rGWrGwQgAu9opvQ
-	(envelope-from <linux-usb+bounces-38157-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:35:10 +0200
+	id SAmGMv5wGWqNwggAu9opvQ
+	(envelope-from <linux-usb+bounces-38158-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:57:02 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2522F600E79
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:35:09 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1D32601304
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 12:57:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D8B330AB1E9
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 10:31:13 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 092BC3067210
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2026 10:53:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438FA3C942B;
-	Fri, 29 May 2026 10:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080AE3C4141;
+	Fri, 29 May 2026 10:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="g41+KBg0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AnvIs9yi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8607433FE36
-	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 10:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A53A368D42
+	for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 10:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780050671; cv=none; b=o1/8pINITKnZEmC/nK1cWxaLtbbRyrWfP/56pIy3/1/beLcm3q5sl4AN8Id6oTjUrb0GNrSEZiE/5nkQ/QIu0Eyxnu3JKN7bSY2jAx3lBB1Gbo8klaYBeriHxjDSNyy0n6Nia9vHReqI9qG+zhQr4X41xFUfMOOWbjGa+VJVl4A=
+	t=1780052004; cv=none; b=hcD2GRb2FyZX7vY5rCETKX7OrJCm2CCFhwTDG33UIaVsRguIEPvqgj4P2eMdBt9DR2aQS6K4QtF3tlGOMXTu42zs2GbyHyrfLFEQiIJ7t2nFhMjizY6mU3+QuTSyI1Tx6lqC9fGxiovSIBQZNVhcROqcta9iO9B6A5sZO4jYS4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780050671; c=relaxed/simple;
-	bh=TnQ9Pz7fsUBXLgOheDV2t6F0iPGT1NGiYVSE4Vaf550=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kr4Wj0nG5CMPyLkBpNcmAgb1swc8K6ZgNEILpOY1tbOEWPhcAISWidzmkzcfHonrKGOgKkx5SNfdiV0nYTx3eqRhR8CMkXLLdqQZX15/uMpnfMGhMsxENuti2Ffc5aCDfYkdsWA8jDk1z8OD1F1NEw03vNeyyozXV+VUsr4fYwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=g41+KBg0; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49041fb8c23so59309785e9.0
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 03:31:10 -0700 (PDT)
+	s=arc-20240116; t=1780052004; c=relaxed/simple;
+	bh=6qDO5NeYuPjhhaVOaAQhzpOMue+EBBSXHrkLxRCXuDU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LbmqZb5jcYxTM0sSMYcYKzGCXyY9ttOZCRfX+VQooWHsJRS6bdUFJNL00eDMCC/RGCaZ4nBGh2AXQg/WNL5orlMPz3f+eJSycn+VniKVWHVRYWROeBUeqU4HxS8435cjr2VkXRZZilEhw0TNxpadeGS9flbZHtViUYWhUvfONM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AnvIs9yi; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49039a8851fso81788135e9.2
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 03:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780050669; x=1780655469; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AnWegkTJYjsTiRlpCjBocEuV+DyykuuRTv5OiUPKgrc=;
-        b=g41+KBg0McHkaVSlua/ACtPi0rdk+DcJM9lpfLqgZbBkY57djQ2Cic04p+d2PMYGVv
-         T0z8H6L0yOUX9v53bus3/O7LSwXxz12SHIe9Ogq8rOkx4fpdWE37q9Kc3RAbUfCxchEH
-         DmY9p7GokJIrtIwLXc6OMApvo2lSXtlsS6auG1LLTxg142+P0uFSl7aaMDRnZGUvDg96
-         Z9i2xMS3evossShX7ImceOUYlFSpBpB5SkWxpSIIRPVZX8tMSjjjs2M5yNY3rNTtbnkz
-         rxCHWy21Ej6tzYA+Rr7AZnqUI+xBfR6F8+jvumzIyv4aXHspd8z8FkhZVtnGi+CIp0Ho
-         XQ9g==
+        d=gmail.com; s=20251104; t=1780052002; x=1780656802; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sE8OKGeWzsCFxSp/KVg1O2OG0DZJS50PRPXMOSdqBk4=;
+        b=AnvIs9yioGNktwkg+UZKROLYTc+YpP9jxIscd3AjOOAYa22BR7j7v4CThhl1QgpA8G
+         PLo0Q871b8G2blXsdYJdGTtsTZGNw6RbqJwecH7UqveE0dZhQghHTodtAvWXR6ukF1wq
+         l9Q/M0IvGKw6k1y3puwZdvk7mndbpT08bnLkXqBZ3D35zMhOgPJPZvbNyMYjJO3r/RLv
+         9jDQbo7oXFctlT2LGh2L4YOab4hk1C2qZ5U8+01ZrrQ6XVuKhOA01bZRjWfcgDqbk9XZ
+         mBCfeJmkiyfUXho/4oVWccgeq2k/jbPDAOdbCOLw6mwmEW8hJNUuPWmdm3I/62IUhlbC
+         +Y8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780050669; x=1780655469;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AnWegkTJYjsTiRlpCjBocEuV+DyykuuRTv5OiUPKgrc=;
-        b=MfOVOoPD20GX2082IhwhHb1KoGAaQ/6hHhxG/7rTVIOv5voatZHz4jcAusDST9x0Lf
-         MaCQY8ummFVwwIeeoKfHL/W2rJRsprx7hl0tP9FuTiE8vGAiUNAErliGwHJ8nydDKxBI
-         8XMcasp/SV2m4oJwzr34uxCsgqpWXCWquEqAjm1O8fC53h4HqSU9lG5p3a4eNK29Zvaw
-         WqLl5HBd1m4lgom/pupNFw73ZMEmY0N4UZVJBlAt8p7BVzXVzSsQqD2c/on/0Pbf9A6+
-         xDjgvpr8csD9eBF88UijIjIBiS2uDrsYnQjXzZwkOMk92CFFDU3aESFVmJVgr3F91fgK
-         3mOg==
-X-Forwarded-Encrypted: i=1; AFNElJ92BbrSy2mgka3QZ8Agn5R7S6JrDm23J/UT86LRvEPk/+RkfopshgZ0bNBarjHjqUeI/u5wx1+zm4k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcS+wFcYkvLywxr4oJoP8hFd7X13/7sR1QC/DKKZpvJ+cG7R7F
-	768JCuSOKziQ9AThc8lZzJHCV8eP7oyxNkvPPljmJyYmPEEz9Ivn+5flhL6aVvHAW5VAKQD77hX
-	Dtozt
-X-Gm-Gg: Acq92OEDSulNT0lPh0ZGQp548AKfTzZ0Gy2zsXssXqicXY4ipKgebUjwO4X8sBqD04j
-	Mbg5tvEoVLcYDFp8vkYCzgJ7s1gtdqBs8HXpqCoqUod5WaNIlecR3erXbG7yeZoICCgsdWyirEW
-	Csmpis0KCIRe0rFe8keO2ZBpNZgWxh4/noW1BrfY18c3vEAwUPI7FGMUQzNRvB8BOVicdW5SQtl
-	JuPa8b3aqF/kzlVu4D7tsSjdn5UX0FmUJkEEOr9BQFxnTF2q5WteANVBhKo3Pd6MFY0MmaB2h/n
-	pbhdXjO5qCcen7W9cVdHrsaRSLZXApx26c9PxKyBwkE5N5FZi89oAnTynsAYUlXKI5eeZBR/88W
-	+krxi3IMYd26S9GVS3bq5B5ppu6esbK3ZEiG+9vOH7kdB7W9VoOsRJoY85DyArFxgo4hOUy/Xw6
-	Rz6LKNuFOuIJG4bGVAu5qhjxuuTR65o0sFE5cJtoEikE6uNPxoFiUJxvC9j07fFwOCWREMAJCeN
-	Ck=
-X-Received: by 2002:a05:600c:250:b0:48a:5821:5ff2 with SMTP id 5b1f17b1804b1-4909c0813a2mr26657805e9.8.1780050668957;
-        Fri, 29 May 2026 03:31:08 -0700 (PDT)
-Received: from ?IPV6:2001:a61:13e8:2801:7422:57b5:ac0:e7e6? ([2001:a61:13e8:2801:7422:57b5:ac0:e7e6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34b47eesm2827353f8f.9.2026.05.29.03.31.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2026 03:31:08 -0700 (PDT)
-Message-ID: <7f78b968-3cb3-4194-b709-28e45946697c@suse.com>
-Date: Fri, 29 May 2026 12:31:07 +0200
+        d=1e100.net; s=20251104; t=1780052002; x=1780656802;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sE8OKGeWzsCFxSp/KVg1O2OG0DZJS50PRPXMOSdqBk4=;
+        b=CmdZDTz5zo6mqJHaz505lfrX9+aJRbNfx29yXaQfnd6yEC40CTiwwaV1kluYpBTDr5
+         5iJQ8My/q0+fHG1Aa1CdfniB3gxnUh6bFbdqvh8s3c9EVBTdCOH5u8UZpjB+0tlO/Ikh
+         FabqSXeJVi9wGPSG+xWys2sHLxdaZTcxDVm6UlCLovQpuq2xVxq9pSa69gXnd6NiR3bW
+         2ySdCP1AJwzdWyUfUk8ss7UZE6+PElObBfMRHjNxubNSD377UtxBDV7dYUvS2ygV7Ua+
+         OFNsxyhyVTwsUWhBZcbbZqQ5b7j6ueMzkCXxuzRWR1xmVxi/2gSIkYhqS7vBayGu7SBm
+         vtIg==
+X-Forwarded-Encrypted: i=1; AFNElJ8qye0DzZ+46V0fV/3apdQM34TqeTBjavm6dSw6gEPckAWNR+xj9ohGo878r0Jxz/QxeiVcCxg5a8A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1GcaYtTRLDqdr+0TLg2CB+z66lvscjXIQhhv35dYGj99sBBGr
+	3PKApvNVQFO04vecVmOvdcOmz/xLcIXIrjsE35sUcS38cWvNsxspCAPF
+X-Gm-Gg: Acq92OFu3uRyw0ELCIZJKhn/2+8v8bo+ZqHVbbzfYo9fscui/epv4pq6pim6hPV58S9
+	92GZWsvktwyckapMltukHOWv93uMIGrX/Mlis1Cc87bUFJIsXRoudRvs1pY9y2iPfQKEi7yG7qC
+	lgnHkUjob5IZOO/jk/Eukme5re6sINDaZ3chRkSrhT6gSke9/AY4Qwissl5MyttrwSTwoS3JHWx
+	6opJeKCCpc36pfErgh+PtZ0iizAEFEDhir7HA3wq+Ytdn4y9rnjqmurdXTQon2MwhT9wWnYkkZO
+	esB6cN/2lEeVKwkGo9lhrH+YV2KN+HtBkkG0Cr+0f8tymV2zRrD2MjN03FlcrAZ2yGHMMZj6JB1
+	bO40VsUoWZ6Bd+vU0qUdDrVtlopa65M5xIiLMIWmR/n+5Dzk8LAZypOxTAKOV6A+45ak90fBMtw
+	/tUWuaJZTpcOeqRJc3NJ6TojLuYXSBk8NzAIhqdModEjAPDQ==
+X-Received: by 2002:a05:600c:e489:10b0:488:aa33:dcbd with SMTP id 5b1f17b1804b1-4909c0b9626mr31644775e9.26.1780052001869;
+        Fri, 29 May 2026 03:53:21 -0700 (PDT)
+Received: from foxbook (bfe246.neoplus.adsl.tpnet.pl. [83.28.42.246])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909d6eb3adsm31211055e9.11.2026.05.29.03.53.21
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 29 May 2026 03:53:21 -0700 (PDT)
+Date: Fri, 29 May 2026 12:53:18 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] usb: xhci: Simplify moving HW Dequeue Pointer
+ past cancelled TDs
+Message-ID: <20260529125318.611b2625.michal.pecio@gmail.com>
+In-Reply-To: <b82f9543-2730-48af-81e8-1612b0d30ed9@linux.intel.com>
+References: <20250225125750.1b345e2c@foxbook>
+	<20250225125939.7a248e38@foxbook>
+	<b82f9543-2730-48af-81e8-1612b0d30ed9@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: misc: yurex: fix ordering of usb_deregister_dev()
- and usb_set_intfdata()
-To: Ginger <ginger.jzllee@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260528082751.204898-1-ginger.jzllee@gmail.com>
- <5099d6cc-c8bc-4fdc-97cf-31e96a57e0c1@suse.com>
- <CAGp+u1ZoHA52vPL5msC29BM5g3xT9c8-A20tAs2LHStnuwMmbQ@mail.gmail.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <CAGp+u1ZoHA52vPL5msC29BM5g3xT9c8-A20tAs2LHStnuwMmbQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38157-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCPT_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38158-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 2522F600E79
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: D1D32601304
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 29.05.26 08:58, Ginger wrote:
-
-> I think the intuition is that the global exposure (i.e., the
-> 'usb_minors') of usb fops should be disabled first, so that the
-> subsequent nullification of internal fields can be considered local to
-> prevent concurrent accesses.
+On Tue, 25 Feb 2025 16:55:49 +0200, Mathias Nyman wrote:
+> On 25.2.2025 13.59, Michal Pecio wrote:
+> > xhci_move_dequeue_past_td() uses a relatively complex and inefficient
+> > procedure to find new dequeue position after the cancelled TD.
+> > 
+> > Replace it with a simpler function which moves dequeue immediately to
+> > the first pending TD, or to enqueue if the ring is empty.
+> > 
+> > The outcome should be basically equivalent, because we only clear xHC
+> > cache if it stopped or halted on some cancelled TD and moving past the
+> > TD effectively means moving to the first remaining TD, if any.  
+> 
+> This new way relies on td_list being in sync and up to date.
+> i.e. hardware dequeue can't be ahead of first TD in list.
+> 
+> One bad scenario could be something like:
+> 
+> class driver queues TD1
+> class driver queues TD2
+> Class driver cancels TD2, queue stop endpoint command
+> (Class driver cancels TD1) (optional)
+> 
+> xHC hardware just completed TD1 and stop endpoint command at the same time,
+> xHC hw may have advanced the hw dequeue to TD2, write event for stop endpoint command, and
+> then write transfer event for TD1 completion. (xHC hardware may do things in odd order)
 
 Hi,
 
-if I understand the logic correctly, the order in yurex_disconnect()
-makes sure if yurex_open() and yurex_disconnect() race, yurex_open()
-will never see an unregistered device with intfdata != NULL.
-That is, precisely because without a lock the race is unavoidable
-the newly opening task will be guaranteed to know that it has
-lost the race.
+I noticed that your xhci repository now contains a very similar patch.
+The same problem seems to still apply.
 
-	Regards
-		Oliver
+I would say that the HW writing TD1 completion event after TD2 stopped
+event would be a blatant spec violation and I don't recall seeing it
+happen, but there is also a possibility that TD1 generates no event at
+all or the event is missed due to a bug (no IOC, broken HW, whatever).
+
+Then we could make things works by rewinding back to TD1.
+
+A safer approach could be to retain the 'td' argument and use td->next
+instead of list_first_entry(td_list).
+
+Today we also have the dma_in_range() technology, so an efficient check
+can be performed whether hw_dequeue lies between td->next and enqueue.
+In such case something is clearly wrong and Set Deq seems unnecessary.
+
+And one more problem: unconditionally advancing enqueue past a link TRB
+creates risk that enqueue will enter deq_seg if the queued command
+fails, which breaks ring expansion later. If we care...
+
+Regards,
+Michal
+
+
+
+
+
+
+
+
+
 
 
