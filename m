@@ -1,53 +1,95 @@
-Return-Path: <linux-usb+bounces-38176-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38177-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iI16C23KGmqA8wgAu9opvQ
-	(envelope-from <linux-usb+bounces-38176-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 13:30:53 +0200
+	id OB+0Orv4GmrH+AgAu9opvQ
+	(envelope-from <linux-usb+bounces-38177-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 16:48:27 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADBE060C7E0
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 13:30:52 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48F4C60D926
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 16:48:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BFFAB303608B
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 11:30:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 697EA3024CB3
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 14:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37847548EE;
-	Sat, 30 May 2026 11:30:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958722F9C37;
+	Sat, 30 May 2026 14:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="z63QA8x3"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="aurWcXcO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4492F26A0D5;
-	Sat, 30 May 2026 11:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBFD2D3225
+	for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 14:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780140638; cv=none; b=N+CBdtAD6A+sWLCs76Fdfg/95P5xkr3rGL+Igt3bfbbp7n3LCHw+QzCDUGj9xULY3tPqtF1y4KHj/dM1Y5SU1sGeHDu7rKCpcuneGY+guv4YwxfulvECmNT7BKiN5oGssr0rfh5MUEBDeezEGaxhzvZOpIs5cPhZo7BnHVu3DCQ=
+	t=1780152499; cv=none; b=fF7F8HT4GA+gdTK9GkCESuCFo/dbq6zmrvdxtxBXbHWIWJc/jxni7qHOGdLvI9TbeKjQOf8RdX/5R0U/2hSUm8HWaNeQG+6sWsECv00cQR+SpjseyjbF1Yel9TUQvY7JhlSU5jV1IYlkD3X0pvx7Jp1qNSWFf1r+/mHrxAWcaTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780140638; c=relaxed/simple;
-	bh=cS3vu4G9HCXs/4oQOJfTOXGjbAsqGn9mb2QOhkLG1a0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hme1MJZylRB1CKkPZ+jt4MWe1hdKPHywt040HVlM3Pk8tYZrID2fyGhDaL/+hu2x2D+q4D0gbMUK1SYcHBQ2UPmJRuPX/2Mjrz0/TTQt8K+p3Rm5vRqXo8tsLl6lzRwNJxa8DarXn620VB23WqPSJ3t1G4hJSbil+OpTd7o3vkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=z63QA8x3; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D9A1F00893;
-	Sat, 30 May 2026 11:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1780140636;
-	bh=spUyBJAOLhAa1uP4u1Y57v5Dd+W+WYRNRfuAA+ayBP8=;
-	h=Date:From:To:Cc:Subject;
-	b=z63QA8x3XgaHYDbVXpo/mNtGv7bsgWpLaINBzobI8IdcCS5/Waw3YcNXKqj9Jc/gy
-	 jpBWLCrGf3jnr5T3S8bKg81ay2iqrdZ61qfRcydTX+xoszcbG+pJyw/QxQ8Kj1zmtF
-	 bxqUzIgOABt86xSybkFWKDoP6D+8zAtxelOEm0cA=
-Date: Sat, 30 May 2026 13:29:41 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 7.1-rc6
-Message-ID: <ahrKJXlzYYoQ7vzR@kroah.com>
+	s=arc-20240116; t=1780152499; c=relaxed/simple;
+	bh=smmYulatWZaRea8tVQuishn0gIRf1ZCPedgK+60sp5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c8WlhR0/G4ND0y+JI/q855bjekvtJtGRRWn9cdOmZKrKk9qFm4Pe/HY4JKkGemKpFbQQl9bAEPNYx0J7Q15e6HNFwyKrerBfEwTECDBzDSLxZuFW1RuwKAYBlHu/g/6mrNw63/9xlWg6pOPmFMAcztyhT4rIdnic7mA6pHewC+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=aurWcXcO; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8b6ea7716bfso168740096d6.0
+        for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 07:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1780152497; x=1780757297; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8TCSz8CdiHlYDuiVY2jRC+66HY0ze0yI9AAz8gUT+ms=;
+        b=aurWcXcO4957xdaDk/9Kd6j2cO1fkVrFrpRDTD5yRxPOTTmaGqtczk0Z/TdXsc5Tzo
+         berbqpR8n0mVmNvU2KOq3YZhv0ESYLeioh2M0aLWcaMZ7k5noGj38eXPJ9LCrrTElsbN
+         UhkeWrjExvCIES6x6JqPW0oXd/27lBc+kl7qVRNnEso8MidQ7I69WPRLPRAqAHMBLL93
+         ICb3FAMoMhJFdnhhKjqjg7Tr9gWxcdDQifhBjtXcXQBzWE1iKVYazycX0WTKAAj/OF+C
+         nRFrPvcpiVEAUuCZtD3qTcmtQSNbSoC0D6UwNFZjDN+OI8vGJ2QRAsH8fzhQnj6HbIie
+         MFpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780152497; x=1780757297;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8TCSz8CdiHlYDuiVY2jRC+66HY0ze0yI9AAz8gUT+ms=;
+        b=c6hPPB+hSTl5oAjTWDZWaR7pJ0ZduwWSuY1paOIOqT8DOPcX6ywUVHtOsV7vaYnXhL
+         L9QcRoQwkLYR4WLghKUrgNUvt7jCi3tXNwFU1GS7LP0iFFtol5PO+W5WJuygq3hMhWSy
+         tbxFUNQVhO6zN7JFbqWeqV+rvAWRquCNTGyXAPZUpvZSEH4xfOIeLg7AUIQqNA8sNwCQ
+         VMc0UIUHw0g0eREuQsMiFwYjOFKq0EXTnvZHAoTy7y38+qoVrBRINOOuPVNprPT349At
+         QsWloR9YY94Uly6xPWL1wwHRUpAnpVyb6UAj2tHBLxKg2w6rYfGnKsMgpoudcRP57y8H
+         Oevw==
+X-Gm-Message-State: AOJu0YzWo15MryXK8R25ZGxuL5Q+747WNiROTSE4OQ10Vyf7F5WTmI0Q
+	XJp7zAx+BZ1G1bvsNK24duaHqYT3ETKrBRL8pOPivCv2/BK0+32OPAegmw8T4IueHA==
+X-Gm-Gg: Acq92OFPucxtf8AXfMkVIKL6b7WegodgLU3wj855rB+sES79OL5nmtavHW3teqhLAbT
+	Gnz+Z9XEhvw5c2ygw2XvTyqYjYiRoIKWZyhwHEB1XtQLwIDXrMXtiJJ6EanUsIjYjxw4Upk+oRz
+	OXEmeUDx001vTTYxtbOJWBQyQo9JORb6vhFthpEqqiRiHTvcu8jjyelBIwyY6z7nVWr63G5ppdE
+	OyJnNr8syRWaqGpibN3iCoaacUy8ds0R8KjHOBrCHB4NatuZebEz+SPE98gilRGvdo9+rGsamgL
+	Zggky3DagXEkPnpf7q4YRqSrOEFJFuTZ6uzSKzAhbUk7oaQ0u3eakwCPV2rN+rsA5J9TVP6xP87
+	Neg70RhGMqpqSMwOQj4Ew6tIDcsQ7pevnB74VmQ/8ccZIEsp72T7j2k5UszIfT2+iXYAKGB0mkd
+	DnCP1AkgjUnlVr+15tB4sgsd95QZkvQqK+KI39aQSWnXTK+u7A4SpYLA==
+X-Received: by 2002:ad4:5b87:0:b0:8c4:edb4:a44a with SMTP id 6a1803df08f44-8ccefd8d30amr65293046d6.23.1780152496833;
+        Sat, 30 May 2026 07:48:16 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210:d62f:1911:f952:16ba])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ccea1c2ca3sm45934456d6.29.2026.05.30.07.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 May 2026 07:48:16 -0700 (PDT)
+Date: Sat, 30 May 2026 10:48:13 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Nikhil Solanke <nikhilsolanke5@gmail.com>
+Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+	mathias.nyman@linux.intel.com, sakari.ailus@linux.intel.com,
+	katieeliu@tencent.com, johannes.bruederl@gmail.com, kees@kernel.org,
+	dengjie03@kylinos.cn, limiao@kylinos.cn, wse@tuxedocomputers.com,
+	dev@a1rm4x.com, vahnenko2003@gmail.com, cs@tuxedo.de,
+	lijiayi@kylinos.cn, oneukum@suse.com, bence98@sch.bme.hu,
+	eeodqql09@gmail.com
+Subject: Re: USB: Request for guidance investigating configuration descriptor
+ enumeration failure
+Message-ID: <2a656f5a-bc8f-458a-a1bb-e66cc3a122b8@rowland.harvard.edu>
+References: <CAFgddh+JWdT4LLwMc5qjM8q_pBu-fRo2qADR5ovAKoGHWMQrRw@mail.gmail.com>
+ <351656ab-a188-444d-a09b-cf304796043b@rowland.harvard.edu>
+ <CAFgddhKPYFKNDDESxvo4jwBCw=mnWWx7Jsmr9_LwawtUpkx8Fw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,224 +98,111 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <CAFgddhKPYFKNDDESxvo4jwBCw=mnWWx7Jsmr9_LwawtUpkx8Fw@mail.gmail.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38176-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,linux.intel.com,tencent.com,gmail.com,kernel.org,kylinos.cn,tuxedocomputers.com,a1rm4x.com,tuxedo.de,suse.com,sch.bme.hu];
+	TAGGED_FROM(0.00)[bounces-38177-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[kroah.com:mid,linuxfoundation.org:email,linuxfoundation.org:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: ADBE060C7E0
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 48F4C60D926
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The following changes since commit 5d6919055dec134de3c40167a490f33c74c12581:
+On Sat, May 30, 2026 at 12:27:13PM +0530, Nikhil Solanke wrote:
+> Thanks for the follow up.
+> 
+> > It would be nice to know _how_ the 9-byte request fails.  That is, what is the status code when the request completes?  This information is in the usbmon trace.
+> 
+> The device reports failure by responding with a GET DESCRIPTOR
+> Response (not a GET DESCRIPTOR Response CONFIGURATION) that has no
+> descriptor response data and sets URB Status with EPROTO (-71) which
+> the kernel reports as is in dmesg (unable to read config index 0
+> descriptor/start: -71).
 
-  Linux 7.1-rc3 (2026-05-10 14:08:09 -0700)
+Actually what happens is the device disconnects from the USB bus without 
+responding at all.  (Probably it does this as part of reinitializing 
+with the fallback-mode firmware.)  That's what leads to the -71 errors.
 
-are available in the Git repository at:
+> > Also, what happens under Windows?  Isn't a 9-byte Get-Config-Descriptor request standard in Windows as well as Linux?
+> 
+> Yes it is the standard on both platforms and that is what bugged me
+> too. I'll be attaching the packet traces here, but here's a quick
+> observation regarding that:
+> On windows, the usbpcap captures shows that windows sets Packet Data
+> Length in the URB data as 8 but requests wLength of 9 in Setup Data.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.1-rc6
+The Packet Data Length probably refers to the length of the request, not 
+the length of the response.
 
-for you to fetch changes up to 645d4eda1d0db0202ed8e4a2c3abb2ebce6b86ef:
+The difference between the two operating systems is that Linux issues a 
+Get-Device-Qualifier-Descriptor request three times (each time the 
+device responds with a Halt) before issuing the length-9 
+Get-Configuration-Descriptor request.  But Windows does not ask for the 
+Device Qualifier descriptor; it just sends the length-9 request for the 
+Configuration descriptor directly and the device responds properly.
 
-  Merge tag 'usb-serial-7.1-rc5' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2026-05-23 13:21:56 +0200)
+> Linux on the other hand has URB Length equal to the wLength and Data
+> Length as 0.
 
-----------------------------------------------------------------
-USB and Thunderbolt fixes for 7.1-rc6
+Again, you may be misinpreting the meaning of those values.  But it 
+doesn't matter.
 
-Here is a set of USB fixes and new device ids for 7.1-rc6.  Nothing
-major in here, just lots of tiny fixes for reported issues found by
-users and some older patches found by some scanning tools.  Included in
-here are:
-  - typec fixes found by fuzzers that have decided to finally look at
-    that device interaction path (i.e. before a driver is bound to a
-    device).
-  - typec fixes for issues found by users
-  - thunderbolt driver fixes for reported problems
-  - cdns3 driver fixes
-  - dwc3 driver fixes
-  - new device quirks added
-  - usb serial driver fixes for broken devices
-  - other small driver fixes
+> Furthermore, the device enumerates perfectly fine in the
+> fallback mode (Android mode) with the 9-byte descriptor request.
+> Further testing also revealed that the xinput mode would fail with
+> broken pipe error if I use an external USB hub. However, all these
+> issues are magically resolved with just a slightly bigger request.
+> 
+> I also had tested the device with various other existing quirks as
+> well but none worked. I also tested using the
+> usbcore.old_scheme_first=1 kernel cmdline, which failed as well.
+> 
+> > I doubt that anything needs to be instrumented.  If the device doesn't respond properly to a standard request, it's the device's fault.
+> 
+> That seems most likely to be the case. However, this behavior is found
+> with other third-party Xbox-compatible controllers as well (i
+> personally tried 2 other controllers that failed the same way). They
+> all fail the enumeration stage in the same way. Wouldn't it be
+> appropriate to introduce a proper fix as a "quirk" in the main line
+> kernel?
 
-All of these have been in linux-next for over a week with no reported
-issues.
+You should try setting the USB_QUIRK_DEVICE_QUALIFIER flag for the 
+device.  If that doesn't fix the problem, collect and post another 
+usbmon trace showing what happens.  If it does fix the problem, you can 
+submit a patch with this quirk flag instead of adding a new one.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Note: i have attached the packet traces, but they are truncated to
+> only show the device communications with the host and any intermediate
+> packets. There were other packets sent and received that communicated
+> with the USB root hub before the device started its enumeration.
+> Should I include those as well?
 
-----------------------------------------------------------------
-Dan Carpenter (2):
-      usb: typec: tipd: Fix error code in tps6598x_probe()
-      usb: dwc2: Fix use after free in debug code
+No, what you did is fine.
 
-Felix Gu (1):
-      usb: typec: fusb302: Fix resource leak when devm_drm_dp_hpd_bridge_add() fails
-
-Greg Kroah-Hartman (10):
-      usb: typec: ucsi: ccg: reject firmware images without a ':' record header
-      Merge tag 'thunderbolt-for-v7.1-rc5' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
-      usb: typec: wcove: don't write past struct pd_message in wcove_read_rx_buffer()
-      usb: typec: altmodes/displayport: validate count before reading Status Update VDO
-      usb: typec: tcpm/tcpci_maxim: validate header NDO against RX_BYTE_CNT
-      usb: typec: tcpm: validate VDO count in Discover Identity ACK handlers
-      usb: typec: tcpm: bound altmode_desc[] per iteration in svdm_consume_modes()
-      usb: typec: ucsi: displayport: NAK DP_CMD_CONFIGURE without a payload VDO
-      usb: typec: ucsi: validate connector number in ucsi_connector_change()
-      Merge tag 'usb-serial-7.1-rc5' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Guangshuo Li (2):
-      usb: gadget: f_hid: fix device reference leak in hidg_alloc()
-      usb: gadget: net2280: Fix double free in probe error path
-
-Hang Cao (1):
-      dt-bindings: usb: Fix EIC7700 USB reset's issue
-
-Heitor Alves de Siqueira (2):
-      usb: usbtmc: check URB actual_length for interrupt-IN notifications
-      usb: usbtmc: reject interrupt endpoints with small wMaxPacketSize
-
-Jan Volckaert (1):
-      USB: serial: option: add MeiG SRM813Q
-
-Jeremy Erazo (1):
-      usb: gadget: composite: fix integer underflow in WebUSB GET_URL handling
-
-Johan Hovold (8):
-      USB: serial: digi_acceleport: fix memory corruption with small endpoints
-      USB: serial: keyspan: fix missing indat transfer sanity check
-      USB: serial: mct_u232: fix memory corruption with small endpoint
-      USB: serial: mct_u232: fix missing interrupt-in transfer sanity check
-      USB: serial: cypress_m8: fix memory corruption with small endpoint
-      USB: serial: mxuport: fix memory corruption with small endpoint
-      USB: serial: omninet: fix memory corruption with small endpoint
-      USB: serial: safe_serial: fix memory corruption with small endpoint
-
-Kai Aizen (1):
-      usb: gadget: uvc: hold opts->lock across XU walks in uvc_function_bind
-
-Michael Bommarito (6):
-      thunderbolt: property: Reject u32 wrap in tb_property_entry_valid()
-      thunderbolt: property: Reject dir_len < 4 to prevent size_t underflow
-      thunderbolt: property: Cap recursion depth in __tb_property_parse_dir()
-      usbip: vudc: Fix use after free bug in vudc_remove due to race condition
-      usb: gadget: f_fs: copy only received bytes on short ep0 read
-      usb: gadget: f_fs: serialize DMABUF cancel against request completion
-
-Michal Pecio (3):
-      usb: core: Fix SuperSpeed root hub wMaxPacketSize
-      usb: core: Fix up Interrupt IN endpoints with bogus wBytesPerInterval
-      usb: core: Clean up SuperSpeed/eUSB2 descriptor validation logging
-
-Myrrh Periwinkle (2):
-      usb: typec: ucsi: Check if power role change actually happened before handling
-      usb: typec: ucsi: Don't update power_supply on power role change if not connected
-
-Peter Chen (2):
-      usb: cdns3: plat: fix leaked usb2_phy initialization on usb3_phy acquisition failure
-      usb: cdns3: plat: fix unbalanced pm_runtime_forbid() call permanently leaks the runtime PM usage counter across bind/unbind cycles
-
-Radhey Shyam Pandey (1):
-      usb: dwc3: xilinx: fix error handling in zynqmp init error paths
-
-Rob Herring (Arm) (1):
-      dt-bindings: usb: ti,omap4-musb: Drop duplicate 'usb-phy' property constraints
-
-Sam Burkels (1):
-      usb: storage: Add quirks for PNY Elite Portable SSD
-
-Sebastian Reichel (1):
-      usb: typec: tcpm: improve handling of DISCOVER_MODES failures
-
-Seungjin Bae (1):
-      usb: gadget: dummy_hcd: Reject hub port requests for non-existent ports
-
-Stephen J. Fuhry (1):
-      USB: quirks: add NO_LPM for Lenovo ThinkPad USB-C Dock Gen2 hub controllers
-
-Wanquan Zhong (1):
-      USB: serial: option: add missing RSVD(5) flag for Rolling RW135R-GL
-
-Wei-Cheng Chen (1):
-      xhci: tegra: Fix ghost USB device on dual-role port unplug
-
-Wentao Guan (1):
-      USB: cdc-acm: Fix bit overlap and move quirk definitions to header
-
-Wentao Liang (1):
-      usb: musb: omap2430: Fix use-after-free in omap2430_probe()
-
-Xu Yang (1):
-      usb: chipidea: core: convert ci_role_switch to local variable
-
-Yongchao Wu (1):
-      usb: cdns3: gadget: fix request skipping after clearing halt
-
-Zhang Cen (2):
-      USB: serial: belkin_sa: validate interrupt status length
-      USB: serial: cypress_m8: validate interrupt packet headers
-
- .../devicetree/bindings/usb/eswin,eic7700-usb.yaml |   7 +-
- .../devicetree/bindings/usb/ti,omap4-musb.yaml     |   7 +-
- drivers/thunderbolt/property.c                     |  32 ++++--
- drivers/usb/cdns3/cdns3-gadget.c                   |  12 ++-
- drivers/usb/cdns3/cdns3-plat.c                     |  11 +-
- drivers/usb/chipidea/core.c                        |  16 ++-
- drivers/usb/class/cdc-acm.c                        |   2 -
- drivers/usb/class/cdc-acm.h                        |   2 +
- drivers/usb/class/usbtmc.c                         |  14 +++
- drivers/usb/core/config.c                          |  46 ++++----
- drivers/usb/core/hcd.c                             |   4 +-
- drivers/usb/core/quirks.c                          |   4 +
- drivers/usb/dwc2/hcd.c                             |   4 +-
- drivers/usb/dwc3/dwc3-xilinx.c                     |  27 ++---
- drivers/usb/gadget/composite.c                     |   5 +-
- drivers/usb/gadget/function/f_fs.c                 |  26 ++++-
- drivers/usb/gadget/function/f_hid.c                |   3 +-
- drivers/usb/gadget/function/f_uvc.c                |  28 +++--
- drivers/usb/gadget/udc/dummy_hcd.c                 |   4 +
- drivers/usb/gadget/udc/net2280.c                   |   4 +-
- drivers/usb/host/xhci-tegra.c                      |  71 +++++++------
- drivers/usb/musb/omap2430.c                        |   3 +-
- drivers/usb/serial/belkin_sa.c                     |   3 +
- drivers/usb/serial/cypress_m8.c                    |  20 +++-
- drivers/usb/serial/digi_acceleport.c               |  23 +++-
- drivers/usb/serial/keyspan.c                       |   4 +
- drivers/usb/serial/mct_u232.c                      |  26 +++--
- drivers/usb/serial/mxuport.c                       |   8 ++
- drivers/usb/serial/omninet.c                       |   9 +-
- drivers/usb/serial/option.c                        |   9 +-
- drivers/usb/serial/safe_serial.c                   |  11 ++
- drivers/usb/storage/unusual_uas.h                  |   7 ++
- drivers/usb/typec/altmodes/displayport.c           |   2 +
- drivers/usb/typec/tcpm/fusb302.c                   |  20 ++--
- drivers/usb/typec/tcpm/tcpci_maxim_core.c          |   9 ++
- drivers/usb/typec/tcpm/tcpm.c                      | 117 +++++++++++++--------
- drivers/usb/typec/tcpm/wcove.c                     |  13 ++-
- drivers/usb/typec/tipd/core.c                      |   1 +
- drivers/usb/typec/ucsi/displayport.c               |   4 +
- drivers/usb/typec/ucsi/ucsi.c                      |  24 ++++-
- drivers/usb/typec/ucsi/ucsi_ccg.c                  |   5 +
- drivers/usb/usbip/vudc_dev.c                       |   1 +
- drivers/usb/usbip/vudc_transfer.c                  |   3 +-
- 43 files changed, 445 insertions(+), 206 deletions(-)
+Alan Stern
 
