@@ -1,277 +1,254 @@
-Return-Path: <linux-usb+bounces-38182-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38183-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ECdvLBMVG2pV/AgAu9opvQ
-	(envelope-from <linux-usb+bounces-38182-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 18:49:23 +0200
+	id CMs7GY0jG2rO/QgAu9opvQ
+	(envelope-from <linux-usb+bounces-38183-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 19:51:09 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A337760E723
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 18:49:22 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0324C61083F
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 19:51:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 93D9430055E1
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 16:49:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 706B8309547E
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 17:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12CCE332EA7;
-	Sat, 30 May 2026 16:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25013B389D;
+	Sat, 30 May 2026 17:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4URh5BR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YprZPr7h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1611C1E260C
-	for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 16:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780159754; cv=pass; b=lLdVCmdRNu0moL8Fb0LGZXTISl9n7GM7/xM3CVLvCCrI2cqxNYxumTRpW7A3vr4/sRdQjdp+CTo7UiIx71Ea7g9Q6synI9fgIasuotNcM3gb2XsvqoTV12dNqRWtsQLY0L+sgX9KUHRTIzadW9zDSaSbNYKxn0PXwLGbsjHtVAE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780159754; c=relaxed/simple;
-	bh=idd853kKritEA6/jjxHq9gTu5MWFv9lawLHfGhpogBk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TZryr06ll/tWVugXx3wJu5LlfDLvywJpiv7C7QFnWJDm0tYWr1l5vBD/vYzHo+IM5dMCo7I1pu6YNpPTprFl3MhcQatEcvSNBQ9bEcbap33K9xt22wl29ujPECPE52snMQ8aWQmzHis/ktdmED1A3hIfXEKVk/Ov2pGGxvMVGrQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P4URh5BR; arc=pass smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-bd3d7c29b4dso2139505766b.2
-        for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 09:49:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780159751; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fQu8twRfwTQvXRHiUOGE7bDpzM67qrgYWV7lp5Zekb8pSpCzLT8klvzHjb8keYWNZg
-         gv7OEzpnAYos2TQVnXI8FWRC8cfHBll5gkoAXLp1DYLs469Zawh+uTsAlBHRYV6wHgOi
-         w7dozxw2vRTXLoDAVn8sTlxWSP726plR/FISsTGs3+yM0iZDwuV5Kndnepj+Luj/yZH2
-         tmyKiRT/v6X4S8MW6PhnTJy2ch+Z2yG+7OqXXRRu+15SW87LJd/l1Enm/2aKdkoyKqS9
-         ZWOEBqWV7MwYtOAx45+VR75TzNouxOB1GIXZxx6qYkyIf5Go+ifHa2ClBbCOdClOTkoe
-         6Zrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=n6gBZfZYlB6EUHBSJEhkVAgXP/wAy7wNcm1u/i7bNT8=;
-        fh=ImnvTmhUCDzFDWuafngDjfFHiGXMCZD9NBo4B/fG3f4=;
-        b=T4gQUBjS8JvA7YzdIetzqLDicVRJ6NZHrHD9DPq4idttaY4N1H1IS/bN3Xj0ayPTzh
-         X1pveqrGChbOMVomXjQRxhg3ikWTDfKS5VNoVF43+6qa3yyJyrYqmP1EjL3e09w5pc7f
-         5WGHQFX9KM1lk2b73e3/n1lf4cFY35Sl7HLogwfkCLx9QGL91SSg1sPSax0FAj5WvFx3
-         ZWmkGYeoIyNxOgeDznAMFGsq8DBZLKB2kgcssUTguStX2zewku7194ZmY+3ypQa6gCFD
-         nFlIfEuGZl6YRf26xlYyMjeQPDxcRm4nsTPx2gIDvbqvwp1BiIvtfYqVLkqxzhceWKYX
-         JPug==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD6434A3C4
+	for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 17:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780163034; cv=none; b=bXTfufeZvjHCrzEERGj6s/mKauCJGD6WCh5tOGZ5wblwK9I04uz5Ahva74riw04JAndmJz7YQI111d+q2vhctBq9W+JmFyR5ui8ZjqEXOY83tzRlErZmK0jNW65irXDyhSC4YyFIRVsWoixWO/koF6nsGErsjnDG/WV17e1sxP0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780163034; c=relaxed/simple;
+	bh=V183WnI5pnoKUBivwNX7yBT6eyXdkhaOPmmYa38jyaY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=di+My6OkNRpIEfYbWr74o6oDuWHWxAMdoyyuAF/kIjdMAj1AzPiT6nALCDFJgj37ChNZD1A+e9CDUIM4S5MIUQJcbwwTBInhjFnjc39RtGVd1IDNByMdAYXbjumYX90x+vYyECjd+e2fYFr4PmQxWnMPqVoOxpXOM1iSKurjQT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YprZPr7h; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2bf2d865383so115ad.1
+        for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 10:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780159751; x=1780764551; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=n6gBZfZYlB6EUHBSJEhkVAgXP/wAy7wNcm1u/i7bNT8=;
-        b=P4URh5BR/tdU52usvx7aEbA9AeOCxu5bsz5688R4TXLE+RKolZtsSkTX1QEGYPVkXb
-         oNgdtM+KQLbYL7R8EzJ6CR4OZyELcfP+kWAyTxiUznyFHc9IgH4qbmGXYUw+yCVc85Vi
-         OnaM7cVXcQA2TeBDJ1DrlAsb5aHqUNmSVYdvcCanP1Omy2XCR8ke67ekS6mA3erqKC9U
-         DCZNH15cb1vNN47hw4BLo8pYeYjHOxgwNe6K0gZMq1pWTwOKNdK1nXjt6RCqUj2hcr0e
-         Rn6z62YNK6DM2U8RjnNDR3U9CuJLgzlw3nZkwAI35j7ClcdfltFv6dclDnYDJ4Ev2J9M
-         3bhA==
+        d=google.com; s=20251104; t=1780163031; x=1780767831; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QOyDHP4ZxCe5uNffp9qfUHpgLGSQaBL/VpuY0l97f+w=;
+        b=YprZPr7hw0gVeUdsf1NoyIA+yaNO7E17rk5XHbHAMqI9mIJnd3qaLM8ROpL2Koy1K4
+         ZW2Pr5ISj4teWjqPqGNebb+G/NhAEqqA9umtOUHyyp41opJRy6S9l61sw2JcK9CrTm8+
+         dtR9jOK0IawCl/QCqxrfZxzVYcH+RD5TjglYSDiBrKiPTJkx2j1/vHPtlhgdH2IocP48
+         xZQqfEU0JjtPRhY8DXNJlK5AQsomz+2XPwrnQHDT/i6ktRkXvKQT/JJWuwWcAJc/OTFr
+         ZUXL6lucOCo4xJlXHvSJrfjfDr/LN75syFqoeA8HsLHkRkK0hjqQSyAUXl8W6Lmsx75D
+         y1lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780159751; x=1780764551;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n6gBZfZYlB6EUHBSJEhkVAgXP/wAy7wNcm1u/i7bNT8=;
-        b=VDU2S7iE1DuVWdAMwGpuK0YC1u/rw6/fj3La8bj6+vJDwGTVsfGahr8LSXdEcydGak
-         qS1AcomPQXsGhTJsFvL43C0G/6r6scyTHuX7J4OBjob1MZ/pF6JJfHe+s0t3j93jP08d
-         ZtZ198E921Cs4kxkU3J4aZ9tupXIuwHeLiU+OwfeyuSUNHxtTaFhzEBNEiM8Ahl7WZi5
-         fm6S01+Ie7Ts0GWQXm+u24HQ+NQUzfPbY8+/Zghqqz29BNX08km0pAIOId0hP8uRFIN9
-         yHRpGfF1fQBGW53cfw3laF16XgYuhyALEiKyq8bL1+T/XzgfTxi6BOUOPdN70yAJ/9an
-         S16w==
-X-Gm-Message-State: AOJu0YyyWtK/8rhpRXPje7g7cxbeJ6MSCVGtVxEk/LLOmrEpVwtEDuar
-	Bqv7V3L6qoWifjTMY5AMIXypwM2GnJYx7PiMDEIAscLbuUHhPiHSNUSfjRrbWd3fbg9iGeY4DFd
-	Z8GwxEVpHr5p3yv0lfFO+wFQk55vHLZ8=
-X-Gm-Gg: Acq92OH69u+04VkBMKm+S9Hn7NKR89qat+GGohZcMFlrZRz5q+FpTKIigigKaqVpon5
-	1SMQon0UKBhKina6GwqxTyVc/XX56EkM6qvtDCizIVuvyI+l7QfRuS+S9vsQe1xljipqvA3RVp4
-	Lr4c8Kc+/D873ggVyu8M9+P4854VAPJNaNjSQ495T+yrFDgjn1JXps32rN/BkuGWLd3fSq4oqd1
-	YnbGTjoNvOAgvEQvQ0LaMbWY73YPm0Bg0I/1JqPOaFNpS84sf+dxNBu4qTz+79uZ4mpsrFBzA70
-	fj8Sm6PZFo7kfvenfw==
-X-Received: by 2002:a17:906:4fd0:b0:bdd:f2e9:37d2 with SMTP id
- a640c23a62f3a-beab71af430mr243353966b.33.1780159751071; Sat, 30 May 2026
- 09:49:11 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780163031; x=1780767831;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QOyDHP4ZxCe5uNffp9qfUHpgLGSQaBL/VpuY0l97f+w=;
+        b=G3r0Q2ydX03lG3lfCYiaBmOZ4qNexJaG1UApJQzl9SglCTvb0ne6PollOnBshdEYrz
+         j5qXFhuyMucXEVr/KZNaass7PxOndopA5Eopn2+RsFYoUsWGpHwz9Sm/w7De9UdJ6TUF
+         T/x9nash8dZRhk3HHwPt7V3xty9D7HCoBmG3zHaMuj72esRd3akF8RA9IrwyuZLjWptj
+         O7XBhnuFiGJvMeEOGFkTe1RDTsMOI35oShdXgfnuEPLa3Fo1h9EdqXDtUcICYSWidq4p
+         C8gRgzrHvlLNAGPcPkYT9VZzn4EcpW7x5AFutgp6+SFxz2V21ui+HPV/3+L+aECnJRoz
+         fu9g==
+X-Forwarded-Encrypted: i=1; AFNElJ+aFb1zgSOrXD5cNGGInc1sWJzP+kB+aQZDhXBEnTf/DhKunRsOCIJLUBtABQc7dsUSN2AnAVHHFL8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNa1RqlSMsUOACg1+tBdFN9sYDbwBALbLz0kjBrf5m7kL+EGDf
+	VvBbzS5vifqWWzKS3HvaLmRKJifmePsYq1y3pQiE9JZqEiQY+AzW6RdI+srVVlILVw==
+X-Gm-Gg: Acq92OE+w+Gj2KId+yZ6569Hv+vW+M5/5U5PToSrvbf1ej1ZDh5eM7bQy3BsV+Ii45+
+	wMYZXbSEb0Ghq4oPv5LHiwKzulaokoN3Cr0ZjKbK/H6Mvfrv+He8sekFVfwwSoGIOmn5UwY8Yp0
+	ZM2pmc6AfJgXMg4Ncl3NqCRl9Q/g7++s0shyfj0PIUchgt+8AOxa3XrBKU9Li8RG1y1clEvejkV
+	KVEGlZJTIqqvtt2LJ3NWAIwpg3AIcHgjCm8YaYjXMnCBKSU6Z1J9dGhj4nN1IJjgWDASyJA8+s9
+	OVCtKL28z/HWq4/YTNrremY50jLklesEDPkFxFoSPXBMDioMeRsWx/3h5V9A67lDN5/S8lYBTIw
+	nJt+D6MQP9FFtf60xx+U7sSQwpSzqXkXcz3i1thlq4gI2+Zd5sV13PtF9b33EskHEWStFRQPEy0
+	S7HyjzNVXu3ycWaNV7HPmV741XFlN99Lbfc6NqkwkLF5yP76PummK1x06qrRI2RvO7jCj2Gv8HM
+	N4AT0VxodleI7NwJPmHKoCzXXxxcOwUTu0yvwq1ciSxKgrnxd2wKgRT
+X-Received: by 2002:a17:902:ef44:b0:2b4:60e6:44bc with SMTP id d9443c01a7336-2c07cb2ec5bmr239755ad.13.1780163030509;
+        Sat, 30 May 2026 10:43:50 -0700 (PDT)
+Received: from google.com (112.174.16.34.bc.googleusercontent.com. [34.16.174.112])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85a187eb12sm203716a12.6.2026.05.30.10.43.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 May 2026 10:43:49 -0700 (PDT)
+Date: Sat, 30 May 2026 17:43:45 +0000
+From: Carlos Llamas <cmllamas@google.com>
+To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Bastien Nocera <hadess@hadess.net>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
+	Ping Cheng <ping.cheng@wacom.com>,
+	Jason Gerecke <jason.gerecke@wacom.com>,
+	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 2/4] HID: core: introduce hid_safe_input_report()
+Message-ID: <ahsh0UtTX6e0ZeHa@google.com>
+References: <20260415-wip-fix-core-v1-0-ed3c4c823175@kernel.org>
+ <20260415-wip-fix-core-v1-2-ed3c4c823175@kernel.org>
+ <8fedad8e9caecd379f2296562cd6abd37f7cee46.camel@hadess.net>
+ <CAO-hwJ+EgC0pM6L6vGFEaRFt2Nwj5b-CCf_5e5VkvrXgdHrjNg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFgddh+JWdT4LLwMc5qjM8q_pBu-fRo2qADR5ovAKoGHWMQrRw@mail.gmail.com>
- <351656ab-a188-444d-a09b-cf304796043b@rowland.harvard.edu>
- <CAFgddhKPYFKNDDESxvo4jwBCw=mnWWx7Jsmr9_LwawtUpkx8Fw@mail.gmail.com> <2a656f5a-bc8f-458a-a1bb-e66cc3a122b8@rowland.harvard.edu>
-In-Reply-To: <2a656f5a-bc8f-458a-a1bb-e66cc3a122b8@rowland.harvard.edu>
-From: Nikhil Solanke <nikhilsolanke5@gmail.com>
-Date: Sat, 30 May 2026 22:18:58 +0530
-X-Gm-Features: AVHnY4Jbj375puF9AGCMm4z6I__1I8irJk1d7qkRkdNRV_z67_fynvCqruxCUMU
-Message-ID: <CAFgddh+6O+pnbrw1szM7_Q3Xkx8423qRptW=Yhf3UbBZNu0ZWg@mail.gmail.com>
-Subject: Re: USB: Request for guidance investigating configuration descriptor
- enumeration failure
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org, 
-	mathias.nyman@linux.intel.com, sakari.ailus@linux.intel.com, 
-	katieeliu@tencent.com, johannes.bruederl@gmail.com, kees@kernel.org, 
-	dengjie03@kylinos.cn, limiao@kylinos.cn, wse@tuxedocomputers.com, 
-	dev@a1rm4x.com, vahnenko2003@gmail.com, cs@tuxedo.de, lijiayi@kylinos.cn, 
-	oneukum@suse.com, bence98@sch.bme.hu, eeodqql09@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAO-hwJ+EgC0pM6L6vGFEaRFt2Nwj5b-CCf_5e5VkvrXgdHrjNg@mail.gmail.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38182-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,linux.intel.com,tencent.com,gmail.com,kernel.org,kylinos.cn,tuxedocomputers.com,a1rm4x.com,tuxedo.de,suse.com,sch.bme.hu];
+	DKIM_TRACE(0.00)[google.com:+];
 	RCPT_COUNT_TWELVE(0.00)[18];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38183-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nikhilsolanke5@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: A337760E723
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cmllamas@google.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hadess.net:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 0324C61083F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-> Actually what happens is the device disconnects from the USB bus without
-> responding at all.
-
-Just being curious here, but wouldn't i see a packet from the usb root
-hub / usb host controller notifying of that?. or even a dmesg log
-saying the device disconnected? Because that doesn't happen at all as
-the kernel tries the request 3 times before completely giving up. If
-the device disconnected, only one configuration request would've been
-sent and the enumeration would have started again from start, wouldn't
-it?
-
-> Again, you may be misinpreting the meaning of those values. But it doesn't matter.
-
-Yeah, I kind of figured that, but mentioned it nonetheless just in
-case. Windows mentions the packet data length for the setup data size
-it sends, and it checks out (i counted the bytes). However, the Linux
-behavior confused me. Like I said earlier, the URB length is basically
-the same as what we request as wLength in setup data. Nothing else in
-the whole packet matches that size. So i was a bit confused and felt
-to mention it.
-
-> You should try setting the USB_QUIRK_DEVICE_QUALIFIER flag for the
-> device.  If that doesn't fix the problem, collect and post another
-> usbmon trace showing what happens.  If it does fix the problem, you can
-> submit a patch with this quirk flag instead of adding a new one.
-
-As I mentioned earlier, I tested it with that specific quirk too. I
-also tested the delay init quirk and various others (even paired a few
-of those together). They make no difference at all. The resulting
-packet trace from the USB_QUIRK_DEVICE_QUALIFIER is the same as the
-unpatched behaviour just with no device qualifier requests. Besides,
-if you look at the patched behavior, the DEVICE QUALIFIER requests
-were ignored by the device in that trace too, but it still
-successfully enumerated in the Xbox/Xinput mode. And as per the USB
-spec, if I got it right, full-speed devices should error when
-requested a device qualifier. We can see that happening in the packet
-trace too. The response packet has URB Status set to -ESTALL (-32),
-which can be considered an error. So, it isn't a problem either way
-whether the host requests it or not. The patched/workaround behavior
-isn't affected by it too after all. Quoting the USB spec directly here
-(Section 9.6.2):
-
-> "If a full-speed only device (with a device descriptor version number equal to 0200H) receives a
-> GetDescriptor() request for a device_qualifier, it must respond with a request error. The host must not make
-> a request for an other_speed_configuration descriptor unless it first successfully retrieves the
-> device_qualifier descriptor."
-
-So, to conclude, the device qualifier request isn't the root cause of
-the problem at all.
-
-Thanks,
-Nikhil Solanke
-
-On Sat, 30 May 2026 at 20:18, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Sat, May 30, 2026 at 12:27:13PM +0530, Nikhil Solanke wrote:
-> > Thanks for the follow up.
+On Thu, Apr 16, 2026 at 04:46:28PM +0200, Benjamin Tissoires wrote:
+> On Thu, Apr 16, 2026 at 11:41 AM Bastien Nocera <hadess@hadess.net> wrote:
 > >
-> > > It would be nice to know _how_ the 9-byte request fails.  That is, what is the status code when the request completes?  This information is in the usbmon trace.
+> > On Wed, 2026-04-15 at 11:38 +0200, Benjamin Tissoires wrote:
+> > > hid_input_report() is used in too many places to have a commit that
+> > > doesn't cross subsystem borders. Instead of changing the API,
+> > > introduce
+> > > a new one when things matters in the transport layers:
+> > > - usbhid
+> > > - i2chid
+> > >
+> > > This effectively revert to the old behavior for those two transport
+> > > layers.
+> > >
+> > > Fixes: 0a3fe972a7cb ("HID: core: Mitigate potential OOB by removing
+> > > bogus memset()")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> > > ---
+> > >  drivers/hid/hid-core.c             | 21 +++++++++++++++++++++
+> > >  drivers/hid/i2c-hid/i2c-hid-core.c |  7 ++++---
+> > >  drivers/hid/usbhid/hid-core.c      | 11 ++++++-----
+> > >  include/linux/hid.h                |  2 ++
+> > >  4 files changed, 33 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > > index a806820df7e5..cb0ad99e7a0a 100644
+> > > --- a/drivers/hid/hid-core.c
+> > > +++ b/drivers/hid/hid-core.c
+> > > @@ -2191,6 +2191,27 @@ int hid_input_report(struct hid_device *hid,
+> > > enum hid_report_type type, u8 *data
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(hid_input_report);
+> > >
+> > > +/**
+> > > + * hid_safe_input_report - report data from lower layer (usb, bt...)
+> > > + *
+> > > + * @hid: hid device
+> > > + * @type: HID report type (HID_*_REPORT)
+> > > + * @data: report contents
+> > > + * @bufsize: allocated size of the data buffer
+> > > + * @size: useful size of data parameter
+> > > + * @interrupt: distinguish between interrupt and control transfers
+> > > + *
+> > > + * This is data entry for lower layers.
 > >
-> > The device reports failure by responding with a GET DESCRIPTOR
-> > Response (not a GET DESCRIPTOR Response CONFIGURATION) that has no
-> > descriptor response data and sets URB Status with EPROTO (-71) which
-> > the kernel reports as is in dmesg (unable to read config index 0
-> > descriptor/start: -71).
->
-> Actually what happens is the device disconnects from the USB bus without
-> responding at all.  (Probably it does this as part of reinitializing
-> with the fallback-mode firmware.)  That's what leads to the -71 errors.
->
-> > > Also, what happens under Windows?  Isn't a 9-byte Get-Config-Descriptor request standard in Windows as well as Linux?
+> > You probably want to explain why it should be used instead of
+> > hid_input_report() in this doc blurb, and modify the hid_input_report()
+> > docs to mention that this should be used.
+> 
+> Good point. Sending v2 ASAP.
+> 
 > >
-> > Yes it is the standard on both platforms and that is what bugged me
-> > too. I'll be attaching the packet traces here, but here's a quick
-> > observation regarding that:
-> > On windows, the usbpcap captures shows that windows sets Packet Data
-> > Length in the URB data as 8 but requests wLength of 9 in Setup Data.
->
-> The Packet Data Length probably refers to the length of the request, not
-> the length of the response.
->
-> The difference between the two operating systems is that Linux issues a
-> Get-Device-Qualifier-Descriptor request three times (each time the
-> device responds with a Halt) before issuing the length-9
-> Get-Configuration-Descriptor request.  But Windows does not ask for the
-> Device Qualifier descriptor; it just sends the length-9 request for the
-> Configuration descriptor directly and the device responds properly.
->
-> > Linux on the other hand has URB Length equal to the wLength and Data
-> > Length as 0.
->
-> Again, you may be misinpreting the meaning of those values.  But it
-> doesn't matter.
->
-> > Furthermore, the device enumerates perfectly fine in the
-> > fallback mode (Android mode) with the 9-byte descriptor request.
-> > Further testing also revealed that the xinput mode would fail with
-> > broken pipe error if I use an external USB hub. However, all these
-> > issues are magically resolved with just a slightly bigger request.
-> >
-> > I also had tested the device with various other existing quirks as
-> > well but none worked. I also tested using the
-> > usbcore.old_scheme_first=1 kernel cmdline, which failed as well.
-> >
-> > > I doubt that anything needs to be instrumented.  If the device doesn't respond properly to a standard request, it's the device's fault.
-> >
-> > That seems most likely to be the case. However, this behavior is found
-> > with other third-party Xbox-compatible controllers as well (i
-> > personally tried 2 other controllers that failed the same way). They
-> > all fail the enumeration stage in the same way. Wouldn't it be
-> > appropriate to introduce a proper fix as a "quirk" in the main line
-> > kernel?
->
-> You should try setting the USB_QUIRK_DEVICE_QUALIFIER flag for the
-> device.  If that doesn't fix the problem, collect and post another
-> usbmon trace showing what happens.  If it does fix the problem, you can
-> submit a patch with this quirk flag instead of adding a new one.
->
-> > Note: i have attached the packet traces, but they are truncated to
-> > only show the device communications with the host and any intermediate
-> > packets. There were other packets sent and received that communicated
-> > with the USB root hub before the device started its enumeration.
-> > Should I include those as well?
->
-> No, what you did is fine.
->
-> Alan Stern
+> > Maybe hid_input_report() should also be marked as deprecated somehow,
+> > to avoid new users?
+> 
+> Well, it's not entirely deprecated because, for instance, in uhid we
+> only have the buffer with the provided size around. So we can't be
+> less restrictive in that precise case, and then switching to _safe
+> will not change a bit.
+> 
+> Cheers,
+> Benjamin
+
+Hi Benjamin, our CI started failing with commit 0a3fe972a7cb ("HID:
+core: Mitigate potential OOB by removing bogus memset()"), so I was
+hoping your patchset would fix this.
+
+However, I just realized our call path goes through uhid precisely,
+which still triggers the EINVAL error since uhid as not converted to
+hid_safe_input_report().
+
+My vague understanding though, is that uhid_event uses a static buffer
+in ev->data[UHID_DATA_MAX], so maybe we can use that through
+uhid_dev_input{2}()?
+
+I ran the following path through our CI and it fixed our issue, so I
+wanted to get your thoughts on this.
+
+Carlos Llamas
+
+---
+ drivers/hid/uhid.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hid/uhid.c b/drivers/hid/uhid.c
+index 524b53a3c87b..37b60c3aaf66 100644
+--- a/drivers/hid/uhid.c
++++ b/drivers/hid/uhid.c
+@@ -595,8 +595,8 @@ static int uhid_dev_input(struct uhid_device *uhid, struct uhid_event *ev)
+ 	if (!READ_ONCE(uhid->running))
+ 		return -EINVAL;
+ 
+-	hid_input_report(uhid->hid, HID_INPUT_REPORT, ev->u.input.data,
+-			 min_t(size_t, ev->u.input.size, UHID_DATA_MAX), 0);
++	hid_safe_input_report(uhid->hid, HID_INPUT_REPORT, ev->u.input.data, UHID_DATA_MAX,
++			      min_t(size_t, ev->u.input.size, UHID_DATA_MAX), 0);
+ 
+ 	return 0;
+ }
+@@ -606,8 +606,8 @@ static int uhid_dev_input2(struct uhid_device *uhid, struct uhid_event *ev)
+ 	if (!READ_ONCE(uhid->running))
+ 		return -EINVAL;
+ 
+-	hid_input_report(uhid->hid, HID_INPUT_REPORT, ev->u.input2.data,
+-			 min_t(size_t, ev->u.input2.size, UHID_DATA_MAX), 0);
++	hid_safe_input_report(uhid->hid, HID_INPUT_REPORT, ev->u.input2.data, UHID_DATA_MAX,
++			      min_t(size_t, ev->u.input2.size, UHID_DATA_MAX), 0);
+ 
+ 	return 0;
+ }
 
