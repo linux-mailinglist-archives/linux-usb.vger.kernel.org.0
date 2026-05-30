@@ -1,618 +1,350 @@
-Return-Path: <linux-usb+bounces-38173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38174-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yHtxO2iKGmrT5QgAu9opvQ
-	(envelope-from <linux-usb+bounces-38173-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 08:57:44 +0200
+	id uFAZLsiQGmrK5ggAu9opvQ
+	(envelope-from <linux-usb+bounces-38174-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 09:24:56 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A2E460B81D
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 08:57:43 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2060760B935
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 09:24:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 14D7C306366E
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 06:57:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 90A19305876F
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 07:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D932238553F;
-	Sat, 30 May 2026 06:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0AA388E66;
+	Sat, 30 May 2026 07:24:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clwieUmx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SrWQMlLX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86DF233920
-	for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 06:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780124251; cv=pass; b=GIzLwLLvpSmKGvklJqDl6yEp5q60hQPbEfkX/P3sJ4WtxWULA3C2fJcXuk+8er/ejCBQN/AHBv3TSNrB3pHPaapPvjAAy3e/PKAtKGcCgvCK6id5PUwOMb/TQgAKGUfx2uOiUfo6xkiNfABkPRPXoeFuoCt1+9jsuYF0FLAJpvM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780124251; c=relaxed/simple;
-	bh=zESYrs0/qiPA8/+1Z4e5Jem8gp7ArxqGPeX4wDQAPiY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jy787gDaRN4NxbolhdT4agoeOzwYgl6zsOusqQizs+4mSVWIyX6Pm+p4f5UdNd4ZZ+ArBHHsY3FL2xBg4uVpax5GW3d8BCR8R4vgFcMQPfE1/tXkw7MGMEp7zeMYTMGAI48QsuoJuhetuWl6hsuWHakymon0+Bk+XcrqitjqEcw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clwieUmx; arc=pass smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-beb44f97561so13797066b.0
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2026 23:57:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780124247; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gp8NfRFUhcnuzWm/M9d9DsA4AKAjPfeVZhE9T28OCY76Y5+qz928zrnEFc0PKjKqMe
-         JYNUTX9+fBElRfPPLZ8gEnILvK61BQTq7W7K+fLSvmwE2h0V+h4yrxdtGt6/QGh/DEH7
-         3iv8WBYEBqhZiE1nMvwR+rQZC5/1CcfuUIL6aGlGVDcbtS2F6czYeiaRHYliawaPiAxW
-         iB9yT87t20hqDCDy1/5Exq14cEmq8RKWRLRxsZ5z7J+Pl2T1jmtGGEgjZl3bDAFs9K9a
-         ZV4sN63as9phoHumQtKbnH88tDRBc31IjGjT0FCItLXED0FYLAdRxLM/e6Gn4as/5YnR
-         DI2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ZIrAiOXuQ5xV48QCoxqlQgfIuM89ObSt+OGQVGQqHAo=;
-        fh=ImnvTmhUCDzFDWuafngDjfFHiGXMCZD9NBo4B/fG3f4=;
-        b=jMGcuecu9RFbbvIMQgmij/kJTyxKqMyjPPlAOT6mCm5nEAYoVC6Z1hk64cxpA4BQbl
-         Mzkl5w1FQVhTkHqus7ftUBzKoT9k9m4NgSAWfQWueZERROapTg+FsDWDK6lT1NyPK9wX
-         Pt1Hs4lITepQMuv/CDK7/6At6xwBTmM7WA2cXbpY6Z1lJY7hPf5Zff3lJZjjCOGKbiPF
-         lC9QR3ksIvb5bUinbAmeeXFF9erZYvAZgHOY3+icCH18lGUkyftNKl89Zb+yZSXO00zO
-         387N1uOxUxjFD7OYNNKxK5LXTKDB+sr4jDWflmuPkXXo1LnSHU6/EEFIpZgGV3O/PUGx
-         xN7g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780124247; x=1780729047; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZIrAiOXuQ5xV48QCoxqlQgfIuM89ObSt+OGQVGQqHAo=;
-        b=clwieUmxg7iXULKbI/YRdT5Yob9EOKKyHLcq81SdBYh53OMXu/lcx/7WUjYjLsdlej
-         n5NFuCCItRL9UC9pIPOtmuHtrKNZkTGxaGFim/Ki82VXIhYVR2gK0Q5YLSjsX0KDru/2
-         yjNrCagP9S5X1X0htE+NA+TVhqWOWi/kuLSySbaHbTohw0NP5/uL5yhT6ZFhdYABexUY
-         UpqrSQwRj+Mr18KSENMoqIN0iFPg93qj3eML8MrNPicJJcgAEnkoUcDWMWMMbxu86kXP
-         WhntTeEBeHE6ro1VUcnlhSkVNonKw49+fWw32BbyKKJSvcpaGoWiZBeSqf0zZJ1E/WoY
-         UhBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780124247; x=1780729047;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZIrAiOXuQ5xV48QCoxqlQgfIuM89ObSt+OGQVGQqHAo=;
-        b=acnC0cx3syb+lWgOP0XrfRSVX77Z3t0Lsr/BJamkkxKfEc0Do+Etd4u+eCcoWzxqJw
-         qzJgBNZ4LHYgcdilIuf1DxVASkdh4tRMvvYSginv0KZ/0N7laxyGreKNMgNDHacdT38s
-         x968z5+DO9Pjn3I/c6r9HY4TcrspA0D0HGhXMJ6UstcVs8sqEuTUqqF/6rZE+yEkntUJ
-         M7l3DZjEDy7ER+iYMifC5NEW/BzUlaZ1FI0Z2E/uOEOO7vhFo4dg0za1ARbOViOkXWuV
-         Gum11VQWIZS+sEOnbThsbrF9CStbZAnLrmRsTIULi52WgsaZjDRIU8hucrQkeVVRGqsT
-         5Frg==
-X-Gm-Message-State: AOJu0YxRPUgGx1MwnYauK6NbFsPc5fz3QFEHnwM1MbyvuT3igBZ8+ePD
-	TX9jATWHovS2+rCS/hGf+mhklaDFi81e8UoNdf360LzGekB8OlUoni5Y92gf6zzl0CCok5AnJdc
-	gJX0iGfA8WZK2hpX1pdFnPVbELwXMc/I=
-X-Gm-Gg: Acq92OE+IrcG869f1vukmGgO2Hq2eVrVp0PntSpyaLXWcRVJrqlKx2VMK9DprTwwYxv
-	5YuloWsdBV7yfUs0luj/ZsZ/q9/e9XUlTYv+Ypx6LrTQ1IYDNVy4Na/n1Ueh+cUxmDiohlXenkL
-	iez2Z+tIMq8dPNNzmCwODFssXACB1PPCvLuvpidfslgzbqEWpL3cbvwRtUpGAO8DsvTrtF6jEhw
-	xXJfaJRzrzoTRRsLQS3Z9XfGGh1XnWAaFvb+OOK9Yo9IBEQLCEej5fAawPw2wQcsgQvcUOeR5g9
-	SqpSxyke0/5mag30nQ==
-X-Received: by 2002:a17:907:3da1:b0:bd5:d06:52a0 with SMTP id
- a640c23a62f3a-beab394b833mr128580766b.43.1780124246674; Fri, 29 May 2026
- 23:57:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF9935F5F8;
+	Sat, 30 May 2026 07:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780125850; cv=none; b=RSFlqlE88pgkLIEH+jynPioKTpZLAVfPSaL1+bZO6Dy8Iu1nwQGi/dQdkMNDQKY3gunipczsZmvXwbWnXFZBiSI7HeSthh3QM89ExGLSy6T5D4eQtLdJuOAFv6qAVDDSLhG/iq09dBbWUO8DWEdZxFOV6Rb4csD216BxKARp7ws=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780125850; c=relaxed/simple;
+	bh=OhL96no5Bl5iHBqpM33mnUMSRzJs4QsmiLe0eDBBHmY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D7KSAGg3EQvfWegjioU3bJt9/j/45y3dAveRWM2L8M5/+QTOzdt8nsKinfGE//VM/VqQF4WHc1DI2qw8MFo6D2j9sEwUzyt8u2BBi7Fm/+PDmsHC0FdYd9mTIVqrM6uz+TkzWyemlx+pOuOO1gCUZhTjnXpIdC7hrFHoHeK14Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SrWQMlLX; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5FF21F00898;
+	Sat, 30 May 2026 07:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780125849;
+	bh=G9ZxHD3lU6TqxXiyrUwIWUka9kcwymS8eSuEmeSwNp4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=SrWQMlLX6NWBWp3WwaKRjpDn21QuLaWwSyN1B2BBBvuRJfgihk3UN57HN/ZCFYs0n
+	 ecJt082rTGSb9VEp38ewpuc5pXjeBw416BRuatMuj7BGb1bRB60xe1YFjydrgRe4r/
+	 XcM7wWW0m8tcXg1P4n1kUFhQUx9h31mJsDy5Xtwqu4aDl+EvyDEqVMvC3KsOeevxet
+	 Zn4kSS9aIRWu5ZmWcG4O8TloVQmLCxqqn9nvz3YE5ZPHwV5C7+/aSuEvC5EC5lP3y7
+	 TOozi/7/Gzy17N1SU7H7x374WHRS/aUE9Fn20XZMTRWQR/LAmXlUWQEKl1L7feFjL+
+	 toBq+SjoDxTEg==
+Message-ID: <a08cd9e4-9144-4707-be37-ccd1cfe25dd9@kernel.org>
+Date: Sat, 30 May 2026 09:24:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFgddh+JWdT4LLwMc5qjM8q_pBu-fRo2qADR5ovAKoGHWMQrRw@mail.gmail.com>
- <351656ab-a188-444d-a09b-cf304796043b@rowland.harvard.edu>
-In-Reply-To: <351656ab-a188-444d-a09b-cf304796043b@rowland.harvard.edu>
-From: Nikhil Solanke <nikhilsolanke5@gmail.com>
-Date: Sat, 30 May 2026 12:27:13 +0530
-X-Gm-Features: AVHnY4JLe2NJYSqLboafnLuHd8iGZcBvKQm0b0fxxBR-Sm68RmnHUZKPN5tDFn8
-Message-ID: <CAFgddhKPYFKNDDESxvo4jwBCw=mnWWx7Jsmr9_LwawtUpkx8Fw@mail.gmail.com>
-Subject: Re: USB: Request for guidance investigating configuration descriptor
- enumeration failure
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org, 
-	mathias.nyman@linux.intel.com, sakari.ailus@linux.intel.com, 
-	katieeliu@tencent.com, johannes.bruederl@gmail.com, kees@kernel.org, 
-	dengjie03@kylinos.cn, limiao@kylinos.cn, wse@tuxedocomputers.com, 
-	dev@a1rm4x.com, vahnenko2003@gmail.com, cs@tuxedo.de, lijiayi@kylinos.cn, 
-	oneukum@suse.com, bence98@sch.bme.hu, eeodqql09@gmail.com
-Content-Type: multipart/mixed; boundary="000000000000615b9406530379a2"
-X-Spamd-Result: default: False [-0.56 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: usb: convert PXA USB bindings to YAML
+To: Jeremiah Bishop <jbishop.dev@gmail.com>, gregkh@linuxfoundation.org
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260529213506.37462-1-jbishop.dev@gmail.com>
+ <20260530022955.32728-1-jbishop.dev@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260530022955.32728-1-jbishop.dev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
-	MIME_UNKNOWN(0.10)[application/x-pcapng];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38173-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-38174-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~,3:~,4:~,5:~];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,linux.intel.com,tencent.com,gmail.com,kernel.org,kylinos.cn,tuxedocomputers.com,a1rm4x.com,tuxedo.de,suse.com,sch.bme.hu];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	HAS_ATTACHMENT(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nikhilsolanke5@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 7A2E460B81D
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[harvard.edu:email,devicetree.org:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,4c000000:email,bootlin.com:url,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 2060760B935
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
---000000000000615b9406530379a2
-Content-Type: text/plain; charset="UTF-8"
+On 30/05/2026 04:29, Jeremiah Bishop wrote:
+> Convert the legacy pxa-usb.txt binding documentation to YAML schemas.
 
-Thanks for the follow up.
+DT schema. Not YAML. There is no such thing as YAML schemas. See also
+submitting patches. Same for subject.
 
-> It would be nice to know _how_ the 9-byte request fails.  That is, what is the status code when the request completes?  This information is in the usbmon trace.
+> 
+> The original text binding documented two distinct devices: the PXA OHCI
+> USB host controller and the PXA270 USB device controller. Split the
+> documentation into separate schemas, marvell,pxa-ohci.yaml and
+> marvell,pxa270-udc.yaml, and remove the obsolete text binding.
+> 
+> The schemas preserve the existing compatible strings and properties used
+> by current in-tree users while adding machine-readable validation and
+> examples.
 
-The device reports failure by responding with a GET DESCRIPTOR
-Response (not a GET DESCRIPTOR Response CONFIGURATION) that has no
-descriptor response data and sets URB Status with EPROTO (-71) which
-the kernel reports as is in dmesg (unable to read config index 0
-descriptor/start: -71).
+Drop, redundant. Say if you changed the binding.
 
-> Also, what happens under Windows?  Isn't a 9-byte Get-Config-Descriptor request standard in Windows as well as Linux?
+> 
+> Signed-off-by: Jeremiah Bishop <jbishop.dev@gmail.com>
+> ---
+> Changes in v2:
+> - Add vbus1-supply, vbus2-supply, and vbus3-supply properties to the
+>   PXA OHCI schema.
 
-Yes it is the standard on both platforms and that is what bugged me
-too. I'll be attaching the packet traces here, but here's a quick
-observation regarding that:
-On windows, the usbpcap captures shows that windows sets Packet Data
-Length in the URB data as 8 but requests wLength of 9 in Setup Data.
-Linux on the other hand has URB Length equal to the wLength and Data
-Length as 0. Furthermore, the device enumerates perfectly fine in the
-fallback mode (Android mode) with the 9-byte descriptor request.
-Further testing also revealed that the xinput mode would fail with
-broken pipe error if I use an external USB hub. However, all these
-issues are magically resolved with just a slightly bigger request.
+Do not attach (thread) your patchsets to some other threads (unrelated
+or older versions). This buries them deep in the mailbox and might
+interfere with applying entire sets. See also:
+https://elixir.bootlin.com/linux/v6.16-rc2/source/Documentation/process/submitting-patches.rst#L830
 
-I also had tested the device with various other existing quirks as
-well but none worked. I also tested using the
-usbcore.old_scheme_first=1 kernel cmdline, which failed as well.
+> 
+>  .../bindings/usb/marvell,pxa-ohci.yaml        | 100 ++++++++++++++++++
+>  .../bindings/usb/marvell,pxa270-udc.yaml      |  50 +++++++++
+>  .../devicetree/bindings/usb/pxa-usb.txt       |  53 ----------
+>  3 files changed, 150 insertions(+), 53 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/marvell,pxa-ohci.yaml
+>  create mode 100644 Documentation/devicetree/bindings/usb/marvell,pxa270-udc.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/usb/pxa-usb.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/marvell,pxa-ohci.yaml b/Documentation/devicetree/bindings/usb/marvell,pxa-ohci.yaml
+> new file mode 100644
+> index 000000000000..5d660b92d3cb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/marvell,pxa-ohci.yaml
+> @@ -0,0 +1,100 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/marvell,pxa-ohci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell PXA OHCI USB Host Controller
+> +
+> +maintainers:
+> +  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> +  - Alan Stern <stern@rowland.harvard.edu>
 
-> I doubt that anything needs to be instrumented.  If the device doesn't respond properly to a standard request, it's the device's fault.
+No, subsystem maintainers are not maintainers of this binding. This
+could be platform maintainer.
 
-That seems most likely to be the case. However, this behavior is found
-with other third-party Xbox-compatible controllers as well (i
-personally tried 2 other controllers that failed the same way). They
-all fail the enumeration stage in the same way. Wouldn't it be
-appropriate to introduce a proper fix as a "quirk" in the main line
-kernel?
+> +
+> +allOf:
+> +  - $ref: usb-hcd.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: marvell,pxa-ohci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  marvell,enable-port1:
+> +    type: boolean
+> +    description: Enable USB port 1 if present.
+> +
+> +  marvell,enable-port2:
+> +    type: boolean
+> +    description: Enable USB port 2 if present.
+> +
+> +  marvell,enable-port3:
+> +    type: boolean
+> +    description: Enable USB port 3 if present.> +
+> +  marvell,port-sense-low:
+> +    type: boolean
+> +    description: Port sense pin in low-active.
+> +
+> +  marvell,power-control-low:
+> +    type: boolean
+> +    description: Power control pin is low-active.
+> +
+> +  marvell,no-oc-protection:
+> +    type: boolean
+> +    description: Disable over-current protection.
+> +
+> +  marvell,oc-mode-perport:
+> +    type: boolean
+> +    description: Enable per-port over-current protection.
+> +
+> +  marvell,power-on-delay:
 
-Note: i have attached the packet traces, but they are truncated to
-only show the device communications with the host and any intermediate
-packets. There were other packets sent and received that communicated
-with the USB root hub before the device started its enumeration.
-Should I include those as well?
+power_on_delay? Your commit msg must clearly list the changes done to
+the binding during conversion with explanation why.
 
-Thanks,
-Nikhil Solanke
 
-On Sat, 30 May 2026 at 07:28, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Sat, May 30, 2026 at 02:52:28AM +0530, Nikhil Solanke wrote:
-> > Hello,
-> >
-> > I have been investigating a USB enumeration issue affecting at least
-> > one controller exposing an Xbox-compatible interface (VID:PID
-> > 045e:028e).
-> >
-> > The device consistently fails enumeration under Linux during the
-> > initial configuration descriptor read. The failure is reproducible on
-> > multiple physical machines and also inside a VM.
-> >
-> > Observations:
-> > - Reproduces successfully on latest mainline linux kernel and also the
-> > latest lts kernel release
-> > - Windows successfully enumerates the device.
-> > - Linux fails while reading the initial configuration descriptor.
-> > - The issue reproduces across different hosts.
-> > - The device falls back to a secondary mode (with different vendor id
-> > and product id) (meant for android support) when enumeration fails.
-> > This android mode gets enumerated and initialized properly but we lose
-> > a few capabilities that get exposed when its in the Xinput mode.
-> >
-> > So I collected and investigated USB captures from both Windows and
-> > Linux via Wireshark.
-> >
-> > Interesting finding:
-> >
-> > The standard Linux path requests the initial configuration descriptor
-> > using USB_DT_CONFIG_SIZE (9 bytes). By introducing a new usbcore quirk
-> > and modifying usb_get_configuration() so that affected devices request
-> > 10 bytes instead of 9, enumeration succeeds reliably and the
-> > controller remains in its expected XInput mode.
-> >
-> > Additional testing:
-> >
-> > 9-byte request: fails
-> > 48-byte request: succeeds
-> > 16-byte request: succeeds
-> > 10-byte request: succeeds
->
-> Probably any length larger than 9 will work.
->
-> It would be nice to know _how_ the 9-byte request fails.  That is, what
-> is the status code when the request completes?  This information is in
-> the usbmon trace.
->
-> Also, what happens under Windows?  Isn't a 9-byte Get-Config-Descriptor
-> request standard in Windows as well as Linux?
->
-> > I do not currently understand the underlying protocol-level reason for
-> > this behavior and would prefer to investigate the root cause rather
-> > than submit a workaround.
->
-> Most likely the root cause is a bug in the device's firmware.
->
-> > Could anyone suggest:
-> >
-> > which USB core paths would be most useful to instrument,
->
-> I doubt that anything needs to be instrumented.  If the device doesn't
-> respond properly to a standard request, it's the device's fault.
->
-> > whether there are existing examples of devices failing specifically at
-> > the initial configuration descriptor size probe,
->
-> Not that I know of.
->
-> > and whether usbmon alone is sufficient here or if
-> > host-controller-level tracing would be more appropriate?
->
-> Can't answer that without seeing the usbmon/Wireshark output.  Post
-> whatever you've got, for both Linux and Windows.
->
-> Alan Stern
->
-> > I would be happy to provide:
-> > Windows and Linux Wireshark captures,
-> > kernel logs,
-> > and the experimental workaround patch.
-> >
-> > Thanks.
-> > Nikhil Solanke
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Power On to Power Good time in milliseconds.
+> +
+> +  marvell,port-mode:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 3]
+> +    description: |
+> +      Selects the mode of the ports.
+> +        1 = PMM_NPS_MODE
+> +        2 = PMM_GLOBAL_MODE
+> +        3 = PMM_PERPORT_MODE
+> +
+> +  marvell,power-budget:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: USB power budget.
 
---000000000000615b9406530379a2
-Content-Type: application/x-pcapng; name="controller_linux.pcapng"
-Content-Disposition: attachment; filename="controller_linux.pcapng"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mprz94zv0>
-X-Attachment-Id: f_mprz94zv0
+There was no such property.
 
-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
-AAUACAAAAAAAAAAAAAAAAABsAAAA
---000000000000615b9406530379a2
-Content-Type: application/x-pcapng; name="controller_linux_patched.pcapng"
-Content-Disposition: attachment; filename="controller_linux_patched.pcapng"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mprz950r1>
-X-Attachment-Id: f_mprz950r1
+> +
+> +  vbus1-supply:
+> +    description: Regulator supplying VBUS for port 1.
+> +
+> +  vbus2-supply:
+> +    description: Regulator supplying VBUS for port 2.
+> +
+> +  vbus3-supply:
+> +    description: Regulator supplying VBUS for port 3.
 
-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
---000000000000615b9406530379a2
-Content-Type: application/x-pcapng; name="controller_windows.pcapng"
-Content-Disposition: attachment; filename="controller_windows.pcapng"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mprz95112>
-X-Attachment-Id: f_mprz95112
+Neither these.
 
-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
---000000000000615b9406530379a2
-Content-Type: application/x-pcapng; 
-	name="controller_with_external_hub_linux.pcapng"
-Content-Disposition: attachment; 
-	filename="controller_with_external_hub_linux.pcapng"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mprzs0rf3>
-X-Attachment-Id: f_mprzs0rf3
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
 
-Cg0NCpQAAABNPCsaAQAAAP//////////AgA4AEFNRCBSeXplbiA3IDc4NDBIUyB3LyBSYWRlb24g
-NzgwTSBHcmFwaGljcyAod2l0aCBTU0U0LjIpAwAUAExpbnV4IDcuMC4xMC1hcmNoMS0xBAAZAER1
-bXBjYXAgKFdpcmVzaGFyaykgNC42LjYAAAAAAAAAlAAAAAEAAABEAAAA3AAAAEDAAwACAAcAdXNi
-bW9uMwAJAAEABgAAAAwAFABMaW51eCA3LjAuMTAtYXJjaDEtMQAAAABEAAAABgAAAGAAAAAAAAAA
-zVIGAKH2dixAAAAAQAAAAIDqO/C0iP//UwKACgMAADxU+xZqAAAAAKF5AACN////CAAAAAAAAACA
-BgABAAAIAAAAAAAAAAAAAAIAAAAAAABgAAAABgAAAGgAAAAAAAAAzVIGAFcAdyxIAAAASAAAAIDq
-O/C0iP//QwKACgMALQBU+xZqAAAAAFeDAAAAAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAIA
-AAAAAAASAQACAAAAQGgAAAAGAAAAYAAAAAAAAADNUgYAcQB3LEAAAABAAAAAgOo78LSI//9TAoAK
-AwAAPFT7FmoAAAAAcYMAAI3///8SAAAAAAAAAIAGAAEAABIAAAAAAAAAAAAAAgAAAAAAAGAAAAAG
-AAAAdAAAAAAAAADNUgYAiAt3LFIAAABSAAAAgOo78LSI//9DAoAKAwAtAFT7FmoAAAAAiI4AAAAA
-AAASAAAAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAABIBAAIAAABAXgSOAjYAAAIDAQAAdAAA
-AAYAAABgAAAAAAAAAM1SBgCmC3csQAAAAEAAAACA6jvwtIj//1MCgAoDAAA8VPsWagAAAACmjgAA
-jf///wkAAAAAAAAAgAYAAgAACQAAAAAAAAAAAAACAAAAAAAAYAAAAAYAAABgAAAAAAAAAM1SBgDc
-I3csQAAAAEAAAACA6jvwtIj//0MCgAoDAC0AVPsWagAAAADcpgAA4P///wAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAACAAAAAAAAYAAAAAYAAABgAAAAAAAAAM1SBgDyI3csQAAAAEAAAACA6jvwtIj/
-/1MCgAoDAAA8VPsWagAAAADypgAAjf///wkAAAAAAAAAgAYAAgAACQAAAAAAAAAAAAACAAAAAAAA
-YAAAAAYAAABgAAAAAAAAAM1SBgC5JHcsQAAAAEAAAACA6jvwtIj//0MCgAoDAC0AVPsWagAAAAC5
-pwAA4P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAYAAAAAYAAABgAAAAAAAAAM1S
-BgDOJHcsQAAAAEAAAACA6jvwtIj//1MCgAoDAAA8VPsWagAAAADOpwAAjf///wkAAAAAAAAAgAYA
-AgAACQAAAAAAAAAAAAACAAAAAAAAYAAAAAYAAABgAAAAAAAAAM1SBgBqJXcsQAAAAEAAAACA6jvw
-tIj//0MCgAoDAC0AVPsWagAAAABqqAAA4P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA
-AAAAYAAAAAYAAABgAAAAAAAAAM1SBgCPJXcsQAAAAEAAAACA6jvwtIj//1MCAAcDAAAAVPsWagAA
-AACPqAAAjf///wAAAAAAAAAAIwEBAAMAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAYAAABgAAAAAAAA
-AM1SBgAWJncsQAAAAEAAAACA6jvwtIj//0MCAAcDAC0+VPsWagAAAAAWqQAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAYAAABgAAAAAAAAAM1SBgB6JncsQAAAAEAAAACA
-6jvwtIj//1MCAAcDAAAAVPsWagAAAAB6qQAAjf///wAAAAAAAAAAIwMEAAMAAAAAAAAAAAAAAAAA
-AAAAAAAAYAAAAAYAAABgAAAAAAAAAM1SBgAPJ3csQAAAAEAAAACA6jvwtIj//0MCAAcDAC0+VPsW
-agAAAAAPqgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAYAAABgAAAA
-AAAAAM1SBgCwT3csQAAAAEAAAACA6jvwtIj//1MCgAcDAAA8VPsWagAAAACw0gAAjf///wQAAAAA
-AAAAowAAAAMABAAAAAAAAAAAAAACAAAAAAAAYAAAAAYAAABkAAAAAAAAAM1SBgCUUHcsRAAAAEQA
-AACA6jvwtIj//0MCgAcDAC0AVPsWagAAAACU0wAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAA
-AAACAAAAAAAAAAEBAGQAAAAGAAAAYAAAAAAAAADNUgYA1Xt3LEAAAABAAAAAgOo78LSI//9TAoAH
-AwAAPFT7FmoAAAAA1f4AAI3///8EAAAAAAAAAKMAAAADAAQAAAAAAAAAAAAAAgAAAAAAAGAAAAAG
-AAAAZAAAAAAAAADNUgYA1X13LEQAAABEAAAAgOo78LSI//9DAoAHAwAtAFT7FmoAAAAA1QABAAAA
-AAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAABAQBkAAAABgAAAGAAAAAAAAAAzVIG
-ALSndyxAAAAAQAAAAIDqO/C0iP//UwKABwMAADxU+xZqAAAAALQqAQCN////BAAAAAAAAACjAAAA
-AwAEAAAAAAAAAAAAAAIAAAAAAABgAAAABgAAAGQAAAAAAAAAzVIGAJeodyxEAAAARAAAAIDqO/C0
-iP//QwKABwMALQBU+xZqAAAAAJcrAQAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA
-AAAAAQEAZAAAAAYAAABkAAAAAAAAAM1SBgCk9ncsQQAAAEEAAABAlPy8s4j//0MBgQcDAC0AVPsW
-agAAAACkeQEAAAAAAAEAAAABAAAAAAAAAAAAAAAACAAAAAAAAAACAAAAAAAACAAAAGQAAAAGAAAA
-YAAAAAAAAADNUgYArvZ3LEAAAABAAAAAQJT8vLOI//9TAYEHAwAtPFT7FmoAAAAArnkBAI3///8B
-AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAgAAAAAAAGAAAAAGAAAAYAAAAAAAAADNUgYA7NJ6LEAA
-AABAAAAAgOo78LSI//9TAoAHAwAAPFT7FmoAAAAA7FUEAI3///8EAAAAAAAAAKMAAAADAAQAAAAA
-AAAAAAAAAgAAAAAAAGAAAAAGAAAAZAAAAAAAAADNUgYAGNR6LEQAAABEAAAAgOo78LSI//9DAoAH
-AwAtAFT7FmoAAAAAGFcEAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAEBAQBk
-AAAABgAAAGAAAAAAAAAAzVIGACbUeixAAAAAQAAAAIDqO/C0iP//UwIABwMAAABU+xZqAAAAACZX
-BACN////AAAAAAAAAAAjARAAAwAAAAAAAAAAAAAAAAAAAAAAAABgAAAABgAAAGAAAAAAAAAAzVIG
-APrUeixAAAAAQAAAAIDqO/C0iP//QwIABwMALT5U+xZqAAAAAPpXBAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAABgAAAABgAAAGAAAAAAAAAAzVIGAAHVeixAAAAAQAAAAIDqO/C0
-iP//UwIABwMAAABU+xZqAAAAAAFYBACN////AAAAAAAAAAAjAwQAAwAAAAAAAAAAAAAAAAAAAAAA
-AABgAAAABgAAAGAAAAAAAAAAzVIGAP3VeixAAAAAQAAAAIDqO/C0iP//QwIABwMALT5U+xZqAAAA
-AP1YBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAABgAAAGQAAAAAAAAA
-zVIGANTeeyxBAAAAQQAAAECU/LyziP//QwGBBwMALQBU+xZqAAAAANRhBQAAAAAAAQAAAAEAAAAA
-AAAAAAAAAAAIAAAAAAAAAAIAAAAAAAAIAAAAZAAAAAYAAABgAAAAAAAAAM1SBgDa3nssQAAAAEAA
-AABAlPy8s4j//1MBgQcDAC08VPsWagAAAADaYQUAjf///wEAAAAAAAAAAAAAAAAAAAAACAAAAAAA
-AAACAAAAAAAAYAAAAAYAAABgAAAAAAAAAM1SBgBq/30sQAAAAEAAAACA6jvwtIj//1MCgAcDAAA8
-VPsWagAAAABqggcAjf///wQAAAAAAAAAowAAAAMABAAAAAAAAAAAAAACAAAAAAAAYAAAAAYAAABk
-AAAAAAAAAM1SBgCXAH4sRAAAAEQAAACA6jvwtIj//0MCgAcDAC0AVPsWagAAAACXgwcAAAAAAAQA
-AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAwEQAGQAAAAGAAAAYAAAAAAAAADNUgYAqAB+
-LEAAAABAAAAAgOo78LSI//9TAgAHAwAAAFT7FmoAAAAAqIMHAI3///8AAAAAAAAAACMBFAADAAAA
-AAAAAAAAAAAAAAAAAAAAAGAAAAAGAAAAYAAAAAAAAADNUgYAaAF+LEAAAABAAAAAgOo78LSI//9D
-AgAHAwAtPlT7FmoAAAAAaIQHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA
-AAAGAAAAYAAAAAAAAADNUgYAj/V+LEAAAABAAAAAgOo78LSI//9TAoALAwAAPFT7FmoAAAAAj3gI
-AI3///8IAAAAAAAAAIAGAAEAAAgAAAAAAAAAAAAAAgAAAAAAAGAAAAAGAAAAaAAAAAAAAADNUgYA
-Mv9+LEgAAABIAAAAgOo78LSI//9DAoALAwAtAFT7FmoAAAAAMoIIAAAAAAAIAAAACAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAgAAAAAAABIBEQEAAABAaAAAAAYAAABgAAAAAAAAAM1SBgBL/34sQAAAAEAA
-AACA6jvwtIj//1MCgAsDAAA8VPsWagAAAABLgggAjf///xIAAAAAAAAAgAYAAQAAEgAAAAAAAAAA
-AAACAAAAAAAAYAAAAAYAAAB0AAAAAAAAAM1SBgBCCn8sUgAAAFIAAACA6jvwtIj//0MCgAsDAC0A
-VPsWagAAAABCjQgAAAAAABIAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAEgERAQAAAEA3
-NZQQNgAAAgABAAB0AAAABgAAAGAAAAAAAAAAzVIGAFwKfyxAAAAAQAAAAIDqO/C0iP//UwKACwMA
-ADxU+xZqAAAAAFyNCACN////CQAAAAAAAACABgACAAAJAAAAAAAAAAAAAAIAAAAAAABgAAAABgAA
-AGwAAAAAAAAAzVIGADwWfyxJAAAASQAAAIDqO/C0iP//QwKACwMALQBU+xZqAAAAADyZCAAAAAAA
-CQAAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAJAikAAQEAgPoAAABsAAAABgAAAGAAAAAA
-AAAAzVIGAEkWfyxAAAAAQAAAAIDqO/C0iP//UwKACwMAADxU+xZqAAAAAEmZCACN////KQAAAAAA
-AACABgACAAApAAAAAAAAAAAAAAIAAAAAAABgAAAABgAAAIwAAAAAAAAAzVIGALIhfyxpAAAAaQAA
-AIDqO/C0iP//QwKACwMALQBU+xZqAAAAALKkCAAAAAAAKQAAACkAAAAAAAAAAAAAAAAAAAAAAAAA
-AAIAAAAAAAAJAikAAQEAgPoJBAAAAgMAAAAJIRABAAEivwAHBYIDQAABBwUCA0AACgAAAIwAAAAG
-AAAAYAAAAAAAAADNUgYAzSF/LEAAAABAAAAAgLmEzLOI//9TAoALAwAAPFT7FmoAAAAAzaQIAI3/
-////AAAAAAAAAIAGAAMAAP8AAAAAAAAAAAAAAgAAAAAAAGAAAAAGAAAAZAAAAAAAAADNUgYAYy1/
-LEQAAABEAAAAgLmEzLOI//9DAoALAwAtAFT7FmoAAAAAY7AIAAAAAAAEAAAABAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAgAAAAAAAAQDCQRkAAAABgAAAGAAAAAAAAAAzVIGAHEtfyxAAAAAQAAAAIC5hMyz
-iP//UwKACwMAADxU+xZqAAAAAHGwCACN/////wAAAAAAAACABgIDCQT/AAAAAAAAAAAAAAIAAAAA
-AABgAAAABgAAAIQAAAAAAAAAzVIGANc8fyxkAAAAZAAAAIC5hMyziP//QwKACwMALQBU+xZqAAAA
-ANe/CAAAAAAAJAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAkA0cAYQBtAGUAUwBpAHIA
-LQBUADMAIABMAGkAdABlACAAVwCEAAAABgAAAGAAAAAAAAAAzVIGAHpDgCxAAAAAQAAAAIC5hMyz
-iP//UwIACwMAAABU+xZqAAAAAHrGCQCN////AAAAAAAAAAAACQEAAAAAAAAAAAAAAAAAAAAAAAAA
-AABgAAAABgAAAGAAAAAAAAAAzVIGAKNGgCxAAAAAQAAAAIC5hMyziP//QwIACwMALT5U+xZqAAAA
-AKPJCQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAABQAAAGwAAAAAAAAA
-zVIGALgM/TkBABwAQ291bnRlcnMgcHJvdmlkZWQgYnkgZHVtcGNhcAIACADNUgYAabHdKwMACADN
-UgYAtgz9OQQACABqAAAAAAAAAAUACAAAAAAAAAAAAAAAAABsAAAA
---000000000000615b9406530379a2--
+There were no interrupts or clocks.
+
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    usb@4c000000 {
+> +        compatible = "marvell,pxa-ohci";
+> +        reg = <0x4c000000 0x100000>;
+> +        interrupts = <3>;
+> +        clocks = <&clks 11>;
+> +        marvell,enable-port1;
+> +        marvell,port-mode = <2>; /* PMM_GLOBAL_MODE */
+> +    };
+> diff --git a/Documentation/devicetree/bindings/usb/marvell,pxa270-udc.yaml b/Documentation/devicetree/bindings/usb/marvell,pxa270-udc.yaml
+> new file mode 100644
+> index 000000000000..0be51e0db80b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/marvell,pxa270-udc.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/marvell,pxa270-udc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell PXA27x USB Device Controller (UDC)
+> +
+> +maintainers:
+> +  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Same problem
+
+> +
+> +properties:
+> +  compatible:
+> +    const: marvell,pxa270-udc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  gpios:
+> +    maxItems: 1
+> +    description: GPIO to control the USB D+ pullup.
+> +
+> +  phys:
+> +    maxItems: 1
+
+There was no such property.
+
+
+Best regards,
+Krzysztof
 
