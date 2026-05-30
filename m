@@ -1,1138 +1,1004 @@
-Return-Path: <linux-usb+bounces-38179-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38180-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AEHHH6sQG2q/+ggAu9opvQ
-	(envelope-from <linux-usb+bounces-38179-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 18:30:35 +0200
+	id cM+HFWUSG2rM+wgAu9opvQ
+	(envelope-from <linux-usb+bounces-38180-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 18:37:57 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5594260E31C
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 18:30:34 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE2C060E4E2
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 18:37:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4E98B3027319
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 16:28:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 665FA3013A68
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2026 16:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD472F25E4;
-	Sat, 30 May 2026 16:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A8834C9AF;
+	Sat, 30 May 2026 16:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mobintestserver.ir header.i=@mobintestserver.ir header.b="ZjBKlvr6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U8AarYTn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mobintestserver.ir (mobintestserver.ir [185.204.170.116])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80761348452
-	for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 16:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.204.170.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5085D1DE4EF
+	for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 16:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780158521; cv=none; b=orkgdYGLh6R1KgXbrF+e4icJJDtGBQUkK8ijhfHwfacgW6NtQ+d+E0FcYDKJwlCpZUa+3diETmVHYcNVh1ZPP07GvfX6rEbo7x5PZ8h/xc79Q0o2JAFo3v4iNnSon+uW8e1q/SjrN21LrSNpMiT6aUTJU0/l0bp1xy0lDC43NmU=
+	t=1780158724; cv=none; b=BmDMgh190DXTYhF5DC8B783uPcRi+vK18jx3G7jGIry+mR2eneOAH73sKXEwlhG+FQUnLPK5xH10kX+peNepjyCT2QGk2cNV3DbJQGB+xuS7Ju2vrsGHPcFrOYBmW1xYa6jMBzdvIob5jiyCj07MfCevSdWwyXR/pM3iP+qdF60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780158521; c=relaxed/simple;
-	bh=U020ruBvUN4NhsgK08XGzwP9R1XmVLqzS2SEwFxO/CI=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:From:Subject; b=K1Ssxe8e0nyjBTPygZtuJIKVpYqygY1WnixLvKpEyslEX+7Vzmpsy5+Vy39YMeLUDqFZZHzhSp+T4P+WogZpEwV+sXqMBelXyhXIueC0JCAfNCvcBUXyJeZyKYG0pZaM0cpodSL3+YYdTtzy4xg7B3uscPBm2wDv89cmWv8W6Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mobintestserver.ir; spf=pass smtp.mailfrom=mobintestserver.ir; dkim=pass (2048-bit key) header.d=mobintestserver.ir header.i=@mobintestserver.ir header.b=ZjBKlvr6; arc=none smtp.client-ip=185.204.170.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mobintestserver.ir
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mobintestserver.ir
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=dkim; bh=U020ruBvUN4Nhsg
-	K08XGzwP9R1XmVLqzS2SEwFxO/CI=; h=subject:from:to:date;
-	d=mobintestserver.ir; b=ZjBKlvr6XMD+0MuLNHMjOrtec9JIgNagy+X59J5hJhe4dS
-	vHkbnroXQDwzsp50NvaZn6GhOAJEGoS9IQA0960+hIU2ibGMoE43+l11lzA9SH64WxYZg4
-	tCHwOwhfpP+AVq1T6Zev4MgHRwmLApxDS4w4Ng4+I8nxI5VE09tZhyKG9/ffWQGtviwSx0
-	3rfs+upbu3BqIW3EPi1vY3bLFAo5QyEtFO3W/WS4q7uhZKuyvh0nwj51SpGMRWhULZGMhV
-	tEgkh0diV9Xqq2/IAeB+ocbz+0e5umRuCkL2O5P3pPZyHf7f4MY57tkPs0qF9S8wthnOqx
-	gw7AwyFH/2T/0plw==
-Received: 
-	by mobintestserver.ir (OpenSMTPD) with ESMTPSA id 1db7ab46 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-	for <linux-usb@vger.kernel.org>;
-	Sat, 30 May 2026 16:10:33 +0000 (UTC)
-Content-Type: multipart/mixed; boundary="------------IxIh208z9b01eJ2I9Naod0l8"
-Message-ID: <6466fbc8-e9de-4610-a733-8ea24cec109d@mobintestserver.ir>
-Date: Sat, 30 May 2026 19:51:53 +0330
+	s=arc-20240116; t=1780158724; c=relaxed/simple;
+	bh=TXay2aGh+5LAjK4dv8Rl2u8/pw7H7zoHIIM5Njc89cI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=o6QJLTq54UuTilKGxSdux2mz3VKn0cRSfNnDOQEjLVHXnm67CJD2Y8AhsR/b0qwq99SdH+rPYqmyH/7jS7zgNb/2gQqukgeHjbksGg9BcfkI96rhHqjse0GMDSMVtMnOa0ICk1+DcNcHF5k8ONVPlJ7PRC4cu19ZKgMSJNwVYe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U8AarYTn; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780158722; x=1811694722;
+  h=date:from:to:cc:subject:message-id;
+  bh=TXay2aGh+5LAjK4dv8Rl2u8/pw7H7zoHIIM5Njc89cI=;
+  b=U8AarYTnOkt5ji33/0+Y4iu3SY8n+Ib1QIwTm8/FUcjv8hRSgHQ3/eBe
+   54BHXf4IbPAnfaBM35pQIWCOnwrMSP1tgX5HmlWZZWAJfiME6jNRAMSm8
+   p5tD6m2C7UVwEcqOshg8zt2z1nsFvssgUJesOzGeIw5EMSMgd6z8jK+40
+   Laexx0tQ6diEbUfTZ3amjfFb8FUpig20V3cyL35HevPCoybfx3oTIf1sk
+   uMpodUQxu1JdegvNbEOOcRt509s2vU499E3fbizCwyv6aojF8yvDC2lkx
+   18l5lkA8by6RZGnXSOK8waaVIyyPvh25xF4dmmJeyTPzjSPb1v2RcXpID
+   w==;
+X-CSE-ConnectionGUID: gmacsd2HSoqpq87FlhWQYQ==
+X-CSE-MsgGUID: 2NDVNUgQT72/662TArROFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11802"; a="68515040"
+X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
+   d="scan'208";a="68515040"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 09:32:02 -0700
+X-CSE-ConnectionGUID: dcRBTdIyR1SYHsjNUpfoYQ==
+X-CSE-MsgGUID: WwKYnp1XQ5WVzlvUKjmrdg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
+   d="scan'208";a="238944816"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 30 May 2026 09:32:00 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wTMbN-000000008fG-3s8e;
+	Sat, 30 May 2026 16:31:57 +0000
+Date: Sun, 31 May 2026 00:31:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 22d91cef94b5b86cff0d68ebfce7741740672704
+Message-ID: <202605310013.Y0FPWFFX-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-usb@vger.kernel.org
-From: Mobin Aydinfar <mobin@mobintestserver.ir>
-Subject: Unreliable UAS behavior from 125f:a88a A-DATA Technology Co., Ltd.
- SD600Q
-X-Spamd-Result: default: False [-1.06 / 15.00];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[mobintestserver.ir,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[mobintestserver.ir:s=dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-log];
-	MIME_BASE64_TEXT(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38179-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	HAS_ATTACHMENT(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:+,3:+];
-	RCPT_COUNT_ONE(0.00)[1];
-	DKIM_TRACE(0.00)[mobintestserver.ir:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mobin@mobintestserver.ir,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38180-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_PROHIBIT(0.00)[0.0.0.1:email];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,0.0.0.0:email,2.98.250.40:email]
-X-Rspamd-Queue-Id: 5594260E31C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: EE2C060E4E2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This is a multi-part message in MIME format.
---------------IxIh208z9b01eJ2I9Naod0l8
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 22d91cef94b5b86cff0d68ebfce7741740672704  usb: cdnsp: Add support for device-only configuration
 
-Hi.
+elapsed time: 11741m
 
-I have this ADATA SD600Q 240GB SSD and I use it as the rootfs for an 
-RPi4. This device is known to have problems in Raspberry Pi community 
-and everybody suggest using usb-storage for this device.
+configs tested: 879
+configs skipped: 37
 
-The problem is that when I plug this device into my PC, everything seems 
-OK but suddenly the UAS failed randomly multiple times in the past 
-unlike on RPi4 which is always results in boot failure. Today I couldn't 
-make it fail on my PC with copying everything from it and also write 
-benchmarks by gnome disks.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I attached "dmesg" and "lsusb -v" outputs of RPi4 and I hope someone 
-come up with an specific quirk for this device for the unusual_uas.h 
-devices list. That would be really great if I don't lose TRIM 
-functionality by using usb-storage anymore.
+tested configs:
+alpha                             allnoconfig    gcc-15.2.0
+alpha                            allyesconfig    gcc-15.2.0
+alpha                               defconfig    gcc-15.2.0
+arc                              allmodconfig    clang-16
+arc                              allmodconfig    gcc-15.2.0
+arc                               allnoconfig    gcc-15.2.0
+arc                              allyesconfig    clang-19
+arc                              allyesconfig    clang-23
+arc                              allyesconfig    gcc-15.2.0
+arc                                 defconfig    gcc-15.2.0
+arc                            randconfig-001    clang-23
+arc                            randconfig-001    gcc-13.4.0
+arc                   randconfig-001-20260523    gcc-10.5.0
+arc                   randconfig-001-20260524    clang-23
+arc                   randconfig-001-20260526    gcc-13.4.0
+arc                   randconfig-001-20260527    gcc-11.5.0
+arc                   randconfig-001-20260528    clang-23
+arc                   randconfig-001-20260529    clang-23
+arc                   randconfig-001-20260530    gcc-14.3.0
+arc                            randconfig-002    clang-23
+arc                            randconfig-002    gcc-13.4.0
+arc                   randconfig-002-20260523    gcc-14.3.0
+arc                   randconfig-002-20260524    clang-23
+arc                   randconfig-002-20260526    gcc-13.4.0
+arc                   randconfig-002-20260527    gcc-11.5.0
+arc                   randconfig-002-20260528    clang-23
+arc                   randconfig-002-20260529    clang-23
+arc                   randconfig-002-20260530    gcc-14.3.0
+arc                    vdk_hs38_smp_defconfig    gcc-15.2.0
+arm                               allnoconfig    clang-23
+arm                               allnoconfig    gcc-15.2.0
+arm                              allyesconfig    clang-16
+arm                              allyesconfig    gcc-15.2.0
+arm                     davinci_all_defconfig    clang-19
+arm                                 defconfig    clang-23
+arm                                 defconfig    gcc-15.2.0
+arm                         lpc32xx_defconfig    clang-17
+arm                        multi_v7_defconfig    gcc-15.2.0
+arm                            randconfig-001    clang-23
+arm                            randconfig-001    gcc-13.4.0
+arm                   randconfig-001-20260523    gcc-10.5.0
+arm                   randconfig-001-20260524    clang-23
+arm                   randconfig-001-20260527    gcc-11.5.0
+arm                   randconfig-001-20260528    clang-23
+arm                   randconfig-001-20260529    clang-23
+arm                   randconfig-001-20260530    gcc-14.3.0
+arm                            randconfig-002    clang-23
+arm                            randconfig-002    gcc-13.4.0
+arm                   randconfig-002-20260523    clang-19
+arm                   randconfig-002-20260524    clang-23
+arm                   randconfig-002-20260526    gcc-13.4.0
+arm                   randconfig-002-20260527    gcc-11.5.0
+arm                   randconfig-002-20260528    clang-23
+arm                   randconfig-002-20260529    clang-23
+arm                   randconfig-002-20260530    gcc-14.3.0
+arm                            randconfig-003    clang-23
+arm                            randconfig-003    gcc-13.4.0
+arm                   randconfig-003-20260523    clang-23
+arm                   randconfig-003-20260524    clang-23
+arm                   randconfig-003-20260526    gcc-13.4.0
+arm                   randconfig-003-20260527    gcc-11.5.0
+arm                   randconfig-003-20260528    clang-23
+arm                   randconfig-003-20260529    clang-23
+arm                   randconfig-003-20260530    gcc-14.3.0
+arm                            randconfig-004    clang-23
+arm                            randconfig-004    gcc-13.4.0
+arm                   randconfig-004-20260523    gcc-10.5.0
+arm                   randconfig-004-20260524    clang-23
+arm                   randconfig-004-20260526    gcc-13.4.0
+arm                   randconfig-004-20260527    gcc-11.5.0
+arm                   randconfig-004-20260528    clang-23
+arm                   randconfig-004-20260529    clang-23
+arm                   randconfig-004-20260530    gcc-14.3.0
+arm                             rpc_defconfig    clang-18
+arm                           spitz_defconfig    gcc-15.2.0
+arm                         wpcm450_defconfig    gcc-15.2.0
+arm64                            allmodconfig    clang-19
+arm64                            allmodconfig    clang-23
+arm64                             allnoconfig    gcc-15.2.0
+arm64                               defconfig    gcc-15.2.0
+arm64                          randconfig-001    clang-23
+arm64                 randconfig-001-20260523    gcc-15.2.0
+arm64                 randconfig-001-20260526    gcc-8.5.0
+arm64                 randconfig-001-20260528    gcc-15.2.0
+arm64                 randconfig-001-20260529    clang-23
+arm64                 randconfig-001-20260530    gcc-8.5.0
+arm64                          randconfig-002    clang-23
+arm64                 randconfig-002-20260523    gcc-8.5.0
+arm64                 randconfig-002-20260526    gcc-8.5.0
+arm64                 randconfig-002-20260528    gcc-15.2.0
+arm64                 randconfig-002-20260529    clang-23
+arm64                 randconfig-002-20260530    gcc-8.5.0
+arm64                          randconfig-003    clang-23
+arm64                 randconfig-003-20260523    gcc-9.5.0
+arm64                 randconfig-003-20260526    gcc-8.5.0
+arm64                 randconfig-003-20260528    gcc-15.2.0
+arm64                 randconfig-003-20260529    clang-23
+arm64                 randconfig-003-20260530    gcc-8.5.0
+arm64                          randconfig-004    clang-23
+arm64                 randconfig-004-20260523    clang-23
+arm64                 randconfig-004-20260526    gcc-8.5.0
+arm64                 randconfig-004-20260528    gcc-15.2.0
+arm64                 randconfig-004-20260529    clang-23
+arm64                 randconfig-004-20260530    gcc-8.5.0
+csky                             allmodconfig    gcc-15.2.0
+csky                              allnoconfig    gcc-15.2.0
+csky                                defconfig    gcc-15.2.0
+csky                           randconfig-001    clang-23
+csky                  randconfig-001-20260523    gcc-9.5.0
+csky                  randconfig-001-20260526    gcc-8.5.0
+csky                  randconfig-001-20260528    gcc-15.2.0
+csky                  randconfig-001-20260529    clang-23
+csky                  randconfig-001-20260530    gcc-10.5.0
+csky                  randconfig-001-20260530    gcc-8.5.0
+csky                           randconfig-002    clang-23
+csky                  randconfig-002-20260523    gcc-15.2.0
+csky                  randconfig-002-20260526    gcc-8.5.0
+csky                  randconfig-002-20260528    gcc-15.2.0
+csky                  randconfig-002-20260529    clang-23
+csky                  randconfig-002-20260530    gcc-8.5.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    gcc-15.2.0
+hexagon                           allnoconfig    clang-23
+hexagon                           allnoconfig    gcc-15.2.0
+hexagon                             defconfig    clang-23
+hexagon                             defconfig    gcc-15.2.0
+hexagon                        randconfig-001    clang-17
+hexagon                        randconfig-001    gcc-11.5.0
+hexagon               randconfig-001-20260523    clang-23
+hexagon               randconfig-001-20260524    gcc-8.5.0
+hexagon               randconfig-001-20260526    gcc-11.5.0
+hexagon               randconfig-001-20260527    gcc-11.5.0
+hexagon               randconfig-001-20260528    gcc-11.5.0
+hexagon               randconfig-001-20260529    gcc-11.5.0
+hexagon               randconfig-001-20260529    gcc-8.5.0
+hexagon               randconfig-001-20260530    clang-17
+hexagon               randconfig-001-20260530    clang-23
+hexagon               randconfig-001-20260530    gcc-11.5.0
+hexagon                        randconfig-002    clang-23
+hexagon                        randconfig-002    gcc-11.5.0
+hexagon               randconfig-002-20260523    clang-23
+hexagon               randconfig-002-20260524    gcc-8.5.0
+hexagon               randconfig-002-20260526    gcc-11.5.0
+hexagon               randconfig-002-20260527    gcc-11.5.0
+hexagon               randconfig-002-20260528    gcc-11.5.0
+hexagon               randconfig-002-20260529    gcc-11.5.0
+hexagon               randconfig-002-20260529    gcc-8.5.0
+hexagon               randconfig-002-20260530    clang-17
+hexagon               randconfig-002-20260530    clang-23
+hexagon               randconfig-002-20260530    gcc-11.5.0
+i386                             allmodconfig    clang-20
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                              allnoconfig    gcc-15.2.0
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-14
+i386                 buildonly-randconfig-001    clang-20
+i386        buildonly-randconfig-001-20260523    gcc-14
+i386        buildonly-randconfig-001-20260524    gcc-14
+i386        buildonly-randconfig-001-20260526    clang-20
+i386        buildonly-randconfig-001-20260527    clang-20
+i386        buildonly-randconfig-001-20260528    clang-20
+i386        buildonly-randconfig-001-20260529    gcc-12
+i386        buildonly-randconfig-001-20260530    clang-20
+i386                 buildonly-randconfig-002    clang-20
+i386        buildonly-randconfig-002-20260523    clang-20
+i386        buildonly-randconfig-002-20260524    gcc-14
+i386        buildonly-randconfig-002-20260526    clang-20
+i386        buildonly-randconfig-002-20260527    clang-20
+i386        buildonly-randconfig-002-20260528    clang-20
+i386        buildonly-randconfig-002-20260529    gcc-12
+i386        buildonly-randconfig-002-20260530    clang-20
+i386                 buildonly-randconfig-003    clang-20
+i386        buildonly-randconfig-003-20260523    gcc-14
+i386        buildonly-randconfig-003-20260524    gcc-14
+i386        buildonly-randconfig-003-20260526    clang-20
+i386        buildonly-randconfig-003-20260527    clang-20
+i386        buildonly-randconfig-003-20260528    clang-20
+i386        buildonly-randconfig-003-20260529    gcc-12
+i386        buildonly-randconfig-003-20260530    clang-20
+i386                 buildonly-randconfig-004    clang-20
+i386        buildonly-randconfig-004-20260523    gcc-12
+i386        buildonly-randconfig-004-20260524    gcc-14
+i386        buildonly-randconfig-004-20260526    clang-20
+i386        buildonly-randconfig-004-20260527    clang-20
+i386        buildonly-randconfig-004-20260528    clang-20
+i386        buildonly-randconfig-004-20260529    gcc-12
+i386        buildonly-randconfig-004-20260530    clang-20
+i386                 buildonly-randconfig-005    clang-20
+i386        buildonly-randconfig-005-20260523    clang-20
+i386        buildonly-randconfig-005-20260524    gcc-14
+i386        buildonly-randconfig-005-20260526    clang-20
+i386        buildonly-randconfig-005-20260527    clang-20
+i386        buildonly-randconfig-005-20260528    clang-20
+i386        buildonly-randconfig-005-20260529    gcc-12
+i386        buildonly-randconfig-005-20260530    clang-20
+i386                 buildonly-randconfig-006    clang-20
+i386        buildonly-randconfig-006-20260523    gcc-14
+i386        buildonly-randconfig-006-20260524    gcc-14
+i386        buildonly-randconfig-006-20260526    clang-20
+i386        buildonly-randconfig-006-20260527    clang-20
+i386        buildonly-randconfig-006-20260528    clang-20
+i386        buildonly-randconfig-006-20260529    gcc-12
+i386        buildonly-randconfig-006-20260530    clang-20
+i386                                defconfig    clang-20
+i386                                defconfig    gcc-15.2.0
+i386                           randconfig-001    gcc-14
+i386                  randconfig-001-20260523    gcc-14
+i386                  randconfig-001-20260524    gcc-14
+i386                  randconfig-001-20260526    gcc-14
+i386                  randconfig-001-20260527    gcc-14
+i386                  randconfig-001-20260528    gcc-14
+i386                  randconfig-001-20260529    gcc-14
+i386                  randconfig-001-20260530    clang-20
+i386                           randconfig-002    gcc-14
+i386                  randconfig-002-20260523    gcc-12
+i386                  randconfig-002-20260524    gcc-14
+i386                  randconfig-002-20260526    gcc-14
+i386                  randconfig-002-20260527    gcc-14
+i386                  randconfig-002-20260528    gcc-14
+i386                  randconfig-002-20260529    gcc-14
+i386                  randconfig-002-20260530    clang-20
+i386                           randconfig-003    gcc-14
+i386                  randconfig-003-20260523    gcc-14
+i386                  randconfig-003-20260524    gcc-14
+i386                  randconfig-003-20260526    gcc-14
+i386                  randconfig-003-20260527    gcc-14
+i386                  randconfig-003-20260528    gcc-14
+i386                  randconfig-003-20260529    gcc-14
+i386                  randconfig-003-20260530    clang-20
+i386                           randconfig-004    gcc-14
+i386                  randconfig-004-20260523    gcc-12
+i386                  randconfig-004-20260524    gcc-14
+i386                  randconfig-004-20260526    gcc-14
+i386                  randconfig-004-20260527    gcc-14
+i386                  randconfig-004-20260528    gcc-14
+i386                  randconfig-004-20260529    gcc-14
+i386                  randconfig-004-20260530    clang-20
+i386                           randconfig-005    gcc-14
+i386                  randconfig-005-20260523    gcc-14
+i386                  randconfig-005-20260524    gcc-14
+i386                  randconfig-005-20260526    gcc-14
+i386                  randconfig-005-20260527    gcc-14
+i386                  randconfig-005-20260528    gcc-14
+i386                  randconfig-005-20260529    gcc-14
+i386                  randconfig-005-20260530    clang-20
+i386                           randconfig-006    gcc-14
+i386                  randconfig-006-20260523    gcc-14
+i386                  randconfig-006-20260524    gcc-14
+i386                  randconfig-006-20260526    gcc-14
+i386                  randconfig-006-20260527    gcc-14
+i386                  randconfig-006-20260528    gcc-14
+i386                  randconfig-006-20260529    gcc-14
+i386                  randconfig-006-20260530    clang-20
+i386                           randconfig-007    gcc-14
+i386                  randconfig-007-20260523    gcc-14
+i386                  randconfig-007-20260524    gcc-14
+i386                  randconfig-007-20260526    gcc-14
+i386                  randconfig-007-20260527    gcc-14
+i386                  randconfig-007-20260528    gcc-14
+i386                  randconfig-007-20260529    gcc-14
+i386                  randconfig-007-20260530    clang-20
+i386                           randconfig-011    clang-20
+i386                  randconfig-011-20260523    gcc-14
+i386                  randconfig-011-20260526    gcc-14
+i386                  randconfig-011-20260527    clang-20
+i386                  randconfig-011-20260528    clang-20
+i386                  randconfig-011-20260529    gcc-14
+i386                  randconfig-011-20260530    clang-20
+i386                           randconfig-012    clang-20
+i386                  randconfig-012-20260523    gcc-14
+i386                  randconfig-012-20260526    gcc-14
+i386                  randconfig-012-20260527    clang-20
+i386                  randconfig-012-20260528    clang-20
+i386                  randconfig-012-20260529    gcc-14
+i386                  randconfig-012-20260530    clang-20
+i386                           randconfig-013    clang-20
+i386                  randconfig-013-20260523    gcc-14
+i386                  randconfig-013-20260526    gcc-14
+i386                  randconfig-013-20260527    clang-20
+i386                  randconfig-013-20260528    clang-20
+i386                  randconfig-013-20260529    gcc-14
+i386                  randconfig-013-20260530    clang-20
+i386                           randconfig-014    clang-20
+i386                  randconfig-014-20260523    clang-20
+i386                  randconfig-014-20260526    gcc-14
+i386                  randconfig-014-20260527    clang-20
+i386                  randconfig-014-20260528    clang-20
+i386                  randconfig-014-20260529    gcc-14
+i386                  randconfig-014-20260530    clang-20
+i386                           randconfig-015    clang-20
+i386                  randconfig-015-20260523    clang-20
+i386                  randconfig-015-20260526    gcc-14
+i386                  randconfig-015-20260527    clang-20
+i386                  randconfig-015-20260528    clang-20
+i386                  randconfig-015-20260529    gcc-14
+i386                  randconfig-015-20260530    clang-20
+i386                           randconfig-016    clang-20
+i386                  randconfig-016-20260523    clang-20
+i386                  randconfig-016-20260526    gcc-14
+i386                  randconfig-016-20260527    clang-20
+i386                  randconfig-016-20260528    clang-20
+i386                  randconfig-016-20260529    gcc-14
+i386                  randconfig-016-20260530    clang-20
+i386                           randconfig-017    clang-20
+i386                  randconfig-017-20260523    clang-20
+i386                  randconfig-017-20260526    gcc-14
+i386                  randconfig-017-20260527    clang-20
+i386                  randconfig-017-20260528    clang-20
+i386                  randconfig-017-20260529    gcc-14
+i386                  randconfig-017-20260530    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                        allmodconfig    clang-23
+loongarch                         allnoconfig    clang-23
+loongarch                         allnoconfig    gcc-15.2.0
+loongarch                           defconfig    clang-19
+loongarch                loongson64_defconfig    clang-23
+loongarch                      randconfig-001    clang-18
+loongarch                      randconfig-001    gcc-11.5.0
+loongarch             randconfig-001-20260523    gcc-15.2.0
+loongarch             randconfig-001-20260524    gcc-8.5.0
+loongarch             randconfig-001-20260526    gcc-11.5.0
+loongarch             randconfig-001-20260527    gcc-11.5.0
+loongarch             randconfig-001-20260528    gcc-11.5.0
+loongarch             randconfig-001-20260529    gcc-11.5.0
+loongarch             randconfig-001-20260529    gcc-8.5.0
+loongarch             randconfig-001-20260530    clang-17
+loongarch             randconfig-001-20260530    clang-23
+loongarch             randconfig-001-20260530    gcc-11.5.0
+loongarch                      randconfig-002    gcc-11.5.0
+loongarch                      randconfig-002    gcc-13.4.0
+loongarch             randconfig-002-20260523    gcc-15.2.0
+loongarch             randconfig-002-20260524    gcc-8.5.0
+loongarch             randconfig-002-20260526    gcc-11.5.0
+loongarch             randconfig-002-20260527    gcc-11.5.0
+loongarch             randconfig-002-20260528    gcc-11.5.0
+loongarch             randconfig-002-20260529    gcc-11.5.0
+loongarch             randconfig-002-20260529    gcc-8.5.0
+loongarch             randconfig-002-20260530    clang-17
+loongarch             randconfig-002-20260530    clang-23
+loongarch             randconfig-002-20260530    gcc-11.5.0
+m68k                             allmodconfig    gcc-15.2.0
+m68k                              allnoconfig    gcc-15.2.0
+m68k                             allyesconfig    clang-16
+m68k                             allyesconfig    gcc-15.2.0
+m68k                                defconfig    clang-19
+m68k                                defconfig    gcc-15.2.0
+m68k                       m5208evb_defconfig    gcc-15.2.0
+microblaze                        allnoconfig    gcc-15.2.0
+microblaze                       allyesconfig    gcc-15.2.0
+microblaze                          defconfig    clang-19
+microblaze                          defconfig    gcc-15.2.0
+mips                             allmodconfig    gcc-15.2.0
+mips                              allnoconfig    gcc-15.2.0
+mips                             allyesconfig    gcc-15.2.0
+mips                           gcw0_defconfig    clang-23
+mips                        qi_lb60_defconfig    clang-23
+nios2                            alldefconfig    gcc-11.5.0
+nios2                            allmodconfig    clang-23
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    clang-17
+nios2                             allnoconfig    clang-23
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    clang-19
+nios2                               defconfig    gcc-11.5.0
+nios2                          randconfig-001    gcc-11.5.0
+nios2                 randconfig-001-20260523    gcc-11.5.0
+nios2                 randconfig-001-20260524    gcc-8.5.0
+nios2                 randconfig-001-20260526    gcc-11.5.0
+nios2                 randconfig-001-20260527    gcc-11.5.0
+nios2                 randconfig-001-20260528    gcc-11.5.0
+nios2                 randconfig-001-20260529    gcc-11.5.0
+nios2                 randconfig-001-20260529    gcc-8.5.0
+nios2                 randconfig-001-20260530    clang-17
+nios2                 randconfig-001-20260530    clang-23
+nios2                 randconfig-001-20260530    gcc-11.5.0
+nios2                          randconfig-002    gcc-11.5.0
+nios2                 randconfig-002-20260523    gcc-9.5.0
+nios2                 randconfig-002-20260524    gcc-8.5.0
+nios2                 randconfig-002-20260526    gcc-11.5.0
+nios2                 randconfig-002-20260527    gcc-11.5.0
+nios2                 randconfig-002-20260528    gcc-11.5.0
+nios2                 randconfig-002-20260529    gcc-11.5.0
+nios2                 randconfig-002-20260529    gcc-8.5.0
+nios2                 randconfig-002-20260530    clang-17
+nios2                 randconfig-002-20260530    clang-23
+nios2                 randconfig-002-20260530    gcc-11.5.0
+openrisc                         allmodconfig    clang-23
+openrisc                         allmodconfig    gcc-15.2.0
+openrisc                          allnoconfig    clang-17
+openrisc                          allnoconfig    clang-23
+openrisc                          allnoconfig    gcc-15.2.0
+openrisc                            defconfig    gcc-15.2.0
+openrisc                  or1klitex_defconfig    gcc-15.2.0
+parisc                           allmodconfig    gcc-15.2.0
+parisc                            allnoconfig    clang-17
+parisc                            allnoconfig    clang-23
+parisc                            allnoconfig    gcc-15.2.0
+parisc                           allyesconfig    clang-19
+parisc                           allyesconfig    gcc-15.2.0
+parisc                              defconfig    gcc-15.2.0
+parisc                         randconfig-001    clang-19
+parisc                         randconfig-001    clang-23
+parisc                         randconfig-001    gcc-10.5.0
+parisc                         randconfig-001    gcc-13.4.0
+parisc                randconfig-001-20260523    gcc-15.2.0
+parisc                randconfig-001-20260524    clang-23
+parisc                randconfig-001-20260526    gcc-10.5.0
+parisc                randconfig-001-20260527    clang-20
+parisc                randconfig-001-20260528    clang-23
+parisc                randconfig-001-20260529    clang-19
+parisc                randconfig-001-20260530    gcc-8.5.0
+parisc                         randconfig-002    clang-19
+parisc                         randconfig-002    clang-23
+parisc                         randconfig-002    gcc-10.5.0
+parisc                         randconfig-002    gcc-8.5.0
+parisc                randconfig-002-20260523    gcc-9.5.0
+parisc                randconfig-002-20260524    clang-23
+parisc                randconfig-002-20260526    gcc-10.5.0
+parisc                randconfig-002-20260527    clang-20
+parisc                randconfig-002-20260528    clang-23
+parisc                randconfig-002-20260529    clang-19
+parisc                randconfig-002-20260530    gcc-8.5.0
+parisc64                            defconfig    clang-19
+parisc64                            defconfig    gcc-15.2.0
+powerpc                          allmodconfig    gcc-15.2.0
+powerpc                           allnoconfig    clang-17
+powerpc                           allnoconfig    clang-23
+powerpc                           allnoconfig    gcc-15.2.0
+powerpc                     mpc83xx_defconfig    clang-23
+powerpc                        randconfig-001    clang-19
+powerpc                        randconfig-001    clang-23
+powerpc                        randconfig-001    gcc-10.5.0
+powerpc                        randconfig-001    gcc-13.4.0
+powerpc               randconfig-001-20260523    gcc-15.2.0
+powerpc               randconfig-001-20260524    clang-23
+powerpc               randconfig-001-20260526    gcc-10.5.0
+powerpc               randconfig-001-20260527    clang-20
+powerpc               randconfig-001-20260528    clang-23
+powerpc               randconfig-001-20260529    clang-19
+powerpc               randconfig-001-20260530    gcc-8.5.0
+powerpc                        randconfig-002    clang-19
+powerpc                        randconfig-002    clang-23
+powerpc                        randconfig-002    gcc-10.5.0
+powerpc               randconfig-002-20260523    gcc-8.5.0
+powerpc               randconfig-002-20260524    clang-23
+powerpc               randconfig-002-20260526    gcc-10.5.0
+powerpc               randconfig-002-20260527    clang-20
+powerpc               randconfig-002-20260528    clang-23
+powerpc               randconfig-002-20260529    clang-19
+powerpc               randconfig-002-20260530    gcc-8.5.0
+powerpc                    socrates_defconfig    gcc-15.2.0
+powerpc64                      randconfig-001    clang-17
+powerpc64                      randconfig-001    clang-19
+powerpc64                      randconfig-001    clang-23
+powerpc64                      randconfig-001    gcc-10.5.0
+powerpc64             randconfig-001-20260523    clang-16
+powerpc64             randconfig-001-20260524    clang-23
+powerpc64             randconfig-001-20260526    gcc-10.5.0
+powerpc64             randconfig-001-20260527    clang-20
+powerpc64             randconfig-001-20260528    clang-23
+powerpc64             randconfig-001-20260529    clang-19
+powerpc64             randconfig-001-20260530    gcc-8.5.0
+powerpc64                      randconfig-002    clang-19
+powerpc64                      randconfig-002    clang-23
+powerpc64                      randconfig-002    gcc-10.5.0
+powerpc64             randconfig-002-20260523    clang-20
+powerpc64             randconfig-002-20260524    clang-23
+powerpc64             randconfig-002-20260526    gcc-10.5.0
+powerpc64             randconfig-002-20260527    clang-20
+powerpc64             randconfig-002-20260528    clang-23
+powerpc64             randconfig-002-20260529    clang-19
+powerpc64             randconfig-002-20260530    gcc-8.5.0
+riscv                            allmodconfig    clang-23
+riscv                             allnoconfig    clang-17
+riscv                             allnoconfig    clang-23
+riscv                             allnoconfig    gcc-15.2.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-23
+riscv                               defconfig    gcc-15.2.0
+riscv                    nommu_virt_defconfig    clang-23
+riscv                          randconfig-001    gcc-12.5.0
+riscv                          randconfig-001    gcc-14.3.0
+riscv                          randconfig-001    gcc-15.2.0
+riscv                 randconfig-001-20260523    gcc-8.5.0
+riscv                 randconfig-001-20260524    gcc-15.2.0
+riscv                 randconfig-001-20260526    gcc-10.5.0
+riscv                 randconfig-001-20260527    gcc-14.3.0
+riscv                 randconfig-001-20260528    gcc-13.4.0
+riscv                 randconfig-001-20260529    gcc-15.2.0
+riscv                 randconfig-001-20260530    gcc-12.5.0
+riscv                          randconfig-002    gcc-12.5.0
+riscv                          randconfig-002    gcc-14.3.0
+riscv                          randconfig-002    gcc-15.2.0
+riscv                 randconfig-002-20260523    gcc-8.5.0
+riscv                 randconfig-002-20260524    gcc-15.2.0
+riscv                 randconfig-002-20260526    gcc-10.5.0
+riscv                 randconfig-002-20260527    gcc-14.3.0
+riscv                 randconfig-002-20260528    gcc-13.4.0
+riscv                 randconfig-002-20260529    gcc-15.2.0
+riscv                 randconfig-002-20260530    gcc-12.5.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-17
+s390                              allnoconfig    clang-23
+s390                             allyesconfig    gcc-15.2.0
+s390                                defconfig    clang-23
+s390                                defconfig    gcc-15.2.0
+s390                           randconfig-001    gcc-12.5.0
+s390                           randconfig-001    gcc-14.3.0
+s390                           randconfig-001    gcc-15.2.0
+s390                  randconfig-001-20260523    clang-23
+s390                  randconfig-001-20260524    gcc-15.2.0
+s390                  randconfig-001-20260526    gcc-10.5.0
+s390                  randconfig-001-20260527    gcc-14.3.0
+s390                  randconfig-001-20260528    gcc-13.4.0
+s390                  randconfig-001-20260529    gcc-15.2.0
+s390                  randconfig-001-20260530    gcc-12.5.0
+s390                           randconfig-002    gcc-12.5.0
+s390                           randconfig-002    gcc-14.3.0
+s390                           randconfig-002    gcc-15.2.0
+s390                  randconfig-002-20260523    clang-23
+s390                  randconfig-002-20260524    gcc-15.2.0
+s390                  randconfig-002-20260526    gcc-10.5.0
+s390                  randconfig-002-20260527    gcc-14.3.0
+s390                  randconfig-002-20260528    gcc-13.4.0
+s390                  randconfig-002-20260529    gcc-15.2.0
+s390                  randconfig-002-20260530    gcc-12.5.0
+sh                               allmodconfig    gcc-15.2.0
+sh                                allnoconfig    clang-17
+sh                                allnoconfig    clang-23
+sh                                allnoconfig    gcc-15.2.0
+sh                               allyesconfig    clang-19
+sh                               allyesconfig    gcc-15.2.0
+sh                                  defconfig    gcc-14
+sh                                  defconfig    gcc-15.2.0
+sh                        edosk7705_defconfig    gcc-15.2.0
+sh                             randconfig-001    gcc-12.5.0
+sh                             randconfig-001    gcc-14.3.0
+sh                             randconfig-001    gcc-15.2.0
+sh                    randconfig-001-20260523    gcc-15.2.0
+sh                    randconfig-001-20260524    gcc-15.2.0
+sh                    randconfig-001-20260526    gcc-10.5.0
+sh                    randconfig-001-20260527    gcc-14.3.0
+sh                    randconfig-001-20260528    gcc-13.4.0
+sh                    randconfig-001-20260529    gcc-15.2.0
+sh                    randconfig-001-20260530    gcc-12.5.0
+sh                             randconfig-002    gcc-12.5.0
+sh                             randconfig-002    gcc-14.3.0
+sh                             randconfig-002    gcc-15.2.0
+sh                    randconfig-002-20260523    gcc-11.5.0
+sh                    randconfig-002-20260524    gcc-15.2.0
+sh                    randconfig-002-20260526    gcc-10.5.0
+sh                    randconfig-002-20260527    gcc-14.3.0
+sh                    randconfig-002-20260528    gcc-13.4.0
+sh                    randconfig-002-20260529    gcc-15.2.0
+sh                    randconfig-002-20260530    gcc-12.5.0
+sh                        sh7763rdp_defconfig    gcc-15.2.0
+sparc                             allnoconfig    clang-17
+sparc                             allnoconfig    clang-23
+sparc                             allnoconfig    gcc-15.2.0
+sparc                               defconfig    gcc-15.2.0
+sparc                          randconfig-001    gcc-11.5.0
+sparc                          randconfig-001    gcc-15.2.0
+sparc                          randconfig-001    gcc-9.5.0
+sparc                 randconfig-001-20260523    gcc-8.5.0
+sparc                 randconfig-001-20260526    gcc-8.5.0
+sparc                 randconfig-001-20260527    gcc-8.5.0
+sparc                 randconfig-001-20260528    gcc-15.2.0
+sparc                 randconfig-001-20260529    gcc-11.5.0
+sparc                 randconfig-001-20260530    gcc-9.5.0
+sparc                          randconfig-002    gcc-11.5.0
+sparc                          randconfig-002    gcc-15.2.0
+sparc                          randconfig-002    gcc-9.5.0
+sparc                 randconfig-002-20260523    gcc-8.5.0
+sparc                 randconfig-002-20260526    gcc-8.5.0
+sparc                 randconfig-002-20260527    gcc-8.5.0
+sparc                 randconfig-002-20260528    gcc-15.2.0
+sparc                 randconfig-002-20260529    gcc-11.5.0
+sparc                 randconfig-002-20260530    gcc-9.5.0
+sparc64                          allmodconfig    clang-23
+sparc64                             defconfig    clang-20
+sparc64                             defconfig    gcc-14
+sparc64                        randconfig-001    gcc-11.5.0
+sparc64                        randconfig-001    gcc-15.2.0
+sparc64                        randconfig-001    gcc-9.5.0
+sparc64               randconfig-001-20260523    clang-23
+sparc64               randconfig-001-20260526    gcc-8.5.0
+sparc64               randconfig-001-20260527    gcc-8.5.0
+sparc64               randconfig-001-20260528    gcc-15.2.0
+sparc64               randconfig-001-20260529    gcc-11.5.0
+sparc64               randconfig-001-20260530    gcc-9.5.0
+sparc64                        randconfig-002    gcc-11.5.0
+sparc64                        randconfig-002    gcc-15.2.0
+sparc64                        randconfig-002    gcc-9.5.0
+sparc64               randconfig-002-20260523    gcc-15.2.0
+sparc64               randconfig-002-20260526    gcc-8.5.0
+sparc64               randconfig-002-20260527    gcc-8.5.0
+sparc64               randconfig-002-20260528    gcc-15.2.0
+sparc64               randconfig-002-20260529    gcc-11.5.0
+sparc64               randconfig-002-20260530    gcc-9.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-17
+um                                allnoconfig    clang-23
+um                               allyesconfig    gcc-14
+um                               allyesconfig    gcc-15.2.0
+um                                  defconfig    clang-23
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                             randconfig-001    gcc-11.5.0
+um                             randconfig-001    gcc-15.2.0
+um                             randconfig-001    gcc-9.5.0
+um                    randconfig-001-20260523    gcc-14
+um                    randconfig-001-20260526    gcc-8.5.0
+um                    randconfig-001-20260527    gcc-8.5.0
+um                    randconfig-001-20260528    gcc-15.2.0
+um                    randconfig-001-20260529    gcc-11.5.0
+um                    randconfig-001-20260530    gcc-9.5.0
+um                             randconfig-002    gcc-11.5.0
+um                             randconfig-002    gcc-15.2.0
+um                             randconfig-002    gcc-9.5.0
+um                    randconfig-002-20260523    gcc-14
+um                    randconfig-002-20260526    gcc-8.5.0
+um                    randconfig-002-20260527    gcc-8.5.0
+um                    randconfig-002-20260528    gcc-15.2.0
+um                    randconfig-002-20260529    gcc-11.5.0
+um                    randconfig-002-20260530    gcc-9.5.0
+um                           x86_64_defconfig    clang-23
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-17
+x86_64                            allnoconfig    clang-20
+x86_64                            allnoconfig    clang-23
+x86_64                           allyesconfig    clang-20
+x86_64               buildonly-randconfig-001    gcc-14
+x86_64      buildonly-randconfig-001-20260523    gcc-14
+x86_64      buildonly-randconfig-001-20260524    clang-20
+x86_64      buildonly-randconfig-001-20260526    gcc-14
+x86_64      buildonly-randconfig-001-20260527    gcc-14
+x86_64      buildonly-randconfig-001-20260528    gcc-14
+x86_64      buildonly-randconfig-001-20260529    gcc-14
+x86_64      buildonly-randconfig-001-20260530    gcc-14
+x86_64               buildonly-randconfig-002    gcc-14
+x86_64      buildonly-randconfig-002-20260523    gcc-14
+x86_64      buildonly-randconfig-002-20260524    clang-20
+x86_64      buildonly-randconfig-002-20260526    gcc-14
+x86_64      buildonly-randconfig-002-20260527    gcc-14
+x86_64      buildonly-randconfig-002-20260528    gcc-14
+x86_64      buildonly-randconfig-002-20260529    gcc-14
+x86_64      buildonly-randconfig-002-20260530    gcc-14
+x86_64               buildonly-randconfig-003    gcc-14
+x86_64      buildonly-randconfig-003-20260523    gcc-14
+x86_64      buildonly-randconfig-003-20260524    clang-20
+x86_64      buildonly-randconfig-003-20260526    gcc-14
+x86_64      buildonly-randconfig-003-20260527    gcc-14
+x86_64      buildonly-randconfig-003-20260528    gcc-14
+x86_64      buildonly-randconfig-003-20260529    gcc-14
+x86_64      buildonly-randconfig-003-20260530    gcc-14
+x86_64               buildonly-randconfig-004    gcc-14
+x86_64      buildonly-randconfig-004-20260523    clang-20
+x86_64      buildonly-randconfig-004-20260524    clang-20
+x86_64      buildonly-randconfig-004-20260526    gcc-14
+x86_64      buildonly-randconfig-004-20260527    gcc-14
+x86_64      buildonly-randconfig-004-20260528    gcc-14
+x86_64      buildonly-randconfig-004-20260529    gcc-14
+x86_64      buildonly-randconfig-004-20260530    gcc-14
+x86_64               buildonly-randconfig-005    gcc-14
+x86_64      buildonly-randconfig-005-20260523    gcc-14
+x86_64      buildonly-randconfig-005-20260524    clang-20
+x86_64      buildonly-randconfig-005-20260526    gcc-14
+x86_64      buildonly-randconfig-005-20260527    gcc-14
+x86_64      buildonly-randconfig-005-20260528    gcc-14
+x86_64      buildonly-randconfig-005-20260529    gcc-14
+x86_64      buildonly-randconfig-005-20260530    gcc-14
+x86_64               buildonly-randconfig-006    gcc-14
+x86_64      buildonly-randconfig-006-20260523    clang-20
+x86_64      buildonly-randconfig-006-20260524    clang-20
+x86_64      buildonly-randconfig-006-20260526    gcc-14
+x86_64      buildonly-randconfig-006-20260527    gcc-14
+x86_64      buildonly-randconfig-006-20260528    gcc-14
+x86_64      buildonly-randconfig-006-20260529    gcc-14
+x86_64      buildonly-randconfig-006-20260530    gcc-14
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                         randconfig-001    clang-20
+x86_64                randconfig-001-20260523    clang-20
+x86_64                randconfig-001-20260524    clang-20
+x86_64                randconfig-001-20260526    clang-20
+x86_64                randconfig-001-20260527    clang-20
+x86_64                randconfig-001-20260528    gcc-14
+x86_64                randconfig-001-20260529    clang-20
+x86_64                randconfig-001-20260530    clang-20
+x86_64                randconfig-001-20260530    gcc-14
+x86_64                         randconfig-002    clang-20
+x86_64                randconfig-002-20260523    gcc-14
+x86_64                randconfig-002-20260524    clang-20
+x86_64                randconfig-002-20260526    clang-20
+x86_64                randconfig-002-20260527    clang-20
+x86_64                randconfig-002-20260528    gcc-14
+x86_64                randconfig-002-20260529    clang-20
+x86_64                randconfig-002-20260530    clang-20
+x86_64                randconfig-002-20260530    gcc-14
+x86_64                         randconfig-003    clang-20
+x86_64                randconfig-003-20260523    clang-20
+x86_64                randconfig-003-20260524    clang-20
+x86_64                randconfig-003-20260526    clang-20
+x86_64                randconfig-003-20260527    clang-20
+x86_64                randconfig-003-20260528    gcc-14
+x86_64                randconfig-003-20260529    clang-20
+x86_64                randconfig-003-20260530    clang-20
+x86_64                randconfig-003-20260530    gcc-14
+x86_64                         randconfig-004    clang-20
+x86_64                randconfig-004-20260523    clang-20
+x86_64                randconfig-004-20260524    clang-20
+x86_64                randconfig-004-20260526    clang-20
+x86_64                randconfig-004-20260527    clang-20
+x86_64                randconfig-004-20260528    gcc-14
+x86_64                randconfig-004-20260529    clang-20
+x86_64                randconfig-004-20260530    clang-20
+x86_64                randconfig-004-20260530    gcc-14
+x86_64                         randconfig-005    clang-20
+x86_64                randconfig-005-20260523    gcc-14
+x86_64                randconfig-005-20260524    clang-20
+x86_64                randconfig-005-20260526    clang-20
+x86_64                randconfig-005-20260527    clang-20
+x86_64                randconfig-005-20260528    gcc-14
+x86_64                randconfig-005-20260529    clang-20
+x86_64                randconfig-005-20260530    clang-20
+x86_64                randconfig-005-20260530    gcc-14
+x86_64                         randconfig-006    clang-20
+x86_64                randconfig-006-20260523    gcc-14
+x86_64                randconfig-006-20260524    clang-20
+x86_64                randconfig-006-20260526    clang-20
+x86_64                randconfig-006-20260527    clang-20
+x86_64                randconfig-006-20260528    gcc-14
+x86_64                randconfig-006-20260529    clang-20
+x86_64                randconfig-006-20260530    clang-20
+x86_64                randconfig-006-20260530    gcc-14
+x86_64                         randconfig-011    clang-20
+x86_64                         randconfig-011    gcc-14
+x86_64                randconfig-011-20260523    gcc-14
+x86_64                randconfig-011-20260524    clang-20
+x86_64                randconfig-011-20260526    clang-20
+x86_64                randconfig-011-20260527    clang-20
+x86_64                randconfig-011-20260528    gcc-14
+x86_64                randconfig-011-20260529    clang-20
+x86_64                randconfig-011-20260530    gcc-14
+x86_64                         randconfig-012    clang-20
+x86_64                         randconfig-012    gcc-14
+x86_64                randconfig-012-20260523    clang-20
+x86_64                randconfig-012-20260524    clang-20
+x86_64                randconfig-012-20260526    clang-20
+x86_64                randconfig-012-20260527    clang-20
+x86_64                randconfig-012-20260528    gcc-14
+x86_64                randconfig-012-20260529    clang-20
+x86_64                randconfig-012-20260530    gcc-14
+x86_64                         randconfig-013    clang-20
+x86_64                         randconfig-013    gcc-14
+x86_64                randconfig-013-20260523    gcc-14
+x86_64                randconfig-013-20260524    clang-20
+x86_64                randconfig-013-20260526    clang-20
+x86_64                randconfig-013-20260527    clang-20
+x86_64                randconfig-013-20260528    gcc-14
+x86_64                randconfig-013-20260529    clang-20
+x86_64                randconfig-013-20260530    gcc-14
+x86_64                         randconfig-014    clang-20
+x86_64                         randconfig-014    gcc-14
+x86_64                randconfig-014-20260523    clang-20
+x86_64                randconfig-014-20260524    clang-20
+x86_64                randconfig-014-20260526    clang-20
+x86_64                randconfig-014-20260527    clang-20
+x86_64                randconfig-014-20260528    gcc-14
+x86_64                randconfig-014-20260529    clang-20
+x86_64                randconfig-014-20260530    gcc-14
+x86_64                         randconfig-015    clang-20
+x86_64                         randconfig-015    gcc-14
+x86_64                randconfig-015-20260523    gcc-14
+x86_64                randconfig-015-20260524    clang-20
+x86_64                randconfig-015-20260526    clang-20
+x86_64                randconfig-015-20260527    clang-20
+x86_64                randconfig-015-20260528    gcc-14
+x86_64                randconfig-015-20260529    clang-20
+x86_64                randconfig-015-20260530    gcc-14
+x86_64                         randconfig-016    clang-20
+x86_64                         randconfig-016    gcc-14
+x86_64                randconfig-016-20260523    clang-20
+x86_64                randconfig-016-20260524    clang-20
+x86_64                randconfig-016-20260526    clang-20
+x86_64                randconfig-016-20260527    clang-20
+x86_64                randconfig-016-20260528    gcc-14
+x86_64                randconfig-016-20260529    clang-20
+x86_64                randconfig-016-20260530    gcc-14
+x86_64                         randconfig-071    clang-20
+x86_64                         randconfig-071    gcc-14
+x86_64                randconfig-071-20260523    gcc-14
+x86_64                randconfig-071-20260524    gcc-14
+x86_64                randconfig-071-20260526    clang-20
+x86_64                randconfig-071-20260527    clang-20
+x86_64                randconfig-071-20260528    gcc-14
+x86_64                randconfig-071-20260529    clang-20
+x86_64                randconfig-071-20260530    gcc-14
+x86_64                         randconfig-072    clang-20
+x86_64                         randconfig-072    gcc-14
+x86_64                randconfig-072-20260523    gcc-14
+x86_64                randconfig-072-20260524    gcc-14
+x86_64                randconfig-072-20260526    clang-20
+x86_64                randconfig-072-20260527    clang-20
+x86_64                randconfig-072-20260528    gcc-14
+x86_64                randconfig-072-20260529    clang-20
+x86_64                randconfig-072-20260530    gcc-14
+x86_64                         randconfig-073    clang-20
+x86_64                         randconfig-073    gcc-14
+x86_64                randconfig-073-20260523    gcc-14
+x86_64                randconfig-073-20260524    gcc-14
+x86_64                randconfig-073-20260526    clang-20
+x86_64                randconfig-073-20260527    clang-20
+x86_64                randconfig-073-20260528    gcc-14
+x86_64                randconfig-073-20260529    clang-20
+x86_64                randconfig-073-20260530    gcc-14
+x86_64                         randconfig-074    clang-20
+x86_64                         randconfig-074    gcc-14
+x86_64                randconfig-074-20260523    clang-20
+x86_64                randconfig-074-20260524    gcc-14
+x86_64                randconfig-074-20260526    clang-20
+x86_64                randconfig-074-20260527    clang-20
+x86_64                randconfig-074-20260528    gcc-14
+x86_64                randconfig-074-20260529    clang-20
+x86_64                randconfig-074-20260530    gcc-14
+x86_64                         randconfig-075    clang-20
+x86_64                         randconfig-075    gcc-14
+x86_64                randconfig-075-20260523    clang-20
+x86_64                randconfig-075-20260524    gcc-14
+x86_64                randconfig-075-20260526    clang-20
+x86_64                randconfig-075-20260527    clang-20
+x86_64                randconfig-075-20260528    gcc-14
+x86_64                randconfig-075-20260529    clang-20
+x86_64                randconfig-075-20260530    gcc-14
+x86_64                         randconfig-076    clang-20
+x86_64                         randconfig-076    gcc-14
+x86_64                randconfig-076-20260523    clang-20
+x86_64                randconfig-076-20260524    gcc-14
+x86_64                randconfig-076-20260526    clang-20
+x86_64                randconfig-076-20260527    clang-20
+x86_64                randconfig-076-20260528    gcc-14
+x86_64                randconfig-076-20260529    clang-20
+x86_64                randconfig-076-20260530    gcc-14
+x86_64                               rhel-9.4    clang-20
+x86_64                               rhel-9.4    gcc-14
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                          rhel-9.4-func    gcc-14
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                    rhel-9.4-kselftests    gcc-14
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    clang-17
+xtensa                            allnoconfig    clang-23
+xtensa                            allnoconfig    gcc-15.2.0
+xtensa                           allyesconfig    clang-23
+xtensa                           allyesconfig    gcc-15.2.0
+xtensa                         randconfig-001    gcc-11.5.0
+xtensa                         randconfig-001    gcc-15.2.0
+xtensa                         randconfig-001    gcc-9.5.0
+xtensa                randconfig-001-20260523    gcc-15.2.0
+xtensa                randconfig-001-20260526    gcc-8.5.0
+xtensa                randconfig-001-20260527    gcc-8.5.0
+xtensa                randconfig-001-20260528    gcc-15.2.0
+xtensa                randconfig-001-20260529    gcc-11.5.0
+xtensa                randconfig-001-20260530    gcc-9.5.0
+xtensa                         randconfig-002    gcc-11.5.0
+xtensa                         randconfig-002    gcc-15.2.0
+xtensa                         randconfig-002    gcc-9.5.0
+xtensa                randconfig-002-20260523    gcc-8.5.0
+xtensa                randconfig-002-20260526    gcc-8.5.0
+xtensa                randconfig-002-20260527    gcc-8.5.0
+xtensa                randconfig-002-20260528    gcc-15.2.0
+xtensa                randconfig-002-20260529    gcc-11.5.0
+xtensa                randconfig-002-20260530    gcc-9.5.0
 
-Note: I tested that SSD with and without a powered USB hub to ensure 
-it's not a power issue.
-
-Best Regards
---------------IxIh208z9b01eJ2I9Naod0l8
-Content-Type: text/x-log; charset=UTF-8; name="uas_failure_dmesg.log"
-Content-Disposition: attachment; filename="uas_failure_dmesg.log"
-Content-Transfer-Encoding: base64
-
-WyAgICAwLjAwMDAwMF0gQm9vdGluZyBMaW51eCBvbiBwaHlzaWNhbCBDUFUgMHgwMDAwMDAw
-MDAwIFsweDQxMGZkMDgzXQpbICAgIDAuMDAwMDAwXSBMaW51eCB2ZXJzaW9uIDYuMTguMzIt
-Mi1ycGkgKGJ1aWxkdXNlckBycHMtcm9jazViLTMyKSAoZ2NjIChHQ0MpIDE2LjEuMSAyMDI2
-MDQzMCwgR05VIGxkIChHTlUgQmludXRpbHMpIDIuNDYuMCkgIzEgU01QIFBSRUVNUFQgTW9u
-IE1heSAyNSAwNzoxMzozMCBVVEMgMjAyNgpbICAgIDAuMDAwMDAwXSBLQVNMUiBlbmFibGVk
-ClsgICAgMC4wMDAwMDBdIHJhbmRvbTogY3JuZyBpbml0IGRvbmUKWyAgICAwLjAwMDAwMF0g
-TWFjaGluZSBtb2RlbDogUmFzcGJlcnJ5IFBpIDQgTW9kZWwgQiBSZXYgMS41ClsgICAgMC4w
-MDAwMDBdIGVmaTogVUVGSSBub3QgZm91bmQuClsgICAgMC4wMDAwMDBdIFJlc2VydmVkIG1l
-bW9yeTogY3JlYXRlZCBDTUEgbWVtb3J5IHBvb2wgYXQgMHgwMDAwMDAwMDBlYzAwMDAwLCBz
-aXplIDUxMiBNaUIKWyAgICAwLjAwMDAwMF0gT0Y6IHJlc2VydmVkIG1lbTogaW5pdGlhbGl6
-ZWQgbm9kZSBsaW51eCxjbWEsIGNvbXBhdGlibGUgaWQgc2hhcmVkLWRtYS1wb29sClsgICAg
-MC4wMDAwMDBdIE9GOiByZXNlcnZlZCBtZW06IDB4MDAwMDAwMDAwZWMwMDAwMC4uMHgwMDAw
-MDAwMDJlYmZmZmZmICg1MjQyODggS2lCKSBtYXAgcmV1c2FibGUgbGludXgsY21hClsgICAg
-MC4wMDAwMDBdIE9GOiByZXNlcnZlZCBtZW06IDB4MDAwMDAwMDAzZWU3NGQ2MC4uMHgwMDAw
-MDAwMDNlZTc0ZDk1ICgwIEtpQikgbm9tYXAgbm9uLXJldXNhYmxlIG52cmFtQDAKWyAgICAw
-LjAwMDAwMF0gT0Y6IHJlc2VydmVkIG1lbTogMHgwMDAwMDAwMDNlZTc0YjIwLi4weDAwMDAw
-MDAwM2VlNzRkMWYgKDAgS2lCKSBub21hcCBub24tcmV1c2FibGUgbnZyYW1AMQpbICAgIDAu
-MDAwMDAwXSBOVU1BOiBGYWtpbmcgYSBub2RlIGF0IFttZW0gMHgwMDAwMDAwMDAwMDAwMDAw
-LTB4MDAwMDAwMDBmYmZmZmZmZl0KWyAgICAwLjAwMDAwMF0gTk9ERV9EQVRBKDApIGFsbG9j
-YXRlZCBbbWVtIDB4ZmI3ZmEwODAtMHhmYjdmY2RmZl0KWyAgICAwLjAwMDAwMF0gWm9uZSBy
-YW5nZXM6ClsgICAgMC4wMDAwMDBdICAgRE1BICAgICAgW21lbSAweDAwMDAwMDAwMDAwMDAw
-MDAtMHgwMDAwMDAwMDNmZmZmZmZmXQpbICAgIDAuMDAwMDAwXSAgIERNQTMyICAgIFttZW0g
-MHgwMDAwMDAwMDQwMDAwMDAwLTB4MDAwMDAwMDBmYmZmZmZmZl0KWyAgICAwLjAwMDAwMF0g
-ICBOb3JtYWwgICBlbXB0eQpbICAgIDAuMDAwMDAwXSBNb3ZhYmxlIHpvbmUgc3RhcnQgZm9y
-IGVhY2ggbm9kZQpbICAgIDAuMDAwMDAwXSBFYXJseSBtZW1vcnkgbm9kZSByYW5nZXMKWyAg
-ICAwLjAwMDAwMF0gICBub2RlICAgMDogW21lbSAweDAwMDAwMDAwMDAwMDAwMDAtMHgwMDAw
-MDAwMDNiMmZmZmZmXQpbICAgIDAuMDAwMDAwXSAgIG5vZGUgICAwOiBbbWVtIDB4MDAwMDAw
-MDA0MDAwMDAwMC0weDAwMDAwMDAwZmJmZmZmZmZdClsgICAgMC4wMDAwMDBdIEluaXRtZW0g
-c2V0dXAgbm9kZSAwIFttZW0gMHgwMDAwMDAwMDAwMDAwMDAwLTB4MDAwMDAwMDBmYmZmZmZm
-Zl0KWyAgICAwLjAwMDAwMF0gT24gbm9kZSAwLCB6b25lIERNQTMyOiAxOTcxMiBwYWdlcyBp
-biB1bmF2YWlsYWJsZSByYW5nZXMKWyAgICAwLjAwMDAwMF0gT24gbm9kZSAwLCB6b25lIERN
-QTMyOiAxNjM4NCBwYWdlcyBpbiB1bmF2YWlsYWJsZSByYW5nZXMKWyAgICAwLjAwMDAwMF0g
-cGVyY3B1OiBFbWJlZGRlZCAzMyBwYWdlcy9jcHUgczk1NDQ4IHI4MTkyIGQzMTUyOCB1MTM1
-MTY4ClsgICAgMC4wMDAwMDBdIHBjcHUtYWxsb2M6IHM5NTQ0OCByODE5MiBkMzE1MjggdTEz
-NTE2OCBhbGxvYz0zMyo0MDk2ClsgICAgMC4wMDAwMDBdIHBjcHUtYWxsb2M6IFswXSAwIFsw
-XSAxIFswXSAyIFswXSAzIApbICAgIDAuMDAwMDAwXSBEZXRlY3RlZCBQSVBUIEktY2FjaGUg
-b24gQ1BVMApbICAgIDAuMDAwMDAwXSBDUFUgZmVhdHVyZXM6IGRldGVjdGVkOiBTcGVjdHJl
-LXYyClsgICAgMC4wMDAwMDBdIENQVSBmZWF0dXJlczogZGV0ZWN0ZWQ6IFNwZWN0cmUtdjNh
-ClsgICAgMC4wMDAwMDBdIENQVSBmZWF0dXJlczogZGV0ZWN0ZWQ6IFNwZWN0cmUtdjQKWyAg
-ICAwLjAwMDAwMF0gQ1BVIGZlYXR1cmVzOiBkZXRlY3RlZDogU3BlY3RyZS1CSEIKWyAgICAw
-LjAwMDAwMF0gQ1BVIGZlYXR1cmVzOiBrZXJuZWwgcGFnZSB0YWJsZSBpc29sYXRpb24gZm9y
-Y2VkIE9OIGJ5IEtBU0xSClsgICAgMC4wMDAwMDBdIENQVSBmZWF0dXJlczogZGV0ZWN0ZWQ6
-IEtlcm5lbCBwYWdlIHRhYmxlIGlzb2xhdGlvbiAoS1BUSSkKWyAgICAwLjAwMDAwMF0gQ1BV
-IGZlYXR1cmVzOiBkZXRlY3RlZDogQVJNIGVycmF0dW0gMTc0MjA5OApbICAgIDAuMDAwMDAw
-XSBDUFUgZmVhdHVyZXM6IGRldGVjdGVkOiBBUk0gZXJyYXRhIDExNjU1MjIsIDEzMTkzNjcs
-IG9yIDE1MzA5MjMKWyAgICAwLjAwMDAwMF0gYWx0ZXJuYXRpdmVzOiBhcHBseWluZyBib290
-IGFsdGVybmF0aXZlcwpbICAgIDAuMDAwMDAwXSBLZXJuZWwgY29tbWFuZCBsaW5lOiByb290
-PVBBUlRVVUlEPTRlZDJlZDIxLTAyIHJ3IHJvb3R3YWl0IGNvbnNvbGU9c2VyaWFsMCwxMTUy
-MDAgY29uc29sZT10dHkxIGZzY2sucmVwYWlyPXllcyBub21vZGVzZXQKWyAgICAwLjAwMDAw
-MF0gQm9vdGVkIHdpdGggdGhlIG5vbW9kZXNldCBwYXJhbWV0ZXIuIE9ubHkgdGhlIHN5c3Rl
-bSBmcmFtZWJ1ZmZlciB3aWxsIGJlIGF2YWlsYWJsZQpbICAgIDAuMDAwMDAwXSBwcmludGs6
-IGxvZyBidWZmZXIgZGF0YSArIG1ldGEgZGF0YTogMTMxMDcyICsgNDU4NzUyID0gNTg5ODI0
-IGJ5dGVzClsgICAgMC4wMDAwMDBdIERlbnRyeSBjYWNoZSBoYXNoIHRhYmxlIGVudHJpZXM6
-IDUyNDI4OCAob3JkZXI6IDEwLCA0MTk0MzA0IGJ5dGVzLCBsaW5lYXIpClsgICAgMC4wMDAw
-MDBdIElub2RlLWNhY2hlIGhhc2ggdGFibGUgZW50cmllczogMjYyMTQ0IChvcmRlcjogOSwg
-MjA5NzE1MiBieXRlcywgbGluZWFyKQpbICAgIDAuMDAwMDAwXSBzb2Z0d2FyZSBJTyBUTEI6
-IGFyZWEgbnVtIDQuClsgICAgMC4wMDAwMDBdIHNvZnR3YXJlIElPIFRMQjogbWFwcGVkIFtt
-ZW0gMHgwMDAwMDAwMDM3MzAwMDAwLTB4MDAwMDAwMDAzYjMwMDAwMF0gKDY0TUIpClsgICAg
-MC4wMDAwMDBdIEZhbGxiYWNrIG9yZGVyIGZvciBOb2RlIDA6IDAgClsgICAgMC4wMDAwMDBd
-IEJ1aWx0IDEgem9uZWxpc3RzLCBtb2JpbGl0eSBncm91cGluZyBvbi4gIFRvdGFsIHBhZ2Vz
-OiAxMDEyNDgwClsgICAgMC4wMDAwMDBdIFBvbGljeSB6b25lOiBETUEzMgpbICAgIDAuMDAw
-MDAwXSBtZW0gYXV0by1pbml0OiBzdGFjazphbGwoemVybyksIGhlYXAgYWxsb2M6b2ZmLCBo
-ZWFwIGZyZWU6b2ZmClsgICAgMC4wMDAwMDBdIFNMVUI6IEhXYWxpZ249NjQsIE9yZGVyPTAt
-MywgTWluT2JqZWN0cz0wLCBDUFVzPTQsIE5vZGVzPTEKWyAgICAwLjAwMDAwMF0gZnRyYWNl
-OiBhbGxvY2F0aW5nIDQ5NTA4IGVudHJpZXMgaW4gMTk0IHBhZ2VzClsgICAgMC4wMDAwMDBd
-IGZ0cmFjZTogYWxsb2NhdGVkIDE5NCBwYWdlcyB3aXRoIDMgZ3JvdXBzClsgICAgMC4wMDAw
-MDBdIHJjdTogUHJlZW1wdGlibGUgaGllcmFyY2hpY2FsIFJDVSBpbXBsZW1lbnRhdGlvbi4K
-WyAgICAwLjAwMDAwMF0gcmN1OiAJUkNVIGV2ZW50IHRyYWNpbmcgaXMgZW5hYmxlZC4KWyAg
-ICAwLjAwMDAwMF0gCVRyYW1wb2xpbmUgdmFyaWFudCBvZiBUYXNrcyBSQ1UgZW5hYmxlZC4K
-WyAgICAwLjAwMDAwMF0gCVJ1ZGUgdmFyaWFudCBvZiBUYXNrcyBSQ1UgZW5hYmxlZC4KWyAg
-ICAwLjAwMDAwMF0gCVRyYWNpbmcgdmFyaWFudCBvZiBUYXNrcyBSQ1UgZW5hYmxlZC4KWyAg
-ICAwLjAwMDAwMF0gcmN1OiBSQ1UgY2FsY3VsYXRlZCB2YWx1ZSBvZiBzY2hlZHVsZXItZW5s
-aXN0bWVudCBkZWxheSBpcyAyNSBqaWZmaWVzLgpbICAgIDAuMDAwMDAwXSBSQ1UgVGFza3M6
-IFNldHRpbmcgc2hpZnQgdG8gMiBhbmQgbGltIHRvIDEgcmN1X3Rhc2tfY2JfYWRqdXN0PTEg
-cmN1X3Rhc2tfY3B1X2lkcz00LgpbICAgIDAuMDAwMDAwXSBSQ1UgVGFza3MgUnVkZTogU2V0
-dGluZyBzaGlmdCB0byAyIGFuZCBsaW0gdG8gMSByY3VfdGFza19jYl9hZGp1c3Q9MSByY3Vf
-dGFza19jcHVfaWRzPTQuClsgICAgMC4wMDAwMDBdIFJDVSBUYXNrcyBUcmFjZTogU2V0dGlu
-ZyBzaGlmdCB0byAyIGFuZCBsaW0gdG8gMSByY3VfdGFza19jYl9hZGp1c3Q9MSByY3VfdGFz
-a19jcHVfaWRzPTQuClsgICAgMC4wMDAwMDBdIE5SX0lSUVM6IDY0LCBucl9pcnFzOiA2NCwg
-cHJlYWxsb2NhdGVkIGlycXM6IDAKWyAgICAwLjAwMDAwMF0gUm9vdCBJUlEgaGFuZGxlcjog
-Z2ljX2hhbmRsZV9pcnEKWyAgICAwLjAwMDAwMF0gR0lDOiBVc2luZyBzcGxpdCBFT0kvRGVh
-Y3RpdmF0ZSBtb2RlClsgICAgMC4wMDAwMDBdIHJjdTogc3JjdV9pbml0OiBTZXR0aW5nIHNy
-Y3Vfc3RydWN0IHNpemVzIGJhc2VkIG9uIGNvbnRlbnRpb24uClsgICAgMC4wMDAwMDBdIGFy
-Y2hfdGltZXI6IGNwMTUgdGltZXIgcnVubmluZyBhdCA1NC4wME1IeiAocGh5cykuClsgICAg
-MC4wMDAwMDBdIGNsb2Nrc291cmNlOiBhcmNoX3N5c19jb3VudGVyOiBtYXNrOiAweGZmZmZm
-ZmZmZmZmZmZmIG1heF9jeWNsZXM6IDB4Yzc0M2NlMzQ2LCBtYXhfaWRsZV9uczogNDQwNzk1
-MjAzMTIzIG5zClsgICAgMC4wMDAwMDBdIHNjaGVkX2Nsb2NrOiA1NiBiaXRzIGF0IDU0TUh6
-LCByZXNvbHV0aW9uIDE4bnMsIHdyYXBzIGV2ZXJ5IDQzOTgwNDY1MTExMDJucwpbICAgIDAu
-MDAwMTU0XSBDb25zb2xlOiBjb2xvdXIgZHVtbXkgZGV2aWNlIDgweDI1ClsgICAgMC4wMDAx
-NjNdIHByaW50azogbGVnYWN5IGNvbnNvbGUgW3R0eTFdIGVuYWJsZWQKWyAgICAwLjAwMDQw
-Nl0gQ2FsaWJyYXRpbmcgZGVsYXkgbG9vcCAoc2tpcHBlZCksIHZhbHVlIGNhbGN1bGF0ZWQg
-dXNpbmcgdGltZXIgZnJlcXVlbmN5Li4gMTA4LjAwIEJvZ29NSVBTIChscGo9MjE2MDAwKQpb
-ICAgIDAuMDAwNDE5XSBwaWRfbWF4OiBkZWZhdWx0OiAzMjc2OCBtaW5pbXVtOiAzMDEKWyAg
-ICAwLjAwMDQ3NF0gTFNNOiBpbml0aWFsaXppbmcgbHNtPWNhcGFiaWxpdHksbGFuZGxvY2sK
-WyAgICAwLjAwMDU0OV0gbGFuZGxvY2s6IFVwIGFuZCBydW5uaW5nLgpbICAgIDAuMDAwNjQw
-XSBNb3VudC1jYWNoZSBoYXNoIHRhYmxlIGVudHJpZXM6IDgxOTIgKG9yZGVyOiA0LCA2NTUz
-NiBieXRlcywgbGluZWFyKQpbICAgIDAuMDAwNjcxXSBNb3VudHBvaW50LWNhY2hlIGhhc2gg
-dGFibGUgZW50cmllczogODE5MiAob3JkZXI6IDQsIDY1NTM2IGJ5dGVzLCBsaW5lYXIpClsg
-ICAgMC4wMDE5NjFdIHJjdTogSGllcmFyY2hpY2FsIFNSQ1UgaW1wbGVtZW50YXRpb24uClsg
-ICAgMC4wMDE5ODBdIHJjdTogCU1heCBwaGFzZSBuby1kZWxheSBpbnN0YW5jZXMgaXMgMTAw
-MC4KWyAgICAwLjAwMjExNl0gVGltZXIgbWlncmF0aW9uOiAxIGhpZXJhcmNoeSBsZXZlbHM7
-IDggY2hpbGRyZW4gcGVyIGdyb3VwOyAxIGNyb3Nzbm9kZSBsZXZlbApbICAgIDAuMDAyNzQ5
-XSBFRkkgc2VydmljZXMgd2lsbCBub3QgYmUgYXZhaWxhYmxlLgpbICAgIDAuMDAyOTI0XSBz
-bXA6IEJyaW5naW5nIHVwIHNlY29uZGFyeSBDUFVzIC4uLgpbICAgIDAuMDAzMjUyXSBEZXRl
-Y3RlZCBQSVBUIEktY2FjaGUgb24gQ1BVMQpbICAgIDAuMDAzMzQ1XSBDUFUxOiBCb290ZWQg
-c2Vjb25kYXJ5IHByb2Nlc3NvciAweDAwMDAwMDAwMDEgWzB4NDEwZmQwODNdClsgICAgMC4w
-MDM2OThdIERldGVjdGVkIFBJUFQgSS1jYWNoZSBvbiBDUFUyClsgICAgMC4wMDM3NThdIENQ
-VTI6IEJvb3RlZCBzZWNvbmRhcnkgcHJvY2Vzc29yIDB4MDAwMDAwMDAwMiBbMHg0MTBmZDA4
-M10KWyAgICAwLjAwNDExNF0gRGV0ZWN0ZWQgUElQVCBJLWNhY2hlIG9uIENQVTMKWyAgICAw
-LjAwNDE3N10gQ1BVMzogQm9vdGVkIHNlY29uZGFyeSBwcm9jZXNzb3IgMHgwMDAwMDAwMDAz
-IFsweDQxMGZkMDgzXQpbICAgIDAuMDA0MjI0XSBzbXA6IEJyb3VnaHQgdXAgMSBub2RlLCA0
-IENQVXMKWyAgICAwLjAwNDI1M10gU01QOiBUb3RhbCBvZiA0IHByb2Nlc3NvcnMgYWN0aXZh
-dGVkLgpbICAgIDAuMDA0MjU4XSBDUFU6IEFsbCBDUFUocykgc3RhcnRlZCBhdCBFTDIKWyAg
-ICAwLjAwNDI3M10gQ1BVIGZlYXR1cmVzOiBkZXRlY3RlZDogMzItYml0IEVMMCBTdXBwb3J0
-ClsgICAgMC4wMDQyNzhdIENQVSBmZWF0dXJlczogZGV0ZWN0ZWQ6IDMyLWJpdCBFTDEgU3Vw
-cG9ydApbICAgIDAuMDA0Mjg1XSBDUFUgZmVhdHVyZXM6IGRldGVjdGVkOiBDUkMzMiBpbnN0
-cnVjdGlvbnMKWyAgICAwLjAwNDI5NF0gQ1BVIGZlYXR1cmVzOiBkZXRlY3RlZDogUE1VdjMK
-WyAgICAwLjAwNDMyN10gYWx0ZXJuYXRpdmVzOiBhcHBseWluZyBzeXN0ZW0td2lkZSBhbHRl
-cm5hdGl2ZXMKWyAgICAwLjAwNTA4NF0gTWVtb3J5OiAzMzMzMTA0Sy80MDQ5OTIwSyBhdmFp
-bGFibGUgKDE2Mzg0SyBrZXJuZWwgY29kZSwgMjU2MksgcndkYXRhLCA1NDA4SyByb2RhdGEs
-IDIxNzZLIGluaXQsIDU0MksgYnNzLCAxODY4NDBLIHJlc2VydmVkLCA1MjQyODhLIGNtYS1y
-ZXNlcnZlZCkKWyAgICAwLjAwNTUzNV0gZGV2dG1wZnM6IGluaXRpYWxpemVkClsgICAgMC4w
-MDk5NTNdIEVuYWJsZWQgY3AxNV9iYXJyaWVyIHN1cHBvcnQKWyAgICAwLjAwOTk4NF0gRW5h
-YmxlZCBzZXRlbmQgc3VwcG9ydApbICAgIDAuMDEwMjA4XSBjbG9ja3NvdXJjZTogamlmZmll
-czogbWFzazogMHhmZmZmZmZmZiBtYXhfY3ljbGVzOiAweGZmZmZmZmZmLCBtYXhfaWRsZV9u
-czogNzY0NTA0MTc4NTEwMDAwMCBucwpbICAgIDAuMDEwMjM4XSBwb3NpeHRpbWVycyBoYXNo
-IHRhYmxlIGVudHJpZXM6IDIwNDggKG9yZGVyOiAzLCAzMjc2OCBieXRlcywgbGluZWFyKQpb
-ICAgIDAuMDEwMzI2XSBmdXRleCBoYXNoIHRhYmxlIGVudHJpZXM6IDEwMjQgKDY1NTM2IGJ5
-dGVzIG9uIDEgTlVNQSBub2RlcywgdG90YWwgNjQgS2lCLCBsaW5lYXIpLgpbICAgIDAuMDE3
-MTU2XSAyRyBtb2R1bGUgcmVnaW9uIGZvcmNlZCBieSBSQU5ET01JWkVfTU9EVUxFX1JFR0lP
-Tl9GVUxMClsgICAgMC4wMTcxODZdIDAgcGFnZXMgaW4gcmFuZ2UgZm9yIG5vbi1QTFQgdXNh
-Z2UKWyAgICAwLjAxNzE4OV0gNTE3NDU2IHBhZ2VzIGluIHJhbmdlIGZvciBQTFQgdXNhZ2UK
-WyAgICAwLjAxNzM0N10gcGluY3RybCBjb3JlOiBpbml0aWFsaXplZCBwaW5jdHJsIHN1YnN5
-c3RlbQpbICAgIDAuMDE3Njc0XSBETUkgbm90IHByZXNlbnQgb3IgaW52YWxpZC4KWyAgICAw
-LjAxOTEwMF0gTkVUOiBSZWdpc3RlcmVkIFBGX05FVExJTksvUEZfUk9VVEUgcHJvdG9jb2wg
-ZmFtaWx5ClsgICAgMC4wMTk3MDddIERNQTogcHJlYWxsb2NhdGVkIDUxMiBLaUIgR0ZQX0tF
-Uk5FTCBwb29sIGZvciBhdG9taWMgYWxsb2NhdGlvbnMKWyAgICAwLjAxOTc3MV0gRE1BOiBw
-cmVhbGxvY2F0ZWQgNTEyIEtpQiBHRlBfS0VSTkVMfEdGUF9ETUEgcG9vbCBmb3IgYXRvbWlj
-IGFsbG9jYXRpb25zClsgICAgMC4wMTk4NjVdIERNQTogcHJlYWxsb2NhdGVkIDUxMiBLaUIg
-R0ZQX0tFUk5FTHxHRlBfRE1BMzIgcG9vbCBmb3IgYXRvbWljIGFsbG9jYXRpb25zClsgICAg
-MC4wMTk4OThdIGF1ZGl0OiBpbml0aWFsaXppbmcgbmV0bGluayBzdWJzeXMgKGRpc2FibGVk
-KQpbICAgIDAuMDIwMDI0XSBhdWRpdDogdHlwZT0yMDAwIGF1ZGl0KDAuMDE2OjEpOiBzdGF0
-ZT1pbml0aWFsaXplZCBhdWRpdF9lbmFibGVkPTAgcmVzPTEKWyAgICAwLjAyMDI2OV0gdGhl
-cm1hbF9zeXM6IFJlZ2lzdGVyZWQgdGhlcm1hbCBnb3Zlcm5vciAnc3RlcF93aXNlJwpbICAg
-IDAuMDIwMjkzXSBjcHVpZGxlOiB1c2luZyBnb3Zlcm5vciBtZW51ClsgICAgMC4wMjAzNjhd
-IGh3LWJyZWFrcG9pbnQ6IGZvdW5kIDYgYnJlYWtwb2ludCBhbmQgNCB3YXRjaHBvaW50IHJl
-Z2lzdGVycy4KWyAgICAwLjAyMDQyNl0gQVNJRCBhbGxvY2F0b3IgaW5pdGlhbGlzZWQgd2l0
-aCAzMjc2OCBlbnRyaWVzClsgICAgMC4wMjA4NzldIFNlcmlhbDogQU1CQSBQTDAxMSBVQVJU
-IGRyaXZlcgpbICAgIDAuMDIzNDA2XSAvc29jL2ludGVycnVwdC1jb250cm9sbGVyQDQwMDQx
-MDAwOiBGaXhlZCBkZXBlbmRlbmN5IGN5Y2xlKHMpIHdpdGggL3NvYy9pbnRlcnJ1cHQtY29u
-dHJvbGxlckA0MDA0MTAwMApbICAgIDAuMDIzODQ2XSBiY20yODM1LW1ib3ggZmUwMGI4ODAu
-bWFpbGJveDogbWFpbGJveCBlbmFibGVkClsgICAgMC4wMzE4MzZdIHJhc3BiZXJyeXBpLWZp
-cm13YXJlIHNvYzpmaXJtd2FyZTogQXR0YWNoZWQgdG8gZmlybXdhcmUgZnJvbSAyMDI2LTA1
-LTIxVDExOjIwOjI1LCB2YXJpYW50IHN0YXJ0ClsgICAgMC4wMzU4NDJdIHJhc3BiZXJyeXBp
-LWZpcm13YXJlIHNvYzpmaXJtd2FyZTogRmlybXdhcmUgaGFzaCBpcyAyODg5MzBhYjQ3MTJi
-OTk1OTZmMzI3MzI2NjRhYWFlYjg4MWVmMWUwClsgICAgMC4wNDExNDZdIC9zY2IvcGNpZUA3
-ZDUwMDAwMDogRml4ZWQgZGVwZW5kZW5jeSBjeWNsZShzKSB3aXRoIC9zY2IvcGNpZUA3ZDUw
-MDAwMApbICAgIDAuMDQxMjUwXSAvc2NiL3BjaWVAN2Q1MDAwMDA6IEZpeGVkIGRlcGVuZGVu
-Y3kgY3ljbGUocykgd2l0aCAvc2NiL3BjaWVAN2Q1MDAwMDAKWyAgICAwLjEwODE0N10gcmFp
-ZDY6IG5lb254OCAgIGdlbigpICA1NDE5IE1CL3MKWyAgICAwLjE3NjE4M10gcmFpZDY6IG5l
-b254NCAgIGdlbigpICA1NTIzIE1CL3MKWyAgICAwLjI0NDIyMV0gcmFpZDY6IG5lb254MiAg
-IGdlbigpICA0NDMzIE1CL3MKWyAgICAwLjMxMjI2MV0gcmFpZDY6IG5lb254MSAgIGdlbigp
-ICAzMTk2IE1CL3MKWyAgICAwLjM4MDI5Nl0gcmFpZDY6IGludDY0eDggIGdlbigpICAyNzY0
-IE1CL3MKWyAgICAwLjQ0ODMzNl0gcmFpZDY6IGludDY0eDQgIGdlbigpICAyOTc4IE1CL3MK
-WyAgICAwLjUxNjM3OF0gcmFpZDY6IGludDY0eDIgIGdlbigpICAyOTMwIE1CL3MKWyAgICAw
-LjU4NDQwNV0gcmFpZDY6IGludDY0eDEgIGdlbigpICAyMTg4IE1CL3MKWyAgICAwLjU4NDQx
-MF0gcmFpZDY6IHVzaW5nIGFsZ29yaXRobSBuZW9ueDQgZ2VuKCkgNTUyMyBNQi9zClsgICAg
-MC42NTI0MzZdIHJhaWQ2OiAuLi4uIHhvcigpIDM5OTEgTUIvcywgcm13IGVuYWJsZWQKWyAg
-ICAwLjY1MjQ0Ml0gcmFpZDY6IHVzaW5nIG5lb24gcmVjb3ZlcnkgYWxnb3JpdGhtClsgICAg
-MC42NTI4MTldIGJjbTI4MzUtZG1hIGZlMDA3MDAwLmRtYS1jb250cm9sbGVyOiBETUEgbGVn
-YWN5IEFQSSBtYW5hZ2VyLCBkbWFjaGFucz0weDEKWyAgICAwLjY1MzUzNF0gaW9tbXU6IERl
-ZmF1bHQgZG9tYWluIHR5cGU6IFRyYW5zbGF0ZWQKWyAgICAwLjY1MzU0OV0gaW9tbXU6IERN
-QSBkb21haW4gVExCIGludmFsaWRhdGlvbiBwb2xpY3k6IHN0cmljdCBtb2RlClsgICAgMC42
-NTQwMzhdIFNDU0kgc3Vic3lzdGVtIGluaXRpYWxpemVkClsgICAgMC42NTQxMzZdIHVzYmNv
-cmU6IHJlZ2lzdGVyZWQgbmV3IGludGVyZmFjZSBkcml2ZXIgdXNiZnMKWyAgICAwLjY1NDE1
-OV0gdXNiY29yZTogcmVnaXN0ZXJlZCBuZXcgaW50ZXJmYWNlIGRyaXZlciBodWIKWyAgICAw
-LjY1NDE4M10gdXNiY29yZTogcmVnaXN0ZXJlZCBuZXcgZGV2aWNlIGRyaXZlciB1c2IKWyAg
-ICAwLjY1NDM2OV0gcHBzX2NvcmU6IExpbnV4UFBTIEFQSSB2ZXIuIDEgcmVnaXN0ZXJlZApb
-ICAgIDAuNjU0Mzc2XSBwcHNfY29yZTogU29mdHdhcmUgdmVyLiA1LjMuNiAtIENvcHlyaWdo
-dCAyMDA1LTIwMDcgUm9kb2xmbyBHaW9tZXR0aSA8Z2lvbWV0dGlAbGludXguaXQ+ClsgICAg
-MC42NTQzODldIFBUUCBjbG9jayBzdXBwb3J0IHJlZ2lzdGVyZWQKWyAgICAwLjY1NDk5MF0g
-dmdhYXJiOiBsb2FkZWQKWyAgICAwLjY1NTIzNF0gY2xvY2tzb3VyY2U6IFN3aXRjaGVkIHRv
-IGNsb2Nrc291cmNlIGFyY2hfc3lzX2NvdW50ZXIKWyAgICAwLjY1NTUxNl0gVkZTOiBEaXNr
-IHF1b3RhcyBkcXVvdF82LjYuMApbICAgIDAuNjU1NTM4XSBWRlM6IERxdW90LWNhY2hlIGhh
-c2ggdGFibGUgZW50cmllczogNTEyIChvcmRlciAwLCA0MDk2IGJ5dGVzKQpbICAgIDAuNjU5
-MjAyXSBORVQ6IFJlZ2lzdGVyZWQgUEZfSU5FVCBwcm90b2NvbCBmYW1pbHkKWyAgICAwLjY1
-OTU2OF0gSVAgaWRlbnRzIGhhc2ggdGFibGUgZW50cmllczogNjU1MzYgKG9yZGVyOiA3LCA1
-MjQyODggYnl0ZXMsIGxpbmVhcikKWyAgICAwLjY2MTE5NF0gdGNwX2xpc3Rlbl9wb3J0YWRk
-cl9oYXNoIGhhc2ggdGFibGUgZW50cmllczogMjA0OCAob3JkZXI6IDMsIDMyNzY4IGJ5dGVz
-LCBsaW5lYXIpClsgICAgMC42NjEyNTldIFRhYmxlLXBlcnR1cmIgaGFzaCB0YWJsZSBlbnRy
-aWVzOiA2NTUzNiAob3JkZXI6IDYsIDI2MjE0NCBieXRlcywgbGluZWFyKQpbICAgIDAuNjYx
-MjczXSBUQ1AgZXN0YWJsaXNoZWQgaGFzaCB0YWJsZSBlbnRyaWVzOiAzMjc2OCAob3JkZXI6
-IDYsIDI2MjE0NCBieXRlcywgbGluZWFyKQpbICAgIDAuNjYxMzgzXSBUQ1AgYmluZCBoYXNo
-IHRhYmxlIGVudHJpZXM6IDMyNzY4IChvcmRlcjogOCwgMTA0ODU3NiBieXRlcywgbGluZWFy
-KQpbICAgIDAuNjYyMjk0XSBUQ1A6IEhhc2ggdGFibGVzIGNvbmZpZ3VyZWQgKGVzdGFibGlz
-aGVkIDMyNzY4IGJpbmQgMzI3NjgpClsgICAgMC42NjI1NzNdIE1QVENQIHRva2VuIGhhc2gg
-dGFibGUgZW50cmllczogNDA5NiAob3JkZXI6IDUsIDk4MzA0IGJ5dGVzLCBsaW5lYXIpClsg
-ICAgMC42NjI3MzldIFVEUCBoYXNoIHRhYmxlIGVudHJpZXM6IDIwNDggKG9yZGVyOiA1LCAx
-MzEwNzIgYnl0ZXMsIGxpbmVhcikKWyAgICAwLjY2MjkzMF0gVURQLUxpdGUgaGFzaCB0YWJs
-ZSBlbnRyaWVzOiAyMDQ4IChvcmRlcjogNSwgMTMxMDcyIGJ5dGVzLCBsaW5lYXIpClsgICAg
-MC42NjMyMTRdIE5FVDogUmVnaXN0ZXJlZCBQRl9VTklYL1BGX0xPQ0FMIHByb3RvY29sIGZh
-bWlseQpbICAgIDAuNjYzNjQ2XSBSUEM6IFJlZ2lzdGVyZWQgbmFtZWQgVU5JWCBzb2NrZXQg
-dHJhbnNwb3J0IG1vZHVsZS4KWyAgICAwLjY2MzY1Nl0gUlBDOiBSZWdpc3RlcmVkIHVkcCB0
-cmFuc3BvcnQgbW9kdWxlLgpbICAgIDAuNjYzNjYyXSBSUEM6IFJlZ2lzdGVyZWQgdGNwIHRy
-YW5zcG9ydCBtb2R1bGUuClsgICAgMC42NjM2NjddIFJQQzogUmVnaXN0ZXJlZCB0Y3Atd2l0
-aC10bHMgdHJhbnNwb3J0IG1vZHVsZS4KWyAgICAwLjY2MzY3Ml0gUlBDOiBSZWdpc3RlcmVk
-IHRjcCBORlN2NC4xIGJhY2tjaGFubmVsIHRyYW5zcG9ydCBtb2R1bGUuClsgICAgMC42NjM2
-ODZdIFBDSTogQ0xTIDAgYnl0ZXMsIGRlZmF1bHQgNjQKWyAgICAwLjY2Mzg3NV0gVHJ5aW5n
-IHRvIHVucGFjayByb290ZnMgaW1hZ2UgYXMgaW5pdHJhbWZzLi4uClsgICAgMC42NzAxODNd
-IGt2bSBbMV06IG52OiA1NjggY29hcnNlIGdyYWluZWQgdHJhcCBoYW5kbGVycwpbICAgIDAu
-NjcwNTQ5XSBrdm0gWzFdOiBJUEEgU2l6ZSBMaW1pdDogNDQgYml0cwpbICAgIDAuNjcxMzE2
-XSBrdm0gWzFdOiB2Z2ljIGludGVycnVwdCBJUlE5ClsgICAgMC42NzEzNzJdIGt2bSBbMV06
-IEh5cCBuVkhFIG1vZGUgaW5pdGlhbGl6ZWQgc3VjY2Vzc2Z1bGx5ClsgICAgMC42NzI0Njdd
-IEluaXRpYWxpc2Ugc3lzdGVtIHRydXN0ZWQga2V5cmluZ3MKWyAgICAwLjY3Mjc5M10gd29y
-a2luZ3NldDogdGltZXN0YW1wX2JpdHM9NDIgbWF4X29yZGVyPTIwIGJ1Y2tldF9vcmRlcj0w
-ClsgICAgMC42NzMyNTJdIE5GUzogUmVnaXN0ZXJpbmcgdGhlIGlkX3Jlc29sdmVyIGtleSB0
-eXBlClsgICAgMC42NzMyNzddIEtleSB0eXBlIGlkX3Jlc29sdmVyIHJlZ2lzdGVyZWQKWyAg
-ICAwLjY3MzI4M10gS2V5IHR5cGUgaWRfbGVnYWN5IHJlZ2lzdGVyZWQKWyAgICAwLjY3MzI5
-N10gbmZzNGZpbGVsYXlvdXRfaW5pdDogTkZTdjQgRmlsZSBMYXlvdXQgRHJpdmVyIFJlZ2lz
-dGVyaW5nLi4uClsgICAgMC42NzMzMDVdIG5mczRmbGV4ZmlsZWxheW91dF9pbml0OiBORlN2
-NCBGbGV4ZmlsZSBMYXlvdXQgRHJpdmVyIFJlZ2lzdGVyaW5nLi4uClsgICAgMC42NzM5NzRd
-IHhvcjogbWVhc3VyaW5nIHNvZnR3YXJlIGNoZWNrc3VtIHNwZWVkClsgICAgMC42NzQzMTld
-ICAgIDhyZWdzICAgICAgICAgICA6IDEwMTQxIE1CL3NlYwpbICAgIDAuNjc0Njc0XSAgICAz
-MnJlZ3MgICAgICAgICAgOiAgOTQzNiBNQi9zZWMKWyAgICAwLjY3NTExMV0gICAgYXJtNjRf
-bmVvbiAgICAgIDogIDc2MjQgTUIvc2VjClsgICAgMC42NzUxMTldIHhvcjogdXNpbmcgZnVu
-Y3Rpb246IDhyZWdzICgxMDE0MSBNQi9zZWMpClsgICAgMC42NzUxMzNdIEtleSB0eXBlIGFz
-eW1tZXRyaWMgcmVnaXN0ZXJlZApbICAgIDAuNjc1MTQxXSBBc3ltbWV0cmljIGtleSBwYXJz
-ZXIgJ3g1MDknIHJlZ2lzdGVyZWQKWyAgICAwLjY3NTI2OV0gQmxvY2sgbGF5ZXIgU0NTSSBn
-ZW5lcmljIChic2cpIGRyaXZlciB2ZXJzaW9uIDAuNCBsb2FkZWQgKG1ham9yIDI0NikKWyAg
-ICAwLjY3NTQ5MV0gaW8gc2NoZWR1bGVyIG1xLWRlYWRsaW5lIHJlZ2lzdGVyZWQKWyAgICAw
-LjY3NTUwOV0gaW8gc2NoZWR1bGVyIGt5YmVyIHJlZ2lzdGVyZWQKWyAgICAwLjY3NTU1Ml0g
-aW8gc2NoZWR1bGVyIGJmcSByZWdpc3RlcmVkClsgICAgMC42NzYxNDBdIGlycV9icmNtc3Ri
-X2wyOiByZWdpc3RlcmVkIEwyIGludGMgKC9zb2MvaW50ZXJydXB0LWNvbnRyb2xsZXJAN2Vm
-MDAxMDAsIHBhcmVudCBpcnE6IDIzKQpbICAgIDAuNjc3ODU1XSBwaW5jdHJsLWJjbTI4MzUg
-ZmUyMDAwMDAuZ3BpbzogR1BJT19PVVQgcGVyc2lzdGVuY2U6IHllcwpbICAgIDAuODUzMTE5
-XSBGcmVlaW5nIGluaXRyZCBtZW1vcnk6IDEyNjI4SwpbICAgIDAuODU2NjM3XSBsZWR0cmln
-LWNwdTogcmVnaXN0ZXJlZCB0byBpbmRpY2F0ZSBhY3Rpdml0eSBvbiBDUFVzClsgICAgMC44
-NTc3OTldIGJyY20tcGNpZSBmZDUwMDAwMC5wY2llOiBob3N0IGJyaWRnZSAvc2NiL3BjaWVA
-N2Q1MDAwMDAgcmFuZ2VzOgpbICAgIDAuODU3ODU5XSBicmNtLXBjaWUgZmQ1MDAwMDAucGNp
-ZTogICAgICBNRU0gMHgwNjAwMDAwMDAwLi4weDA2M2ZmZmZmZmYgLT4gMHgwMGMwMDAwMDAw
-ClsgICAgMC44NTc4NzldIGJyY20tcGNpZSBmZDUwMDAwMC5wY2llOiAgIElCIE1FTSAweDAw
-MDAwMDAwMDAuLjB4MDBmZmZmZmZmZiAtPiAweDA0MDAwMDAwMDAKWyAgICAwLjg1OTIwOF0g
-YnJjbS1wY2llIGZkNTAwMDAwLnBjaWU6IFBDSSBob3N0IGJyaWRnZSB0byBidXMgMDAwMDow
-MApbICAgIDAuODU5MzQ1XSBwY2lfYnVzIDAwMDA6MDA6IHJvb3QgYnVzIHJlc291cmNlIFti
-dXMgMDAtZmZdClsgICAgMC44NTkzNjFdIHBjaV9idXMgMDAwMDowMDogcm9vdCBidXMgcmVz
-b3VyY2UgW21lbSAweDYwMDAwMDAwMC0weDYzZmZmZmZmZl0gKGJ1cyBhZGRyZXNzIFsweGMw
-MDAwMDAwLTB4ZmZmZmZmZmZdKQpbICAgIDAuODU5NDI0XSBwY2kgMDAwMDowMDowMC4wOiBb
-MTRlNDoyNzExXSB0eXBlIDAxIGNsYXNzIDB4MDYwNDAwIFBDSWUgUm9vdCBQb3J0ClsgICAg
-MC44NTk0NDRdIHBjaSAwMDAwOjAwOjAwLjA6IFBDSSBicmlkZ2UgdG8gW2J1cyAwMV0KWyAg
-ICAwLjg1OTQ1M10gcGNpIDAwMDA6MDA6MDAuMDogICBicmlkZ2Ugd2luZG93IFttZW0gMHg2
-MDAwMDAwMDAtMHg2MDAwZmZmZmZdClsgICAgMC44NTk0OTRdIHBjaSAwMDAwOjAwOjAwLjA6
-IFBNRSMgc3VwcG9ydGVkIGZyb20gRDAgRDNob3QKWyAgICAwLjg2MTI5N10gcGNpX2J1cyAw
-MDAwOjAxOiBzdXBwbHkgdnBjaWUzdjMgbm90IGZvdW5kLCB1c2luZyBkdW1teSByZWd1bGF0
-b3IKWyAgICAwLjg2MTQwMV0gcGNpX2J1cyAwMDAwOjAxOiBzdXBwbHkgdnBjaWUzdjNhdXgg
-bm90IGZvdW5kLCB1c2luZyBkdW1teSByZWd1bGF0b3IKWyAgICAwLjg2MTQyOV0gcGNpX2J1
-cyAwMDAwOjAxOiBzdXBwbHkgdnBjaWUxMnYgbm90IGZvdW5kLCB1c2luZyBkdW1teSByZWd1
-bGF0b3IKWyAgICAwLjk2MzI0Nl0gYnJjbS1wY2llIGZkNTAwMDAwLnBjaWU6IGNsa3JlcS1t
-b2RlIHNldCB0byBkZWZhdWx0ClsgICAgMC45NjUzMThdIGJyY20tcGNpZSBmZDUwMDAwMC5w
-Y2llOiBsaW5rIHVwLCA1LjAgR1QvcyBQQ0llIHgxIChTU0MpClsgICAgMC45NjUzODVdIHBj
-aSAwMDAwOjAxOjAwLjA6IFsxMTA2OjM0ODNdIHR5cGUgMDAgY2xhc3MgMHgwYzAzMzAgUENJ
-ZSBFbmRwb2ludApbICAgIDAuOTY1NDM4XSBwY2kgMDAwMDowMTowMC4wOiBCQVIgMCBbbWVt
-IDB4MDAwMDAwMDAtMHgwMDAwMGZmZiA2NGJpdF0KWyAgICAwLjk2NTQ3M10gcGNpIDAwMDA6
-MDE6MDAuMDogQVNQTTogVkw4MDUgZml4dXAgYXBwbGllZApbICAgIDAuOTY1NTIxXSBwY2kg
-MDAwMDowMTowMC4wOiBQTUUjIHN1cHBvcnRlZCBmcm9tIEQwIEQzaG90ClsgICAgMC45NjU3
-OTRdIHBjaSAwMDAwOjAwOjAwLjA6IGJyaWRnZSB3aW5kb3cgW21lbSAweDYwMDAwMDAwMC0w
-eDYwMDBmZmZmZl06IGFzc2lnbmVkClsgICAgMC45NjU4MDddIHBjaSAwMDAwOjAxOjAwLjA6
-IEJBUiAwIFttZW0gMHg2MDAwMDAwMDAtMHg2MDAwMDBmZmYgNjRiaXRdOiBhc3NpZ25lZApb
-ICAgIDAuOTY1ODI1XSBwY2kgMDAwMDowMDowMC4wOiBQQ0kgYnJpZGdlIHRvIFtidXMgMDFd
-ClsgICAgMC45NjU4MzNdIHBjaSAwMDAwOjAwOjAwLjA6ICAgYnJpZGdlIHdpbmRvdyBbbWVt
-IDB4NjAwMDAwMDAwLTB4NjAwMGZmZmZmXQpbICAgIDAuOTY1ODQzXSBwY2lfYnVzIDAwMDA6
-MDA6IHJlc291cmNlIDQgW21lbSAweDYwMDAwMDAwMC0weDYzZmZmZmZmZl0KWyAgICAwLjk2
-NTg1MV0gcGNpX2J1cyAwMDAwOjAxOiByZXNvdXJjZSAxIFttZW0gMHg2MDAwMDAwMDAtMHg2
-MDAwZmZmZmZdClsgICAgMC45NjU5OTRdIHBjaWVwb3J0IDAwMDA6MDA6MDAuMDogZW5hYmxp
-bmcgZGV2aWNlICgwMDAwIC0+IDAwMDIpClsgICAgMC45NjYwNjRdIHBjaWVwb3J0IDAwMDA6
-MDA6MDAuMDogUE1FOiBTaWduYWxpbmcgd2l0aCBJUlEgMjcKWyAgICAwLjk2NjIwNl0gcGNp
-ZXBvcnQgMDAwMDowMDowMC4wOiBBRVI6IGVuYWJsZWQgd2l0aCBJUlEgMjcKWyAgICAwLjk2
-NjYwOV0gc2ltcGxlLWZyYW1lYnVmZmVyIDNlNmZhMDAwLmZyYW1lYnVmZmVyOiBmcmFtZWJ1
-ZmZlciBhdCAweDNlNmZhMDAwLCAweDNmYzAwMCBieXRlcwpbICAgIDAuOTY2NjIwXSBzaW1w
-bGUtZnJhbWVidWZmZXIgM2U2ZmEwMDAuZnJhbWVidWZmZXI6IGZvcm1hdD1hOHI4ZzhiOCwg
-bW9kZT0xMzYweDc2OHgzMiwgbGluZWxlbmd0aD01NDQwClsgICAgMC45Njg1MDNdIENvbnNv
-bGU6IHN3aXRjaGluZyB0byBjb2xvdXIgZnJhbWUgYnVmZmVyIGRldmljZSAxNzB4NDgKWyAg
-ICAwLjk3MDEzOV0gc2ltcGxlLWZyYW1lYnVmZmVyIDNlNmZhMDAwLmZyYW1lYnVmZmVyOiBm
-YjA6IHNpbXBsZWZiIHJlZ2lzdGVyZWQhClsgICAgMC45ODk5NzRdIGlwcm9jLXJuZzIwMCBm
-ZTEwNDAwMC5ybmc6IGh3cm5nIHJlZ2lzdGVyZWQKWyAgICAwLjk5MDA5NV0gdmMtbWVtOiBw
-aHlzX2FkZHI6MHgwMDAwMDAwMCBtZW1fYmFzZT0weDAwMDAwMDAwIG1lbV9zaXplOjB4MDAw
-MDAwMDAoMCBNaUIpClsgICAgMC45OTQ4MzZdIGJyZDogbW9kdWxlIGxvYWRlZApbICAgIDAu
-OTk3NTAyXSBsb29wOiBtb2R1bGUgbG9hZGVkClsgICAgMC45OTc5NzVdIExvYWRpbmcgaVND
-U0kgdHJhbnNwb3J0IGNsYXNzIHYyLjAtODcwLgpbICAgIDAuOTk5ODQ2XSBiY21nZW5ldCBm
-ZDU4MDAwMC5ldGhlcm5ldDogR0VORVQgNS4wIEVQSFk6IDB4MDAwMApbICAgIDEuMTk5MjY3
-XSB1bmltYWMtbWRpbyB1bmltYWMtbWRpby4tMTk6IEJyb2FkY29tIFVuaU1BQyBNRElPIGJ1
-cwpbICAgIDEuMTk5ODMxXSB1c2Jjb3JlOiByZWdpc3RlcmVkIG5ldyBpbnRlcmZhY2UgZHJp
-dmVyIGxhbjc4eHgKWyAgICAxLjE5OTg3M10gdXNiY29yZTogcmVnaXN0ZXJlZCBuZXcgaW50
-ZXJmYWNlIGRyaXZlciBzbXNjOTV4eApbICAgIDEuMjkxMjc1XSB4aGNpX2hjZCAwMDAwOjAx
-OjAwLjA6IHhIQ0kgSG9zdCBDb250cm9sbGVyClsgICAgMS4yOTEzMDVdIHhoY2lfaGNkIDAw
-MDA6MDE6MDAuMDogbmV3IFVTQiBidXMgcmVnaXN0ZXJlZCwgYXNzaWduZWQgYnVzIG51bWJl
-ciAxClsgICAgMS4yOTIxMTFdIHhoY2lfaGNkIDAwMDA6MDE6MDAuMDogaGNjIHBhcmFtcyAw
-eDAwMjg0MWViIGhjaSB2ZXJzaW9uIDB4MTAwIHF1aXJrcyAweDAzMDAyNDAwMDAwMDA4OTAK
-WyAgICAxLjI5MjcxOV0geGhjaV9oY2QgMDAwMDowMTowMC4wOiB4SENJIEhvc3QgQ29udHJv
-bGxlcgpbICAgIDEuMjkyNzQ0XSB4aGNpX2hjZCAwMDAwOjAxOjAwLjA6IG5ldyBVU0IgYnVz
-IHJlZ2lzdGVyZWQsIGFzc2lnbmVkIGJ1cyBudW1iZXIgMgpbICAgIDEuMjkyNzc1XSB4aGNp
-X2hjZCAwMDAwOjAxOjAwLjA6IEhvc3Qgc3VwcG9ydHMgVVNCIDMuMCBTdXBlclNwZWVkClsg
-ICAgMS4yOTI5MzJdIHVzYiB1c2IxOiBOZXcgVVNCIGRldmljZSBmb3VuZCwgaWRWZW5kb3I9
-MWQ2YiwgaWRQcm9kdWN0PTAwMDIsIGJjZERldmljZT0gNi4xOApbICAgIDEuMjkyOTYyXSB1
-c2IgdXNiMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTMsIFByb2R1Y3Q9MiwgU2Vy
-aWFsTnVtYmVyPTEKWyAgICAxLjI5MzY5NV0gdXNiIHVzYjE6IFByb2R1Y3Q6IHhIQ0kgSG9z
-dCBDb250cm9sbGVyClsgICAgMS4yOTQ0MTBdIHVzYiB1c2IxOiBNYW51ZmFjdHVyZXI6IExp
-bnV4IDYuMTguMzItMi1ycGkgeGhjaS1oY2QKWyAgICAxLjI5NTExNl0gdXNiIHVzYjE6IFNl
-cmlhbE51bWJlcjogMDAwMDowMTowMC4wClsgICAgMS4yOTYxMzZdIGh1YiAxLTA6MS4wOiBV
-U0IgaHViIGZvdW5kClsgICAgMS4yOTY4ODhdIGh1YiAxLTA6MS4wOiAxIHBvcnQgZGV0ZWN0
-ZWQKWyAgICAxLjI5Nzg4OV0gdXNiIHVzYjI6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZl
-bmRvcj0xZDZiLCBpZFByb2R1Y3Q9MDAwMywgYmNkRGV2aWNlPSA2LjE4ClsgICAgMS4yOTg1
-OTFdIHVzYiB1c2IyOiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MywgUHJvZHVjdD0y
-LCBTZXJpYWxOdW1iZXI9MQpbICAgIDEuMjk5MzAxXSB1c2IgdXNiMjogUHJvZHVjdDogeEhD
-SSBIb3N0IENvbnRyb2xsZXIKWyAgICAxLjI5OTk5OV0gdXNiIHVzYjI6IE1hbnVmYWN0dXJl
-cjogTGludXggNi4xOC4zMi0yLXJwaSB4aGNpLWhjZApbICAgIDEuMzAwNjg2XSB1c2IgdXNi
-MjogU2VyaWFsTnVtYmVyOiAwMDAwOjAxOjAwLjAKWyAgICAxLjMwMTU2M10gaHViIDItMDox
-LjA6IFVTQiBodWIgZm91bmQKWyAgICAxLjMwMjMwMl0gaHViIDItMDoxLjA6IDQgcG9ydHMg
-ZGV0ZWN0ZWQKWyAgICAxLjMwMzQ3NV0gZHdjX290ZzogdmVyc2lvbiAzLjAwYSAxMC1BVUct
-MjAxMiAocGxhdGZvcm0gYnVzKQpbICAgIDEuMzA0MjEyXSBkd2Nfb3RnOiBGSVEgZW5hYmxl
-ZApbICAgIDEuMzA0MjE1XSBkd2Nfb3RnOiBOQUsgaG9sZG9mZiBlbmFibGVkClsgICAgMS4z
-MDQyMTddIGR3Y19vdGc6IEZJUSBzcGxpdC10cmFuc2FjdGlvbiBGU00gZW5hYmxlZApbICAg
-IDEuMzA0MjIxXSBNb2R1bGUgZHdjX2NvbW1vbl9wb3J0IGluaXQKWyAgICAxLjMwNDc2NF0g
-dXNiY29yZTogcmVnaXN0ZXJlZCBuZXcgaW50ZXJmYWNlIGRyaXZlciB1YXMKWyAgICAxLjMw
-NTQ5M10gdXNiY29yZTogcmVnaXN0ZXJlZCBuZXcgaW50ZXJmYWNlIGRyaXZlciB1c2Itc3Rv
-cmFnZQpbICAgIDEuMzA2Mzg1XSBtb3VzZWRldjogUFMvMiBtb3VzZSBkZXZpY2UgY29tbW9u
-IGZvciBhbGwgbWljZQpbICAgIDEuMzA4MzA3XSBzZGhjaTogU2VjdXJlIERpZ2l0YWwgSG9z
-dCBDb250cm9sbGVyIEludGVyZmFjZSBkcml2ZXIKWyAgICAxLjMwOTAzM10gc2RoY2k6IENv
-cHlyaWdodChjKSBQaWVycmUgT3NzbWFuClsgICAgMS4zMDk4MjZdIHNkaGNpLXBsdGZtOiBT
-REhDSSBwbGF0Zm9ybSBhbmQgT0YgZHJpdmVyIGhlbHBlcgpbICAgIDEuMzEwNzY1XSBoaWQ6
-IHJhdyBISUQgZXZlbnRzIGRyaXZlciAoQykgSmlyaSBLb3NpbmEKWyAgICAxLjMxMTU2NV0g
-dXNiY29yZTogcmVnaXN0ZXJlZCBuZXcgaW50ZXJmYWNlIGRyaXZlciB1c2JoaWQKWyAgICAx
-LjMxMjI3NV0gdXNiaGlkOiBVU0IgSElEIGNvcmUgZHJpdmVyClsgICAgMS4zMTU4NDldIGh3
-IHBlcmZldmVudHM6IGVuYWJsZWQgd2l0aCBhcm12OF9jb3J0ZXhfYTcyIFBNVSBkcml2ZXIs
-IDcgKDAsODAwMDAwM2YpIGNvdW50ZXJzIGF2YWlsYWJsZQpbICAgIDEuMzE3MjcyXSBORVQ6
-IFJlZ2lzdGVyZWQgUEZfUEFDS0VUIHByb3RvY29sIGZhbWlseQpbICAgIDEuMzE4Mjc0XSBL
-ZXkgdHlwZSBkbnNfcmVzb2x2ZXIgcmVnaXN0ZXJlZApbICAgIDEuMzI5NjUyXSByZWdpc3Rl
-cmVkIHRhc2tzdGF0cyB2ZXJzaW9uIDEKWyAgICAxLjMzMDU4M10gTG9hZGluZyBjb21waWxl
-ZC1pbiBYLjUwOSBjZXJ0aWZpY2F0ZXMKWyAgICAxLjMzNTY3Nl0gRGVtb3Rpb24gdGFyZ2V0
-cyBmb3IgTm9kZSAwOiBudWxsClsgICAgMS4zMzY1NDVdIEtleSB0eXBlIC5mc2NyeXB0IHJl
-Z2lzdGVyZWQKWyAgICAxLjMzNzI0Nl0gS2V5IHR5cGUgZnNjcnlwdC1wcm92aXNpb25pbmcg
-cmVnaXN0ZXJlZApbICAgIDEuMzM4NTY5XSBCdHJmcyBsb2FkZWQsIHpvbmVkPW5vLCBmc3Zl
-cml0eT15ZXMKWyAgICAxLjM0MjQwNV0gcGwwMTEtYXhpIGZlMjAxMDAwLnNlcmlhbDogdGhl
-cmUgaXMgbm90IHZhbGlkIG1hcHMgZm9yIHN0YXRlIGRlZmF1bHQKWyAgICAxLjM0MzMzMV0g
-cGwwMTEtYXhpIGZlMjAxMDAwLnNlcmlhbDogY3RzX2V2ZW50X3dvcmthcm91bmQgZW5hYmxl
-ZApbICAgIDEuMzQ0NTczXSBmZTIwMTAwMC5zZXJpYWw6IHR0eUFNQTEgYXQgTU1JTyAweGZl
-MjAxMDAwIChpcnEgPSAzOSwgYmFzZV9iYXVkID0gMCkgaXMgYSBQTDAxMSBBWEkKWyAgICAx
-LjM0NTYwNV0gc2VyaWFsIHNlcmlhbDA6IHR0eSBwb3J0IHR0eUFNQTEgcmVnaXN0ZXJlZApb
-ICAgIDEuMzQ2OTgxXSBiY20yODM1LWF1eC11YXJ0IGZlMjE1MDQwLnNlcmlhbDogdGhlcmUg
-aXMgbm90IHZhbGlkIG1hcHMgZm9yIHN0YXRlIGRlZmF1bHQKWyAgICAxLjM0ODIwMF0gYmNt
-MjgzNS1hdXgtdWFydCBmZTIxNTA0MC5zZXJpYWw6IGVycm9yIC1FSU5WQUw6IHVuYWJsZSB0
-byByZWdpc3RlciA4MjUwIHBvcnQKWyAgICAxLjM0ODk2NV0gYmNtMjgzNS1hdXgtdWFydCBm
-ZTIxNTA0MC5zZXJpYWw6IHByb2JlIHdpdGggZHJpdmVyIGJjbTI4MzUtYXV4LXVhcnQgZmFp
-bGVkIHdpdGggZXJyb3IgLTIyClsgICAgMS4zNTAxMTFdIGJjbTI4MzUtd2R0IGJjbTI4MzUt
-d2R0OiBCcm9hZGNvbSBCQ00yODM1IHdhdGNoZG9nIHRpbWVyClsgICAgMS4zNTE2NTldIGJj
-bTI4MzUtcG93ZXIgYmNtMjgzNS1wb3dlcjogQnJvYWRjb20gQkNNMjgzNSBwb3dlciBkb21h
-aW5zIGRyaXZlcgpbICAgIDEuMzUyNTg1XSBvZl9jZnNfaW5pdApbICAgIDEuMzUzNTUyXSBv
-Zl9jZnNfaW5pdDogT0sKWyAgICAxLjM1NDY1OF0gY2xrOiBEaXNhYmxpbmcgdW51c2VkIGNs
-b2NrcwpbICAgIDEuMzU5MzkyXSBQTTogZ2VucGQ6IERpc2FibGluZyB1bnVzZWQgcG93ZXIg
-ZG9tYWlucwpbICAgIDEuMzkyMzc2XSBtbWMwOiBTREhDSSBjb250cm9sbGVyIG9uIGZlMzQw
-MDAwLm1tYyBbZmUzNDAwMDAubW1jXSB1c2luZyBBRE1BClsgICAgMS4zOTYzODFdIEZyZWVp
-bmcgdW51c2VkIGtlcm5lbCBtZW1vcnk6IDIxNzZLClsgICAgMS4zOTczNTJdIFJ1biAvaW5p
-dCBhcyBpbml0IHByb2Nlc3MKWyAgICAxLjM5ODE4MV0gICB3aXRoIGFyZ3VtZW50czoKWyAg
-ICAxLjM5ODE4NF0gICAgIC9pbml0ClsgICAgMS4zOTgxODZdICAgd2l0aCBlbnZpcm9ubWVu
-dDoKWyAgICAxLjM5ODE4OF0gICAgIEhPTUU9LwpbICAgIDEuMzk4MTkxXSAgICAgVEVSTT1s
-aW51eApbICAgIDEuNTUxMzU2XSB1c2IgMS0xOiBuZXcgaGlnaC1zcGVlZCBVU0IgZGV2aWNl
-IG51bWJlciAyIHVzaW5nIHhoY2lfaGNkClsgICAgMS42MjEwNThdIHYzZCBmZWMwMDAwMC52
-M2Q6IFtkcm1dIFRyYW5zcGFyZW50IEh1Z2VwYWdlIHN1cHBvcnQgaXMgcmVjb21tZW5kZWQg
-Zm9yIG9wdGltYWwgcGVyZm9ybWFuY2Ugb24gdGhpcyBwbGF0Zm9ybSEKWyAgICAxLjYyMjQ5
-M10gW2RybV0gSW5pdGlhbGl6ZWQgdjNkIDEuMC4wIGZvciBmZWMwMDAwMC52M2Qgb24gbWlu
-b3IgMApbICAgIDEuNzAxOTAyXSB1c2IgMS0xOiBOZXcgVVNCIGRldmljZSBmb3VuZCwgaWRW
-ZW5kb3I9MjEwOSwgaWRQcm9kdWN0PTM0MzEsIGJjZERldmljZT0gNC4yMQpbICAgIDEuNzAy
-NzMxXSB1c2IgMS0xOiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MCwgUHJvZHVjdD0x
-LCBTZXJpYWxOdW1iZXI9MApbICAgIDEuNzAzNTM5XSB1c2IgMS0xOiBQcm9kdWN0OiBVU0Iy
-LjAgSHViClsgICAgMS43MDYyOTVdIGh1YiAxLTE6MS4wOiBVU0IgaHViIGZvdW5kClsgICAg
-MS43MDc1MTddIGh1YiAxLTE6MS4wOiA0IHBvcnRzIGRldGVjdGVkClsgICAgMS44MjM1OTJd
-IHVzYiAyLTE6IG5ldyBTdXBlclNwZWVkIFVTQiBkZXZpY2UgbnVtYmVyIDIgdXNpbmcgeGhj
-aV9oY2QKWyAgICAxLjg0MTA1Ml0gdXNiIDItMTogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlk
-VmVuZG9yPTEyNWYsIGlkUHJvZHVjdD1hODhhLCBiY2REZXZpY2U9OTMuMDQKWyAgICAxLjg0
-MTkwOF0gdXNiIDItMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTEsIFByb2R1Y3Q9
-MiwgU2VyaWFsTnVtYmVyPTMKWyAgICAxLjg0MjY4OV0gdXNiIDItMTogUHJvZHVjdDogU0Q2
-MDBRClsgICAgMS44NDM0OTNdIHVzYiAyLTE6IE1hbnVmYWN0dXJlcjogQURBVEEKWyAgICAx
-Ljg0NDI2NV0gdXNiIDItMTogU2VyaWFsTnVtYmVyOiBbUkVEQUNURURdClsgICAgMS44NjIy
-MjldIHNjc2kgaG9zdDA6IHVhcwpbICAgIDEuODY0MTkwXSBzY3NpIDA6MDowOjA6IERpcmVj
-dC1BY2Nlc3MgICAgIEFEQVRBICAgIFNENjAwUSAgICAgICAgICAgOTMwNCBQUTogMCBBTlNJ
-OiA2ClsgICAgMS44Njg3OTldIHNkIDA6MDowOjA6IFtzZGFdIDQ2ODg2MjEyOCA1MTItYnl0
-ZSBsb2dpY2FsIGJsb2NrczogKDI0MCBHQi8yMjQgR2lCKQpbICAgIDEuODY5Nzc1XSBzZCAw
-OjA6MDowOiBbc2RhXSA0MDk2LWJ5dGUgcGh5c2ljYWwgYmxvY2tzClsgICAgMS44NzA4NTZd
-IHNkIDA6MDowOjA6IFtzZGFdIFdyaXRlIFByb3RlY3QgaXMgb2ZmClsgICAgMS44NzE3NTFd
-IHNkIDA6MDowOjA6IFtzZGFdIE1vZGUgU2Vuc2U6IDUzIDAwIDAwIDA4ClsgICAgMS44NzIx
-NThdIHNkIDA6MDowOjA6IFtzZGFdIFdyaXRlIGNhY2hlOiBlbmFibGVkLCByZWFkIGNhY2hl
-OiBlbmFibGVkLCBkb2Vzbid0IHN1cHBvcnQgRFBPIG9yIEZVQQpbICAgIDEuOTE5OTA5XSBz
-ZCAwOjA6MDowOiBbc2RhXSBQcmVmZXJyZWQgbWluaW11bSBJL08gc2l6ZSA0MDk2IGJ5dGVz
-ClsgICAgMS45MjA3NDJdIHNkIDA6MDowOjA6IFtzZGFdIE9wdGltYWwgdHJhbnNmZXIgc2l6
-ZSAzMzU1MzkyMCBieXRlcyBub3QgYSBtdWx0aXBsZSBvZiBwcmVmZXJyZWQgbWluaW11bSBi
-bG9jayBzaXplICg0MDk2IGJ5dGVzKQpbICAgIDEuOTg4MjgzXSAgc2RhOiBzZGExIHNkYTIK
-WyAgICAyLjAxNDQ5MF0gc2QgMDowOjA6MDogW3NkYV0gQXR0YWNoZWQgU0NTSSBkaXNrClsg
-ICAgMi4yNjQxODFdIEJUUkZTOiBkZXZpY2UgZnNpZCBlN2JkN2Q4YS1jZTE5LTQ5NTEtYjVj
-Zi04MWU3ZTM1MDY0ODEgZGV2aWQgMSB0cmFuc2lkIDcwMjg3MCAvZGV2L3NkYTIgKDg6Mikg
-c2Nhbm5lZCBieSBtb3VudCAoMjEwKQpbICAgIDIuMjY1NjAyXSBCVFJGUyBpbmZvIChkZXZp
-Y2Ugc2RhMik6IGZpcnN0IG1vdW50IG9mIGZpbGVzeXN0ZW0gZTdiZDdkOGEtY2UxOS00OTUx
-LWI1Y2YtODFlN2UzNTA2NDgxClsgICAgMi4yNjY1MjhdIEJUUkZTIGluZm8gKGRldmljZSBz
-ZGEyKTogdXNpbmcgY3JjMzJjIChjcmMzMmMtbGliKSBjaGVja3N1bSBhbGdvcml0aG0KWyAg
-ICAyLjMyMTAzNl0gQlRSRlMgaW5mbyAoZGV2aWNlIHNkYTIpOiB0dXJuaW5nIG9uIGFzeW5j
-IGRpc2NhcmQKWyAgICAyLjMyMTg0Nl0gQlRSRlMgaW5mbyAoZGV2aWNlIHNkYTIpOiBlbmFi
-bGluZyBmcmVlIHNwYWNlIHRyZWUKWyAgIDMzLjc3OTI1MV0gc2QgMDowOjA6MDogW3NkYV0g
-dGFnIzkgdWFzX2VoX2Fib3J0X2hhbmRsZXIgMCB1YXMtdGFnIDEgaW5mbGlnaHQ6IENNRCBJ
-TiAKWyAgIDMzLjc3OTI2NV0gc2QgMDowOjA6MDogW3NkYV0gdGFnIzkgQ0RCOiBvcGNvZGU9
-MHgyOCAyOCAwMCAxOCAzYyAxZCAyMCAwMCAwMCAyMCAwMApbICAgMzMuODgzMzQ2XSBzZCAw
-OjA6MDowOiBbc2RhXSB0YWcjNiB1YXNfZWhfYWJvcnRfaGFuZGxlciAwIHVhcy10YWcgNCBp
-bmZsaWdodDogQ01EIElOIApbICAgMzMuODgzMzUxXSBzZCAwOjA6MDowOiBbc2RhXSB0YWcj
-NiBDREI6IG9wY29kZT0weDI4IDI4IDAwIDE4IDNmIDRkIDgwIDAwIDAwIDIwIDAwClsgICAz
-My44OTkyNTBdIHNjc2kgaG9zdDA6IHVhc19laF9kZXZpY2VfcmVzZXRfaGFuZGxlciBzdGFy
-dApbICAgMzQuMDE5ODYzXSB1c2IgMi0xOiByZXNldCBTdXBlclNwZWVkIFVTQiBkZXZpY2Ug
-bnVtYmVyIDIgdXNpbmcgeGhjaV9oY2QKWyAgIDM0LjA0NDQxNl0gc2NzaSBob3N0MDogdWFz
-X2VoX2RldmljZV9yZXNldF9oYW5kbGVyIHN1Y2Nlc3MKWyAgIDY0LjQ5OTI1MV0gc2QgMDow
-OjA6MDogW3NkYV0gdGFnIzEyIHVhc19laF9hYm9ydF9oYW5kbGVyIDAgdWFzLXRhZyA1IGlu
-ZmxpZ2h0OiBDTUQgSU4gClsgICA2NC40OTkyNjZdIHNkIDA6MDowOjA6IFtzZGFdIHRhZyMx
-MiBDREI6IG9wY29kZT0weDI4IDI4IDAwIDEzIDMwIDgyIGEwIDAwIDAwIGUwIDAwClsgICA2
-NC42MDMzNjRdIHNkIDA6MDowOjA6IFtzZGFdIHRhZyM4IHVhc19laF9hYm9ydF9oYW5kbGVy
-IDAgdWFzLXRhZyAxIGluZmxpZ2h0OiBDTUQgSU4gClsgICA2NC42MDMzNzBdIHNkIDA6MDow
-OjA6IFtzZGFdIHRhZyM4IENEQjogb3Bjb2RlPTB4MjggMjggMDAgMTggMzkgZWQgYTAgMDAg
-MDAgMjAgMDAKWyAgIDkzLjE3MTI0Ml0gc2QgMDowOjA6MDogW3NkYV0gdGFnIzkgdWFzX2Vo
-X2Fib3J0X2hhbmRsZXIgMCB1YXMtdGFnIDIgaW5mbGlnaHQ6IENNRCBJTiAKWyAgIDkzLjE3
-MTI1MF0gc2QgMDowOjA6MDogW3NkYV0gdGFnIzkgQ0RCOiBvcGNvZGU9MHgyOCAyOCAwMCAw
-MCAxNSBjZSA0MCAwMCAwMCAyMCAwMApbICAgOTMuMjkxMjQ4XSBzY3NpIGhvc3QwOiB1YXNf
-ZWhfZGV2aWNlX3Jlc2V0X2hhbmRsZXIgc3RhcnQKWyAgIDkzLjQxMTgzOV0gdXNiIDItMTog
-cmVzZXQgU3VwZXJTcGVlZCBVU0IgZGV2aWNlIG51bWJlciAyIHVzaW5nIHhoY2lfaGNkClsg
-ICA5My40MzIzNTBdIHNjc2kgaG9zdDA6IHVhc19laF9kZXZpY2VfcmVzZXRfaGFuZGxlciBz
-dWNjZXNzClsgIDEyMC42NDMyNDJdIHVzYiAxLTEuMzogbmV3IGxvdy1zcGVlZCBVU0IgZGV2
-aWNlIG51bWJlciAzIHVzaW5nIHhoY2lfaGNkClsgIDEyMC43Mzk0MDhdIHVzYiAxLTEuMzog
-TmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTFjNGYsIGlkUHJvZHVjdD0wMDI2LCBi
-Y2REZXZpY2U9IDEuMTAKWyAgMTIwLjczOTQxNV0gdXNiIDEtMS4zOiBOZXcgVVNCIGRldmlj
-ZSBzdHJpbmdzOiBNZnI9MSwgUHJvZHVjdD0yLCBTZXJpYWxOdW1iZXI9MApbICAxMjAuNzM5
-NDE5XSB1c2IgMS0xLjM6IFByb2R1Y3Q6IFVTQiBLZXlib2FyZApbICAxMjAuNzM5NDIzXSB1
-c2IgMS0xLjM6IE1hbnVmYWN0dXJlcjogU0lHTUFDSElQClsgIDEyMC43NDU0OTRdIGlucHV0
-OiBTSUdNQUNISVAgVVNCIEtleWJvYXJkIGFzIC9kZXZpY2VzL3BsYXRmb3JtL3NjYi9mZDUw
-MDAwMC5wY2llL3BjaTAwMDA6MDAvMDAwMDowMDowMC4wLzAwMDA6MDE6MDAuMC91c2IxLzEt
-MS8xLTEuMy8xLTEuMzoxLjAvMDAwMzoxQzRGOjAwMjYuMDAwMS9pbnB1dC9pbnB1dDAKWyAg
-MTIwLjgyMzM5M10gaGlkLWdlbmVyaWMgMDAwMzoxQzRGOjAwMjYuMDAwMTogaW5wdXQsaGlk
-cmF3MDogVVNCIEhJRCB2MS4xMCBLZXlib2FyZCBbU0lHTUFDSElQIFVTQiBLZXlib2FyZF0g
-b24gdXNiLTAwMDA6MDE6MDAuMC0xLjMvaW5wdXQwClsgIDEyMC44Mjc1MzVdIGlucHV0OiBT
-SUdNQUNISVAgVVNCIEtleWJvYXJkIENvbnN1bWVyIENvbnRyb2wgYXMgL2RldmljZXMvcGxh
-dGZvcm0vc2NiL2ZkNTAwMDAwLnBjaWUvcGNpMDAwMDowMC8wMDAwOjAwOjAwLjAvMDAwMDow
-MTowMC4wL3VzYjEvMS0xLzEtMS4zLzEtMS4zOjEuMS8wMDAzOjFDNEY6MDAyNi4wMDAyL2lu
-cHV0L2lucHV0MQpbICAxMjAuODgzMzQzXSBpbnB1dDogU0lHTUFDSElQIFVTQiBLZXlib2Fy
-ZCBTeXN0ZW0gQ29udHJvbCBhcyAvZGV2aWNlcy9wbGF0Zm9ybS9zY2IvZmQ1MDAwMDAucGNp
-ZS9wY2kwMDAwOjAwLzAwMDA6MDA6MDAuMC8wMDAwOjAxOjAwLjAvdXNiMS8xLTEvMS0xLjMv
-MS0xLjM6MS4xLzAwMDM6MUM0RjowMDI2LjAwMDIvaW5wdXQvaW5wdXQyClsgIDEyMC44ODM0
-NDhdIGhpZC1nZW5lcmljIDAwMDM6MUM0RjowMDI2LjAwMDI6IGlucHV0LGhpZHJhdzE6IFVT
-QiBISUQgdjEuMTAgRGV2aWNlIFtTSUdNQUNISVAgVVNCIEtleWJvYXJkXSBvbiB1c2ItMDAw
-MDowMTowMC4wLTEuMy9pbnB1dDEKWyAgMTU4LjcwNzI1MV0gc2QgMDowOjA6MDogW3NkYV0g
-dGFnIzE0IHVhc19laF9hYm9ydF9oYW5kbGVyIDAgdWFzLXRhZyAxMCBpbmZsaWdodDogQ01E
-IElOIApbICAxNTguNzA3MjY1XSBzZCAwOjA6MDowOiBbc2RhXSB0YWcjMTQgQ0RCOiBvcGNv
-ZGU9MHgyOCAyOCAwMCAxOCAzNCBjNyA0MCAwMCAwMCAyMCAwMApbICAxNTguODExMzE4XSBz
-ZCAwOjA6MDowOiBbc2RhXSB0YWcjMTMgdWFzX2VoX2Fib3J0X2hhbmRsZXIgMCB1YXMtdGFn
-IDkgaW5mbGlnaHQ6IENNRCBJTiAKWyAgMTU4LjgxMTMyNF0gc2QgMDowOjA6MDogW3NkYV0g
-dGFnIzEzIENEQjogb3Bjb2RlPTB4MjggMjggMDAgMTYgYmMgMTQgNDggMDAgMDEgOTggMDAK
-WyAgMTU4LjgxMTY3MV0gc2QgMDowOjA6MDogW3NkYV0gdGFnIzkgdWFzX2VoX2Fib3J0X2hh
-bmRsZXIgMCB1YXMtdGFnIDggaW5mbGlnaHQ6IENNRCBJTiAKWyAgMTU4LjgxMTY3Nl0gc2Qg
-MDowOjA6MDogW3NkYV0gdGFnIzkgQ0RCOiBvcGNvZGU9MHgyOCAyOCAwMCAxNiBiYyAxMCA0
-OCAwMCAwNCAwMCAwMApbICAxNTguODI3MjQ5XSBzY3NpIGhvc3QwOiB1YXNfZWhfZGV2aWNl
-X3Jlc2V0X2hhbmRsZXIgc3RhcnQKWyAgMTU4Ljk0Nzg3OV0gdXNiIDItMTogcmVzZXQgU3Vw
-ZXJTcGVlZCBVU0IgZGV2aWNlIG51bWJlciAyIHVzaW5nIHhoY2lfaGNkClsgIDE1OC45Njg2
-MjZdIHNjc2kgaG9zdDA6IHVhc19laF9kZXZpY2VfcmVzZXRfaGFuZGxlciBzdWNjZXNzClsg
-IDE1OC45Njg5NDVdIHNkIDA6MDowOjA6IFtzZGFdIHRhZyMxMyBVTktOT1dOKDB4MjAwMykg
-UmVzdWx0OiBob3N0Ynl0ZT0weDA3IGRyaXZlcmJ5dGU9RFJJVkVSX09LIGNtZF9hZ2U9MzBz
-ClsgIDE1OC45Njg5NTJdIHNkIDA6MDowOjA6IFtzZGFdIHRhZyMxMyBDREI6IG9wY29kZT0w
-eDI4IDI4IDAwIDE2IGJjIDE0IDQ4IDAwIDAxIDk4IDAwClsgIDE1OC45Njg5NTZdIEkvTyBl
-cnJvciwgZGV2IHNkYSwgc2VjdG9yIDM4MTQyNDcxMiBvcCAweDA6KFJFQUQpIGZsYWdzIDB4
-ODA3MDAgcGh5c19zZWcgNTEgcHJpbyBjbGFzcyAyClsgIDE1OC45Njg5ODhdIHNkIDA6MDow
-OjA6IFtzZGFdIHRhZyM5IFVOS05PV04oMHgyMDAzKSBSZXN1bHQ6IGhvc3RieXRlPTB4MDcg
-ZHJpdmVyYnl0ZT1EUklWRVJfT0sgY21kX2FnZT0zMHMKWyAgMTU4Ljk2ODk5M10gc2QgMDow
-OjA6MDogW3NkYV0gdGFnIzkgQ0RCOiBvcGNvZGU9MHgyOCAyOCAwMCAxNiBiYyAxMCA0OCAw
-MCAwNCAwMCAwMApbICAxNTguOTY4OTk2XSBJL08gZXJyb3IsIGRldiBzZGEsIHNlY3RvciAz
-ODE0MjM2ODggb3AgMHgwOihSRUFEKSBmbGFncyAweDg0NzAwIHBoeXNfc2VnIDEyOCBwcmlv
-IGNsYXNzIDIKWyAxMjUxLjQyNzIzNl0gdXNiIDEtMS4yOiBuZXcgaGlnaC1zcGVlZCBVU0Ig
-ZGV2aWNlIG51bWJlciA0IHVzaW5nIHhoY2lfaGNkClsgMTI1MS41MTc3MzhdIHVzYiAxLTEu
-MjogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTA1ZTMsIGlkUHJvZHVjdD0wNjEw
-LCBiY2REZXZpY2U9IDYuNjMKWyAxMjUxLjUxNzc0NV0gdXNiIDEtMS4yOiBOZXcgVVNCIGRl
-dmljZSBzdHJpbmdzOiBNZnI9MSwgUHJvZHVjdD0yLCBTZXJpYWxOdW1iZXI9MApbIDEyNTEu
-NTE3NzUwXSB1c2IgMS0xLjI6IFByb2R1Y3Q6IFVTQjIuMSBIdWIKWyAxMjUxLjUxNzc1NF0g
-dXNiIDEtMS4yOiBNYW51ZmFjdHVyZXI6IEdlbmVzeXNMb2dpYwpbIDEyNTEuNTE4ODIxXSBo
-dWIgMS0xLjI6MS4wOiBVU0IgaHViIGZvdW5kClsgMTI1MS41MTkxMjNdIGh1YiAxLTEuMjox
-LjA6IDQgcG9ydHMgZGV0ZWN0ZWQKWyAxMjU2LjY3MTI5Nl0geGhjaV9oY2QgMDAwMDowMTow
-MC4wOiBUaW1lb3V0IHdoaWxlIHdhaXRpbmcgZm9yIHNldHVwIGRldmljZSBjb21tYW5kClsg
-MTI2Mi4wNDcyOTNdIHhoY2lfaGNkIDAwMDA6MDE6MDAuMDogVGltZW91dCB3aGlsZSB3YWl0
-aW5nIGZvciBzZXR1cCBkZXZpY2UgY29tbWFuZApbIDEyNjIuMjUxMjMyXSB1c2IgMi0yOiBk
-ZXZpY2Ugbm90IGFjY2VwdGluZyBhZGRyZXNzIDMsIGVycm9yIC02MgpbIDEyNjIuNDQzNTEz
-XSB1c2IgMi0yOiBuZXcgU3VwZXJTcGVlZCBVU0IgZGV2aWNlIG51bWJlciA0IHVzaW5nIHho
-Y2lfaGNkClsgMTI2Mi40NjcyMzFdIHVzYiAyLTI6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBp
-ZFZlbmRvcj0wNWUzLCBpZFByb2R1Y3Q9MDYyNiwgYmNkRGV2aWNlPSA2LjYzClsgMTI2Mi40
-NjcyMzddIHVzYiAyLTI6IE5ldyBVU0IgZGV2aWNlIHN0cmluZ3M6IE1mcj0xLCBQcm9kdWN0
-PTIsIFNlcmlhbE51bWJlcj0wClsgMTI2Mi40NjcyNDFdIHVzYiAyLTI6IFByb2R1Y3Q6IFVT
-QjMuMSBIdWIKWyAxMjYyLjQ2NzI0NF0gdXNiIDItMjogTWFudWZhY3R1cmVyOiBHZW5lc3lz
-TG9naWMKWyAxMjYyLjQ2OTY0NV0gaHViIDItMjoxLjA6IFVTQiBodWIgZm91bmQKWyAxMjYy
-LjQ3MDQ4Nl0gaHViIDItMjoxLjA6IDQgcG9ydHMgZGV0ZWN0ZWQKWyAxNDMzLjkwNzUwMV0g
-dXNiIDItMi4yOiBuZXcgU3VwZXJTcGVlZCBVU0IgZGV2aWNlIG51bWJlciA1IHVzaW5nIHho
-Y2lfaGNkClsgMTQzMy45MjQ3NjZdIHVzYiAyLTIuMjogTmV3IFVTQiBkZXZpY2UgZm91bmQs
-IGlkVmVuZG9yPTA3ODEsIGlkUHJvZHVjdD01NTkxLCBiY2REZXZpY2U9IDEuMDAKWyAxNDMz
-LjkyNDc3M10gdXNiIDItMi4yOiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MSwgUHJv
-ZHVjdD0yLCBTZXJpYWxOdW1iZXI9MwpbIDE0MzMuOTI0Nzc3XSB1c2IgMi0yLjI6IFByb2R1
-Y3Q6ICBTYW5EaXNrIDMuMkdlbjEKWyAxNDMzLjkyNDc4MV0gdXNiIDItMi4yOiBNYW51ZmFj
-dHVyZXI6ICBVU0IKWyAxNDMzLjkyNDc4NF0gdXNiIDItMi4yOiBTZXJpYWxOdW1iZXI6IFtS
-RURBQ1RFRF0KWyAxNDMzLjkyNjM5N10gdXNiLXN0b3JhZ2UgMi0yLjI6MS4wOiBVU0IgTWFz
-cyBTdG9yYWdlIGRldmljZSBkZXRlY3RlZApbIDE0MzMuOTI2NjkwXSBzY3NpIGhvc3QxOiB1
-c2Itc3RvcmFnZSAyLTIuMjoxLjAKWyAxNDM0Ljk0NDEyNF0gc2NzaSAxOjA6MDowOiBEaXJl
-Y3QtQWNjZXNzICAgICAgVVNCICAgICAgU2FuRGlzayAzLjJHZW4xIDEuMDAgUFE6IDAgQU5T
-STogNgpbIDE0MzQuOTQ4ODkwXSBzZCAxOjA6MDowOiBbc2RiXSAxMjAxNjQzNTIgNTEyLWJ5
-dGUgbG9naWNhbCBibG9ja3M6ICg2MS41IEdCLzU3LjMgR2lCKQpbIDE0MzQuOTQ5OTk1XSBz
-ZCAxOjA6MDowOiBbc2RiXSBXcml0ZSBQcm90ZWN0IGlzIG9mZgpbIDE0MzQuOTUwMDAxXSBz
-ZCAxOjA6MDowOiBbc2RiXSBNb2RlIFNlbnNlOiA0MyAwMCAwMCAwMApbIDE0MzQuOTUwNjA2
-XSBzZCAxOjA6MDowOiBbc2RiXSBXcml0ZSBjYWNoZTogZGlzYWJsZWQsIHJlYWQgY2FjaGU6
-IGVuYWJsZWQsIGRvZXNuJ3Qgc3VwcG9ydCBEUE8gb3IgRlVBClsgMTQzNC45OTkxMThdICBz
-ZGI6IHNkYjEgc2RiMgpbIDE0MzQuOTk5MzM4XSBzZCAxOjA6MDowOiBbc2RiXSBBdHRhY2hl
-ZCBTQ1NJIHJlbW92YWJsZSBkaXNrCg==
---------------IxIh208z9b01eJ2I9Naod0l8
-Content-Type: text/x-log; charset=UTF-8; name="uas_failure_lsusb_output.log"
-Content-Disposition: attachment; filename="uas_failure_lsusb_output.log"
-Content-Transfer-Encoding: base64
-
-CkJ1cyAwMDEgRGV2aWNlIDAwMTogSUQgMWQ2YjowMDAyIExpbnV4IEZvdW5kYXRpb24gMi4w
-IHJvb3QgaHViCk5lZ290aWF0ZWQgc3BlZWQ6IEhpZ2ggU3BlZWQgKDQ4ME1icHMpCkRldmlj
-ZSBEZXNjcmlwdG9yOgogIGJMZW5ndGggICAgICAgICAgICAgICAgMTgKICBiRGVzY3JpcHRv
-clR5cGUgICAgICAgICAxCiAgYmNkVVNCICAgICAgICAgICAgICAgMi4wMAogIGJEZXZpY2VD
-bGFzcyAgICAgICAgICAgIDkgSHViCiAgYkRldmljZVN1YkNsYXNzICAgICAgICAgMCBbdW5r
-bm93bl0KICBiRGV2aWNlUHJvdG9jb2wgICAgICAgICAxIFNpbmdsZSBUVAogIGJNYXhQYWNr
-ZXRTaXplMCAgICAgICAgNjQKICBpZFZlbmRvciAgICAgICAgICAgMHgxZDZiIExpbnV4IEZv
-dW5kYXRpb24KICBpZFByb2R1Y3QgICAgICAgICAgMHgwMDAyIDIuMCByb290IGh1YgogIGJj
-ZERldmljZSAgICAgICAgICAgIDYuMTgKICBpTWFudWZhY3R1cmVyICAgICAgICAgICAzIExp
-bnV4IDYuMTguMzItMi1ycGkgeGhjaS1oY2QKICBpUHJvZHVjdCAgICAgICAgICAgICAgICAy
-IHhIQ0kgSG9zdCBDb250cm9sbGVyCiAgaVNlcmlhbCAgICAgICAgICAgICAgICAgMSAwMDAw
-OjAxOjAwLjAKICBiTnVtQ29uZmlndXJhdGlvbnMgICAgICAxCiAgQ29uZmlndXJhdGlvbiBE
-ZXNjcmlwdG9yOgogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgOQogICAgYkRlc2NyaXB0
-b3JUeXBlICAgICAgICAgMgogICAgd1RvdGFsTGVuZ3RoICAgICAgIDB4MDAxOQogICAgYk51
-bUludGVyZmFjZXMgICAgICAgICAgMQogICAgYkNvbmZpZ3VyYXRpb25WYWx1ZSAgICAgMQog
-ICAgaUNvbmZpZ3VyYXRpb24gICAgICAgICAgMCAKICAgIGJtQXR0cmlidXRlcyAgICAgICAg
-IDB4ZTAKICAgICAgU2VsZiBQb3dlcmVkCiAgICAgIFJlbW90ZSBXYWtldXAKICAgIE1heFBv
-d2VyICAgICAgICAgICAgICAgIDBtQQogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6CiAgICAg
-IGJMZW5ndGggICAgICAgICAgICAgICAgIDkKICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAg
-ICAgNAogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAwCiAgICAgIGJBbHRlcm5hdGVT
-ZXR0aW5nICAgICAgIDAKICAgICAgYk51bUVuZHBvaW50cyAgICAgICAgICAgMQogICAgICBi
-SW50ZXJmYWNlQ2xhc3MgICAgICAgICA5IEh1YgogICAgICBiSW50ZXJmYWNlU3ViQ2xhc3Mg
-ICAgICAwIFt1bmtub3duXQogICAgICBiSW50ZXJmYWNlUHJvdG9jb2wgICAgICAwIEZ1bGwg
-c3BlZWQgKG9yIHJvb3QpIGh1YgogICAgICBpSW50ZXJmYWNlICAgICAgICAgICAgICAwIAog
-ICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOgogICAgICAgIGJMZW5ndGggICAgICAgICAgICAg
-ICAgIDcKICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA1CiAgICAgICAgYkVuZHBv
-aW50QWRkcmVzcyAgICAgMHg4MSAgRVAgMSBJTgogICAgICAgIGJtQXR0cmlidXRlcyAgICAg
-ICAgICAgIDMKICAgICAgICAgIFRyYW5zZmVyIFR5cGUgICAgICAgICAgICBJbnRlcnJ1cHQK
-ICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lCiAgICAgICAgICBVc2Fn
-ZSBUeXBlICAgICAgICAgICAgICAgRGF0YQogICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAw
-eDAwMDQgIDF4IDQgYnl0ZXMKICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgIDEyCkh1
-YiBEZXNjcmlwdG9yOgogIGJMZW5ndGggICAgICAgICAgICAgICA5CiAgYkRlc2NyaXB0b3JU
-eXBlICAgICAgNDEKICBuTmJyUG9ydHMgICAgICAgICAgICAgMQogIHdIdWJDaGFyYWN0ZXJp
-c3RpYyAweDAwMDkKICAgIFBlci1wb3J0IHBvd2VyIHN3aXRjaGluZwogICAgUGVyLXBvcnQg
-b3ZlcmN1cnJlbnQgcHJvdGVjdGlvbgogICAgVFQgdGhpbmsgdGltZSA4IEZTIGJpdHMKICBi
-UHdyT24yUHdyR29vZCAgICAgICAxMCAqIDIgbWlsbGkgc2Vjb25kcwogIGJIdWJDb250ckN1
-cnJlbnQgICAgICAwIG1pbGxpIEFtcGVyZQogIERldmljZVJlbW92YWJsZSAgICAweDAyCiAg
-UG9ydFB3ckN0cmxNYXNrICAgIDB4ZmYKIEh1YiBQb3J0IFN0YXR1czoKICAgUG9ydCAxOiAw
-MDAwLjA1MDMgaGlnaHNwZWVkIHBvd2VyIGVuYWJsZSBjb25uZWN0CkRldmljZSBTdGF0dXM6
-ICAgICAweDAwMDEKICBTZWxmIFBvd2VyZWQKCkJ1cyAwMDEgRGV2aWNlIDAwMjogSUQgMjEw
-OTozNDMxIFZJQSBMYWJzLCBJbmMuIEh1YgpOZWdvdGlhdGVkIHNwZWVkOiBIaWdoIFNwZWVk
-ICg0ODBNYnBzKQpEZXZpY2UgRGVzY3JpcHRvcjoKICBiTGVuZ3RoICAgICAgICAgICAgICAg
-IDE4CiAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgMQogIGJjZFVTQiAgICAgICAgICAgICAg
-IDIuMTAKICBiRGV2aWNlQ2xhc3MgICAgICAgICAgICA5IEh1YgogIGJEZXZpY2VTdWJDbGFz
-cyAgICAgICAgIDAgW3Vua25vd25dCiAgYkRldmljZVByb3RvY29sICAgICAgICAgMSBTaW5n
-bGUgVFQKICBiTWF4UGFja2V0U2l6ZTAgICAgICAgIDY0CiAgaWRWZW5kb3IgICAgICAgICAg
-IDB4MjEwOSBWSUEgTGFicywgSW5jLgogIGlkUHJvZHVjdCAgICAgICAgICAweDM0MzEgSHVi
-CiAgYmNkRGV2aWNlICAgICAgICAgICAgNC4yMQogIGlNYW51ZmFjdHVyZXIgICAgICAgICAg
-IDAgCiAgaVByb2R1Y3QgICAgICAgICAgICAgICAgMSBVU0IyLjAgSHViCiAgaVNlcmlhbCAg
-ICAgICAgICAgICAgICAgMCAKICBiTnVtQ29uZmlndXJhdGlvbnMgICAgICAxCiAgQ29uZmln
-dXJhdGlvbiBEZXNjcmlwdG9yOgogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgOQogICAg
-YkRlc2NyaXB0b3JUeXBlICAgICAgICAgMgogICAgd1RvdGFsTGVuZ3RoICAgICAgIDB4MDAx
-OQogICAgYk51bUludGVyZmFjZXMgICAgICAgICAgMQogICAgYkNvbmZpZ3VyYXRpb25WYWx1
-ZSAgICAgMQogICAgaUNvbmZpZ3VyYXRpb24gICAgICAgICAgMCAKICAgIGJtQXR0cmlidXRl
-cyAgICAgICAgIDB4ZTAKICAgICAgU2VsZiBQb3dlcmVkCiAgICAgIFJlbW90ZSBXYWtldXAK
-ICAgIE1heFBvd2VyICAgICAgICAgICAgICAxMDBtQQogICAgSW50ZXJmYWNlIERlc2NyaXB0
-b3I6CiAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDkKICAgICAgYkRlc2NyaXB0b3JU
-eXBlICAgICAgICAgNAogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAwCiAgICAgIGJB
-bHRlcm5hdGVTZXR0aW5nICAgICAgIDAKICAgICAgYk51bUVuZHBvaW50cyAgICAgICAgICAg
-MQogICAgICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgICA5IEh1YgogICAgICBiSW50ZXJmYWNl
-U3ViQ2xhc3MgICAgICAwIFt1bmtub3duXQogICAgICBiSW50ZXJmYWNlUHJvdG9jb2wgICAg
-ICAwIEZ1bGwgc3BlZWQgKG9yIHJvb3QpIGh1YgogICAgICBpSW50ZXJmYWNlICAgICAgICAg
-ICAgICAwIAogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOgogICAgICAgIGJMZW5ndGggICAg
-ICAgICAgICAgICAgIDcKICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA1CiAgICAg
-ICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHg4MSAgRVAgMSBJTgogICAgICAgIGJtQXR0cmli
-dXRlcyAgICAgICAgICAgIDMKICAgICAgICAgIFRyYW5zZmVyIFR5cGUgICAgICAgICAgICBJ
-bnRlcnJ1cHQKICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lCiAgICAg
-ICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQogICAgICAgIHdNYXhQYWNrZXRT
-aXplICAgICAweDAwMDEgIDF4IDEgYnl0ZXMKICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAg
-ICAgIDEyCkJpbmFyeSBPYmplY3QgU3RvcmUgRGVzY3JpcHRvcjoKICBiTGVuZ3RoICAgICAg
-ICAgICAgICAgICA1CiAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAxNQogIHdUb3RhbExlbmd0
-aCAgICAgICAweDAwMmEKICBiTnVtRGV2aWNlQ2FwcyAgICAgICAgICAzCiAgVVNCIDIuMCBF
-eHRlbnNpb24gRGV2aWNlIENhcGFiaWxpdHk6CiAgICBiTGVuZ3RoICAgICAgICAgICAgICAg
-ICA3CiAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE2CiAgICBiRGV2Q2FwYWJpbGl0eVR5
-cGUgICAgICAyCiAgICBibUF0dHJpYnV0ZXMgICAweDAwMDAwMDAyCiAgICAgIEhJUkQgTGlu
-ayBQb3dlciBNYW5hZ2VtZW50IChMUE0pIFN1cHBvcnRlZAogIFN1cGVyU3BlZWQgVVNCIERl
-dmljZSBDYXBhYmlsaXR5OgogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAxMAogICAgYkRl
-c2NyaXB0b3JUeXBlICAgICAgICAxNgogICAgYkRldkNhcGFiaWxpdHlUeXBlICAgICAgMwog
-ICAgYm1BdHRyaWJ1dGVzICAgICAgICAgMHgwMAogICAgd1NwZWVkc1N1cHBvcnRlZCAgIDB4
-MDAwZQogICAgICBEZXZpY2UgY2FuIG9wZXJhdGUgYXQgRnVsbCBTcGVlZCAoMTJNYnBzKQog
-ICAgICBEZXZpY2UgY2FuIG9wZXJhdGUgYXQgSGlnaCBTcGVlZCAoNDgwTWJwcykKICAgICAg
-RGV2aWNlIGNhbiBvcGVyYXRlIGF0IFN1cGVyU3BlZWQgKDVHYnBzKQogICAgYkZ1bmN0aW9u
-YWxpdHlTdXBwb3J0ICAgMQogICAgICBMb3dlc3QgZnVsbHktZnVuY3Rpb25hbCBkZXZpY2Ug
-c3BlZWQgaXMgRnVsbCBTcGVlZCAoMTJNYnBzKQogICAgYlUxRGV2RXhpdExhdCAgICAgICAg
-ICAgNCBtaWNybyBzZWNvbmRzCiAgICBiVTJEZXZFeGl0TGF0ICAgICAgICAgMjMxIG1pY3Jv
-IHNlY29uZHMKICBDb250YWluZXIgSUQgRGV2aWNlIENhcGFiaWxpdHk6CiAgICBiTGVuZ3Ro
-ICAgICAgICAgICAgICAgIDIwCiAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE2CiAgICBi
-RGV2Q2FwYWJpbGl0eVR5cGUgICAgICA0CiAgICBiUmVzZXJ2ZWQgICAgICAgICAgICAgICAw
-CiAgICBDb250YWluZXJJRCAgICAgICAgICAgICB7MzBlZWYzNWMtMDdkNS0yNTQ5LWIwMDEt
-ODAyZDc5NDM0YzMwfQpIdWIgRGVzY3JpcHRvcjoKICBiTGVuZ3RoICAgICAgICAgICAgICAg
-OQogIGJEZXNjcmlwdG9yVHlwZSAgICAgIDQxCiAgbk5iclBvcnRzICAgICAgICAgICAgIDQK
-ICB3SHViQ2hhcmFjdGVyaXN0aWMgMHgwMGUwCiAgICBHYW5nZWQgcG93ZXIgc3dpdGNoaW5n
-CiAgICBHYW5nZWQgb3ZlcmN1cnJlbnQgcHJvdGVjdGlvbgogICAgVFQgdGhpbmsgdGltZSAz
-MiBGUyBiaXRzCiAgICBQb3J0IGluZGljYXRvcnMKICBiUHdyT24yUHdyR29vZCAgICAgICA1
-MCAqIDIgbWlsbGkgc2Vjb25kcwogIGJIdWJDb250ckN1cnJlbnQgICAgMTAwIG1pbGxpIEFt
-cGVyZQogIERldmljZVJlbW92YWJsZSAgICAweDAwCiAgUG9ydFB3ckN0cmxNYXNrICAgIDB4
-ZmYKIEh1YiBQb3J0IFN0YXR1czoKICAgUG9ydCAxOiAwMDAwLjAxMDAgcG93ZXIKICAgUG9y
-dCAyOiAwMDAwLjA1MDcgaGlnaHNwZWVkIHBvd2VyIHN1c3BlbmQgZW5hYmxlIGNvbm5lY3QK
-ICAgUG9ydCAzOiAwMDAwLjAzMDMgbG93c3BlZWQgcG93ZXIgZW5hYmxlIGNvbm5lY3QKICAg
-UG9ydCA0OiAwMDAwLjAxMDAgcG93ZXIKRGV2aWNlIFN0YXR1czogICAgIDB4MDAwMQogIFNl
-bGYgUG93ZXJlZAoKQnVzIDAwMSBEZXZpY2UgMDAzOiBJRCAxYzRmOjAwMjYgU2lHbWEgTWlj
-cm8gS2V5Ym9hcmQKTmVnb3RpYXRlZCBzcGVlZDogTG93IFNwZWVkICgxTWJwcykKRGV2aWNl
-IERlc2NyaXB0b3I6CiAgYkxlbmd0aCAgICAgICAgICAgICAgICAxOAogIGJEZXNjcmlwdG9y
-VHlwZSAgICAgICAgIDEKICBiY2RVU0IgICAgICAgICAgICAgICAxLjEwCiAgYkRldmljZUNs
-YXNzICAgICAgICAgICAgMCBbdW5rbm93bl0KICBiRGV2aWNlU3ViQ2xhc3MgICAgICAgICAw
-IFt1bmtub3duXQogIGJEZXZpY2VQcm90b2NvbCAgICAgICAgIDAgCiAgYk1heFBhY2tldFNp
-emUwICAgICAgICAgOAogIGlkVmVuZG9yICAgICAgICAgICAweDFjNGYgU2lHbWEgTWljcm8K
-ICBpZFByb2R1Y3QgICAgICAgICAgMHgwMDI2IEtleWJvYXJkCiAgYmNkRGV2aWNlICAgICAg
-ICAgICAgMS4xMAogIGlNYW51ZmFjdHVyZXIgICAgICAgICAgIDEgU0lHTUFDSElQCiAgaVBy
-b2R1Y3QgICAgICAgICAgICAgICAgMiBVU0IgS2V5Ym9hcmQKICBpU2VyaWFsICAgICAgICAg
-ICAgICAgICAwIAogIGJOdW1Db25maWd1cmF0aW9ucyAgICAgIDEKICBDb25maWd1cmF0aW9u
-IERlc2NyaXB0b3I6CiAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5CiAgICBiRGVzY3Jp
-cHRvclR5cGUgICAgICAgICAyCiAgICB3VG90YWxMZW5ndGggICAgICAgMHgwMDNiCiAgICBi
-TnVtSW50ZXJmYWNlcyAgICAgICAgICAyCiAgICBiQ29uZmlndXJhdGlvblZhbHVlICAgICAx
-CiAgICBpQ29uZmlndXJhdGlvbiAgICAgICAgICAwIAogICAgYm1BdHRyaWJ1dGVzICAgICAg
-ICAgMHhhMAogICAgICAoQnVzIFBvd2VyZWQpCiAgICAgIFJlbW90ZSBXYWtldXAKICAgIE1h
-eFBvd2VyICAgICAgICAgICAgICAgOThtQQogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6CiAg
-ICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDkKICAgICAgYkRlc2NyaXB0b3JUeXBlICAg
-ICAgICAgNAogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAwCiAgICAgIGJBbHRlcm5h
-dGVTZXR0aW5nICAgICAgIDAKICAgICAgYk51bUVuZHBvaW50cyAgICAgICAgICAgMQogICAg
-ICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgICAzIEh1bWFuIEludGVyZmFjZSBEZXZpY2UKICAg
-ICAgYkludGVyZmFjZVN1YkNsYXNzICAgICAgMSBCb290IEludGVyZmFjZSBTdWJjbGFzcwog
-ICAgICBiSW50ZXJmYWNlUHJvdG9jb2wgICAgICAxIEtleWJvYXJkCiAgICAgIGlJbnRlcmZh
-Y2UgICAgICAgICAgICAgIDAgCiAgICAgICAgSElEIERldmljZSBEZXNjcmlwdG9yOgogICAg
-ICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgOQogICAgICAgICAgYkRlc2NyaXB0b3JU
-eXBlICAgICAgICAzMwogICAgICAgICAgYmNkSElEICAgICAgICAgICAgICAgMS4xMAogICAg
-ICAgICAgYkNvdW50cnlDb2RlICAgICAgICAgICAgMCBOb3Qgc3VwcG9ydGVkCiAgICAgICAg
-ICBiTnVtRGVzY3JpcHRvcnMgICAgICAgICAxCiAgICAgICAgICBiRGVzY3JpcHRvclR5cGUg
-ICAgICAgIDM0IFJlcG9ydAogICAgICAgICAgd0Rlc2NyaXB0b3JMZW5ndGggICAgICA1NAog
-ICAgICAgICAgUmVwb3J0IERlc2NyaXB0b3JzOiAKICAgICAgICAgICAgKiogVU5BVkFJTEFC
-TEUgKioKICAgICAgRW5kcG9pbnQgRGVzY3JpcHRvcjoKICAgICAgICBiTGVuZ3RoICAgICAg
-ICAgICAgICAgICA3CiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQogICAgICAg
-IGJFbmRwb2ludEFkZHJlc3MgICAgIDB4ODEgIEVQIDEgSU4KICAgICAgICBibUF0dHJpYnV0
-ZXMgICAgICAgICAgICAzCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgSW50
-ZXJydXB0CiAgICAgICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQogICAgICAg
-ICAgVXNhZ2UgVHlwZSAgICAgICAgICAgICAgIERhdGEKICAgICAgICB3TWF4UGFja2V0U2l6
-ZSAgICAgMHgwMDA4ICAxeCA4IGJ5dGVzCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAg
-ICAxMAogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6CiAgICAgIGJMZW5ndGggICAgICAgICAg
-ICAgICAgIDkKICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNAogICAgICBiSW50ZXJm
-YWNlTnVtYmVyICAgICAgICAxCiAgICAgIGJBbHRlcm5hdGVTZXR0aW5nICAgICAgIDAKICAg
-ICAgYk51bUVuZHBvaW50cyAgICAgICAgICAgMQogICAgICBiSW50ZXJmYWNlQ2xhc3MgICAg
-ICAgICAzIEh1bWFuIEludGVyZmFjZSBEZXZpY2UKICAgICAgYkludGVyZmFjZVN1YkNsYXNz
-ICAgICAgMCBbdW5rbm93bl0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAgICAgMCAKICAg
-ICAgaUludGVyZmFjZSAgICAgICAgICAgICAgMCAKICAgICAgICBISUQgRGV2aWNlIERlc2Ny
-aXB0b3I6CiAgICAgICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5CiAgICAgICAgICBi
-RGVzY3JpcHRvclR5cGUgICAgICAgIDMzCiAgICAgICAgICBiY2RISUQgICAgICAgICAgICAg
-ICAxLjEwCiAgICAgICAgICBiQ291bnRyeUNvZGUgICAgICAgICAgICAwIE5vdCBzdXBwb3J0
-ZWQKICAgICAgICAgIGJOdW1EZXNjcmlwdG9ycyAgICAgICAgIDEKICAgICAgICAgIGJEZXNj
-cmlwdG9yVHlwZSAgICAgICAgMzQgUmVwb3J0CiAgICAgICAgICB3RGVzY3JpcHRvckxlbmd0
-aCAgICAgIDUwCiAgICAgICAgICBSZXBvcnQgRGVzY3JpcHRvcnM6IAogICAgICAgICAgICAq
-KiBVTkFWQUlMQUJMRSAqKgogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOgogICAgICAgIGJM
-ZW5ndGggICAgICAgICAgICAgICAgIDcKICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAg
-ICA1CiAgICAgICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHg4MiAgRVAgMiBJTgogICAgICAg
-IGJtQXR0cmlidXRlcyAgICAgICAgICAgIDMKICAgICAgICAgIFRyYW5zZmVyIFR5cGUgICAg
-ICAgICAgICBJbnRlcnJ1cHQKICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBO
-b25lCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQogICAgICAgIHdN
-YXhQYWNrZXRTaXplICAgICAweDAwMDMgIDF4IDMgYnl0ZXMKICAgICAgICBiSW50ZXJ2YWwg
-ICAgICAgICAgICAgIDEwCkRldmljZSBTdGF0dXM6ICAgICAweDAwMDAKICAoQnVzIFBvd2Vy
-ZWQpCgpCdXMgMDAxIERldmljZSAwMDQ6IElEIDA1ZTM6MDYxMCBHZW5lc3lzIExvZ2ljLCBJ
-bmMuIEh1YgpOZWdvdGlhdGVkIHNwZWVkOiBIaWdoIFNwZWVkICg0ODBNYnBzKQpEZXZpY2Ug
-RGVzY3JpcHRvcjoKICBiTGVuZ3RoICAgICAgICAgICAgICAgIDE4CiAgYkRlc2NyaXB0b3JU
-eXBlICAgICAgICAgMQogIGJjZFVTQiAgICAgICAgICAgICAgIDIuMTAKICBiRGV2aWNlQ2xh
-c3MgICAgICAgICAgICA5IEh1YgogIGJEZXZpY2VTdWJDbGFzcyAgICAgICAgIDAgW3Vua25v
-d25dCiAgYkRldmljZVByb3RvY29sICAgICAgICAgMSBTaW5nbGUgVFQKICBiTWF4UGFja2V0
-U2l6ZTAgICAgICAgIDY0CiAgaWRWZW5kb3IgICAgICAgICAgIDB4MDVlMyBHZW5lc3lzIExv
-Z2ljLCBJbmMuCiAgaWRQcm9kdWN0ICAgICAgICAgIDB4MDYxMCBIdWIKICBiY2REZXZpY2Ug
-ICAgICAgICAgICA2LjYzCiAgaU1hbnVmYWN0dXJlciAgICAgICAgICAgMSBHZW5lc3lzTG9n
-aWMKICBpUHJvZHVjdCAgICAgICAgICAgICAgICAyIFVTQjIuMSBIdWIKICBpU2VyaWFsICAg
-ICAgICAgICAgICAgICAwIAogIGJOdW1Db25maWd1cmF0aW9ucyAgICAgIDEKICBDb25maWd1
-cmF0aW9uIERlc2NyaXB0b3I6CiAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5CiAgICBi
-RGVzY3JpcHRvclR5cGUgICAgICAgICAyCiAgICB3VG90YWxMZW5ndGggICAgICAgMHgwMDE5
-CiAgICBiTnVtSW50ZXJmYWNlcyAgICAgICAgICAxCiAgICBiQ29uZmlndXJhdGlvblZhbHVl
-ICAgICAxCiAgICBpQ29uZmlndXJhdGlvbiAgICAgICAgICAwIAogICAgYm1BdHRyaWJ1dGVz
-ICAgICAgICAgMHhlMAogICAgICBTZWxmIFBvd2VyZWQKICAgICAgUmVtb3RlIFdha2V1cAog
-ICAgTWF4UG93ZXIgICAgICAgICAgICAgIDEwMG1BCiAgICBJbnRlcmZhY2UgRGVzY3JpcHRv
-cjoKICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgOQogICAgICBiRGVzY3JpcHRvclR5
-cGUgICAgICAgICA0CiAgICAgIGJJbnRlcmZhY2VOdW1iZXIgICAgICAgIDAKICAgICAgYkFs
-dGVybmF0ZVNldHRpbmcgICAgICAgMAogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAgICAx
-CiAgICAgIGJJbnRlcmZhY2VDbGFzcyAgICAgICAgIDkgSHViCiAgICAgIGJJbnRlcmZhY2VT
-dWJDbGFzcyAgICAgIDAgW3Vua25vd25dCiAgICAgIGJJbnRlcmZhY2VQcm90b2NvbCAgICAg
-IDAgRnVsbCBzcGVlZCAob3Igcm9vdCkgaHViCiAgICAgIGlJbnRlcmZhY2UgICAgICAgICAg
-ICAgIDAgCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6CiAgICAgICAgYkxlbmd0aCAgICAg
-ICAgICAgICAgICAgNwogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUKICAgICAg
-ICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDgxICBFUCAxIElOCiAgICAgICAgYm1BdHRyaWJ1
-dGVzICAgICAgICAgICAgMwogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIElu
-dGVycnVwdAogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAgICAgICAgIE5vbmUKICAgICAg
-ICAgIFVzYWdlIFR5cGUgICAgICAgICAgICAgICBEYXRhCiAgICAgICAgd01heFBhY2tldFNp
-emUgICAgIDB4MDAwMSAgMXggMSBieXRlcwogICAgICAgIGJJbnRlcnZhbCAgICAgICAgICAg
-ICAgMTIKQmluYXJ5IE9iamVjdCBTdG9yZSBEZXNjcmlwdG9yOgogIGJMZW5ndGggICAgICAg
-ICAgICAgICAgIDUKICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE1CiAgd1RvdGFsTGVuZ3Ro
-ICAgICAgIDB4MDAyYQogIGJOdW1EZXZpY2VDYXBzICAgICAgICAgIDMKICBVU0IgMi4wIEV4
-dGVuc2lvbiBEZXZpY2UgQ2FwYWJpbGl0eToKICAgIGJMZW5ndGggICAgICAgICAgICAgICAg
-IDcKICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTYKICAgIGJEZXZDYXBhYmlsaXR5VHlw
-ZSAgICAgIDIKICAgIGJtQXR0cmlidXRlcyAgIDB4MDAwMDAwMDYKICAgICAgQkVTTCBMaW5r
-IFBvd2VyIE1hbmFnZW1lbnQgKExQTSkgU3VwcG9ydGVkCiAgU3VwZXJTcGVlZCBVU0IgRGV2
-aWNlIENhcGFiaWxpdHk6CiAgICBiTGVuZ3RoICAgICAgICAgICAgICAgIDEwCiAgICBiRGVz
-Y3JpcHRvclR5cGUgICAgICAgIDE2CiAgICBiRGV2Q2FwYWJpbGl0eVR5cGUgICAgICAzCiAg
-ICBibUF0dHJpYnV0ZXMgICAgICAgICAweDAwCiAgICB3U3BlZWRzU3VwcG9ydGVkICAgMHgw
-MDBlCiAgICAgIERldmljZSBjYW4gb3BlcmF0ZSBhdCBGdWxsIFNwZWVkICgxMk1icHMpCiAg
-ICAgIERldmljZSBjYW4gb3BlcmF0ZSBhdCBIaWdoIFNwZWVkICg0ODBNYnBzKQogICAgICBE
-ZXZpY2UgY2FuIG9wZXJhdGUgYXQgU3VwZXJTcGVlZCAoNUdicHMpCiAgICBiRnVuY3Rpb25h
-bGl0eVN1cHBvcnQgICAxCiAgICAgIExvd2VzdCBmdWxseS1mdW5jdGlvbmFsIGRldmljZSBz
-cGVlZCBpcyBGdWxsIFNwZWVkICgxMk1icHMpCiAgICBiVTFEZXZFeGl0TGF0ICAgICAgICAg
-ICA4IG1pY3JvIHNlY29uZHMKICAgIGJVMkRldkV4aXRMYXQgICAgICAgICAxOTAgbWljcm8g
-c2Vjb25kcwogIENvbnRhaW5lciBJRCBEZXZpY2UgQ2FwYWJpbGl0eToKICAgIGJMZW5ndGgg
-ICAgICAgICAgICAgICAgMjAKICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTYKICAgIGJE
-ZXZDYXBhYmlsaXR5VHlwZSAgICAgIDQKICAgIGJSZXNlcnZlZCAgICAgICAgICAgICAgIDAK
-ICAgIENvbnRhaW5lcklEICAgICAgICAgICAgIHs5ZjRiNTZmMC0xZGY2LTExZTAtYWM2NC0w
-ODAwMjAwYzlhNjZ9Ckh1YiBEZXNjcmlwdG9yOgogIGJMZW5ndGggICAgICAgICAgICAgICA5
-CiAgYkRlc2NyaXB0b3JUeXBlICAgICAgNDEKICBuTmJyUG9ydHMgICAgICAgICAgICAgNAog
-IHdIdWJDaGFyYWN0ZXJpc3RpYyAweDAwZTAKICAgIEdhbmdlZCBwb3dlciBzd2l0Y2hpbmcK
-ICAgIEdhbmdlZCBvdmVyY3VycmVudCBwcm90ZWN0aW9uCiAgICBUVCB0aGluayB0aW1lIDMy
-IEZTIGJpdHMKICAgIFBvcnQgaW5kaWNhdG9ycwogIGJQd3JPbjJQd3JHb29kICAgICAgICAw
-ICogMiBtaWxsaSBzZWNvbmRzCiAgYkh1YkNvbnRyQ3VycmVudCAgICAxMDAgbWlsbGkgQW1w
-ZXJlCiAgRGV2aWNlUmVtb3ZhYmxlICAgIDB4MDAKICBQb3J0UHdyQ3RybE1hc2sgICAgMHhm
-ZgogSHViIFBvcnQgU3RhdHVzOgogICBQb3J0IDE6IDAwMDAuMDEwMCBwb3dlcgogICBQb3J0
-IDI6IDAwMDAuMDEwMCBwb3dlcgogICBQb3J0IDM6IDAwMDAuMDEwMCBwb3dlcgogICBQb3J0
-IDQ6IDAwMDAuMDEwMCBwb3dlcgpEZXZpY2UgU3RhdHVzOiAgICAgMHgwMDAxCiAgU2VsZiBQ
-b3dlcmVkCgpCdXMgMDAyIERldmljZSAwMDE6IElEIDFkNmI6MDAwMyBMaW51eCBGb3VuZGF0
-aW9uIDMuMCByb290IGh1YgpOZWdvdGlhdGVkIHNwZWVkOiBTdXBlclNwZWVkICg1R2JwcykK
-RGV2aWNlIERlc2NyaXB0b3I6CiAgYkxlbmd0aCAgICAgICAgICAgICAgICAxOAogIGJEZXNj
-cmlwdG9yVHlwZSAgICAgICAgIDEKICBiY2RVU0IgICAgICAgICAgICAgICAzLjAwCiAgYkRl
-dmljZUNsYXNzICAgICAgICAgICAgOSBIdWIKICBiRGV2aWNlU3ViQ2xhc3MgICAgICAgICAw
-IFt1bmtub3duXQogIGJEZXZpY2VQcm90b2NvbCAgICAgICAgIDMgCiAgYk1heFBhY2tldFNp
-emUwICAgICAgICAgOQogIGlkVmVuZG9yICAgICAgICAgICAweDFkNmIgTGludXggRm91bmRh
-dGlvbgogIGlkUHJvZHVjdCAgICAgICAgICAweDAwMDMgMy4wIHJvb3QgaHViCiAgYmNkRGV2
-aWNlICAgICAgICAgICAgNi4xOAogIGlNYW51ZmFjdHVyZXIgICAgICAgICAgIDMgTGludXgg
-Ni4xOC4zMi0yLXJwaSB4aGNpLWhjZAogIGlQcm9kdWN0ICAgICAgICAgICAgICAgIDIgeEhD
-SSBIb3N0IENvbnRyb2xsZXIKICBpU2VyaWFsICAgICAgICAgICAgICAgICAxIDAwMDA6MDE6
-MDAuMAogIGJOdW1Db25maWd1cmF0aW9ucyAgICAgIDEKICBDb25maWd1cmF0aW9uIERlc2Ny
-aXB0b3I6CiAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5CiAgICBiRGVzY3JpcHRvclR5
-cGUgICAgICAgICAyCiAgICB3VG90YWxMZW5ndGggICAgICAgMHgwMDFmCiAgICBiTnVtSW50
-ZXJmYWNlcyAgICAgICAgICAxCiAgICBiQ29uZmlndXJhdGlvblZhbHVlICAgICAxCiAgICBp
-Q29uZmlndXJhdGlvbiAgICAgICAgICAwIAogICAgYm1BdHRyaWJ1dGVzICAgICAgICAgMHhl
-MAogICAgICBTZWxmIFBvd2VyZWQKICAgICAgUmVtb3RlIFdha2V1cAogICAgTWF4UG93ZXIg
-ICAgICAgICAgICAgICAgMG1BCiAgICBJbnRlcmZhY2UgRGVzY3JpcHRvcjoKICAgICAgYkxl
-bmd0aCAgICAgICAgICAgICAgICAgOQogICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA0
-CiAgICAgIGJJbnRlcmZhY2VOdW1iZXIgICAgICAgIDAKICAgICAgYkFsdGVybmF0ZVNldHRp
-bmcgICAgICAgMAogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAgICAxCiAgICAgIGJJbnRl
-cmZhY2VDbGFzcyAgICAgICAgIDkgSHViCiAgICAgIGJJbnRlcmZhY2VTdWJDbGFzcyAgICAg
-IDAgW3Vua25vd25dCiAgICAgIGJJbnRlcmZhY2VQcm90b2NvbCAgICAgIDAgRnVsbCBzcGVl
-ZCAob3Igcm9vdCkgaHViCiAgICAgIGlJbnRlcmZhY2UgICAgICAgICAgICAgIDAgCiAgICAg
-IEVuZHBvaW50IERlc2NyaXB0b3I6CiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAg
-NwogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUKICAgICAgICBiRW5kcG9pbnRB
-ZGRyZXNzICAgICAweDgxICBFUCAxIElOCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAg
-ICAgMwogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEludGVycnVwdAogICAg
-ICAgICAgU3luY2ggVHlwZSAgICAgICAgICAgICAgIE5vbmUKICAgICAgICAgIFVzYWdlIFR5
-cGUgICAgICAgICAgICAgICBEYXRhCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDAw
-NCAgMXggNCBieXRlcwogICAgICAgIGJJbnRlcnZhbCAgICAgICAgICAgICAgMTIKICAgICAg
-ICBiTWF4QnVyc3QgICAgICAgICAgICAgICAwCiAgICAgICAgd0J5dGVzUGVySW50ZXJ2YWwg
-ICAgICAgMgpCaW5hcnkgT2JqZWN0IFN0b3JlIERlc2NyaXB0b3I6CiAgYkxlbmd0aCAgICAg
-ICAgICAgICAgICAgNQogIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTUKICB3VG90YWxMZW5n
-dGggICAgICAgMHgwMDBmCiAgYk51bURldmljZUNhcHMgICAgICAgICAgMQogIFN1cGVyU3Bl
-ZWQgVVNCIERldmljZSBDYXBhYmlsaXR5OgogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAx
-MAogICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAxNgogICAgYkRldkNhcGFiaWxpdHlUeXBl
-ICAgICAgMwogICAgYm1BdHRyaWJ1dGVzICAgICAgICAgMHgwMgogICAgICBMYXRlbmN5IFRv
-bGVyYW5jZSBNZXNzYWdlcyAoTFRNKSBTdXBwb3J0ZWQKICAgIHdTcGVlZHNTdXBwb3J0ZWQg
-ICAweDAwMDgKICAgICAgRGV2aWNlIGNhbiBvcGVyYXRlIGF0IFN1cGVyU3BlZWQgKDVHYnBz
-KQogICAgYkZ1bmN0aW9uYWxpdHlTdXBwb3J0ICAgMQogICAgICBMb3dlc3QgZnVsbHktZnVu
-Y3Rpb25hbCBkZXZpY2Ugc3BlZWQgaXMgRnVsbCBTcGVlZCAoMTJNYnBzKQogICAgYlUxRGV2
-RXhpdExhdCAgICAgICAgICAgNCBtaWNybyBzZWNvbmRzCiAgICBiVTJEZXZFeGl0TGF0ICAg
-ICAgICAgMjMxIG1pY3JvIHNlY29uZHMKSHViIERlc2NyaXB0b3I6CiAgYkxlbmd0aCAgICAg
-ICAgICAgICAgMTIKICBiRGVzY3JpcHRvclR5cGUgICAgICA0MgogIG5OYnJQb3J0cyAgICAg
-ICAgICAgICA0CiAgd0h1YkNoYXJhY3RlcmlzdGljIDB4MDAwOQogICAgUGVyLXBvcnQgcG93
-ZXIgc3dpdGNoaW5nCiAgICBQZXItcG9ydCBvdmVyY3VycmVudCBwcm90ZWN0aW9uCiAgYlB3
-ck9uMlB3ckdvb2QgICAgICAgNTAgKiAyIG1pbGxpIHNlY29uZHMKICBiSHViQ29udHJDdXJy
-ZW50ICAgICAgMCBtaWxsaSBBbXBlcmUKICBiSHViRGVjTGF0ICAgICAgICAgIDAuMCBtaWNy
-byBzZWNvbmRzCiAgd0h1YkRlbGF5ICAgICAgICAgICAgIDAgbmFubyBzZWNvbmRzCiAgRGV2
-aWNlUmVtb3ZhYmxlICAgIDB4MDAKIEh1YiBQb3J0IFN0YXR1czoKICAgUG9ydCAxOiAwMDAw
-LjAyMDMgNUdicHMgcG93ZXIgVTAgZW5hYmxlIGNvbm5lY3QKICAgUG9ydCAyOiAwMDAwLjAy
-MDMgNUdicHMgcG93ZXIgVTAgZW5hYmxlIGNvbm5lY3QKICAgUG9ydCAzOiAwMDAwLjAyYjAg
-NUdicHMgcG93ZXIgUnguRGV0ZWN0IFJFU0VUCiAgIFBvcnQgNDogMDAwMC4wMmIwIDVHYnBz
-IHBvd2VyIFJ4LkRldGVjdCBSRVNFVApEZXZpY2UgU3RhdHVzOiAgICAgMHgwMDAxCiAgU2Vs
-ZiBQb3dlcmVkCgpCdXMgMDAyIERldmljZSAwMDI6IElEIDEyNWY6YTg4YSBBLURBVEEgVGVj
-aG5vbG9neSBDby4sIEx0ZC4gU0Q2MDBRCk5lZ290aWF0ZWQgc3BlZWQ6IFN1cGVyU3BlZWQg
-KDVHYnBzKQpEZXZpY2UgRGVzY3JpcHRvcjoKICBiTGVuZ3RoICAgICAgICAgICAgICAgIDE4
-CiAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgMQogIGJjZFVTQiAgICAgICAgICAgICAgIDMu
-MDAKICBiRGV2aWNlQ2xhc3MgICAgICAgICAgICAwIFt1bmtub3duXQogIGJEZXZpY2VTdWJD
-bGFzcyAgICAgICAgIDAgW3Vua25vd25dCiAgYkRldmljZVByb3RvY29sICAgICAgICAgMCAK
-ICBiTWF4UGFja2V0U2l6ZTAgICAgICAgICA5CiAgaWRWZW5kb3IgICAgICAgICAgIDB4MTI1
-ZiBBLURBVEEgVGVjaG5vbG9neSBDby4sIEx0ZC4KICBpZFByb2R1Y3QgICAgICAgICAgMHhh
-ODhhIFNENjAwUQogIGJjZERldmljZSAgICAgICAgICAgOTMuMDQKICBpTWFudWZhY3R1cmVy
-ICAgICAgICAgICAxIEFEQVRBCiAgaVByb2R1Y3QgICAgICAgICAgICAgICAgMiBTRDYwMFEK
-ICBpU2VyaWFsICAgICAgICAgICAgICAgICAzIFtSRURBQ1RFRF0KICBiTnVtQ29uZmlndXJh
-dGlvbnMgICAgICAxCiAgQ29uZmlndXJhdGlvbiBEZXNjcmlwdG9yOgogICAgYkxlbmd0aCAg
-ICAgICAgICAgICAgICAgOQogICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgMgogICAgd1Rv
-dGFsTGVuZ3RoICAgICAgIDB4MDA3OQogICAgYk51bUludGVyZmFjZXMgICAgICAgICAgMQog
-ICAgYkNvbmZpZ3VyYXRpb25WYWx1ZSAgICAgMQogICAgaUNvbmZpZ3VyYXRpb24gICAgICAg
-ICAgMCAKICAgIGJtQXR0cmlidXRlcyAgICAgICAgIDB4ODAKICAgICAgKEJ1cyBQb3dlcmVk
-KQogICAgTWF4UG93ZXIgICAgICAgICAgICAgIDg5Nm1BCiAgICBJbnRlcmZhY2UgRGVzY3Jp
-cHRvcjoKICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgOQogICAgICBiRGVzY3JpcHRv
-clR5cGUgICAgICAgICA0CiAgICAgIGJJbnRlcmZhY2VOdW1iZXIgICAgICAgIDAKICAgICAg
-YkFsdGVybmF0ZVNldHRpbmcgICAgICAgMAogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAg
-ICAyCiAgICAgIGJJbnRlcmZhY2VDbGFzcyAgICAgICAgIDggTWFzcyBTdG9yYWdlCiAgICAg
-IGJJbnRlcmZhY2VTdWJDbGFzcyAgICAgIDYgU0NTSQogICAgICBiSW50ZXJmYWNlUHJvdG9j
-b2wgICAgIDgwIEJ1bGstT25seQogICAgICBpSW50ZXJmYWNlICAgICAgICAgICAgICAwIAog
-ICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOgogICAgICAgIGJMZW5ndGggICAgICAgICAgICAg
-ICAgIDcKICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA1CiAgICAgICAgYkVuZHBv
-aW50QWRkcmVzcyAgICAgMHg4MSAgRVAgMSBJTgogICAgICAgIGJtQXR0cmlidXRlcyAgICAg
-ICAgICAgIDIKICAgICAgICAgIFRyYW5zZmVyIFR5cGUgICAgICAgICAgICBCdWxrCiAgICAg
-ICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQogICAgICAgICAgVXNhZ2UgVHlw
-ZSAgICAgICAgICAgICAgIERhdGEKICAgICAgICB3TWF4UGFja2V0U2l6ZSAgICAgMHgwNDAw
-ICAxeCAxMDI0IGJ5dGVzCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgMAogICAg
-ICAgIGJNYXhCdXJzdCAgICAgICAgICAgICAgMTUKICAgICAgRW5kcG9pbnQgRGVzY3JpcHRv
-cjoKICAgICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3CiAgICAgICAgYkRlc2NyaXB0
-b3JUeXBlICAgICAgICAgNQogICAgICAgIGJFbmRwb2ludEFkZHJlc3MgICAgIDB4MDIgIEVQ
-IDIgT1VUCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAgMgogICAgICAgICAgVHJh
-bnNmZXIgVHlwZSAgICAgICAgICAgIEJ1bGsKICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAg
-ICAgICAgICBOb25lCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQog
-ICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAweDA0MDAgIDF4IDEwMjQgYnl0ZXMKICAgICAg
-ICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwCiAgICAgICAgYk1heEJ1cnN0ICAgICAgICAg
-ICAgICAxNQogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6CiAgICAgIGJMZW5ndGggICAgICAg
-ICAgICAgICAgIDkKICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNAogICAgICBiSW50
-ZXJmYWNlTnVtYmVyICAgICAgICAwCiAgICAgIGJBbHRlcm5hdGVTZXR0aW5nICAgICAgIDEK
-ICAgICAgYk51bUVuZHBvaW50cyAgICAgICAgICAgNAogICAgICBiSW50ZXJmYWNlQ2xhc3Mg
-ICAgICAgICA4IE1hc3MgU3RvcmFnZQogICAgICBiSW50ZXJmYWNlU3ViQ2xhc3MgICAgICA2
-IFNDU0kKICAgICAgYkludGVyZmFjZVByb3RvY29sICAgICA5OCBVU0IgQXR0YWNoZWQgU0NT
-SQogICAgICBpSW50ZXJmYWNlICAgICAgICAgICAgICAwIAogICAgICBFbmRwb2ludCBEZXNj
-cmlwdG9yOgogICAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcKICAgICAgICBiRGVz
-Y3JpcHRvclR5cGUgICAgICAgICA1CiAgICAgICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHgw
-MSAgRVAgMSBPVVQKICAgICAgICBibUF0dHJpYnV0ZXMgICAgICAgICAgICAyCiAgICAgICAg
-ICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgQnVsawogICAgICAgICAgU3luY2ggVHlwZSAg
-ICAgICAgICAgICAgIE5vbmUKICAgICAgICAgIFVzYWdlIFR5cGUgICAgICAgICAgICAgICBE
-YXRhCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRlcwog
-ICAgICAgIGJJbnRlcnZhbCAgICAgICAgICAgICAgIDAKICAgICAgICBiTWF4QnVyc3QgICAg
-ICAgICAgICAgICAwCiAgICAgICAgQ29tbWFuZCBwaXBlICgweDAxKQogICAgICBFbmRwb2lu
-dCBEZXNjcmlwdG9yOgogICAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcKICAgICAg
-ICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA1CiAgICAgICAgYkVuZHBvaW50QWRkcmVzcyAg
-ICAgMHg4MiAgRVAgMiBJTgogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDIKICAg
-ICAgICAgIFRyYW5zZmVyIFR5cGUgICAgICAgICAgICBCdWxrCiAgICAgICAgICBTeW5jaCBU
-eXBlICAgICAgICAgICAgICAgTm9uZQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAgICAg
-ICAgIERhdGEKICAgICAgICB3TWF4UGFja2V0U2l6ZSAgICAgMHgwNDAwICAxeCAxMDI0IGJ5
-dGVzCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgMAogICAgICAgIGJNYXhCdXJz
-dCAgICAgICAgICAgICAgIDAKICAgICAgICBNYXhTdHJlYW1zICAgICAgICAgICAgIDMyCiAg
-ICAgICAgU3RhdHVzIHBpcGUgKDB4MDIpCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6CiAg
-ICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNwogICAgICAgIGJEZXNjcmlwdG9yVHlw
-ZSAgICAgICAgIDUKICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDgzICBFUCAzIElO
-CiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAgMgogICAgICAgICAgVHJhbnNmZXIg
-VHlwZSAgICAgICAgICAgIEJ1bGsKICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAg
-ICBOb25lCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQogICAgICAg
-IHdNYXhQYWNrZXRTaXplICAgICAweDA0MDAgIDF4IDEwMjQgYnl0ZXMKICAgICAgICBiSW50
-ZXJ2YWwgICAgICAgICAgICAgICAwCiAgICAgICAgYk1heEJ1cnN0ICAgICAgICAgICAgICAx
-NAogICAgICAgIE1heFN0cmVhbXMgICAgICAgICAgICAgMzIKICAgICAgICBEYXRhLWluIHBp
-cGUgKDB4MDMpCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6CiAgICAgICAgYkxlbmd0aCAg
-ICAgICAgICAgICAgICAgNwogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUKICAg
-ICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDA0ICBFUCA0IE9VVAogICAgICAgIGJtQXR0
-cmlidXRlcyAgICAgICAgICAgIDIKICAgICAgICAgIFRyYW5zZmVyIFR5cGUgICAgICAgICAg
-ICBCdWxrCiAgICAgICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQogICAgICAg
-ICAgVXNhZ2UgVHlwZSAgICAgICAgICAgICAgIERhdGEKICAgICAgICB3TWF4UGFja2V0U2l6
-ZSAgICAgMHgwNDAwICAxeCAxMDI0IGJ5dGVzCiAgICAgICAgYkludGVydmFsICAgICAgICAg
-ICAgICAgMAogICAgICAgIGJNYXhCdXJzdCAgICAgICAgICAgICAgIDcKICAgICAgICBNYXhT
-dHJlYW1zICAgICAgICAgICAgIDMyCiAgICAgICAgRGF0YS1vdXQgcGlwZSAoMHgwNCkKQmlu
-YXJ5IE9iamVjdCBTdG9yZSBEZXNjcmlwdG9yOgogIGJMZW5ndGggICAgICAgICAgICAgICAg
-IDUKICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE1CiAgd1RvdGFsTGVuZ3RoICAgICAgIDB4
-MDAxNgogIGJOdW1EZXZpY2VDYXBzICAgICAgICAgIDIKICBVU0IgMi4wIEV4dGVuc2lvbiBE
-ZXZpY2UgQ2FwYWJpbGl0eToKICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcKICAgIGJE
-ZXNjcmlwdG9yVHlwZSAgICAgICAgMTYKICAgIGJEZXZDYXBhYmlsaXR5VHlwZSAgICAgIDIK
-ICAgIGJtQXR0cmlidXRlcyAgIDB4MDAwMDBmMGUKICAgICAgQkVTTCBMaW5rIFBvd2VyIE1h
-bmFnZW1lbnQgKExQTSkgU3VwcG9ydGVkCiAgICAgIEJhc2VsaW5lIEJFU0wgdmFsdWUgIDEw
-MDAwIHVzIAogIFN1cGVyU3BlZWQgVVNCIERldmljZSBDYXBhYmlsaXR5OgogICAgYkxlbmd0
-aCAgICAgICAgICAgICAgICAxMAogICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAxNgogICAg
-YkRldkNhcGFiaWxpdHlUeXBlICAgICAgMwogICAgYm1BdHRyaWJ1dGVzICAgICAgICAgMHgw
-MAogICAgd1NwZWVkc1N1cHBvcnRlZCAgIDB4MDAwZQogICAgICBEZXZpY2UgY2FuIG9wZXJh
-dGUgYXQgRnVsbCBTcGVlZCAoMTJNYnBzKQogICAgICBEZXZpY2UgY2FuIG9wZXJhdGUgYXQg
-SGlnaCBTcGVlZCAoNDgwTWJwcykKICAgICAgRGV2aWNlIGNhbiBvcGVyYXRlIGF0IFN1cGVy
-U3BlZWQgKDVHYnBzKQogICAgYkZ1bmN0aW9uYWxpdHlTdXBwb3J0ICAgMQogICAgICBMb3dl
-c3QgZnVsbHktZnVuY3Rpb25hbCBkZXZpY2Ugc3BlZWQgaXMgRnVsbCBTcGVlZCAoMTJNYnBz
-KQogICAgYlUxRGV2RXhpdExhdCAgICAgICAgICAxMCBtaWNybyBzZWNvbmRzCiAgICBiVTJE
-ZXZFeGl0TGF0ICAgICAgICAgIDMyIG1pY3JvIHNlY29uZHMKRGV2aWNlIFN0YXR1czogICAg
-IDB4MDAwYwogIChCdXMgUG93ZXJlZCkKICBVMSBFbmFibGVkCiAgVTIgRW5hYmxlZAoKQnVz
-IDAwMiBEZXZpY2UgMDA0OiBJRCAwNWUzOjA2MjYgR2VuZXN5cyBMb2dpYywgSW5jLiBIdWIK
-TmVnb3RpYXRlZCBzcGVlZDogU3VwZXJTcGVlZCAoNUdicHMpCkRldmljZSBEZXNjcmlwdG9y
-OgogIGJMZW5ndGggICAgICAgICAgICAgICAgMTgKICBiRGVzY3JpcHRvclR5cGUgICAgICAg
-ICAxCiAgYmNkVVNCICAgICAgICAgICAgICAgMy4yMAogIGJEZXZpY2VDbGFzcyAgICAgICAg
-ICAgIDkgSHViCiAgYkRldmljZVN1YkNsYXNzICAgICAgICAgMCBbdW5rbm93bl0KICBiRGV2
-aWNlUHJvdG9jb2wgICAgICAgICAzIAogIGJNYXhQYWNrZXRTaXplMCAgICAgICAgIDkKICBp
-ZFZlbmRvciAgICAgICAgICAgMHgwNWUzIEdlbmVzeXMgTG9naWMsIEluYy4KICBpZFByb2R1
-Y3QgICAgICAgICAgMHgwNjI2IEh1YgogIGJjZERldmljZSAgICAgICAgICAgIDYuNjMKICBp
-TWFudWZhY3R1cmVyICAgICAgICAgICAxIEdlbmVzeXNMb2dpYwogIGlQcm9kdWN0ICAgICAg
-ICAgICAgICAgIDIgVVNCMy4xIEh1YgogIGlTZXJpYWwgICAgICAgICAgICAgICAgIDAgCiAg
-Yk51bUNvbmZpZ3VyYXRpb25zICAgICAgMQogIENvbmZpZ3VyYXRpb24gRGVzY3JpcHRvcjoK
-ICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDkKICAgIGJEZXNjcmlwdG9yVHlwZSAgICAg
-ICAgIDIKICAgIHdUb3RhbExlbmd0aCAgICAgICAweDAwMWYKICAgIGJOdW1JbnRlcmZhY2Vz
-ICAgICAgICAgIDEKICAgIGJDb25maWd1cmF0aW9uVmFsdWUgICAgIDEKICAgIGlDb25maWd1
-cmF0aW9uICAgICAgICAgIDAgCiAgICBibUF0dHJpYnV0ZXMgICAgICAgICAweGUwCiAgICAg
-IFNlbGYgUG93ZXJlZAogICAgICBSZW1vdGUgV2FrZXVwCiAgICBNYXhQb3dlciAgICAgICAg
-ICAgICAgICAwbUEKICAgIEludGVyZmFjZSBEZXNjcmlwdG9yOgogICAgICBiTGVuZ3RoICAg
-ICAgICAgICAgICAgICA5CiAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDQKICAgICAg
-YkludGVyZmFjZU51bWJlciAgICAgICAgMAogICAgICBiQWx0ZXJuYXRlU2V0dGluZyAgICAg
-ICAwCiAgICAgIGJOdW1FbmRwb2ludHMgICAgICAgICAgIDEKICAgICAgYkludGVyZmFjZUNs
-YXNzICAgICAgICAgOSBIdWIKICAgICAgYkludGVyZmFjZVN1YkNsYXNzICAgICAgMCBbdW5r
-bm93bl0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAgICAgMCBGdWxsIHNwZWVkIChvciBy
-b290KSBodWIKICAgICAgaUludGVyZmFjZSAgICAgICAgICAgICAgMSBHZW5lc3lzTG9naWMK
-ICAgICAgRW5kcG9pbnQgRGVzY3JpcHRvcjoKICAgICAgICBiTGVuZ3RoICAgICAgICAgICAg
-ICAgICA3CiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQogICAgICAgIGJFbmRw
-b2ludEFkZHJlc3MgICAgIDB4ODEgIEVQIDEgSU4KICAgICAgICBibUF0dHJpYnV0ZXMgICAg
-ICAgICAgIDE5CiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgSW50ZXJydXB0
-CiAgICAgICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQogICAgICAgICAgVXNh
-Z2UgVHlwZSAgICAgICAgICAgICAgIEZlZWRiYWNrCiAgICAgICAgd01heFBhY2tldFNpemUg
-ICAgIDB4MDAwMiAgMXggMiBieXRlcwogICAgICAgIGJJbnRlcnZhbCAgICAgICAgICAgICAg
-IDgKICAgICAgICBiTWF4QnVyc3QgICAgICAgICAgICAgICAwCiAgICAgICAgd0J5dGVzUGVy
-SW50ZXJ2YWwgICAgICAgMgpCaW5hcnkgT2JqZWN0IFN0b3JlIERlc2NyaXB0b3I6CiAgYkxl
-bmd0aCAgICAgICAgICAgICAgICAgNQogIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTUKICB3
-VG90YWxMZW5ndGggICAgICAgMHgwMDJhCiAgYk51bURldmljZUNhcHMgICAgICAgICAgMwog
-IFVTQiAyLjAgRXh0ZW5zaW9uIERldmljZSBDYXBhYmlsaXR5OgogICAgYkxlbmd0aCAgICAg
-ICAgICAgICAgICAgNwogICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAxNgogICAgYkRldkNh
-cGFiaWxpdHlUeXBlICAgICAgMgogICAgYm1BdHRyaWJ1dGVzICAgMHgwMDAwMDAwNgogICAg
-ICBCRVNMIExpbmsgUG93ZXIgTWFuYWdlbWVudCAoTFBNKSBTdXBwb3J0ZWQKICBTdXBlclNw
-ZWVkIFVTQiBEZXZpY2UgQ2FwYWJpbGl0eToKICAgIGJMZW5ndGggICAgICAgICAgICAgICAg
-MTAKICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTYKICAgIGJEZXZDYXBhYmlsaXR5VHlw
-ZSAgICAgIDMKICAgIGJtQXR0cmlidXRlcyAgICAgICAgIDB4MDAKICAgIHdTcGVlZHNTdXBw
-b3J0ZWQgICAweDAwMGUKICAgICAgRGV2aWNlIGNhbiBvcGVyYXRlIGF0IEZ1bGwgU3BlZWQg
-KDEyTWJwcykKICAgICAgRGV2aWNlIGNhbiBvcGVyYXRlIGF0IEhpZ2ggU3BlZWQgKDQ4ME1i
-cHMpCiAgICAgIERldmljZSBjYW4gb3BlcmF0ZSBhdCBTdXBlclNwZWVkICg1R2JwcykKICAg
-IGJGdW5jdGlvbmFsaXR5U3VwcG9ydCAgIDEKICAgICAgTG93ZXN0IGZ1bGx5LWZ1bmN0aW9u
-YWwgZGV2aWNlIHNwZWVkIGlzIEZ1bGwgU3BlZWQgKDEyTWJwcykKICAgIGJVMURldkV4aXRM
-YXQgICAgICAgICAgIDggbWljcm8gc2Vjb25kcwogICAgYlUyRGV2RXhpdExhdCAgICAgICAg
-IDE5MCBtaWNybyBzZWNvbmRzCiAgQ29udGFpbmVyIElEIERldmljZSBDYXBhYmlsaXR5Ogog
-ICAgYkxlbmd0aCAgICAgICAgICAgICAgICAyMAogICAgYkRlc2NyaXB0b3JUeXBlICAgICAg
-ICAxNgogICAgYkRldkNhcGFiaWxpdHlUeXBlICAgICAgNAogICAgYlJlc2VydmVkICAgICAg
-ICAgICAgICAgMAogICAgQ29udGFpbmVySUQgICAgICAgICAgICAgezlmNGI1NmYwLTFkZjYt
-MTFlMC1hYzY0LTA4MDAyMDBjOWE2Nn0KSHViIERlc2NyaXB0b3I6CiAgYkxlbmd0aCAgICAg
-ICAgICAgICAgMTIKICBiRGVzY3JpcHRvclR5cGUgICAgICA0MgogIG5OYnJQb3J0cyAgICAg
-ICAgICAgICA0CiAgd0h1YkNoYXJhY3RlcmlzdGljIDB4MDAwMAogICAgR2FuZ2VkIHBvd2Vy
-IHN3aXRjaGluZwogICAgR2FuZ2VkIG92ZXJjdXJyZW50IHByb3RlY3Rpb24KICBiUHdyT24y
-UHdyR29vZCAgICAgICAgMCAqIDIgbWlsbGkgc2Vjb25kcwogIGJIdWJDb250ckN1cnJlbnQg
-ICAgNTc2IG1pbGxpIEFtcGVyZQogIGJIdWJEZWNMYXQgICAgICAgICAgMC40IG1pY3JvIHNl
-Y29uZHMKICB3SHViRGVsYXkgICAgICAgICAgMTUwOCBuYW5vIHNlY29uZHMKICBEZXZpY2VS
-ZW1vdmFibGUgICAgMHgwMAogSHViIFBvcnQgU3RhdHVzOgogICBQb3J0IDE6IDAwMDAuMDJh
-MCA1R2JwcyBwb3dlciBSeC5EZXRlY3QKICAgUG9ydCAyOiAwMDAwLjAyMDMgNUdicHMgcG93
-ZXIgVTAgZW5hYmxlIGNvbm5lY3QKICAgUG9ydCAzOiAwMDAwLjAyYTAgNUdicHMgcG93ZXIg
-UnguRGV0ZWN0CiAgIFBvcnQgNDogMDAwMC4wMmEwIDVHYnBzIHBvd2VyIFJ4LkRldGVjdApE
-ZXZpY2UgU3RhdHVzOiAgICAgMHgwMDBkCiAgU2VsZiBQb3dlcmVkCiAgVTEgRW5hYmxlZAog
-IFUyIEVuYWJsZWQKCkJ1cyAwMDIgRGV2aWNlIDAwNTogSUQgMDc4MTo1NTkxIFNhbkRpc2sg
-Q29ycC4gVWx0cmEgRmxhaXIKTmVnb3RpYXRlZCBzcGVlZDogU3VwZXJTcGVlZCAoNUdicHMp
-CkRldmljZSBEZXNjcmlwdG9yOgogIGJMZW5ndGggICAgICAgICAgICAgICAgMTgKICBiRGVz
-Y3JpcHRvclR5cGUgICAgICAgICAxCiAgYmNkVVNCICAgICAgICAgICAgICAgMy4yMAogIGJE
-ZXZpY2VDbGFzcyAgICAgICAgICAgIDAgW3Vua25vd25dCiAgYkRldmljZVN1YkNsYXNzICAg
-ICAgICAgMCBbdW5rbm93bl0KICBiRGV2aWNlUHJvdG9jb2wgICAgICAgICAwIAogIGJNYXhQ
-YWNrZXRTaXplMCAgICAgICAgIDkKICBpZFZlbmRvciAgICAgICAgICAgMHgwNzgxIFNhbkRp
-c2sgQ29ycC4KICBpZFByb2R1Y3QgICAgICAgICAgMHg1NTkxIFVsdHJhIEZsYWlyCiAgYmNk
-RGV2aWNlICAgICAgICAgICAgMS4wMAogIGlNYW51ZmFjdHVyZXIgICAgICAgICAgIDEgIFVT
-QgogIGlQcm9kdWN0ICAgICAgICAgICAgICAgIDIgIFNhbkRpc2sgMy4yR2VuMQogIGlTZXJp
-YWwgICAgICAgICAgICAgICAgIDMgW1JFREFDVEVEXQogIGJOdW1Db25maWd1cmF0aW9ucyAg
-ICAgIDEKICBDb25maWd1cmF0aW9uIERlc2NyaXB0b3I6CiAgICBiTGVuZ3RoICAgICAgICAg
-ICAgICAgICA5CiAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICAyCiAgICB3VG90YWxMZW5n
-dGggICAgICAgMHgwMDJjCiAgICBiTnVtSW50ZXJmYWNlcyAgICAgICAgICAxCiAgICBiQ29u
-ZmlndXJhdGlvblZhbHVlICAgICAxCiAgICBpQ29uZmlndXJhdGlvbiAgICAgICAgICAwIAog
-ICAgYm1BdHRyaWJ1dGVzICAgICAgICAgMHg4MAogICAgICAoQnVzIFBvd2VyZWQpCiAgICBN
-YXhQb3dlciAgICAgICAgICAgICAgODk2bUEKICAgIEludGVyZmFjZSBEZXNjcmlwdG9yOgog
-ICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5CiAgICAgIGJEZXNjcmlwdG9yVHlwZSAg
-ICAgICAgIDQKICAgICAgYkludGVyZmFjZU51bWJlciAgICAgICAgMAogICAgICBiQWx0ZXJu
-YXRlU2V0dGluZyAgICAgICAwCiAgICAgIGJOdW1FbmRwb2ludHMgICAgICAgICAgIDIKICAg
-ICAgYkludGVyZmFjZUNsYXNzICAgICAgICAgOCBNYXNzIFN0b3JhZ2UKICAgICAgYkludGVy
-ZmFjZVN1YkNsYXNzICAgICAgNiBTQ1NJCiAgICAgIGJJbnRlcmZhY2VQcm90b2NvbCAgICAg
-ODAgQnVsay1Pbmx5CiAgICAgIGlJbnRlcmZhY2UgICAgICAgICAgICAgIDAgCiAgICAgIEVu
-ZHBvaW50IERlc2NyaXB0b3I6CiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNwog
-ICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUKICAgICAgICBiRW5kcG9pbnRBZGRy
-ZXNzICAgICAweDgxICBFUCAxIElOCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAg
-MgogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEJ1bGsKICAgICAgICAgIFN5
-bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAg
-ICAgICAgICAgRGF0YQogICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAweDA0MDAgIDF4IDEw
-MjQgYnl0ZXMKICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwCiAgICAgICAgYk1h
-eEJ1cnN0ICAgICAgICAgICAgICAgMQogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOgogICAg
-ICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcKICAgICAgICBiRGVzY3JpcHRvclR5cGUg
-ICAgICAgICA1CiAgICAgICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHgwMiAgRVAgMiBPVVQK
-ICAgICAgICBibUF0dHJpYnV0ZXMgICAgICAgICAgICAyCiAgICAgICAgICBUcmFuc2ZlciBU
-eXBlICAgICAgICAgICAgQnVsawogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAgICAgICAg
-IE5vbmUKICAgICAgICAgIFVzYWdlIFR5cGUgICAgICAgICAgICAgICBEYXRhCiAgICAgICAg
-d01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRlcwogICAgICAgIGJJbnRl
-cnZhbCAgICAgICAgICAgICAgIDAKICAgICAgICBiTWF4QnVyc3QgICAgICAgICAgICAgIDE1
-CkJpbmFyeSBPYmplY3QgU3RvcmUgRGVzY3JpcHRvcjoKICBiTGVuZ3RoICAgICAgICAgICAg
-ICAgICA1CiAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAxNQogIHdUb3RhbExlbmd0aCAgICAg
-ICAweDAwMTYKICBiTnVtRGV2aWNlQ2FwcyAgICAgICAgICAyCiAgVVNCIDIuMCBFeHRlbnNp
-b24gRGV2aWNlIENhcGFiaWxpdHk6CiAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3CiAg
-ICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE2CiAgICBiRGV2Q2FwYWJpbGl0eVR5cGUgICAg
-ICAyCiAgICBibUF0dHJpYnV0ZXMgICAweDAwMDAwMDAyCiAgICAgIEhJUkQgTGluayBQb3dl
-ciBNYW5hZ2VtZW50IChMUE0pIFN1cHBvcnRlZAogIFN1cGVyU3BlZWQgVVNCIERldmljZSBD
-YXBhYmlsaXR5OgogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAxMAogICAgYkRlc2NyaXB0
-b3JUeXBlICAgICAgICAxNgogICAgYkRldkNhcGFiaWxpdHlUeXBlICAgICAgMwogICAgYm1B
-dHRyaWJ1dGVzICAgICAgICAgMHgwMAogICAgd1NwZWVkc1N1cHBvcnRlZCAgIDB4MDAwZQog
-ICAgICBEZXZpY2UgY2FuIG9wZXJhdGUgYXQgRnVsbCBTcGVlZCAoMTJNYnBzKQogICAgICBE
-ZXZpY2UgY2FuIG9wZXJhdGUgYXQgSGlnaCBTcGVlZCAoNDgwTWJwcykKICAgICAgRGV2aWNl
-IGNhbiBvcGVyYXRlIGF0IFN1cGVyU3BlZWQgKDVHYnBzKQogICAgYkZ1bmN0aW9uYWxpdHlT
-dXBwb3J0ICAgMQogICAgICBMb3dlc3QgZnVsbHktZnVuY3Rpb25hbCBkZXZpY2Ugc3BlZWQg
-aXMgRnVsbCBTcGVlZCAoMTJNYnBzKQogICAgYlUxRGV2RXhpdExhdCAgICAgICAgICAxMCBt
-aWNybyBzZWNvbmRzCiAgICBiVTJEZXZFeGl0TGF0ICAgICAgICAgMjU2IG1pY3JvIHNlY29u
-ZHMKRGV2aWNlIFN0YXR1czogICAgIDB4MDAwMAogIChCdXMgUG93ZXJlZCkK
-
---------------IxIh208z9b01eJ2I9Naod0l8--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
