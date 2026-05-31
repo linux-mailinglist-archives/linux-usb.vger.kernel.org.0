@@ -1,56 +1,55 @@
-Return-Path: <linux-usb+bounces-38204-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38206-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sI6/OLmiHGrjQwkAu9opvQ
-	(envelope-from <linux-usb+bounces-38204-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 23:06:01 +0200
+	id kAGpM7WiHGrjQwkAu9opvQ
+	(envelope-from <linux-usb+bounces-38206-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 23:05:57 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 413C7617F58
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 23:06:00 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 690D1617F49
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 23:05:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 06C2A301AD15
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 21:05:55 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AB4CF30054CC
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 21:05:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB28368D7A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29D436C9EB;
 	Sun, 31 May 2026 21:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="crx0ncgT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKdrk9W6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091CB2DCF6C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A37A34B404;
 	Sun, 31 May 2026 21:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780261553; cv=none; b=X0gg+xW9afUIDe0PDGQzLQPTj0KcO60dqRtzsUzzu1VcA1ulLWMgC+2W0nB90pkBEyAmPgb8Z5hZ2QlbMc9oxrBAjPuRL9RB1YVp89SeWDZOZ174kDkTevxQPq7fyWB/yIn3HMC4DZIbNAOu8ZKXC1SfCySIdATR+3KGRHyglT0=
+	t=1780261553; cv=none; b=PQjebcubnGUW2G+fEUQjSinkMw6/BJOClVOH/woSffeFSOVN1jhg/ZF7If0DfSx02I7ZoptEaS2sm4AEx7qQxJcgEZ1vhA+e5EbO7DDUV23R6UOL7axDl//PzHROazxv4Wp2DgBKcM60lVOsBBaHD3qjbaYSwbBJnGCCfI+kH6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780261553; c=relaxed/simple;
-	bh=9xHmw36KDmoY3u+JBaKiwE1xkfzVDG8gdznwLgAwKC4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GMf+aMiEYRT4z3LbLd/iVPt6nDl97idx0LhJpEiXmS9gVdLB8fAiZti00DW+xM3Ha9jgjVBHPLHzKgXcasjLp4TLgP5/ovqV+xgww7aHGLdFaNBruPgluND/fd7PZV0AuyqYK6kMNvfgZQk/enWqF05OLQfZxgyf7ZMAlOwmoI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=crx0ncgT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D8282C2BCB4;
+	bh=+gtme44HgV3+0cY0fNPZva52Dkwj7je2hlaTW5P9DVU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=V7FJ5ms3mmHmoM4w2rHG0LEgWwN2WUuwbgjCmxwiJ4vIj8K+ecStETkmBtZy4FVTde2uupLj841Oo/Bm6WfyvV7e7yXUKmlMXC1Jai6ProHU0v4WomH+lO8OjBzPLrli36oqgk2xy+NeIgg6XQUueQwWKsuPVhZfTIOUWWVX9NI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKdrk9W6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F0B52C2BCF4;
 	Sun, 31 May 2026 21:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1780261552;
-	bh=9xHmw36KDmoY3u+JBaKiwE1xkfzVDG8gdznwLgAwKC4=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=crx0ncgTpxfXevAb2frzCNwLmZDlNSC++E1s/x3yHdWMdFcy5C+XW/wYj04ciCnHJ
-	 Al3kkmEv5fc6KjNo+2WlcPt9Mm4ATevuk3LosRIUNtv88rHNQrWLQYXD/UT+RGODsn
-	 jPFIcBnA16cYwRfYuIhLDTWPdVsNYb4TTG0Rh2UQPkS7MlBiSAdg4IOiBhmt3gw901
-	 YXYP/m5Ow29rZbFJ6UWs/PRFgZ2vTavrelieifMdPnNyLaj5G23McdhoPrwlKlcQSb
-	 Me+80FrmTVl73xbugvo2ARGorUthIQaig2pNfzCRqQ2Do0IMH54hRZltDzVybq2PrL
-	 r8QO1pNkpCeyw==
+	s=k20201202; t=1780261553;
+	bh=+gtme44HgV3+0cY0fNPZva52Dkwj7je2hlaTW5P9DVU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=IKdrk9W6L4eUJwNKBbYFpzoklAoF/W++dIAcDOEcBPOuTXRB7U2adGKVhYwGZPqpZ
+	 FArn5mj2m6oXN5aY44bhkcwjc4amQh7ObrYvOwuaxIgEPxbKLQ5bPmSJ5MGUhDmajI
+	 6KavCjLR8e/2kwXqLdIR4Y+JYuiG4vl1fbvGYCczN5YNY424iOFva1dMXLEr3RHXpO
+	 rkRRBdcwqrZ1QWm2Vbf6n2qfV7NoBuddduYTtwXYdvxx4z1ukWv0dQdRzXt7Za881c
+	 Hh8O6a57RtWzpKFGo/QSWOk/CtEDDQTvETkgA4oK1B7gPIjGohBnSA4nVeB7pGBjyt
+	 yhY9i6NaH0Q4A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D04E2CD6E55;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD37CCD6E56;
 	Sun, 31 May 2026 21:05:52 +0000 (UTC)
 From: Gabriel Prostitis via B4 Relay <devnull+prostitisgabriel.gmail.com@kernel.org>
-Subject: [PATCH 0/2] USB: gadget: fix mm lifetime use-after-free in async
- read paths
-Date: Sun, 31 May 2026 23:04:39 +0200
-Message-Id: <20260531-mm-uaf-fix-v1-0-91571cc6ca46@gmail.com>
+Date: Sun, 31 May 2026 23:04:40 +0200
+Subject: [PATCH 1/2] USB: gadget: ffs: fix mm lifetime handling
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,19 +58,18 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGeiHGoC/yXM0QpAMBTG8VfRuXZqm6h5FbmY7eCooQ0peXfD5
- e+r739BpMAUoc4uCHRw5GVOkHkGdjTzQMguGZRQlSgLid7jbnrs+UQtnXbGGltpBemwBkrzF2v
- a33HvJrLbW4D7fgCpR8VlbgAAAA==
-X-Change-ID: 20260531-mm-uaf-fix-91d9dacac692
+Message-Id: <20260531-mm-uaf-fix-v1-1-91571cc6ca46@gmail.com>
+References: <20260531-mm-uaf-fix-v1-0-91571cc6ca46@gmail.com>
+In-Reply-To: <20260531-mm-uaf-fix-v1-0-91571cc6ca46@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Gabriel Prostitis <prostitisgabriel@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780261550; l=1813;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780261550; l=2293;
  i=prostitisgabriel@gmail.com; s=20260530; h=from:subject:message-id;
- bh=9xHmw36KDmoY3u+JBaKiwE1xkfzVDG8gdznwLgAwKC4=;
- b=RzkI0hNCePrSRxMfjkqz0VDak9y0kh1TjLp01zBROSZG5GOmfu5kQ/UY3ABwLLlrRPqZwbJyo
- TM/g2fRVhpyDkNQwz6n2H2yNaqyZJUf9fTOqf5X+TT3bHew4gu8F1wY
+ bh=la8smGq95XcSDzHNQL1zzeelJ5kGKb2oaQaJ/J86UgM=;
+ b=bWD7quM1JesXEp+CJMNyh3twqqiiU88cfzLM0iyn8a96yeZe3ocz+jYu/9YcFi5h+Bt91fSDv
+ ZuxZfjf8IzsB+A5i7SsBINrfyb1BOE9uHNsl8f/ZQ2QwMuLIf9Zmk00
 X-Developer-Key: i=prostitisgabriel@gmail.com; a=ed25519;
  pk=FwuU+O6ZnvvnFVA45nfqkGlhSmC1P64HLtxRgBebOuY=
 X-Endpoint-Received: by B4 Relay for prostitisgabriel@gmail.com/20260530
@@ -83,82 +81,121 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38204-lists,linux-usb=lfdr.de,prostitisgabriel.gmail.com];
+	TAGGED_FROM(0.00)[bounces-38206-lists,linux-usb=lfdr.de,prostitisgabriel.gmail.com];
 	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_REPLYTO(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
 	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	HAS_REPLYTO(0.00)[prostitisgabriel@gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.641];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.614];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCPT_COUNT_THREE(0.00)[4];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 413C7617F58
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 690D1617F49
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-There is a use-after-free in the USB gadget FunctionFS and legacy
-GadgetFS asynchronous read paths. Both implementations store
-current->mm in per-request state without taking a reference, and
-later use it in a workqueue context via kthread_use_mm().
+From: Gabriel Prostitis <prostitisgabriel@gmail.com>
 
-If the submitting task exits before the USB request completes,
-the stored mm_struct may be freed while a pending request still
-references it, leading to a use-after-free.
+io_data stores a pointer to the submitting task's mm_struct,
+but does not currently hold a reference to it while async
+requests are pending.
 
-The issue affects:
+This can result in a use-after-free if the task exits before
+completion handling finishes.
 
-- FunctionFS: drivers/usb/gadget/function/f_fs.c
-- GadgetFS legacy: drivers/usb/gadget/legacy/inode.c
-
-Fix this by taking a reference to mm_struct with mmgrab() when
-queueing the request and releasing it with mmdrop() after
-completion. Before using the saved mm_struct, acquire a temporary 
-reference with mmget_not_zero() to ensure it is still alive.
-
-The issue can be triggered by submitting asynchronous reads on
-OUT endpoints (e.g. via io_uring for FunctionFS) and exiting the
-submitting task before completion. This may result in memory
-corruption in the address space of another process if the freed
-mm_struct is reclaimed during the race window.
-
-KASAN reports confirm use-after-free in the workqueue completion
-path when accessing the stale mm_struct.
-
-Best regards,
-Gabriel
+Take a reference with mmgrab() when queuing the read request
+and release it with mmdrop() on request completion.
 
 Signed-off-by: Gabriel Prostitis <prostitisgabriel@gmail.com>
 ---
-Gabriel Prostitis (2):
-      USB: gadget: ffs: fix mm lifetime handling
-      USB: gadget: inode: fix mm lifetime handling
-
  drivers/usb/gadget/function/f_fs.c | 27 ++++++++++++++++++++-------
- drivers/usb/gadget/legacy/inode.c  | 17 +++++++++++++----
- 2 files changed, 33 insertions(+), 11 deletions(-)
----
-base-commit: 22d91cef94b5b86cff0d68ebfce7741740672704
-change-id: 20260531-mm-uaf-fix-91d9dacac692
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-Best regards,
---  
-Gabriel Prostitis <prostitisgabriel@gmail.com>
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 002c3441bea3..674f2fd5450f 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -864,9 +864,15 @@ static void ffs_user_copy_worker(struct work_struct *work)
+ 	bool kiocb_has_eventfd = io_data->kiocb->ki_flags & IOCB_EVENTFD;
+ 
+ 	if (io_data->read && ret > 0) {
+-		kthread_use_mm(io_data->mm);
+-		ret = ffs_copy_to_iter(io_data->buf, ret, &io_data->data);
+-		kthread_unuse_mm(io_data->mm);
++		if (mmget_not_zero(io_data->mm)) {
++			kthread_use_mm(io_data->mm);
++			ret = ffs_copy_to_iter(io_data->buf, ret, &io_data->data);
++			kthread_unuse_mm(io_data->mm);
++			mmput(io_data->mm);
++		} else {
++			ret = -EFAULT;
++		}
++		mmdrop(io_data->mm);
+ 	}
+ 
+ 	io_data->kiocb->ki_complete(io_data->kiocb, ret);
+@@ -1261,16 +1267,20 @@ static ssize_t ffs_epfile_write_iter(struct kiocb *kiocb, struct iov_iter *from)
+ 
+ 	kiocb->private = p;
+ 
+-	if (p->aio)
++	if (p->aio) {
++		mmgrab(p->mm);
+ 		kiocb_set_cancel_fn(kiocb, ffs_aio_cancel);
++	}
+ 
+ 	res = ffs_epfile_io(kiocb->ki_filp, p);
+ 	if (res == -EIOCBQUEUED)
+ 		return res;
+-	if (p->aio)
++	if (p->aio) {
++		mmdrop(p->mm);
+ 		kfree(p);
+-	else
++	} else {
+ 		*from = p->data;
++	}
+ 	return res;
+ }
+ 
+@@ -1305,14 +1315,17 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, struct iov_iter *to)
+ 
+ 	kiocb->private = p;
+ 
+-	if (p->aio)
++	if (p->aio) {
++		mmgrab(p->mm);
+ 		kiocb_set_cancel_fn(kiocb, ffs_aio_cancel);
++	}
+ 
+ 	res = ffs_epfile_io(kiocb->ki_filp, p);
+ 	if (res == -EIOCBQUEUED)
+ 		return res;
+ 
+ 	if (p->aio) {
++		mmdrop(p->mm);
+ 		kfree(p->to_free);
+ 		kfree(p);
+ 	} else {
+
+-- 
+2.54.0
 
 
 
