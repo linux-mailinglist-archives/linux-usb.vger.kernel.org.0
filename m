@@ -1,180 +1,326 @@
-Return-Path: <linux-usb+bounces-38189-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38190-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QbUDKZCSG2oZEQkAu9opvQ
-	(envelope-from <linux-usb+bounces-38189-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 03:44:48 +0200
+	id QG41MLDfG2rUGwkAu9opvQ
+	(envelope-from <linux-usb+bounces-38190-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 09:13:52 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE94614287
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 03:44:47 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6CD614CB5
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 09:13:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C96F2300F778
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 01:44:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E19043033FA9
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 07:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2CB935F60E;
-	Sun, 31 May 2026 01:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEDA349CDB;
+	Sun, 31 May 2026 07:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="me8Z/ozn"
+	dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b="E7yqv3Vf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m15590.qiye.163.com (mail-m15590.qiye.163.com [101.71.155.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE207260F
-	for <linux-usb@vger.kernel.org>; Sun, 31 May 2026 01:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755BB8C1F;
+	Sun, 31 May 2026 07:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780191882; cv=none; b=MGKXoltHUpopQ39CmG3xCl4Jr6axYMxfL3hbAYJnZMvCiqmwtYLCoJyMJ+KfEijluD6FCuDS/mgNkJbPeRDmmW2+dJVgzw/rpkyi9bonsv6/d3weK+TJFhDti/n3RRIaQUs2rUSueuxLrKlGYlVuPlOuvQGc7dqguv6FVPAzAlM=
+	t=1780211569; cv=none; b=Ao60ga/7bdHiqYmXq3xYBW6g8w1eIXK+RCpDmaVnrdpq4/I7jIJ4QymXBR4EEg+k6Cw2WLtVBMpsEqfg4yKyfIHQsqJ+WA4Xn/EDu4EACFnR+iSmHPWdTig3mjl1fYOM63/lLRFKEPhNuTdYZU4oaUMIB+q8LRQnoyAUSYyV5rQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780191882; c=relaxed/simple;
-	bh=vaLaKzH/CDQ1wX7xY9XpnFEjoCVut/yFH9WkPYJSSow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IznEOl0P6V/Ri7ttLockpxdzYtE/vnCXLfYIGN1vs4qku7fCyfpV8cHvKDmjKjQAoiOBc77/pVz4JGuiPPcxO+bpo08R+yt2yLBTXu3rGJxbmL/B8Z/1FByNoS8k6ssI6nF1CTBJSXtnEGU1hxfPUq6Wd5FHp5QISwVJM8ikAWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=me8Z/ozn; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8ce9df48e1bso3058486d6.1
-        for <linux-usb@vger.kernel.org>; Sat, 30 May 2026 18:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1780191880; x=1780796680; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtZ8s8sXtULm5XJO2j4rtILmYcujGvNWJqaBTl7IWAg=;
-        b=me8Z/ozn87FJYQpQHF1Z/IDe6j/rwA8pga9mAFg+4yN3Mk2T4tJ9Lxs+wr3QOt/+KP
-         Q8UR6NjEmseBdrBvj1j1LY0kZwnvBzTpfWU3nC/IJoPtxiQEtAyA3OVsHTqLf7p+jaze
-         SFZyZlTXGLGnYmeYQK1bFo7pv+F76sJCSWIIGwiwx3zT4VJJeaUCRKRtEYUQP9Yl2Q8H
-         I9ZBl92Syc6H53LX2tmKS4jwLFmmv02brwUBhyPO+OyX5mk1h8NLIixBPd56Sa4r2CVN
-         v1ml5Ylz2JS0myiizl/LNBaQbuCseXawRgxPeoHTlpbAbVF0VfknzEkhIpOQVjq8YGsb
-         R8Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780191880; x=1780796680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UtZ8s8sXtULm5XJO2j4rtILmYcujGvNWJqaBTl7IWAg=;
-        b=K+TgT+ncuCMc38Qf12RaJ7KxWUNjcH7z8pWc+UsdfAbe9iPdXeuIK7QK0c1Hs/nqJV
-         tGVLmz4O9MlhaZ3crFw0TzbJHXC7NKwsNa9eITSNkrmgoa6lyFSCDnC7K6NYvcA754VV
-         lBDnpmD7/runkAwPu8pWuDiiF/wHEKB+0sv9UP0/HERjvARpProx9QZVOuCb638lrjbF
-         Il7HafPmgKxaIZ4y9mh0pjs+Dj+cCn+81s+vvagkhqT9J3eckiTLp/4OmDpojrJ1vi4X
-         Z6ce++jszhFYGGqvfhVdMCzR2w5nABQL0eZWeYx26J2RIhMB+w6kUlle6JjaERyR2uHI
-         cKGg==
-X-Gm-Message-State: AOJu0Yxo9+6m43mVCYIzziajcSnx4nPN1XtifTga9W+0KQMQiYtlyo1y
-	awA8rofzhKKCawbxPx2IvWJa0b0C3fP6kUoAJUrskjbHXkOeRYuVQWDB7mn+3LFbyg==
-X-Gm-Gg: Acq92OFgeeu94VKYYuX2bCc6B+or+DCniWHZMH28l12cqfOudVkwb8Ux7Fd/tI/zAyg
-	/kPMsrDkQPMn6VWnFQrke0JT/7oHNQwaoNBBBn0sOUzimZp/mmvzGQ4g6CYVJC6ZchHxhi/T2X/
-	LUB/fuY7o5WCKNZAAaHmtwbBBUbW9ie0EMno3fUFOh8Z4WZEmo/3VaLR80Dhx8pdM9fXefIgQyj
-	uOEYZK+A1k/Ciaow3DFO3u6k58WhwKzmIkmmGoTMzwz0Oh2oCjgbWMDrX0Yxq7Q6Ye5vnygoA1X
-	kZ2CfU43lvxeAn10lsPur3dopEJA11dop500orH5YQPNL6yUb9KegNjDRmc/YPuReVMTKCKWha/
-	eXcAN6T6NxMvG9I4eOlC6m1+qBDMNMThLiorxiPIHiEPDhYGfu8bUM/4QBd2FW8M4XdJCqGFPn+
-	mE5ouVs82AUh7rB7GweuF5mUGrunNMgPhSd5v6UQT2VC/gmKt5iU/yWA==
-X-Received: by 2002:a05:622a:8309:b0:516:e7d0:73a2 with SMTP id d75a77b69052e-5173a70f246mr63241561cf.15.1780191879806;
-        Sat, 30 May 2026 18:44:39 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210:d62f:1911:f952:16ba])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51741b06e54sm21629671cf.6.2026.05.30.18.44.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 May 2026 18:44:38 -0700 (PDT)
-Date: Sat, 30 May 2026 21:44:34 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Nikhil Solanke <nikhilsolanke5@gmail.com>
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-	mathias.nyman@linux.intel.com, sakari.ailus@linux.intel.com,
-	katieeliu@tencent.com, johannes.bruederl@gmail.com, kees@kernel.org,
-	dengjie03@kylinos.cn, limiao@kylinos.cn, wse@tuxedocomputers.com,
-	dev@a1rm4x.com, vahnenko2003@gmail.com, cs@tuxedo.de,
-	lijiayi@kylinos.cn, oneukum@suse.com, bence98@sch.bme.hu,
-	eeodqql09@gmail.com
-Subject: Re: USB: Request for guidance investigating configuration descriptor
- enumeration failure
-Message-ID: <96dc88f0-15b9-44d0-9238-128e80dac02e@rowland.harvard.edu>
-References: <CAFgddh+JWdT4LLwMc5qjM8q_pBu-fRo2qADR5ovAKoGHWMQrRw@mail.gmail.com>
- <351656ab-a188-444d-a09b-cf304796043b@rowland.harvard.edu>
- <CAFgddhKPYFKNDDESxvo4jwBCw=mnWWx7Jsmr9_LwawtUpkx8Fw@mail.gmail.com>
- <2a656f5a-bc8f-458a-a1bb-e66cc3a122b8@rowland.harvard.edu>
- <CAFgddh+6O+pnbrw1szM7_Q3Xkx8423qRptW=Yhf3UbBZNu0ZWg@mail.gmail.com>
- <242c4d8d-fec8-4693-9c17-91d763f68985@rowland.harvard.edu>
- <CAFgddh+3Ksi7aj=ZNdn0qum8zQ=d_HM=hVtoH224rEpfhamsXA@mail.gmail.com>
+	s=arc-20240116; t=1780211569; c=relaxed/simple;
+	bh=4rxEG82yvl0ii1Rsr5R2iRROWMz3xHbrMoabOricMR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hfuZNWSZSiR3z0ZNhZXySu4G7AnS3D8Pg5WFPEq28MwN/MUeplN7Tyq66SJVMmlKTzY35hjzzj47l9uQUJd6cr9p+Y3EZ7d8Oz1zx8GvP3Lr8mSutsypuwCTVWOECQ0OrU0AWM3VwfJnTYyuuzk1zkWZzLAu1g3BAvRitQNVwzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com; spf=pass smtp.mailfrom=leap-io-kernel.com; dkim=pass (2048-bit key) header.d=leap-io-kernel.com header.i=@leap-io-kernel.com header.b=E7yqv3Vf; arc=none smtp.client-ip=101.71.155.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leap-io-kernel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leap-io-kernel.com
+Received: from localhost (unknown [222.130.22.242])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 40759fa20;
+	Sun, 31 May 2026 14:57:09 +0800 (GMT+08:00)
+Date: Sun, 31 May 2026 14:57:04 +0800
+From: Kefan Bai <baikefan@leap-io-kernel.com>
+To: Alex Shi <seakeel@gmail.com>
+Cc: linux-usb@vger.kernel.org, si.yanteng@linux.dev,
+ gregkh@linuxfoundation.org, alexs@kernel.org, dzm91@hust.edu.cn,
+ corbet@lwn.net, skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+ doubled@leap-io-kernel.com
+Subject: Re: [PATCH v7 2/8] docs/zh_CN: Add acm.rst translation
+Message-ID: <20260531145704.000061ae@leap-io-kernel.com>
+In-Reply-To: <a6752fa9-b15b-4b50-baef-53c36460311e@gmail.com>
+References: <cover.1779355170.git.baikefan@leap-io-kernel.com>
+	<9f865599e837c90d3048b9a8004efd65b2e3f9d3.1779355170.git.baikefan@leap-io-kernel.com>
+	<a6752fa9-b15b-4b50-baef-53c36460311e@gmail.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.51; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFgddh+3Ksi7aj=ZNdn0qum8zQ=d_HM=hVtoH224rEpfhamsXA@mail.gmail.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=GB18030
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9e7cd279d003ackunmeb980cf015a72e
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaHk1MVksYTRpJTE8fThoZGVYVFA
+	kWGhdVEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUlVSkhLVUlJVUlPSVlXWRYaDxIVHRRZQVlPS0hVSk
+	tJT09PSFVKS0tVSkJLS1kG
+DKIM-Signature: a=rsa-sha256;
+	b=E7yqv3Vfi6WVXQhx9qDA960mxIMsIRdy6orbLw3nh8sCIREPqMyXFw9mloc7ehrJ3UhkXkv2JZWsu9UBIEtUyDMgXkkcYDJiheUy3CBgVJSH3V95w2H2dVuPpktKNhf5VzE5JsoQHF0VJDSVjgLGcz0KzNFF47LcLMfOkWV/GzaU50bjyM/623tjV6dzEGDZkZ+pXMHroBgMhhhtXc4H4Pr7obpHnfrcjsKicn9/t1W/Ui8tdh0LKmvQcLorofM51dB0gcdwUC3yl+2lEHBKauLt8ZW7FNi1oOmuQRW2NeGZM7ITIkVg68RSOxBLB+iFWqDxUs/FT5ZxpJn0K+gGeg==; s=default; c=relaxed/relaxed; d=leap-io-kernel.com; v=1;
+	bh=28k+EV+xM3AcribAqaKcns0myL5jorq6Xdjrk30tScU=;
+	h=date:mime-version:subject:message-id:from;
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[leap-io-kernel.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[leap-io-kernel.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,linux.intel.com,tencent.com,gmail.com,kernel.org,kylinos.cn,tuxedocomputers.com,a1rm4x.com,tuxedo.de,suse.com,sch.bme.hu];
-	TAGGED_FROM(0.00)[bounces-38189-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-38190-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[baikefan@leap-io-kernel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[leap-io-kernel.com:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 3AE94614287
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,suse.cz:email,cqsoftware.com.cn:email,leap-io-kernel.com:email,leap-io-kernel.com:mid,leap-io-kernel.com:dkim]
+X-Rspamd-Queue-Id: 2A6CD614CB5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, May 31, 2026 at 02:17:32AM +0530, Nikhil Solanke wrote:
-> > However, there should have been messages in the log saying
-> > something like "unable to read config index 1 descriptor start: -71" and
-> > "can't read configurations, error -71".
+On Mon, 25 May 2026 10:05:23 +0800
+Alex Shi <seakeel@gmail.com> wrote:
+
 > 
-> yep there is. I did mentioned in one of my replies. It does say:
-> unable to read config index 0 descriptor/start: -71
 > 
-> Attaching the packet trace with the USB_QUIRK_DEVICE_QUALIFIER quirk set.
+> On 2026/5/21 17:55, Kefan Bai wrote:
+> > Translate .../usb/acm.rst into Chinese
+> > 
+> > Update the translation through commit ecefae6db042
+> > ("docs: usb: rename files to .rst and add them to drivers-api")
+> > 
+> > Reviewed-by: Yanteng Si<siyanteng@cqsoftware.com.cn>
+> > Signed-off-by: Kefan Bai<baikefan@leap-io-kernel.com>
+> > ---
+> >   Documentation/translations/zh_CN/usb/acm.rst  | 147
+> > ++++++++++++++++++ .../translations/zh_CN/usb/index.rst          |
+> >  2 +- 2 files changed, 148 insertions(+), 1 deletion(-)
+> >   create mode 100644 Documentation/translations/zh_CN/usb/acm.rst
+> > 
+> > diff --git a/Documentation/translations/zh_CN/usb/acm.rst
+> > b/Documentation/translations/zh_CN/usb/acm.rst new file mode 100644
+> > index 000000000000..51d6eb8f5660
+> > --- /dev/null
+> > +++ b/Documentation/translations/zh_CN/usb/acm.rst
+> > @@ -0,0 +1,147 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +.. include:: ../disclaimer-zh_CN.rst
+> > +
+> > +:Original: Documentation/usb/acm.rst
+> > +
+> > +:翻译:
+> > +
+> > + 白钶凡 Kefan Bai<baikefan@leap-io-kernel.com>
+> > +
+> > +:校译:
+> > +
+> > +
+> > +====================
+> > +Linux ACM 驱动 v0.16
+> > +====================
+> > +
+> > +版权所有 (c) 1999 Vojtech Pavlik<vojtech@suse.cz>
+> > +
+> > +由 SuSE 赞助
+> > +
+> > +0. 免责声明
+> > +~~~~~~~~~~~
+> > +本程序是自由软件；你可以在自由软件基金会发布的
+> > +GNU 通用公共许可证第 2 版，或者（按你的选择）
+> > +任何后续版本的条款下重新发布和/或修改它。
+> > +
+> > +发布本程序是希望它能发挥作用，但它不附带任何担保；
+> > +甚至不包括对适销性或特定用途适用性的默示担保。
+> > +详情见 GNU 通用公共许可证。
+> 
+> Hi Kefan,
+> 
+> The alignment means we will try use the width for each of lines, not 
+> just stop for each of punctuation. Please fix all patches alignment,
+> try to expand the whole width for lines unless it's broken a word or
+> unreadable.
+> 
+> Thanks
 
-Thanks.  There's no visible difference between the enumeration under 
-Linux and under Windows until the disconnection occurs.  Here's the 
-relevant part of the Windows trace:
+Hi Alex,
 
-ffffc588ce0c3a20 0.327827 S Ci:2:001:0 s 80 06 0100 0000 0012 18 <
-ffffc588ce0c3a20 0.329841 C Ci:2:001:0 0 18 = 12010002 00000040 5e048e02 36000002 0301
-ffffc588ce0c3a20 0.329887 S Ci:2:001:0 s 80 06 0200 0000 0009 9 <
-ffffc588ce0c3a20 0.332841 C Ci:2:001:0 0 9 = 09023000 01010080 fa
+  Sorry for the late reply, and thanks for the review.
 
-And here's the equivalent portion of the Linux trace:
+  I understand the formatting point now. The translated text should be
+  reflowed more evenly, instead of breaking too early around
+  punctuation.
 
-ffff88e64c1fd440 0.965292 S Ci:3:003:0 s 80 06 0100 0000 0012 18 <
-ffff88e64c1fd440 0.967582 C Ci:3:003:0 0 18 = 12010002 00000040 5e048e02 36000002 0301
-ffff88e64c1fd440 0.967613 S Ci:3:003:0 s 80 06 0200 0000 0009 9 <
-ffff88e605143ec0 0.973464 C Ii:3:001:1 0:2048 1 = 02
-ffff88e605143ec0 0.973467 S Ii:3:001:1 -115:2048 4 <
-ffff88e64c1fd440 0.975670 C Ci:3:003:0 -71 0
+  Greg queued this series in usb-testing on May 21, 2026, and then
+  moved it into usb-next on May 27, 2026. At this point, would you
+  prefer me to leave the current series as-is and follow this rule in
+  future translations, or send a small follow-up cleanup patch on top
+  of usb-next?
 
-As you can see, the first three lines are the same (from the fifth 
-column on).  The fourth line under Windows shows a 9-byte response to 
-the Get-Configuration-Descriptor request, and the last three lines under 
-Linux show a disconnection and consequent error.
+  Thanks,
+  Kefan
 
-Since the traces agree up until the error occurs, I can only conclude 
-that the cause of the difference in behavior must be something not 
-captured in the traces.  And since there's no way to tell what it is, 
-the only alternative is to add the new quirk flag that you proposed.
+> > +
+> > +你应该已经随本程序收到了 GNU 通用公共许可证的副本；
+> > +如果没有，请致信：Free Software Foundation, Inc., 59
+> > +Temple Place, Suite 330, Boston, MA 02111-1307 USA。
+> > +
+> > +如需联系作者，可发送电子邮件至vojtech@suse.cz，
+> > +或邮寄至：
+> > +Vojtech Pavlik, Ucitelska 1576, Prague 8,
+> > +182 00, Czech Republic。
+> > +
+> > +为方便起见，软件包中已附带 GNU 通用公共许可证
+> > +第 2 版：见 COPYING 文件。
+> > +
+> > +1. 使用方法
+> > +~~~~~~~~~~~
+> > +``drivers/usb/class/cdc-acm.c`` 驱动可用于符合 USB
+> > +通信设备类抽象控制模型（USB CDC ACM）规范的
+> > +USB 调制解调器和 USB ISDN 终端适配器。
+> > +
+> > +许多调制解调器支持此驱动，以下是我所知道的一些型号：
+> > +
+> > +	- 3Com OfficeConnect 56k
+> > +	- 3Com Voice FaxModem Pro
+> > +	- 3Com Sportster
+> > +	- MultiTech MultiModem 56k
+> > +	- Zoom 2986L FaxModem
+> > +	- Compaq 56k FaxModem
+> > +	- ELSA Microlink 56k
+> > +
+> > +我知道有一款 ISDN 终端适配器可以与 ACM 驱动一起使用：
+> > +
+> > +	- 3Com USR ISDN Pro TA
+> > +
+> > +一些手机也可以通过 USB 连接。
+> > +我知道以下机型可以正常工作：
+> > +
+> > +	- SonyEricsson K800i
+> > +
+> > +遗憾的是，许多调制解调器和大多数 ISDN TA
+> > +都使用专有接口，因此无法与此驱动配合工作。
+> > +购买前请先确认设备是否符合 ACM 规范。
+> > +
+> > +要使用这些调制解调器，需要加载以下模块::
+> > +
+> > +	usbcore.ko
+> > +	uhci-hcd.ko ohci-hcd.ko or ehci-hcd.ko
+> > +	cdc-acm.ko
+> > +
+> > +之后就应该可以访问这些调制解调器了。
+> > +应当可以使用 ``minicom``、``ppp`` 和 ``mgetty``
+> > +与它们通信。
+> > +
+> > +2. 验证驱动是否正常工作
+> > +~~~~~~~~~~~~~~~~~~~~~~~
+> > +
+> > +第一步是检查 ``/sys/kernel/debug/usb/devices``，
+> > +其内容应该类似如下::
+> > +
+> > +  T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=12  MxCh= 2
+> > +  B:  Alloc=  0/900 us ( 0%), #Int=  0, #Iso=  0
+> > +  D:  Ver= 1.00 Cls=09(hub  ) Sub=00 Prot=00 MxPS= 8 #Cfgs=  1
+> > +  P:  Vendor=0000 ProdID=0000 Rev= 0.00
+> > +  S:  Product=USB UHCI Root Hub
+> > +  S:  SerialNumber=6800
+> > +C:* #Ifs= 1 Cfg#= 1 Atr=40 MxPwr=  0mA
+> > +  I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
+> > +  E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=255ms
+> > +  T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=12  MxCh= 0
+> > +  D:  Ver= 1.00 Cls=02(comm.) Sub=00 Prot=00 MxPS= 8 #Cfgs=  2
+> > +  P:  Vendor=04c1 ProdID=008f Rev= 2.07
+> > +  S:  Manufacturer=3Com Inc.
+> > +  S:  Product=3Com U.S. Robotics Pro ISDN TA
+> > +  S:  SerialNumber=UFT53A49BVT7
+> > +  C:  #Ifs= 1 Cfg#= 1 Atr=60 MxPwr=  0mA
+> > +  I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=acm
+> > +  E:  Ad=85(I) Atr=02(Bulk) MxPS=  64 Ivl=  0ms
+> > +  E:  Ad=04(O) Atr=02(Bulk) MxPS=  64 Ivl=  0ms
+> > +  E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=128ms
+> > +C:* #Ifs= 2 Cfg#= 2 Atr=60 MxPwr=  0mA
+> > +  I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=01 Driver=acm
+> > +  E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=128ms
+> > +  I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=acm
+> > +  E:  Ad=85(I) Atr=02(Bulk) MxPS=  64 Ivl=  0ms
+> > +  E:  Ad=04(O) Atr=02(Bulk) MxPS=  64 Ivl=  0ms
+> > +
+> > +这三行的存在很关键（以及 ``Cls=`` 字段里出现的
+> > +``comm`` 和 ``data`` 类）；它说明这是一个 ACM
+> > +设备。``Driver=acm`` 表示该设备正在使用 acm 驱动。
+> > +如果只看到 ``Cls=ff(vend.)``，那就无能为力了：
+> > +这说明你手上的设备使用的是厂商专有接口::
+> > +
+> > +    D:  Ver= 1.00 Cls=02(comm.) Sub=00 Prot=00 MxPS= 8 #Cfgs=  2
+> > +    I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=01
+> > Driver=acm
+> > +    I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00
+> > Driver=acm +
+> > +在系统日志中应该可以看到::
+> > +
+> > +  usb.c: USB new device connect, assigned device number 2
+> > +  usb.c: kmalloc IF c7691fa0, numif 1
+> > +  usb.c: kmalloc IF c7b5f3e0, numif 2
+> > +  usb.c: skipped 4 class/vendor specific interface descriptors
+> > +  usb.c: new device strings: Mfr=1, Product=2, SerialNumber=3
+> > +  usb.c: USB device number 2 default language ID 0x409
+> > +  Manufacturer: 3Com Inc.
+> > +  Product: 3Com U.S. Robotics Pro ISDN TA
+> > +  SerialNumber: UFT53A49BVT7
+> > +  acm.c: probing config 1
+> > +  acm.c: probing config 2
+> > +  ttyACM0: USB ACM device
+> > +  acm.c: acm_control_msg: rq: 0x22 val: 0x0 len: 0x0 result: 0
+> > +  acm.c: acm_control_msg: rq: 0x20 val: 0x0 len: 0x7 result: 7
+> > +  usb.c: acm driver claimed interface c7b5f3e0
+> > +  usb.c: acm driver claimed interface c7b5f3f8
+> > +  usb.c: acm driver claimed interface c7691fa0
+> > +
+> > +如果以上都正常，请启动 ``minicom``，
+> > +把它配置为连接 ``ttyACM`` 设备，然后
+> > +尝试输入 ``at``。如果返回 ``OK``，说明一切工作正常。
+> > diff --git a/Documentation/translations/zh_CN/usb/index.rst
+> > b/Documentation/translations/zh_CN/usb/index.rst index
+> > b4cb0ccaa39b..686e5b0a9384 100644 ---
+> > a/Documentation/translations/zh_CN/usb/index.rst +++
+> > b/Documentation/translations/zh_CN/usb/index.rst @@ -17,10 +17,10
+> > @@ USB 支持 .. toctree::
+> >       :maxdepth: 1
+> > 
+> > +    acm
+> > 
+> >   Todolist:
+> > 
+> > -* acm
+> >   * authorization
+> >   * chipidea
+> >   * dwc3
+> > --
+> > 2.54.0
+> > 
+> 
+> 
+> 
 
-Go ahead and submit your patch.
-
-Alan Stern
 
