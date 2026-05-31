@@ -1,212 +1,193 @@
-Return-Path: <linux-usb+bounces-38197-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38198-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EIqSGb4PHGqQJQkAu9opvQ
-	(envelope-from <linux-usb+bounces-38197-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 12:38:54 +0200
+	id EF9DFoQZHGo+JwkAu9opvQ
+	(envelope-from <linux-usb+bounces-38198-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 13:20:36 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD17D6159C4
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 12:38:53 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEA47615C26
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 13:20:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 65B2E3029768
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 10:38:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2D59F3018436
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2026 11:20:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1841C36D9FA;
-	Sun, 31 May 2026 10:38:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8477938399E;
+	Sun, 31 May 2026 11:20:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qk3pu1XG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KcP0XnL8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26666370AC3
-	for <linux-usb@vger.kernel.org>; Sun, 31 May 2026 10:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780223930; cv=none; b=ND7jkV6V6r9OGC3o86ftRK+UTgUoNuBsJHlkq/jAd6e6OnM/KYzliGPXg21vmuwRMxy+a4R153t2db2t4+siny7FiH5JT1OhJkPH9h0CLRTXB7STIdeO6uuqcjgszLyEv9XoqaaYviahVf+p6RTkgtpH6VqF2c3iAgMGefxY8SM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780223930; c=relaxed/simple;
-	bh=ykW3cA5mU5h55567JQQ6eMA62N7pXwLwEC+MR0QAER8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YC1zdsCRtGKY/yRizuZavbxcWak5lMZNbfyVsZddurwIG1zGKVRCcoejgK68z6rXaAHwTbK0QviP2uj1YVcCtnzi5N8Pg8AcmMUjJ/dW/vMGc2MSStcUmT+xwmA2XNrToPbUyQo9ATBNG/Nmnfk3EcaUWtgTMBxEE9Rtz7MA4vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qk3pu1XG; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54AA372B25
+	for <linux-usb@vger.kernel.org>; Sun, 31 May 2026 11:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780226433; cv=pass; b=RIajxaKO/eoAw+CwyaVuoebS6/LbO+wNMlxQFm2ypuGjmXWZjWKIH0iRzfTeEhofAKbdtKNc3w1L+BosEp1RfvVClvZ02CPcKJpqWZoFxLyCb3l6zbUCIzdy2tnr+kbcnKq/d9wPhuHzHmfyI2fvCcmAGKvmCJY8HsBrmpuA4QE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780226433; c=relaxed/simple;
+	bh=g+RcRL2Y1aCrncAQ9muyp63uPoOQsIrI9mS9L9ufMMg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=daSoaKlnkwMId77IB8TZMP7IIskLD5d6mNqxIWk00vwd+bytH6rPBM8GyZBBZY2Zlxhu/jvkyYB2PyJe88a3acs/PET6fduvhe32AJwFV0m5CUTBDE06xLb0ilpFym77l9RGBhOru7LuAqFkTRIAu64FSMvQq3R3J1NOf4NYVZc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KcP0XnL8; arc=pass smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-490a7629893so4528755e9.0
-        for <linux-usb@vger.kernel.org>; Sun, 31 May 2026 03:38:48 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-68c19f1f3ceso3083736a12.2
+        for <linux-usb@vger.kernel.org>; Sun, 31 May 2026 04:20:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780226430; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TumzyUZM/UAG2DvLcuCrzAWrqskN6T0ifiwuq5HXj3s4qElTxalX+TB5IdwfKjT0tg
+         JEHT1GV7Ba77VR++n3l0fyBoR18b89NfZInjF+J9r+lPZN2XvqOzIlvjjIrHU5CtbBGG
+         i9EcTEUZ8CI64sZDtIJ7Oo3YAfm8VwXBdOnWgn3DzCRyTkG8LPyWMdI0DlxqmiwYOq7B
+         dzLYK8Q+WqHn/zSNmS05O9MJxLofEhFFVcZQN6eky1WCQmd4BQVPARrjEZ7HhN9l3U9W
+         LO8pTvk0RBQ9fKnrye334gFUkhMMAY6YdMk4s/c9459/pJ4hEOPSwsecCaadQH8+rD12
+         avrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=g+RcRL2Y1aCrncAQ9muyp63uPoOQsIrI9mS9L9ufMMg=;
+        fh=0g9ROlWvuhx3ZbXw65ftZjGUX3Z+GfUoHpMd3SEEz2Y=;
+        b=ZAYgLbKiUoQGKbBZt5jyyLWGzZTZ0dxcxMB3pIo1kf/MsFr9P6U8KAGxR71HlNDWtu
+         cewwhjS8pmPd5Rq4g2eIpqh+P/kgp6EEqPRDGNdvrnQU/YUhlyZLXgz5GSgGCyypmjes
+         uRGJgOcdS51cPewClNPkjvSdc442oQ9/tyHaqgt7I8EZZVt41rf188pu2OaP7zVQUgOn
+         AImYkFtprZpBk9eHUVR3WxDxFsXMA9KnrnbwUNWbQ/ESz8p62Fgq9HKKVL2PEnvDQay1
+         HRhs2A7CnjiOoSseW8QOJHE8q2RxDffipFcrTVc2g2xc7Ss3uUi/c9Z8WXVkZN4mZjBX
+         FXRQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780223927; x=1780828727; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kr+h88xVPwLz6NIB3ELmU+oCJWO31tA43scRiCDjvAY=;
-        b=qk3pu1XGNPFBJT8O/RpI9RvYgVS9cZ8tacAfpAt/AoJmdVZcR8lnq1AMFasMkQKpxt
-         Zqlgryoc08wUfoUbshnYeXwWdxLBu6NnrzgFnw2WbY7txpHbmdwRre4hO2EKVAS/VUIU
-         MGCLSBr/n7SLPPB6nYC3ODFRHu4CI74cLc8gy7/lVMDwPpGo069ydPf46C+HcAOnGJVV
-         IQ2N8kVki8lO/eoz+afJqSU3EYN4iwvQ1UI6c0cp4kUlE83GHIgn/C3q5/ELtwQ6yCa/
-         2qov3WiOZQvnk+7tYlxBdDO6OP4J7za+1SjRnRxE/ARKFqUxeAFGyYAdeyOgvZfRZYpE
-         8oGg==
+        d=gmail.com; s=20251104; t=1780226430; x=1780831230; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+RcRL2Y1aCrncAQ9muyp63uPoOQsIrI9mS9L9ufMMg=;
+        b=KcP0XnL86Gt2GKgYw9YefaiVOd5LXSwPGPG9pzU3Qon4flO5G6l6cKLhihuybFB+eA
+         QA3w0LliFXsqeASBod/CHxutlk//qS+uzbIKW3IFBi2Y8EQdavykwJtAJrh5+Mx+m5N8
+         Odlm+veQx3MRbmtrFbQR3gINgJbBjlSBOAlqH70MfABtag4fUubzjX7i3OUefQapVNBz
+         WeQLaffzht3jxowqhA7O9RjakKV/mDoZBiytkJdNGuvvpJoR3JYCWyvGeg9xrpNd3nrg
+         tEjAndZZcSB+QdcEfOL/o3vg1OaHWkQGDY6+SwZkXvGDH6f0wKTGYoF+gWML9RDa93pm
+         8u2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780223927; x=1780828727;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Kr+h88xVPwLz6NIB3ELmU+oCJWO31tA43scRiCDjvAY=;
-        b=N6eBykIIxv1nw51iSjU1rt0natpj5+uEk7R30HKJtNka6IHkHdUGcGvqN5tlOUkc0T
-         tNMtrQuGSzjwb62mXOuuIamLtbBmSejiYIUBFpN1XXjxNEy7+An0OeR/RwYHgmepxCd0
-         1zycoSfAfib+7EDOrJ7rAHtM/bYl8AKsCKpdw6aJfLQYAPGVrO8ndwj/8N3jmIZEBJk6
-         MGA4hgq2kpvgkTckNmIwDTPOmgoJpkNBazOFLQaRvAA/rr0q5BwWFShVU5noJBNWo0Pe
-         m9VtkIFWIz0w8pGM7TPZ4qKV0X6I7eAPd77qGs2QaZkaGXDz/NGFWwShhOzXEV22H46z
-         VrMQ==
-X-Gm-Message-State: AOJu0YxfYtWNinEjWu4qrS30tfnDeXb5RwxpuEDJBfxfjUPm+Yr4hgti
-	k8qPXIpyp3ddXYyKFWsiUcAUVZ6StWrSoKTlzpsrniDjaEla37VWGq/i
-X-Gm-Gg: Acq92OEsOpFvx3Qz3VAqYFDfQ7llWNTQiZnb+FfEs42IrqUbNX+X0ypXcOELlmbU78U
-	06wQcsRi61P6cANZqFzYaSd++zOSCWa90ra2PDs21Wx8DAzoW6YT+QlKQk5Wd3GxltJjQQVNrVB
-	tHxlOnxnLb3FC+GxxCYeXj1EAj8tiiRXvfiTYmEDxE0GexhQbXXEfpjoQgiDrl5BCqoXtVZRSMk
-	+gZtZIrPtMMN8xDlJGvoDokgVoxpt7bCr9AdTGFsrDFSQQkoK8RygFCyGBo+pI5cCIlBsAY9wgD
-	CbxSXizByLjcHWhhgfL05s+JDyhdRN6/rlz6DQdrh0QP4j5L6SjWEej4hnstdN1ix90qZkxmaGq
-	Xc0v0e6rqjc46L/357Sa/FZ9qvTiLDeVbN0y3Y3UnyyaFjzI8Nh9k9Ww2SdFTD98FnO/k9PZg46
-	IJzDfrxWa5aSoc1d3hChhfWtMAMu0gT9ltwOLPogHlvBU9pA==
-X-Received: by 2002:a05:600c:8508:b0:490:6237:521d with SMTP id 5b1f17b1804b1-490a2910ab0mr127034305e9.13.1780223927462;
-        Sun, 31 May 2026 03:38:47 -0700 (PDT)
-Received: from foxbook (bfe246.neoplus.adsl.tpnet.pl. [83.28.42.246])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34a03f8sm18043896f8f.7.2026.05.31.03.38.45
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 31 May 2026 03:38:47 -0700 (PDT)
-Date: Sun, 31 May 2026 12:38:43 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Nikhil Solanke <nikhilsolanke5@gmail.com>
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
- mathias.nyman@linux.intel.com, sakari.ailus@linux.intel.com,
- katieeliu@tencent.com, johannes.bruederl@gmail.com, kees@kernel.org,
- dengjie03@kylinos.cn, limiao@kylinos.cn, wse@tuxedocomputers.com,
- dev@a1rm4x.com, vahnenko2003@gmail.com, cs@tuxedo.de, lijiayi@kylinos.cn,
- oneukum@suse.com, stern@rowland.harvard.edu, bence98@sch.bme.hu,
- eeodqql09@gmail.com
-Subject: Re: USB: Request for guidance investigating configuration
- descriptor enumeration failure
-Message-ID: <20260531123843.736bd69a.michal.pecio@gmail.com>
-In-Reply-To: <CAFgddhLGHvTmRxWtguXTpgZV_Mq5ZW=CVK_ZkqbOgUF9Y5bCsA@mail.gmail.com>
-References: <CAFgddh+JWdT4LLwMc5qjM8q_pBu-fRo2qADR5ovAKoGHWMQrRw@mail.gmail.com>
-	<20260531101612.332151d8.michal.pecio@gmail.com>
-	<CAFgddhLGHvTmRxWtguXTpgZV_Mq5ZW=CVK_ZkqbOgUF9Y5bCsA@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1780226430; x=1780831230;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g+RcRL2Y1aCrncAQ9muyp63uPoOQsIrI9mS9L9ufMMg=;
+        b=JczhJb1aC9O8i6m+T2zFT4n1AqC6O/cSdqN0tArLsAagUx4cSPEYrHpsiTmTs1ZNtP
+         Vp8Zh57NATWnjKEuCY3zdSWuzkdBz/sJe1HhgaZqX2Q5m+sD+zxPNRunHBfChqcJ3eEH
+         5Aoi0s/8TVnJj5R+WNwCmKmGQRh1FynOpSIW8GHnAgOjzzg9Y3efASeooQanSVvMBp2P
+         QWFNzwIAtfMbrzUx4gdY+AM7XjXLGmkg45PsNutvkR3lIgu1cw8SG04bLbQbN8ZDSCYa
+         ObW30E4Ch84IVlgfLcpzUSQzLFyIlXhfDU5/HtSj5Nshc0YwMaG28HIXdCSyH1VXbiMa
+         NqQA==
+X-Gm-Message-State: AOJu0YzhervIJpFlMaG8tRGwDEl9IlHZA0WAa50JyvpURXGoQABK6IiM
+	dxrPy1SGw/VFQIC9FXktxQdDJ8H+dS5QX5uHlh2jiBwrVM5g9sGyEtfJB5JcepACX5gKWRRh9Tu
+	T9aEAlC0oAd2c+zAB2mqqfISTELSXR2A=
+X-Gm-Gg: Acq92OHbe7Q+aTfL/mXyt5LJII5id0RDZMrBZESq10bI9FjDgm6VgQFN2br5ZP92sxR
+	+exfRckgeEbcuAIH2/WFRfpqtyzx3aF3GodUyHhVUF0CYhyiCTHlNnXkY+EhmpxdckJgeHONJ/8
+	rwplak1ez5tos0/7VcZbtwcs2AX04al7uj/U5RY4fpgo+J5FQ1OUANP4UfKPFuYMCA+1B+T4YwL
+	sGFJ1n4OR1huegMkRvglvb4CKLtJe8K8hdUg9PBBMxQdmwmlsmHGESm4oUl93ayaa9YSChUHij+
+	4vYWG6ekvwz/QQ5OIw==
+X-Received: by 2002:a17:907:270f:b0:bed:25a6:1c89 with SMTP id
+ a640c23a62f3a-bed25a61d08mr18230266b.25.1780226429835; Sun, 31 May 2026
+ 04:20:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <CAFgddh+JWdT4LLwMc5qjM8q_pBu-fRo2qADR5ovAKoGHWMQrRw@mail.gmail.com>
+ <20260531101612.332151d8.michal.pecio@gmail.com> <CAFgddhLGHvTmRxWtguXTpgZV_Mq5ZW=CVK_ZkqbOgUF9Y5bCsA@mail.gmail.com>
+ <20260531123843.736bd69a.michal.pecio@gmail.com>
+In-Reply-To: <20260531123843.736bd69a.michal.pecio@gmail.com>
+From: Nikhil Solanke <nikhilsolanke5@gmail.com>
+Date: Sun, 31 May 2026 16:50:17 +0530
+X-Gm-Features: AVHnY4JyxPF6_SzpowO1ngh2fLsPa52m0GfpIpt30w1o0y11S2JFT7NApkl0QJs
+Message-ID: <CAFgddhL8_q0D43r3KG3vV5jCagmXcMZJcbjACjFr5+6c7LNigg@mail.gmail.com>
+Subject: Re: USB: Request for guidance investigating configuration descriptor
+ enumeration failure
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org, 
+	mathias.nyman@linux.intel.com, sakari.ailus@linux.intel.com, 
+	katieeliu@tencent.com, johannes.bruederl@gmail.com, kees@kernel.org, 
+	dengjie03@kylinos.cn, limiao@kylinos.cn, wse@tuxedocomputers.com, 
+	dev@a1rm4x.com, vahnenko2003@gmail.com, cs@tuxedo.de, lijiayi@kylinos.cn, 
+	oneukum@suse.com, stern@rowland.harvard.edu, bence98@sch.bme.hu, 
+	eeodqql09@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38197-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38198-lists,linux-usb=lfdr.de];
 	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,linux.intel.com,tencent.com,gmail.com,kernel.org,kylinos.cn,tuxedocomputers.com,a1rm4x.com,tuxedo.de,suse.com,rowland.harvard.edu,sch.bme.hu];
+	URIBL_MULTI_FAIL(0.00)[mail.gmail.com:server fail,tor.lore.kernel.org:server fail];
 	RCPT_COUNT_TWELVE(0.00)[19];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nikhilsolanke5@gmail.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,linux.intel.com,tencent.com,gmail.com,kernel.org,kylinos.cn,tuxedocomputers.com,a1rm4x.com,tuxedo.de,suse.com,rowland.harvard.edu,sch.bme.hu];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: BD17D6159C4
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: BEA47615C26
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, 31 May 2026 15:41:14 +0530, Nikhil Solanke wrote:
-> > By "VM" you mean that it's connected to Windows and works normally,
-> > then you pass it through to a Linux guest and the guest breaks it?
-> > I suppose it remains broken until power cycled? And I suppose it
-> > breaks after connecting to a Linux host, so a Windows guest can't
-> > use it normally either?  
-> 
-> I actually didn't test for Linux guest on Windows host. I only tested
-> Linux guest on a Linux host. I had utilized PCI Passthrough to
-> passthrough the entire usb hub itself that is present in my laptop.
-> This, to my knowledge, completely negates any interaction of the
-> device with the VM host on the USB path. It only interacts with the
-> guest directly. The Linux guest also couldn't properly enumerate the
-> device (failing with "unable to read config index 0 descriptor/start:
-> -71"). Then i tried a Windows guest with same configuration (i.e. PCI
-> passthrough of the usb root hub), the device enumerated successfully!
+> What about xHCI vs EHCI?
 
-Well, that's not surprising. As you noted, with PCI passthrough the
-guest has full control over all USB transfers to the device.
+I don't know how to test that. I couldn't find any BIOS settings
+related to USB controllers on my laptop. There used to be an advanced
+BIOS menu which revealed a lot more configuration options, but my
+laptop vendor has unfortunately disabled or hidden it.
+Previously it used to be activated by a combination of key presses,
+but now they no longer work. I tried disabling xhci_hcd module but
+`rmmod` didn't let me because it was a builtin module. My kernel has
+been compiled with the following:
+CONFIG_USB_XHCI_HCD=y
+CONFIG_USB_XHCI_DBGCAP=y
+CONFIG_USB_XHCI_PCI=y
+CONFIG_USB_XHCI_PCI_RENESAS=m
+CONFIG_USB_XHCI_PLATFORM=m
+CONFIG_USB_XHCI_SIDEBAND=y
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_EHCI_ROOT_HUB_TT=y
+CONFIG_USB_EHCI_TT_NEWSCHED=y
+CONFIG_USB_EHCI_PCI=y
+CONFIG_USB_EHCI_FSL=m
+CONFIG_USB_EHCI_HCD_PLATFORM=m
+CONFIG_USB_ROLES_INTEL_XHCI=m
 
-What about xHCI vs EHCI?
- 
-> Also a side note: during initial enumeration, when it presents itself
-> as 045e:028e, that ID only appears in the usbmon trace. Because the
-> device didn't finish enumeration, lsusb doesn't show that VID:PID.
-> Only after it fails and falls back to Android mode does lsusb show the
-> Android mode's VID:PID. Therefore, to even try applying existing
-> quirks, the user must use usbmon to find the initial VID:PID. This
-> might seem like common sense to you and other developers, but it
-> wasn't to me or any other normal user. So my workaround also displays
-> the VID:PID that failed to enumerate in dmesg. This helps an average
-> non-technical user to apply the quirks, let's say, by following a
-> tutorial or guide to resolve any issue (at the start, I was trying to
-> apply those quirks to the Android mode's VID:PID. only later i
-> discovered that it presents itself as another vid:pid).
+> So I don't know what's true anymore. Running Windows under a Linux host
+> with individual device passthrough (e.g. qemu) could show what really
+> happens.
 
-Annoying, and not the first such case. Perhaps VID:PID should always
-be printed earlier, as soon as the device descriptor is obtained.
+The trace is exactly the same. wLength is not 255. no additional
+packets. one-to-one replication (which was expected since it was a PCI
+passthrough, so...). And I can't utilize the normal usb device
+passthrough (or i think it's more of a redirection instead of complete
+passthrough) either since the vid:pid pair is different after a failed
+enumeration. The device doesn't initialize in xinput mode, so QEMU
+doesn't even grab it. If I redirect the Android mode vid:pid, the
+device stays in that mode on Windows as well.
 
-> > I ask because I found Windows Wireshark traces not to be fully
-> > complete and running Wireshark on a Linux host with Windows VM
-> > could be better.  
-> 
-> I'm sorry; I didn't understand what you meant by "not fully complete."
-> As I mentioned in the note, I did truncate the packets sent and
-> received before the device's enumeration began, but that was for
-> Linux. The Windows traces I obtained were originally just like what I
-> had attached. There weren't any other packets captured, unlike what we
-> see on Linux with those USBHUB packets. Perhaps I missed some
-> USBPcap/Wireshark configuration? I tested it on a fresh Windows
-> install and a fresh Wireshark install. Nothing else besides that.
-
-That's what I mean. There is plenty of missing communication with hubs,
-which "should be there", particularly when the device is connected to
-an external hub. And IIRC some descriptors (like BOS) are missing too
-in Windows Wireshark traces.
-
-I don't know if it can be fixed, and how.
-
-I also found this article, which claims that Windows uses wLength=255
-for its config descriptor request "for compatibility reasons". But your
-pcap doesn't show anything like that and so do mine (Windows 10).
-
-https://thewindowsupdate.com/2018/10/12/how-does-usb-stack-enumerate-a-device/
-
-So I don't know what's true anymore. Running Windows under a Linux host
-with individual device passthrough (e.g. qemu) could show what really
-happens. Even better would be a USB bus analyzer. I don't have one :(
-
-Maybe 255 would make sense for the quirk, if we can't find the true
-root cause and any better solution.
-
-Regards,
-Michal
+Thanks,
+Nikhil Solanke
 
