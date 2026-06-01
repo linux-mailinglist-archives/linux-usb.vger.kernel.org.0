@@ -1,192 +1,164 @@
-Return-Path: <linux-usb+bounces-38251-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38252-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +OgsJFaOHWrFbwkAu9opvQ
-	(envelope-from <linux-usb+bounces-38251-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 15:51:18 +0200
+	id cCNoGDWPHWrFbwkAu9opvQ
+	(envelope-from <linux-usb+bounces-38252-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 15:55:01 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B2296204C4
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 15:51:17 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F05B5620596
+	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 15:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B53E730782FC
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 13:44:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3F5EF30C3945
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 13:44:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4763ACA5F;
-	Mon,  1 Jun 2026 13:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C01BC3ACF16;
+	Mon,  1 Jun 2026 13:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iVlbPIsS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XyW67PUj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336323009E2;
-	Mon,  1 Jun 2026 13:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C993AC0FA
+	for <linux-usb@vger.kernel.org>; Mon,  1 Jun 2026 13:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780321462; cv=none; b=C+QRQyYAyoH2m3+KlvA4Izz9bOagoAzc1kkUzS7LlvLkPikJEfZOq5qDVE5mnPiZY9dQeHbJUXhyZRz3vB2Bqarvp2gnECSkunO1meGCUv5npcePQMEfxCrkQqgepqpclc9MA19igxiTnEH/I3rMVfERPo8+trRgQrJwKd7RG8k=
+	t=1780321470; cv=none; b=PHrqYJesOjhZCvf9gQ55NKgTHOZdTEAE6DFaovh8kDRpV0PfSftNjSQGk+8DgKC3GHq21f4uNxho+1Rc7SnCk7kJZxRjctwYdTCh6yN9IxYVwCCXt8UO385taLpAXzLjJd8IsbgbXlSMu3wyCl45H2ygwlD62dqXWeVF2YYgHzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780321462; c=relaxed/simple;
-	bh=QaaoqTgY7mbCD7j81m65kbLiupzRLlixZZXI+Iby1cE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p8OIaZLa5BZA7WwJDK95Pk2UdCFiPEGMRWWBPlTs0RZLVGzmJ188iUo7KE1pdp9dtN0QJPkhEQiX3ap+CFYmyoI/9O0vXQo8cBpUse2LUfa+6bOvHqcX/V8J8YRu8WWd2EVy8ZHB6IZGYWx2BiTGnvyVeV/i922xnJ3BjHutdGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iVlbPIsS; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780321460; x=1811857460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QaaoqTgY7mbCD7j81m65kbLiupzRLlixZZXI+Iby1cE=;
-  b=iVlbPIsSr1L3myFw8gPHgjLpgQR+lFYTIn1KeuLlSEdOpIfuxmaxGiTF
-   ekb8F8a1Cnx5Gq292vXFsl4FUwXtG+q1PCc5vtQyM3fRxvL3OUzVl7RRw
-   CJzk4f0ZJn4p+1oqcl7ewnijj4O9+TTfX+Ngjh1nWR/SaJIQqh1pSAGn7
-   dc0pQLo1CpFK3DRu9zqP7FO3mSXuoPQR4EVsukiwLbzv8p1/PeGYT7VBp
-   UqzaT27yHo9hQKaPsHZLAVItt0wu0KaqQhm3WctojUgkkI1OKu85TBgRE
-   4guNt00RYF/vp3bnY4dz4T/QDut0OFpaUQ6NADbV7IaYON4GiEsemmz8W
-   g==;
-X-CSE-ConnectionGUID: LG2WSyIOTx+4sxJP+zCKCQ==
-X-CSE-MsgGUID: WYrLDmWGTyWApY4FfH1yVw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="80217485"
-X-IronPort-AV: E=Sophos;i="6.24,181,1774335600"; 
-   d="scan'208";a="80217485"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 06:44:19 -0700
-X-CSE-ConnectionGUID: zYPYdV1HQx2YDvxOmPJuRQ==
-X-CSE-MsgGUID: 69zQOU6eQfS47GVe1aC5YA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,181,1774335600"; 
-   d="scan'208";a="247541277"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 01 Jun 2026 06:44:18 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 8584C95; Mon, 01 Jun 2026 15:44:16 +0200 (CEST)
-Date: Mon, 1 Jun 2026 16:44:14 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: jens.glathe@oldschoolsolutions.biz
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "usb: typec: mux: avoid duplicated mux switches"
-Message-ID: <ah2Mrs6S2cwwcgza@kuha>
-References: <20260530-typc-mux-modeset-v1-1-64b0281e2cd6@oldschoolsolutions.biz>
+	s=arc-20240116; t=1780321470; c=relaxed/simple;
+	bh=G0GDCGBDBmBtWPYbM6yoLHhxE+ZZhx54r0Gt1ypGkpo=;
+	h=MIME-Version:From:To:Cc:Subject:In-Reply-To:References:Message-ID:
+	 Date:Content-Type; b=WAjwz0AkydDFrjaAczFz0qosUEOkUyuwpnqIRRsyPH70+1ewA++CD/s4SZ51CdoqmO9LJU+9a9M+4C7O+W4YDNqP56ZlxgKxYK5vyrLPZ3sZlzCOo4Eg5LxMHR4IHAIOmPsEM5wl7cr6rPtImxLAe6NFjwwRN7fskIhwBWlB8Dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XyW67PUj; arc=none smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-137e3a3a4b0so1858828c88.0
+        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2026 06:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780321468; x=1780926268; darn=vger.kernel.org;
+        h=content-transfer-encoding:date:message-id:references:in-reply-to
+         :subject:cc:to:from:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bp5vSMppXoItqHAagwaAVQcBt6Js0Wroa25cfHyXfxo=;
+        b=XyW67PUjtyqto6qCn3/7KpC+Xj8GtmSnUeZt5wQrV2t2acMzBglkdeBgYZ5UAUQFbS
+         LLoIpBbA3IF65WEU3kZP5g6Lkwm5zVzcVVHGesFdlz4iMW38/9nujR61y0YXlGXuROed
+         12Ill5JuV6C2XfCUGx24g/Rsf/fW7zQfg3GfQa6F3A4CIRyTXn1MqKksTtpXp8w5lcFH
+         j+KLMltqY1U4cYQPOa3qXLY/oDmLugxuu12agzxBmATSo/2eK8954tGyWt5xAefw5sGI
+         zrqaEUFWkQKiUAta7j+xdKJ2KdzdNVVqowuTVKjv9DmQFHLIYv7uzJvcs7SXEdvXwLo3
+         5Skg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780321468; x=1780926268;
+        h=content-transfer-encoding:date:message-id:references:in-reply-to
+         :subject:cc:to:from:mime-version:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bp5vSMppXoItqHAagwaAVQcBt6Js0Wroa25cfHyXfxo=;
+        b=P5RxRqolc+DWpn72CmaMDNok2ZDosr+Za7joSkho9BduXtYp1Gr35UzFAHbVaDumlr
+         j+JsAs8qbHRRXEciNbh9MDunuWO2lIoubZWSNROLmXP4MleI6XrtdMOTJJHcUWOPWjRw
+         Bx9bwnWbHDLgBxXPoinc3RZlbDlDYQk25YieH8qnbdKeZnvTIzBeo1I9HGd3qql/PS7H
+         R2VSkKylaEOGi+eVmvUMZHsizdfsB/3eThM9W/JIezFfn1wC1QrwhlK0/Zwvv2RmO97E
+         hVpEjQ7/JVu1Qs3mjJ3Bo3/AfMKN4ButzsRdCJeB6N31lTavSI5csSRu7d4pZbc185md
+         qZTg==
+X-Gm-Message-State: AOJu0Yw+8nN92WBodWobAb5FY0IMFbccG1cVEigqDWr/Ugd6MH/PA1LE
+	nTkWffki2AkOUW3s/vZ+fr7FxT7RPLH//VRO3EG0z8W/v21z/xQyOcwB
+X-Gm-Gg: Acq92OG4mpPNQoYynRMApIhp6ScILaEb0H96d8d2VYBsD7Y3dOLoKuTH+U8f0u/2H9f
+	Pn+Sj8O/NbbAvPnAxe/fH+P3rziTMr9SewcBsxpdJtADhkOnKDkMk+IoCbpzXt2IdI92yLhJAIF
+	ElhrNn8TeO40KvOTY4vo1Uso0qoIOKb0M5pzH7QCOmP68T+wIimY81mP+eoRTFRpkkFMuxNUJux
+	l+GHkpef9sOFmrMC19QS2rqNVH6jEqoa6iM72JPDhk28tO3NHg3ffo6euWeAFO0MO+Qa/qtlxRH
+	DyiIcUgT2xDchJSkw4BWTtavT9wdeZMpwp6Zwi7b+pvafrh2MI/sncScav766MxVQe07Tj4IkfH
+	DgMUXMNNcfMbO84cgNgi5YgFi7U/A4Rad7IrV1LL3HX/Oih8rN4qcV2KQabTaLEu6x/uwCR4qNq
+	ErSOd6xscms/MqeiHslDt6ysVAMY1SNMDo3xTs
+X-Received: by 2002:a05:7022:6896:b0:133:1be4:a357 with SMTP id a92af1059eb24-137d3f18cb7mr4397728c88.1.1780321468166;
+        Mon, 01 Jun 2026 06:44:28 -0700 (PDT)
+Received: from GordonMsi ([24.249.245.149])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137b3c7fd47sm7323475c88.14.2026.06.01.06.44.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 06:44:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260530-typc-mux-modeset-v1-1-64b0281e2cd6@oldschoolsolutions.biz>
+From: "Gordon Chen" <chengordon326@gmail.com>
+To: "Mathias Nyman" <mathias.nyman@linux.intel.com>, 
+	"Mario Limonciello" <mario.limonciello@amd.com>, 
+	"Shyam Sundar S K" <Shyam-sundar.S-k@amd.com>
+Cc: <linux-usb@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>, 
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	"Mathias Nyman" <mathias.nyman@intel.com>
+Subject: Re: USB-audio isochronous Missed Service Errors on AMD Zen5 client (Fire
+	 Range) -- Data Fabric idle C-state? No OS-level knob found
+In-Reply-To: <18b4f7b23ba6392f.e25301f473da0264.54f7bc72d1817dd4@GordonMsi>
+References: 18b4e4f7089aa4f1.da8dbe994ae3bb77.445e21b98b0b205b@GordonMsi 78ebe71f-85a8-4675-aa0e-6011353dee39@linux.intel.com
+	 18b4f7b23ba6392f.e25301f473da0264.54f7bc72d1817dd4@GordonMsi
+Message-ID: <18b4f8f0c2ce37be.8d4c4c4ee804b95a.4c2042ec04b99872@GordonMsi>
+Date: Mon, 1 Jun 2026 13:44:25 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38251-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-38252-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chengordon326@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,oldschoolsolutions.biz:email]
-X-Rspamd-Queue-Id: 8B2296204C4
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: F05B5620596
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, May 30, 2026 at 10:20:22AM +0200, Jens Glathe via B4 Relay wrote:
-> From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> 
-> This reverts commit b145c3f29d62f71cc9d2d714e2d4ae4c8d3f863d.
-> 
-> The deduplication logic appears to cause issues with separate
-> SBU muxes. The mode-switch call on these (like gpio-sbu-mux)
-> never appeared, so no successful mode-switch happened. The more
-> high-end Parade PS883X redrivers are not affected due to being
-> retimer-switch. The revert fixes dp altmode mode-switch for both.
-> 
-> Tested on:
->   Lenovo Thinkbook 16 G7 QOY
->   Lenovo Ideapad 5 2in1 14Q8X9
->   Microsoft Windows Dev Kit 2023 (Blackrock)
->   Lenovo Thinkpad T14s G6
-> 
-> Fixes: b145c3f29d62 ("usb: typec: mux: avoid duplicated mux switches")
-> 
-> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Hi all,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+A quick correction and a sharper question after probing the PCIe side.
 
-> ---
->  drivers/usb/typec/mux.c | 13 +------------
->  1 file changed, 1 insertion(+), 12 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> index db5e4a4c0a996..9b908c46bd7df 100644
-> --- a/drivers/usb/typec/mux.c
-> +++ b/drivers/usb/typec/mux.c
-> @@ -275,9 +275,7 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
->  static void *typec_mux_match(const struct fwnode_handle *fwnode,
->  			     const char *id, void *data)
->  {
-> -	struct typec_mux_dev **mux_devs = data;
->  	struct device *dev;
-> -	int i;
->  
->  	/*
->  	 * Device graph (OF graph) does not give any means to identify the
-> @@ -293,14 +291,6 @@ static void *typec_mux_match(const struct fwnode_handle *fwnode,
->  	dev = class_find_device(&typec_mux_class, NULL, fwnode,
->  				mux_fwnode_match);
->  
-> -	/* Skip duplicates */
-> -	for (i = 0; i < TYPEC_MUX_MAX_DEVS; i++)
-> -		if (to_typec_mux_dev(dev) == mux_devs[i]) {
-> -			put_device(dev);
-> -			return NULL;
-> -		}
-> -
-> -
->  	return dev ? to_typec_mux_dev(dev) : ERR_PTR(-EPROBE_DEFER);
->  }
->  
-> @@ -326,8 +316,7 @@ struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode)
->  		return ERR_PTR(-ENOMEM);
->  
->  	count = fwnode_connection_find_matches(fwnode, "mode-switch",
-> -					       (void **)mux_devs,
-> -					       typec_mux_match,
-> +					       NULL, typec_mux_match,
->  					       (void **)mux_devs,
->  					       ARRAY_SIZE(mux_devs));
->  	if (count <= 0) {
-> 
-> ---
-> base-commit: 7da7f07112610a520567421dd2ffcb51beaefbcc
-> change-id: 20260530-typc-mux-modeset-e5f8a38a100c
-> 
-> Best regards,
-> -- 
-> Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> 
+I checked the controller's PCIe config (lspci -vvv): the xHC function
+(0000:6b:00.3) has no Latency Tolerance Reporting extended capability at all
+and reports DevCap2 LTR-. Its upstream root port (00:08.1) is LTR- as well.
+So the PCIe-layer variant I floated in my last mail is a dead end -- there
+is no LTR register to write, and neither the endpoint nor the root port
+advertises the mechanism.
 
--- 
-heikki
+That leaves an apparent contradiction I'd appreciate help squaring:
+
+  - USB/xHCI layer: HCCPARAMS1 LTC = 1 (the controller advertises Latency
+    Tolerance Messaging Capability).
+  - PCIe layer: the same function is LTR- (no LTR capability at all).
+
+So if I issue a Set LTV command (the driver-injected path you mentioned),
+where does the xHC actually forward that aggregated tolerance value to the
+fabric, given it has no PCIe LTR egress? Is there an internal sideband path
+to the DF on these integrated AMD controllers, or does LTC only affect USB
+link power states on this silicon -- in which case Set LTV would never reach
+the Data Fabric?
+
+If it's an internal/sideband path (Mario / Shyam?), a Set LTV PoC is still
+worth trying. If LTC is purely USB-link-scoped here, it won't touch the DF
+idle problem and I should look elsewhere. That distinction decides whether I
+write the PoC at all.
+
+Thanks,
+Gordon Chen
 
