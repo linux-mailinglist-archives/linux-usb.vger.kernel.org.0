@@ -1,184 +1,165 @@
-Return-Path: <linux-usb+bounces-38210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38211-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GMr1CejzHGrxUQkAu9opvQ
-	(envelope-from <linux-usb+bounces-38210-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 04:52:24 +0200
+	id mFr/IfT8HGoYUwkAu9opvQ
+	(envelope-from <linux-usb+bounces-38211-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 05:31:00 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74451618E82
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 04:52:23 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0208861938D
+	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 05:30:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 367813016915
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 02:52:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B112E300B87C
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 03:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D52822F74A;
-	Mon,  1 Jun 2026 02:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13AD3238D52;
+	Mon,  1 Jun 2026 03:30:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VCFxPQ3Y"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="U5yYzer2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAB81DED63;
-	Mon,  1 Jun 2026 02:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A5220B80B;
+	Mon,  1 Jun 2026 03:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780282324; cv=none; b=LPbjzxQIl1bSzgLcY/ez3gbgS4VwBcu3qLicVwX1l7cc1bBapT28tQIQ/Y/oRQvYGU17FegKXLIFum12nQNmHWW8+zcQoGXlGvmhuyoZM594Np2HuIolDJb84WQfxYYMO7KAoBzig+gjXRsL8Rk5BYEenYSlPWx0hHnnhrSullM=
+	t=1780284648; cv=none; b=YUvAOVTsAoAfrKapl9cCrVhU71ellm2PuW3C+xxDNCebaY11trJiKDqYdxCUJ73s3rMB9vwEoJQR63094cEhpH+nflFBDS/EotncVczkx3Xe0RU2PyN7rL15y17JdP7bAAGJqeZ5oNx+xVAjAhUvDFAS4Lg8Bs+9Dje36Z0eCCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780282324; c=relaxed/simple;
-	bh=gFx0CXu6EGFMy8QGSKa/fPMUv8w8pD+02r4pN8tto4Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PzBD9egqswwIZ68CamBY78L/vGiZ1kG8CMowIMlKOok5CTG4sps3eBdXwiCrwLNjBQSZTRx469cM3CRgXu9BLyathdcD6qMeJkhYgruXAHuVhykjC2wSU3KDEnfcZK3NsOmoM7+Zr3UxGdVGJ5RnL4nFAwkMhodrV0NoT7UkqJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VCFxPQ3Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95D7DC2BCB4;
-	Mon,  1 Jun 2026 02:52:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1780282323;
-	bh=gFx0CXu6EGFMy8QGSKa/fPMUv8w8pD+02r4pN8tto4Y=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=VCFxPQ3YwQYBKdGzDvTvKNpi6qHKUSjVufjqSiN0zOPFUO1R/455CTPh/Eyb97XYk
-	 ofhq31K2+emU7hyVfqWJV5osSIcDklKHiZoHbfHf54Pu5KYKtKh/eGeCJRSYX+Tqbq
-	 lW0JgJB1sS259xI3fW8FiJmeQctKD0XKjVkE1gY/HCMrCqjY2XWZlTdSOolYTvj+gI
-	 dGSDabvzAPo2+Jg96yki0WPHsjEvNgUU5hL2fbs5wNFHbwLatPVuxXtoHq++806iv5
-	 QSVx0xPGVgx/iwClehTgriat8hGU4J1d+j5zbyQhk3EAYqECV3q4uZe7KeEZPiB/Aw
-	 AF7iNqy+eA5Kg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C9ACD6E55;
-	Mon,  1 Jun 2026 02:52:03 +0000 (UTC)
-From: Jack Wu via B4 Relay <devnull+jackbb_wu.compal.com@kernel.org>
-Date: Mon, 01 Jun 2026 10:52:01 +0800
-Subject: [PATCH] USB: serial: option: add new usb-id for Dell Wireless
- DW5826e-m
+	s=arc-20240116; t=1780284648; c=relaxed/simple;
+	bh=Mu6SJ19ACRU19B3QoaOsRb5p5LNRKIJYmOKXEGBYOr8=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=aV1y2iOG/LHPj1Pa4t8jSApXsNtHqmUsDyNQyLSAJimCsVtBt99U7+JCiZq+g57pEqRL6kEgUx8Z4st3AdGQBtddNvws5DrpzVg22cLDYiUlLFEf2wdszRXFO0bCbyp7IrpVIl5/uSpvOHaOKiPBgqRpezMp48HBlO6RSrINVa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=U5yYzer2; arc=none smtp.client-ip=203.205.221.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1780284637;
+	bh=9HuMwzHiOFQ6cRhE+WD/ccaIIu7OOVejhB8VQT70LDY=;
+	h=From:To:Cc:Subject:Date;
+	b=U5yYzer2YUzRBTCNoaZBR7lN2zXt0Jf/vcTp2gUoai/gKASbtcUB3XaWjQtKrJDmv
+	 AGlQU9MI/xy45RXft6FWDLx0VRsH/eqjlDdJbVytVAPGW4FvGSmeATMUI39LFfu+Mx
+	 yzGqzQk+X9rhOq6NhqjScdDuxyAL51vRyKHXihhM=
+Received: from localhost.localdomain ([240e:40d:2100:2c8b:dc3c:374b:f004:8f4d])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 7561C849; Mon, 01 Jun 2026 11:29:22 +0800
+X-QQ-mid: xmsmtpt1780284562txqawymen
+Message-ID: <tencent_96AA6EAB892D4596D70BA972ECC3667AC505@qq.com>
+X-QQ-XMAILINFO: NA01pC2kVxOgVdyRhJbs6IC8JQOODnACZfF3z8ZouUvK6Wkw4nVWbSbbz+rcdp
+	 FgFJDmHGiE5pQNihnizcdbXXeRyGyY/Oi4f8qnsQYdDOE+LJOwpwckXWIoKUUV2P18InKukSu5ax
+	 ioJJzwzivclxkJNpXd918vDqp4xLYIZShmdBDSWaFsYunhVvcc95xehYSCwloVmFE9aFBMpNnnf1
+	 HZjO0vuw+2thpeeW4GkMt86b+PU4hiU83/hV13zC8j4aX22yI2B42Ccq1NCzFEN3KGzC0M0VtONm
+	 hCc9LfqJrtC6sX3dmh+EFeUmgIc3e8il7Pgkpsr4Q7mu0fgD8n+J/9+G+cNGthnJy05NBNcLZc/b
+	 NN65pVoV+k0LVIHhG/RkIH4GtGpCZnrJe4FWzVeoJbAU7h4OAt/r0RpWVz6zHygMSsk8cJVylgcg
+	 j97tico3GmzXcMHOqlfW2PLbZmN+aFH+PVoiLO7dyQwS9qi0ysPfkSzeSoE3+82+e/qms1Fm2aJK
+	 L0jymRz7pqv8UlPkBxnm7pKN5mVsPFLBZJ0JmJPg31yhz5mLgcIQpxLc+dr8nV0L5zl9nmyWUM1T
+	 V71Kebfk/nb4Jxc5t9LsldGCFjKli7GPpp/yXVMSwMO0T4Vxks3/b2XzWEhyUP6l8ZbgGnkkPTm/
+	 6MdxztI2PXk9Z7IGEKZLLlvpG+KO5W4okrBUFNSfES8+PkEp4JleK9MkO1rjdu0Mqao5bKcK4g19
+	 fQa3Gkci9DOBTz1UFETz3qmMPNx/RtPqpqYOqAcHiw0h40x/s1SKz1m5uVfw5fNtUpBMmw3c6InP
+	 +nIDBp+TOSasZYu6SuOAbfL88JolKXAlZgWHGPk6iXjG34MF2ms3A+36A/yi86z5rrfWrrj7pVtZ
+	 eCG0pbGDCicJR+aHUBsUUWGmeSoUIgRtTwneVgQxp1f1r1woNzZ3OrslyAZAmRWUvzHSoj/NnFEt
+	 j5ZsPJqhh6oTNo76g+/e4AnM7OARSNrsRYKHBdINJyqBxfxfsPwnIW2fPtQlIeF7FIf5rfZqR/Q0
+	 twSBkKN+yyAbQdwGZ/dY4UrEDPfASD2AJR4xCevvyv0NpHCKSb
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+From: Shaoxu Liu <shaoxul@foxmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: shaoxul@foxmail.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] Add power management op for RNDIS host
+Date: Mon,  1 Jun 2026 11:29:19 +0800
+X-OQ-MSGID: <20260601032919.1877007-1-shaoxul@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260601-dw5826e-option-driver-v1-1-e0a0a72cfe1b@compal.com>
-X-B4-Tracking: v=1; b=H4sIANDzHGoC/yXMwQqDMBCE4VeRPXchphhsX6X0YJJR14PKRm1Bf
- Pemevxg5t8pQQWJnsVOik2STGNGeSso9M3YgSVmkzXWGWdKjp+qtg48zUueclTZoIyHb4K517C
- +ovydFa18z+7rfTmtfkBY/jE6jh95huZpeQAAAA==
-X-Change-ID: 20260601-dw5826e-option-driver-e9bac038e2b5
-To: Johan Hovold <johan@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jack Wu <jackbb_wu@compal.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780282322; l=2993;
- i=jackbb_wu@compal.com; s=20260526; h=from:subject:message-id;
- bh=oLGr2MBmaHaVF3yGoDC09WgaV1UaQJ2oj62gl0Nv3Vk=;
- b=U9qVeaGN82mBG+a8oU//dTL8mbR9c27hVxQSQkmt4+mJ/Y2QR9I+D+69G3FSCK6N7Ux98uO9h
- 3u0vcLSvAYRCoZQ/b6DVSrPQxj8zeHcsiWxH44TE2hPoQu+oVK/BO7I
-X-Developer-Key: i=jackbb_wu@compal.com; a=ed25519;
- pk=VH1prTWixNl8OEUPPSfII3p46MzJpQN8J3+ecE1tZXg=
-X-Endpoint-Received: by B4 Relay for jackbb_wu@compal.com/20260526 with
- auth_id=793
-X-Original-From: Jack Wu <jackbb_wu@compal.com>
-Reply-To: jackbb_wu@compal.com
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[foxmail.com,none];
+	R_DKIM_ALLOW(-0.20)[foxmail.com:s=s201512];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38210-lists,linux-usb=lfdr.de,jackbb_wu.compal.com];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	HAS_REPLYTO(0.00)[jackbb_wu@compal.com];
+	FREEMAIL_CC(0.00)[foxmail.com,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38211-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[foxmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[foxmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[shaoxul@foxmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,compal.com:replyto,compal.com:mid,compal.com:email]
-X-Rspamd-Queue-Id: 74451618E82
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 0208861938D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Jack Wu <jackbb_wu@compal.com>
+RNDIS host does not manage the USB power, and it will
+cause more power consumption even when no data transferring.
 
-Add support for Dell DW5826e-m with USB-id 0x413c:0x81ea
+Adding the power management operator will make the USB
+enter suspend mode when no data transferring.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=413c ProdID=81ea Rev= 5.04
-S:  Manufacturer=DELL
-S:  Product=DW5826e-m Qualcomm Snapdragon X12 Global LTE-A
-S:  SerialNumber=358988870177734
-C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#=12 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:* If#=12 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#=13 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#=13 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Signed-off-by: Jack Wu <jackbb_wu@compal.com>
+Signed-off-by: Shaoxu Liu <shaoxul@foxmail.com>
 ---
- drivers/usb/serial/option.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/usb/rndis_host.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 48ae0188f2e9..e37013a6956a 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -203,6 +203,8 @@ static void option_instat_callback(struct urb *urb);
- #define DELL_PRODUCT_5829E_ESIM			0x81e4
- #define DELL_PRODUCT_5829E			0x81e6
+diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
+index 7b3739b29..76eb65fd5 100644
+--- a/drivers/net/usb/rndis_host.c
++++ b/drivers/net/usb/rndis_host.c
+@@ -630,6 +630,17 @@ static const struct driver_info	zte_rndis_info = {
+ 	.tx_fixup =	rndis_tx_fixup,
+ };
  
-+#define DELL_PRODUCT_DW5826E_ESIM	0x81ea
++static const struct driver_info	rndis_info_lowpower = {
++	.description =	"RNDIS device",
++	.flags =	FLAG_ETHER | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SETINT,
++	.bind =		rndis_bind,
++	.unbind =	rndis_unbind,
++	.status =	rndis_status,
++	.rx_fixup =	rndis_rx_fixup,
++	.tx_fixup =	rndis_tx_fixup,
++	.manage_power =	usbnet_manage_power,
++};
 +
- #define DELL_PRODUCT_FM101R_ESIM		0x8213
- #define DELL_PRODUCT_FM101R			0x8215
+ /*-------------------------------------------------------------------------*/
  
-@@ -1125,6 +1127,7 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(0) | RSVD(6) },
- 	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_FM101R, 0xff) },
- 	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_FM101R_ESIM, 0xff) },
-+	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_DW5826E_ESIM, 0xff) },
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
-
----
-base-commit: e43ffb69e0438cddd72aaa30898b4dc446f664f8
-change-id: 20260601-dw5826e-option-driver-e9bac038e2b5
-
-Best regards,
---  
-Jack Wu <jackbb_wu@compal.com>
-
+ static const struct usb_device_id	products [] = {
+@@ -657,6 +668,11 @@ static const struct usb_device_id	products [] = {
+ 	/* RNDIS is MSFT's un-official variant of CDC ACM */
+ 	USB_INTERFACE_INFO(USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
+ 	.driver_info = (unsigned long) &rndis_info,
++}, {
++	/* RNDIS for Telit Cinterion low power LTE cat1biz modules LE310X1*/
++	USB_DEVICE_AND_INTERFACE_INFO(0x1bc7, 0x7030,
++				      USB_CLASS_WIRELESS_CONTROLLER, 1, 3),
++	.driver_info = (unsigned long)&rndis_info_lowpower,
+ }, {
+ 	/* "ActiveSync" is an undocumented variant of RNDIS, used in WM5 */
+ 	USB_INTERFACE_INFO(USB_CLASS_MISC, 1, 1),
+-- 
+2.25.1
 
 
