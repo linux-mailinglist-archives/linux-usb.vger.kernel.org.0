@@ -1,82 +1,82 @@
-Return-Path: <linux-usb+bounces-38264-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38265-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +Cm6I1UTHmrugwkAu9opvQ
-	(envelope-from <linux-usb+bounces-38264-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 01:18:45 +0200
+	id yAdKImwTHmrugwkAu9opvQ
+	(envelope-from <linux-usb+bounces-38265-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 01:19:08 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03F4762646D
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 01:18:44 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08C4E626485
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 01:19:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B23BD30557C9
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 23:15:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AA094304C755
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 23:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C121385D79;
-	Mon,  1 Jun 2026 23:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42174349CFE;
+	Mon,  1 Jun 2026 23:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="et3aWNAB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMVleSNg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4957838737E
-	for <linux-usb@vger.kernel.org>; Mon,  1 Jun 2026 23:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABA43815E3
+	for <linux-usb@vger.kernel.org>; Mon,  1 Jun 2026 23:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780355749; cv=none; b=EzOjJGzAEs7kudgaf4vNMI01dVybzyToehdDUTUFt5PqtNI/IMAILc6+j0D09YPIgdzd2BzYf31BtWbRt+T9jy6dgpGw7Vti7WHOoloW6ejVb+BzWtUHrKANly64lbcs/cOeJD/J4xRr23M4zQvHVTNFKlktOU3CPWVVXbjT+zE=
+	t=1780355760; cv=none; b=l4C4RhVNuWFTIWzFamDSLrdMkU9xWmgvICsivr2bTzEwPfzIPesvIgmqjjoEIQ0Slq3jF6gphHqvs1qU8KftPp5H+QC5Gi/PFc+HDQ9azo3g4MAZ1ejdlpcXZbMHnHa91c+Uus9q7ohWqjOGRNzOeuwz0gGw/k9wgDFMpDeb7Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780355749; c=relaxed/simple;
-	bh=pEOFktyEdDrmsMq+VxhyWtZQC/mdnC1YCF3iTCL9224=;
+	s=arc-20240116; t=1780355760; c=relaxed/simple;
+	bh=uzHEC8gmAxO8h2736QEykyhvl3Sb4cDm5wxPO1UPc5o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Dv3nBhkLrBmF+4VVyGYlSo+FqTmUmmirdYBJUaxVgWlSNIlDiLmZRt8v8jlLoQKjPhRjcN3K+jdTJ4lB04cLDPW1x/HG8GC5VWTjBUBAEjsnh6sD3yCxpMl95MGfCkh3kLHxzXUYbpuK5AMIn0ITMbnk/J2jyR/ZSrqQqK624Mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=et3aWNAB; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=XEJ5oljfP3MxmTugQ0NKnNJPMECre+ErgocwFuHIqLZzHbtE9sm9OVceWSzCQlj9e22SotxnvXiW7f6kvX8N4WcAF5p2YkseaR3P9CTtGLPHkx3a7F5hDtrRKNXq3SqVSROjaBN331sKJZpHTbugbdGjwp3RhgqRZv3IxXXde5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMVleSNg; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2bf3781ca51so26315375ad.0
-        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2026 16:15:47 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf237e1433so37026135ad.1
+        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2026 16:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780355746; x=1780960546; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780355757; x=1780960557; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xQhwbUv75riwhJ2xHnBk5bpyd72x1+FfpjxIgAuZhAc=;
-        b=et3aWNABTQ80KblQvTDfx1fppju0qciGXnI8ZWmoLtkAYX3QQxrvPRRVI9oaZ+s9dj
-         RWoWVLZvaf9v5o9Hlvuol8nTXW593VXYx6a9H+H+QptUVtebnP4yJLp9Tak5PNe2cXvo
-         P9v3fgjkk2flPzs2vlki98uZxr3eBmp0w3TDG55LPDT7qpcgwUy/Wy9/7PGaXZV6zc8j
-         cC6UsZshHWwbtcp0EZRILCiXPPSpi9jXYmYj/i4B9BQOGJu8kHBhrtvCVP7uHSlauMmk
-         BtbFXTdgAK8V48gBCQA8rHL2tEkWcyverHPkqNQu3LXl1mVHhpjRplFZvi3eF27lX1cW
-         39Uw==
+        bh=vEGOFfHWeLdHXhuCkKkw3VwMtN/iTVupSierNalI6tY=;
+        b=RMVleSNg7SysWCVkIwV15Cs9NIe155+C6D0hH2rdk286QD0CYLMowHSAFHOMPmTvn6
+         RjDPw2pDBBNKZ2FiSX2jVxnnCyFZlkHZxf6NJzwrQ+RHQyY8P7nj0d4T3oc/ePfKCo26
+         BZaC/9b0G7ErUrx4IHolcs513omlBQJ4exBbxyBYZD+rC64UmZTsDvPpBUjnJ+5I97b5
+         QgDA1/pjqb3zJWUZM7ZoMAs5qJdC9IlnBBGphTczAQ6mumBRlJo+FdHPk9lf+GLYXhkf
+         3S3KcdJ48E5gWZp5T6ky2J2Hqdb9SiFLTjBuoEoC05cxislC0GjnRLD2KiiJcd6YgS3T
+         dgfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780355746; x=1780960546;
+        d=1e100.net; s=20251104; t=1780355757; x=1780960557;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=xQhwbUv75riwhJ2xHnBk5bpyd72x1+FfpjxIgAuZhAc=;
-        b=q35G32NC6dzHX1sLEWguElmueiN5pNyZfE7ld/6hroba3j/kqe6CZfN+KPya/Bk2SF
-         9bsNdEfe14AIKdfhkzIidd7Qc6jIDWd68RruQD2ZuO6XDBSVQUEDTMLTYfIOurc6mTXv
-         YH6a/1pFkaUSL/mELqpxbn11HEDmgGHfxuv6MMOKT/8IANsP5D0e9KzHiUovO/l6y5fy
-         QF0o5bvBU8Ty9PYS8cVsnShDdwlDp1wmSeu395hsp0zO0EPSO2sXrDwxd4g+8BZHB4SK
-         xm/JewZVfnAGKug7ouZj5jUAvpayT/yFnpyJS8UhtOZTTcBzePPEJmPSJSVfsmBKXqkV
-         6Z9w==
-X-Forwarded-Encrypted: i=1; AFNElJ/R9TUOlnws2UVNoKy3RKuzt2PibnmJZHJEjrRDSqM7bqtBSvQ9sCt4BsoQr5cmUGkQBFvEBY/RLHo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU6hUykTL++c75a4HhLjuNKiCypS1HKGAYww8RX7XZpZhi0smW
-	Rh4Ox3dTsJKUg3EA2zSd3ADx0wk7iVxCugD5HrBNbd9Yl018kIgrWpiu
-X-Gm-Gg: Acq92OHQeIyjkYhD0qaoE98+PGmIkvaX3RjmeIfZQtq9cX8CUCiBetEA5Gg3tvHMMT9
-	wo4pNy3DZLqBDVWv5B3FNZ/Zw6GgOE+gQ+6cDx7fWkNpKJEOd3WS/Wt/neqvY9EAfa1nejfcwfL
-	WgN9ezDx9yDlYxi1xZ5U92Jux+wN93rH3Dvn1z6p6pQhRwaMHIe7OTHd0pBXhmVgMwLuVcFKrhO
-	OyeaTwjDM9hPnHVS4Y/gf0ne8tluZ6lMM9xCd6HpIKwsvmRbsqmG7q5/72ZuXcuV+o0w0aTElCe
-	8zgZMBsNHRxEYdpveP31PQfdYWQJGKW8t177d3DodP81Dk/L9PigwZoi6pfFJK8lCAAOvR46FnS
-	FWlIT1Hyd6kYEbt+84L4GWdr/Srszj7r7HvdiUWYgNPcoLwZlsjNwAiZCt+2NNkYKI3QI9WiDOT
-	2epf0wA8ZkDry7AXDSbMugHvkpF1HREhIwWGAKWJIkCp2hmb4FRPqNp7IcTZdZHfrlgXqXKxfvO
-	b547bczhFqzXZYkz60Q
-X-Received: by 2002:a17:902:d58d:b0:2bf:2e28:db28 with SMTP id d9443c01a7336-2bf368263d0mr145407195ad.29.1780355746509;
-        Mon, 01 Jun 2026 16:15:46 -0700 (PDT)
+        bh=vEGOFfHWeLdHXhuCkKkw3VwMtN/iTVupSierNalI6tY=;
+        b=WYfKg7vaf3VQZvW4SlTzG1oqwGR4pM8ilvrYbPJy97zn4ECWCj8V3UIBxEzgg7ZE5G
+         glDL58GWsrH7UNhkUis7EEMEEftHL+1QjsYXt0zXlBVgOI7Uz3Ra+3P6QrQIXXMmM2IG
+         JTrrn2JNELXPswvygyOLj5kvs6bFW3xLrR/Ja3AVETpT+SYWdUqOnlAybtM/jtDjv7pv
+         HEJdMh0aLZzSq4xJDaaDIas5v5SGRXAdU4P2jAbkN24SHyPDMNLL/ho1VMsXh5Wv2g9H
+         8qkUfwdonZE8xGrt88efCEgk3uWPz2lDQRzPt5Cv+QzY4B3uEjyiSMe6UScyAc6EG/IC
+         lHEw==
+X-Forwarded-Encrypted: i=1; AFNElJ9u0XZub0OiPgkC9Zj6g3ag+uLfT2kmWsahdT0KGKJ1EX5cbQ0qQo2+Z830pjAA2t2iiEwCvKEC/i0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvoOJWli5rzL3jruJqnlRFG8Atud8yIufT0NN9yIcU9DUOInFI
+	gUN8bas8QBnxDSxWC0s4jQ7m0yeD7d+31jMDLe8FzjO7Uguc5pE1/KRiZN/ApCw1ZXQ=
+X-Gm-Gg: Acq92OGLRv23DyAkKoA82wDvOm1JhAfSUnYL7xMuGYzWYzs0wGtKNqvIU4ev5QsJ2LH
+	AKEgc/UmvhZes3iEK9pMoTrpKbQywf3V2c8XfAncQefWOGNojSBJpSP8BB4NOpyWwvsfdFqBTc8
+	7Ve3LSJeL40z4KlQ9AoPJkE8UXgFUBc3gao8WsSrZwVZHK6W/uZxQDIq1Mb2t7+FoYK9hnPN9yM
+	6Cne2ZAVkRDGFQoWtROUOfsPIvCLtunGMU07YsAosDtv30ojCVI9D8KyD8HBqk6xeKy/Ii1BqdU
+	YJUoZh/Q47ukYjAyX8BI6hztFWSLCiLQ3BnrMEjOQus2dqWNPGV46wnwVcRo7jASg47H6vctIbQ
+	Dfp3GuKXQE21ArSzitWTlOqRPjMqmbAhJWNq29VOq/UzL5y5i/qzRxcnZk/oJCEPoZyHdCSqZ6i
+	5P6rH1O2a9JgoeU3ERPEXYaSd0XGmzO7jeojLuNR7HiFtnu7DGtYz12nr4PtD3wjHWjdfiWryyy
+	/Pkt7RCC2BmueGjObBd
+X-Received: by 2002:a17:902:cec4:b0:2c0:bb2d:a321 with SMTP id d9443c01a7336-2c0bb2db260mr104962495ad.37.1780355757465;
+        Mon, 01 Jun 2026 16:15:57 -0700 (PDT)
 Received: from tomriddle.canterbury.ac.nz ([202.36.179.106])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239fd24fsm143815355ad.20.2026.06.01.16.15.41
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239fd24fsm143815355ad.20.2026.06.01.16.15.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 16:15:46 -0700 (PDT)
+        Mon, 01 Jun 2026 16:15:57 -0700 (PDT)
 From: Oliver White <oliverjwhite07@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Rob Herring <robh@kernel.org>,
@@ -91,9 +91,9 @@ Cc: Felipe Balbi <balbi@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: usb: dwc3: document snps,reinit-phy-on-resume
-Date: Tue,  2 Jun 2026 11:12:34 +1200
-Message-ID: <20260601231236.20402-2-oliverjwhite07@gmail.com>
+Subject: [PATCH 2/3] usb: dwc3: add reinit-phy-on-resume quirk
+Date: Tue,  2 Jun 2026 11:12:35 +1200
+Message-ID: <20260601231236.20402-3-oliverjwhite07@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260601231236.20402-1-oliverjwhite07@gmail.com>
 References: <20260601231236.20402-1-oliverjwhite07@gmail.com>
@@ -111,7 +111,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -121,7 +121,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[13];
-	TAGGED_FROM(0.00)[bounces-38264-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-38265-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -131,45 +131,86 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 03F4762646D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 08C4E626485
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add the documentation for the 'snps,reinit-phy-on-resume' boolean
-property. When set, the DWC3 core will perform a full phy_exit() +
-phy_init() cycle on each USB2 PHY during the host-mode fast resume
-path. This is needed on platforms where the USB2 PHY power domain
-is gated during deep sleep even when device_may_wakeup is true.
+Some platforms gate the USB2 PHY power domain during deep sleep
+(S3) even when device_may_wakeup is set, which causes the PHY
+register state to be lost. The DWC3 fast resume path (taken when
+device_may_wakeup is true) relies on phy_pm_runtime_get_sync() to
+restore the PHY, but this is a no-op for PHY drivers that do not
+implement runtime PM (e.g. the Qualcomm eUSB2 driver).
+
+Add a new boolean quirk 'snps,reinit-phy-on-resume' that, when set,
+forces a full phy_exit() + phy_init() cycle on each USB2 PHY during
+the host-mode fast resume path. This ensures the PHY registers are
+properly re-programmed after power loss.
 
 Signed-off-by: Oliver White <oliverjwhite07@gmail.com>
 ---
- .../devicetree/bindings/usb/snps,dwc3-common.yaml      | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/usb/dwc3/core.c | 25 +++++++++++++++++++++++++
+ drivers/usb/dwc3/core.h |  1 +
+ 2 files changed, 26 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
-index 6c0b8b653824..d12f6ae81ab8 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
-@@ -212,6 +212,16 @@ properties:
-       When set, run the SOF/ITP counter based on ref_clk.
-     type: boolean
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 161a4d58b2ce..82baaab0d1d1 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1854,6 +1854,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
  
-+  snps,reinit-phy-on-resume:
-+    description:
-+      When set, the DWC3 will re-initialize the USB2 PHYs during the
-+      host-mode fast resume path (device_may_wakeup). Some platforms
-+      cut PHY power during deep sleep even when USB wake is enabled,
-+      and the standard PHY runtime PM resume is insufficient to restore
-+      the PHY register state. This quirk forces a full phy_exit() +
-+      phy_init() cycle on each USB2 PHY.
-+    type: boolean
+ 	dwc->dis_split_quirk = device_property_read_bool(dev,
+ 				"snps,dis-split-quirk");
++	dwc->reinit_phy_on_resume = device_property_read_bool(dev,
++				"snps,reinit-phy-on-resume");
+ 
+ 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+ 	dwc->tx_de_emphasis = tx_de_emphasis;
+@@ -2561,6 +2563,29 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+ 			dwc3_writel(dwc, DWC3_GUSB2PHYCFG(i), reg);
+ 		}
+ 
++		/*
++		 * Some platforms gate USB2 PHY power during deep sleep even
++		 * when device_may_wakeup is true, causing register state to be
++		 * lost.  Re-initialize the PHY to ensure clean signalling.
++		 */
++		if (dwc->reinit_phy_on_resume && !PMSG_IS_AUTO(msg)) {
++			for (i = 0; i < dwc->num_usb2_ports; i++) {
++				int ret;
 +
-   snps,resume-hs-terminations:
-     description:
-       Fix the issue of HS terminations CRC error on resume by enabling this
++				ret = phy_exit(dwc->usb2_generic_phy[i]);
++				if (ret)
++					dev_warn_ratelimited(dwc->dev,
++						"failed to exit usb2 phy %d: %d\n",
++						i, ret);
++
++				ret = phy_init(dwc->usb2_generic_phy[i]);
++				if (ret)
++					dev_warn_ratelimited(dwc->dev,
++						"failed to init usb2 phy %d: %d\n",
++						i, ret);
++			}
++		}
++
+ 		for (i = 0; i < dwc->num_usb2_ports; i++)
+ 			phy_pm_runtime_get_sync(dwc->usb2_generic_phy[i]);
+ 		for (i = 0; i < dwc->num_usb3_ports; i++)
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index a35b3db1f9f3..f64cf709e194 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1403,6 +1403,7 @@ struct dwc3 {
+ 	unsigned		dis_metastability_quirk:1;
+ 
+ 	unsigned		dis_split_quirk:1;
++	unsigned		reinit_phy_on_resume:1;
+ 	unsigned		async_callbacks:1;
+ 	unsigned		sys_wakeup:1;
+ 	unsigned		wakeup_configured:1;
 -- 
 2.53.0
 
