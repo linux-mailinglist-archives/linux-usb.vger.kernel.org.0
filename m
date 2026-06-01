@@ -1,233 +1,166 @@
-Return-Path: <linux-usb+bounces-38262-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38263-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AAmVG40AHmrDgQkAu9opvQ
-	(envelope-from <linux-usb+bounces-38262-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 23:58:37 +0200
+	id UMMLExcTHmrugwkAu9opvQ
+	(envelope-from <linux-usb+bounces-38263-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 01:17:43 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C63625B71
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Jun 2026 23:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE822626441
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 01:17:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1E1D7302B75A
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 21:55:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6BB20303CF84
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2026 23:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F242B37F724;
-	Mon,  1 Jun 2026 21:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7495A38945D;
+	Mon,  1 Jun 2026 23:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lDuneMgC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y+ljZqSw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA5D282F10;
-	Mon,  1 Jun 2026 21:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CD63822A6
+	for <linux-usb@vger.kernel.org>; Mon,  1 Jun 2026 23:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780350927; cv=none; b=INORgYoAnkzI+IDs1WCSwkaWwKr4sm6MBrrerT1YlLHcggiHwzQHghuuPqhU3hV17/WyCCcaSCWT67Bq8jkquX8Dv+ZCPlnhGp0j0Gkaa73PgaQS58m71NJBwKLKfuj7v2kSnfk4+miGbD1n1miZ7c2u6Vhc94d7129JphsNqJ8=
+	t=1780355734; cv=none; b=uR3aQlBP/UewcHlayBSBc49h28vd7uudWH4Sv9HgjnsjVrLw/oSRlXByJMdn4naZ8j0T7s3YjwaKP1yxdPbDd//7k0nUBGIBcqlZSglIlemX8KzLcBwUqg9tPsWyHJD4aKbRRQhhAucd5hIXKS9sKbJPzKi4+oOP4kh5/GaFtSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780350927; c=relaxed/simple;
-	bh=OPW7t2+scf7awova5FPOoTQNVM4dIqp3OEtLYGNHxRE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FjTjJ6c1MVE1mAiNCxAG9HAo3laE7Kq22O/3D6qNCFVxsfz9RzPttXXqvEx/BeeDRNKIuvU22Uw61sc3kHHuX1pfQLbvncDN/evz2+n8EEb3DAZCbkhmb30jiyzBO/XGCBbaOFEIXlsygrT+Y3BSkyBUDJigqEjr3OLKT+kO8Zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDuneMgC; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DEA1F00893;
-	Mon,  1 Jun 2026 21:55:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780350926;
-	bh=Btd7ETiVGpwE7oNRY8Tbs8MqaEa31ijMp/j+iytSgS0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lDuneMgCbrJYW+2aAqXGd1O172kgGoI3AnwmqFoacxgXNKX2JQlwpONWVoMyLH06Y
-	 +3fy6YDReRQBpMEhm2WmCm/MZoNqOehMyvT1L2gFsX5Tn0p33aBbRUAYITX6euXyd9
-	 UY8bgO/Gz0Ooa42fF1aHOQcEIEbM4CXYGVIxcLaJcMcMXB9HPK4OenmXy3BFuHopbw
-	 uCbLq0RxhWGu6jjiiXtRTYl3cs9gW6CM41d+0kJKWACmUm3yb3FbV+w7uKESeAngHA
-	 16GAgq3kGN5C6nVHYjo5yu5lGcWVECBprcxL5X3JnTqzy3XMxbqlD3QNNiOa95VXP9
-	 8Ygb5VrUfrDuA==
-Date: Mon, 1 Jun 2026 16:55:25 -0500
-From: Rob Herring <robh@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Pawel Laszczak <pawell@cadence.com>, Peter Chen <peter.chen@kernel.org>,
-	Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1780355734; c=relaxed/simple;
+	bh=5C0NvkvoNVW1GzuiitG2zF83G0Py8AToQX3X0I6RQCk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h1C0gExNBJhPVSkybLwLT1voEoPFtcAMF7/k7C80p9M1ixxBb9BjRKVonDgZ5JLPX+AKT6fCxLyD+tNxEmi0WYltIYs7UxTM/ItZfsLzB6qEus1nKHJdP2TjB4E2P0sOJZWlmnzIVaTtmdDoH7oKsBG/ihOhLCDyZNweqU4tD2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y+ljZqSw; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c0c2d792c8so12346345ad.1
+        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2026 16:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780355732; x=1780960532; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Qss5GDiUGvvZMzZ4WxtI6WP7Gai0GoYtE3oLWnkhZc=;
+        b=Y+ljZqSw9sDHUZce/xTH9q9LSh3fNE4l3hvu0SZbMWkj6Q46tZTsYGIu39OBw82Gmk
+         XJt24n2rhpyEDWIGsIbQ3XPe/lOD24AheQlZTQSMXs2pFAnh9oS6NclNY1KxMubXuokf
+         FLCNLSlCEGLVSQr7S59ClOUtQt6L5tktWaFwkAlC4SG25c8hL3NzGCxu6mDGPskpuAVP
+         GS85Z1RwBFENN3iGMVN+iQTsd2I6rFhsoBBlUD1d80S9Sj0TiGxvOPa7rka+KmnK7sTz
+         alWD7mtZPMqJsxEtbmy01odXnjRlQIU+98ZHCcFnDsWWiU2aSHEbeqRB7MafZCbK69zY
+         zM4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780355732; x=1780960532;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Qss5GDiUGvvZMzZ4WxtI6WP7Gai0GoYtE3oLWnkhZc=;
+        b=c1IRQFQFV2MyDHaAhq7VIABFetCd7J/Sxv6VPiKBnnMUCDLZhiD237BlMtVlUXBElz
+         OLoWKnMEAx7GbnswnRwxzg6f7/yDp9a+0iRzAef/n+hRpbu7gDMIiQ08nPYwnvrzRP+j
+         AXRLPMypN5dYWdNP5phkAu7nj0MOb/bkHEEImoioHSEARgMuj3Ytd1+u0kTNbuhE7JqN
+         WxsHnnvHHNkGHOs+uZShdIxpptBJf7hNIzRFUWnm9r/sv1PkcIDaZO3pMthOi/mUrFjb
+         /AVH/ZfvRA7WwR+hnpehK69Q4XC5eCqcxT6Xx2vlJuu0no7cBQRyv8BC7HrLILmeZElw
+         EbyA==
+X-Forwarded-Encrypted: i=1; AFNElJ+tvxaExOFIdsjWt2/FWUnH5C07SEZdIFule8M3/5WfuNogfdOVtYvLLBa9b0pHKUSA+QfIg/Ad3dQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/jQHePOlIhKeQZkekyi1JvMiB5n5UnTmdtLs5G5PcHMi5eQOd
+	kUvSCZ9z1GPW2wlhBgawHDNpcPTfXzds4WGFRt7OFZofw4SFzbyCfNyU
+X-Gm-Gg: Acq92OGZ9IQJtP2Oh8nTWE4uGRNUu+Y/98I9FKbz0EDfVkz6M9SUEOszJ+/X++yqtkh
+	cvo18XrOhXeOMEtJODzoeaa1vRjk4kPMJNtw7kIOqF5V1UrTdoAiZFa1TJHNSP6g1/x/hnfIpxs
+	Wmob6w8TeAOFue5fiEXW2Q6WYFZ/rsXCIYzidn2uut0H3YEUfCt9MO649zVEr2ObkpldQVCx2ip
+	luZariHHURKYUzhdA0co/o8we9pjje5S9a44ZGB2iHkzzUgbfpV5MK6I4HuyhZ+xey2LqRXzbw+
+	wR5WD9ccpXZxkTC39+WdtTi5d+56f1Tv5PV9OFoXQzCqWEpWwlhp+O754pKjKJNVe0iVRYakGI6
+	YUC/4eHU3ts/ZU6Q4b/2JDA1IHF+FezmrAqcwm/UYD7IW4lTaqiSYZfD0eeVubH3U6bzsG5EBv1
+	ZyIN1yhTo/0VO5alJOs25ysVCq06Aa3V0TShgyAbC3JHtGN9mGvbBqZuRVVWfwCc09dHWPpYwmS
+	cxFxlJLpWypTFXlCBSw
+X-Received: by 2002:a17:902:e88c:b0:2bd:9803:9308 with SMTP id d9443c01a7336-2bf36878d37mr136499995ad.36.1780355732165;
+        Mon, 01 Jun 2026 16:15:32 -0700 (PDT)
+Received: from tomriddle.canterbury.ac.nz ([202.36.179.106])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239fd24fsm143815355ad.20.2026.06.01.16.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 16:15:31 -0700 (PDT)
+From: Oliver White <oliverjwhite07@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 1/2] dt-bindings: usb: cdns3: Add cdns,cdnsp-no-drd
- compatible string
-Message-ID: <20260601215525.GA4114052-robh@kernel.org>
-References: <20260515-b4-no_drd_config-v8-0-75cb05317679@cadence.com>
- <20260515-b4-no_drd_config-v8-1-75cb05317679@cadence.com>
- <20260515-trinity-unthawed-c5ab5d7783f2@spud>
- <PH7PR07MB9538E14BE6778498A48FECEBDD002@PH7PR07MB9538.namprd07.prod.outlook.com>
- <20260519-defog-spiritual-2eeebb390ba7@spud>
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: Felipe Balbi <balbi@kernel.org>,
+	Oliver White <oliverjwhite07@gmail.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] usb: dwc3: add snps,reinit-phy-on-resume quirk for USB2 PHY power loss during S3
+Date: Tue,  2 Jun 2026 11:12:33 +1200
+Message-ID: <20260601231236.20402-1-oliverjwhite07@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260519-defog-spiritual-2eeebb390ba7@spud>
-X-Spamd-Result: default: False [0.34 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38262-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-38263-lists,linux-usb=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oliverjwhite07@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	NEURAL_HAM(-0.00)[-1.000];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,cadence.com:email]
-X-Rspamd-Queue-Id: C0C63625B71
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: DE822626441
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, May 19, 2026 at 06:49:36PM +0100, Conor Dooley wrote:
-> On Tue, May 19, 2026 at 08:47:30AM +0000, Pawel Laszczak wrote:
-> > >
-> > >On Fri, May 15, 2026 at 01:24:38PM +0200, Pawel Laszczak via B4 Relay wrote:
-> > >> From: Pawel Laszczak <pawell@cadence.com>
-> > >>
-> > >> Introduce a new compatible string 'cdns,cdnsp-no-drd' for Cadence
-> > >> USBSS/USBSSP controllers to support hardware configurations where the
-> > >> Dual-Role Device (DRD) register block is missing or inaccessible.
-> > >>
-> > >> This change follows the recommendation to imply hardware limitations
-> > >> directly from the compatible string rather than using a dedicated
-> > >> boolean property.
-> > >>
-> > >> When 'cdns,cdnsp-no-drd' is used:
-> > >> - The 'otg' register and interrupt resources are not required.
-> > >> - The 'reg' and 'interrupts' properties are restricted to 2 items
-> > >>   (host and device).
-> > >> - 'dr_mode' must be explicitly set to either 'host' or 'peripheral'.
-> > >>
-> > >> The standard 'cdns,usb3' compatible remains unchanged, maintaining
-> > >> backward compatibility by requiring all 3 resource sets (otg, host, dev).
-> > >>
-> > >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> > >> ---
-> > >> v8:
-> > >> - Update commit message to reflect schema changes.
-> > >> - Removed 'cdns,no-drd' boolean property as per Rob Herring's suggestion.
-> > >> - Introduced a new compatible string 'cdns,cdnsp-no-drd' for controller
-> > >>   variants that lack the DRD/OTG register block.
-> > >>
-> > >> v7:
-> > >> - Rename 'no_drd' to 'cdns,no-drd'.
-> > >> - Update commit message to reflect property renaming and schema
-> > >changes.
-> > >> - Simplify 'reg-names' using a single enum.
-> > >> - Revert 'interrupt-names' to a list of constants.
-> > >> - Move 'reg' item descriptions to if/else blocks for accuracy.
-> > >> - Clean up 'if/then' logic (remove redundant checks).
-> > >> - Add explicit 'items' list for 'interrupt-names' in the 'else' block.
-> > >>
-> > >> v6:
-> > >> - Fixed validation error for 'interrupt-names' by correcting
-> > >>   the items definition.
-> > >> - Adjusted 'minItems'/'maxItems' to properly support the optional
-> > >>  'wakeup' interrupt.
-> > >> - Fixed 'too long' schema error in examples.
-> > >>
-> > >> v5:
-> > >> - Implemented strict conditional validation using if-then-else logic.
-> > >> - Enforced 2 register/interrupt items and required 'dr_mode'
-> > >>   (host or peripheral) when 'no_drd' is present.
-> > >> - Enforced the standard 3 register/interrupt items (otg, host, dev)
-> > >>   when 'no_drd' is absent to ensure backward compatibility.
-> > >> - Updated 'reg-names' and 'interrupt-names' to use enums in the main
-> > >>   properties section to support flexible resource ordering during
-> > >>   validation.
-> > >> ---
-> > >> ---
-> > >>  .../devicetree/bindings/usb/cdns,usb3.yaml         | 60
-> > >++++++++++++++++++----
-> > >>  1 file changed, 50 insertions(+), 10 deletions(-)
-> > >>
-> > >> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> > >b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> > >> index 2d95fb7321af..7b0aa9c4a2bd 100644
-> > >> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> > >> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> > >> @@ -17,22 +17,22 @@ description:
-> > >>
-> > >>  properties:
-> > >>    compatible:
-> > >> -    const: cdns,usb3
-> > >> +    enum:
-> > >> +      - cdns,usb3
-> > >> +      - cdns,cdnsp-no-drd
-> > >
-> > >I doubt this is what Rob meant, he asked for soc-specific compatibles
-> > >and this is generic. A soc-specific compatible would be something like
-> > >microchip,newsoc-usb3
-> > 
-> > Hi Conor, Rob
-> > 
-> > To clarify the hardware situation: I am developing and testing this on
-> > an FPGA development board connected via pure PCI, without any Device Tree.
-> > I do not have a specific SoC platform, nor do I know what silicon target
-> > the end customers will use in the future.
-> > Introducing a fake SoC-specific compatible string just to pass the DT
-> > validation feels misleading and unnecessary.
-> > 
-> > Since cdns,usb3 is already an established generic compatible, and we
-> > cannot use a generic configuration string like cdns,cdnsp-no-drd,
-> > the cleanest way forward is to make this resource-driven instead of
-> > compatible-driven.
-> > 
-> > In v9, I propose to:
-> >  - Keep only the existing cdns,usb3 compatible.
-> >  - Update cdns,usb3.yaml to allow minItems: 2 for reg and reg-names
-> >    if dr_mode is explicitly set to "host" or "peripheral" (indicating
-> >    that the OTG register block is absent).
-> >  - In the driver code, determine the lack of DRD dynamically if the "otg"
-> >    resource/register block is missing.
-> > 
-> > This elegantly solves the issue for my PCI/FPGA platform (where I just
-> > won't pass the "otg" resource), complies with DT practices, and leaves
-> > the door open for any future customer SoC to use cdns,usb3 with
-> > standard dr_mode constraints.
-> > 
-> > Does this approach look acceptable to you?
-> 
-> Not really. I want enforcement of the correct properties in the binding,
-> not permission of multiple different combinations.
-> 
-> Perhaps we could go back to the original cdns,usbssp compatible and
-> leave an empty slot for the soc-specific compatibles, like:
->       - items:
->           - {}
->           - const: sifive,clint2        # SiFive CLINT v2 IP block
-> 
-> That way you can proceed with this effort without a soc-compatible
-> but we don't end up permitting a generic compatible.
+The Surface Laptop 7 (x1e80100-romulus) gates the USB2 PHY power domain
+during S3 even when device_may_wakeup is set, causing PHY register
+state to be lost. The DWC3 fast-resume path calls
+phy_pm_runtime_get_sync() to restore the PHY, but this is a no-op for
+PHY drivers that do not implement runtime PM (e.g. the Qualcomm eUSB2
+driver), resulting in corrupted USB2 signalling on resume.
 
-That sounds good to me.
+This series adds a new DT quirk flag that forces a full phy_exit() +
+phy_init() cycle on each USB2 PHY during system resume, and enables it
+for the Romulus board.
 
-Rob
+Patch 1 documents the new dt-binding property.
+Patch 2 implements the quirk in the DWC3 core driver.
+Patch 3 enables the quirk on x1e80100-microsoft-romulus.
+
+Oliver White (3):
+  dt-bindings: usb: dwc3: document snps,reinit-phy-on-resume
+  usb: dwc3: add reinit-phy-on-resume quirk
+  arm64: dts: qcom: x1e80100-microsoft-romulus: add phy-reinit-on-resume
+
+ .../bindings/usb/snps,dwc3-common.yaml        | 10 ++++++++
+ .../dts/qcom/x1e80100-microsoft-romulus.dtsi  |  4 +++
+ drivers/usb/dwc3/core.c                       | 25 +++++++++++++++++++
+ drivers/usb/dwc3/core.h                       |  1 +
+ 4 files changed, 40 insertions(+)
+
+-- 
+2.53.0
+
 
