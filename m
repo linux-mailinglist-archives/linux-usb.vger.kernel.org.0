@@ -1,181 +1,156 @@
-Return-Path: <linux-usb+bounces-38277-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38278-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GF8CMSR+HmrnjgkAu9opvQ
-	(envelope-from <linux-usb+bounces-38277-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 08:54:28 +0200
+	id gLHoJlWHHmr0kgkAu9opvQ
+	(envelope-from <linux-usb+bounces-38278-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 09:33:41 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A5686293AF
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 08:54:28 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 017E0629BB9
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 09:33:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B23783028458
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 06:52:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DBA4530477F6
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 07:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFE173A6EFC;
-	Tue,  2 Jun 2026 06:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1F021A434;
+	Tue,  2 Jun 2026 07:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWZ6YLfe"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Xm911NpV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E77A3A05C2
-	for <linux-usb@vger.kernel.org>; Tue,  2 Jun 2026 06:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A2D377567;
+	Tue,  2 Jun 2026 07:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780383162; cv=none; b=Evz/77gR5IKdDMYWfr9fc63dgMaY5DlLLwVAUbyRWCTo5KT+tt5h6H6kTX1irhaxtkzYPE57coSbKy23oclzGF8U+M7L+xBoZwXks+LUUHhCtQI3olbMn3zIpuFA8DScxnC09m37n4o2UG2sqfGt6rgk7Zb/0r0aXiTBfUnLc3s=
+	t=1780385271; cv=none; b=aQ3Rxu+O9W2yhnHYavfaFumTyM3foQUqWeZTC3w1MFFwO8t6si8rKp4FIDU00UMgP0Z3jAXTgbOP0X35dImMtIuLwcgl6DYYSzJmcKk3XIUbfLPbrNSvQpNP31RWjOBUOt/0HEcYZYwQmUVA0OSccpj3s2b6WPJP36bXbww7Fgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780383162; c=relaxed/simple;
-	bh=1SHssq8wUsxsnClMzPJn6dKJ2uWJmS46IDRfw+rknRg=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=dowbRxFQc8ELU2CFUuHZciO6my+vgwtUo1yspE7aXe9nnAJB7Yl2TMBBtUhemlUKhmIa8ETLSzKPoT2xAj2cVoN/Mg8JiY05nM/hdnW/StrspiYP8Atpj+cQ0ZwLMD5RjlLncVxnBoKJi9kFwDW1AuyGp7NMJ+wRIvSttxvhpLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BWZ6YLfe; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-307263ad0cbso1931160eec.0
-        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2026 23:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780383160; x=1780987960; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=75+k/sM4WKXlh6DnXfZoqqjR3nPpFTsqEzSHfS8spjc=;
-        b=BWZ6YLfeNzzeRIPkuqUtQgpzYDhF2d5o7TQR9XBDdr2RK7W0aigDAVx01en9/hTxWe
-         M9J/6TK2q9MJiuURLBPFdCUJYdd3HMORN0HQ6o9Kko7EiPHrk82k8mkAELi1exNiE8WH
-         YI4eY5CmAITy6J1lCGXCWxN0JsPLCBjqLaIwpcLrBUyJGuQqIzadisElBDg4rhebFTxa
-         8aT8GtZobidh4t3azxnr9rN27+1dSXMXlLGrB4zzgKkQlNqCiqsudh27Kj+lLE8BjLtW
-         fOr8roDBrYe2oXSZLbLpodPDiC5SkCPK9S/O8olrack4Y98ysCO03P3+P/4tgW6r2HuD
-         To1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780383160; x=1780987960;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=75+k/sM4WKXlh6DnXfZoqqjR3nPpFTsqEzSHfS8spjc=;
-        b=LWej+RPpXHkUwGDVD3pA1PpGvCOXQ8zI3T/1SPXCzCkCOPAqa2rGG7r3jXXeih2Zpd
-         YauisjKTiALSeyRH+b81S1Lq88/j0yUPZIxdIYl7emT9TrZFLKbFR0YPW6/gsskJv0BU
-         1QVjNvMnno5cpDP/kpb1bPjAG9iKWYSSQUDJIidzo6Br9AOsjeArKB1TT0WKS/xZhbPf
-         1mwXCG20BrpCFmQKXIxTILNYOlprONpF/rQ9ohqz0IUgR7ksPROA+Ta5AYtqHaYk5X97
-         QCNKWdyXydHJ7MnnNAz8M0Ygi4p2POGNm7npeMfs5JBFeQdK3vz8xj1mkCXnCFcBlGAj
-         SSKA==
-X-Gm-Message-State: AOJu0YwLqyl4iojPa6XifpbV4Ca76wcC6wXqOyAYH3jijDdITuBmp4J5
-	TXH9RSepbdaZ/vM03c7oDnxaQ8xW7X9hzhNisamm/FxbDPKvjfbyPBpm9tLPSEHVyWE=
-X-Gm-Gg: Acq92OF2FUbYvVCgr2CQYzOj9TsAZB3KbC6r/Y05CG76G4JbGgKWFjSi9T40Up3HK0p
-	1RrAOhTC4kd1emNfy0RrsP5RBETjau/dM0Mk5D7QcEJnNQAR+SqdFjrmB41TGOld2IAddnBiZlr
-	m6azajytCkWjG4xjWRRVfWaMJAabqo2FuLArn+xp24IgZ7wWsSKyDgzH7TP27l67wpZtrmxzFyl
-	DcWP/+B5qFbLx/m+2wzAPi5FgAzWIeAqnN8iGthIOR8lIlj+Sqgp+OUhAyXDB8TBsi86NbXefvr
-	uZJfR5LcMgmZOhN88LF7Rz4lBKNuUTygVmP5LsVvFvkEmv/gfVuRruVSAXoPBhhV7P3Xmmg57qw
-	qvBoisp9rdUqJejlIukDg9xfO5aAX3TVqIsdfTjd1YIeuv7eirOLJwYaJ5Io8vuSLQ0EHbxe6pd
-	GO31sspYw0iB0YCuTuMNTMJm++jZqktixe9h4WQpe6splVo5FvGtY56rPd
-X-Received: by 2002:a05:7300:6da3:b0:304:cf6c:4cfe with SMTP id 5a478bee46e88-304fa4d506emr6728777eec.9.1780383160380;
-        Mon, 01 Jun 2026 23:52:40 -0700 (PDT)
-Received: from smtpclient.apple ([2601:644:601:140:869:edd6:7c75:df77])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed53f316sm10441027eec.19.2026.06.01.23.52.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Jun 2026 23:52:40 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1780385271; c=relaxed/simple;
+	bh=3euCun7Jp5CRBu0O+v8ACnx6GZBdjsUp/93zV0Jkqdk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o5Q/GgtWnhdo5xdkoPCXPVWqBIU2t59QnPlOc+Pn14/2zZkvprfOzdiS1U0pYdosMJzuOhk2P2HhXonAHIyZpVZDSbMjlY3uw3QKdd8GtM5G+dh++FCE6l0weik5V0hMc5VPX3JHo1u9Nvz40Lz65OINNOgV4P3TWXz/RGl0WuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Xm911NpV; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1780385230;
+	bh=vsF8kWjgQSV1qS0tbe1TS4ygkPiCw+uDiqzC3knABzY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=Xm911NpVIVge5CC3kHPdzrBF4AwuWOo5+8nXsv8bso3/cWjHlGoyJcsaCAGQUHKhb
+	 HDrz916Pj7jwn3kcGobcDRQ3OLDjjwnEW/Y7d247i7QyljdG0NkhzEpZAubfGX41SU
+	 TIEI56egkCUwBayVxQkeXtbxk0NUH/PBAaII2qqU=
+X-QQ-mid: esmtpgz11t1780385214t2e033139
+X-QQ-Originating-IP: YkueepEfC1E+8Z0tCC5Lyrr2sBaHIPI6QH1s42k0c08=
+Received: from PEN202512010004 ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 02 Jun 2026 15:26:53 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 18430485532748447633
+EX-QQ-RecipientCnt: 7
+From: Xu Rao <raoxu@uniontech.com>
+To: gregkh@linuxfoundation.org
+Cc: bentiss@kernel.org,
+	jikos@kernel.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	raoxu@uniontech.com
+Subject: Re: [PATCH] HID: usbhid: switch HIDBP devices to boot protocol
+Date: Tue,  2 Jun 2026 15:26:52 +0800
+Message-ID: <C8E9803E69FFBFC6+20260602072653.3053911-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <2026060216-freezable-donated-99e5@gregkh>
+References: <2026060216-freezable-donated-99e5@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.4\))
-Subject: Re: [PATCH] USB: EHCI: inflate max_tt_usecs and implement sitd
- backpointers
-From: Brent Page <brentfpage@gmail.com>
-In-Reply-To: <bfdd7729-be9a-4014-87bc-7b7a5b393980@rowland.harvard.edu>
-Date: Mon, 1 Jun 2026 23:52:29 -0700
-Cc: linux-usb@vger.kernel.org,
- Michal Pecio <michal.pecio@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EC0D612B-B61B-4652-9CAB-FCED814F46AC@gmail.com>
-References: <35666FD0-D108-41FD-8CE4-CD8F0DD87472@gmail.com>
- <bfdd7729-be9a-4014-87bc-7b7a5b393980@rowland.harvard.edu>
-To: Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3826.700.81.1.4)
-X-Spamd-Result: default: False [-1.66 / 15.00];
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: OOCyznbq6KdUpkzm7v6h9rLygkgDqf97HAJmFMeWZljY+5hCjePIHUD4
+	TiDAW6LrZiuCpFCPiBZ91dKh88sw2CgSrDujzkWnUzEosG7qJWY3545TZEd/8ixXBcFrnGz
+	ZUbipKAHZvFBwUqWXYVpSjuCXzVZx15+mDtkj4FBunS1mNy5ADJpfDaGa9/PajgVCpR1cX7
+	Ll2DJvJUHvQtMhvpWASc/xEn9mzRaPMW8DcaYvY2u7DKzqaEHNT49T7oTYZ5dnj918LJtQ8
+	5tEmzvuk3zprfbejUd2SFNs0IH/n8vuOtgAWJ/xW1/+WnRJBWX3JpXfvE/Q5eMfs7zoNTeP
+	UTWwzcNh4My2cl/QXN3EgIT1AOR1sbOr8qhOIQEpEEc8rkhIwldsYo8lVybQlcJfpZpY3ca
+	zj6QQi1NtrS4yET1haPq31gntOOef30J9qdTpNynmvWNnAP3pgKN9e6Fc9Jv8yqMPk9Va9c
+	BKLWwcAto8JFq++yZ/eZqTe56mDngPjTMjHDCnPJ2XZsfQm6FNZMjBTbmBKZ6F5o9J5BMdY
+	/e5PzLr9rbRtlQrbKwWs4/T99GuJKYwRfPjaaCJc0TehNPhRYlBJietccmsnhfnnnG8UmiI
+	8B5igi86J/um26idGa2BSPTAvSmbxCjhs9pvod4XnRW4Wdyt43neoJuhhOmmvtwClVszjTs
+	Oe3wVt/kQ8PPP7NgXb/c73HUh3/uLy5+gSJQ34fX15ikajJLr3UP1YCfcTAx/MNyxTBrBIh
+	h+bzcbzFz1Q+lFJtx9NQJEBv+602ixwlBV8GxZJWYSIcF125hY4bla2a5INjxCGQ5AC91Ed
+	z508NFG4hy7I4Tv62h+nRNy0JGp9+KTY9485mChowVXAp1MEAOnOnGTX56GkQOrfGtAojk4
+	2Fq3TBYa0jpjyYQfOvpTSx+Is+IpwJg/pMH0vJGg452x0CN2CfnQSsneH7GsK7Rj9uFxesG
+	LZ60FpupeJ9bkCslhrn/U4+YGyA9a3QRJz+rguHjee9Ivo5Hu53pq4GOaLF+O2yO9vQgCGP
+	iVQkRYfg==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-38277-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-38278-lists,linux-usb=lfdr.de];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brentfpage@gmail.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 4A5686293AF
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:mid,uniontech.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 017E0629BB9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-> That loop adds three new "blank" sitds to iso_sched.  At the end of=20
-> sitd_urb_transaction(), the picture looks like this:
->=20
-> 	+-> iso_sched <--> new2 <--> new1 <--> new0 <-+
-> 	|				                              |
-> 	+---------------------------------------------+
+Hi Greg,
 
-But for an iso endpoint, the schedule should never be empty (except for
-when the very first urb comes in).  So, there are sitds that are already
-scheduled before the new sitds come in, and I think in total the picture
-will look like, e.g.,
-	+-> stream <--> new2  <--> new1  <--> new0  <--
-	|		        --> prev2 <--> prev1 <--> prev0 <-+
-	|	                        					=
-  |
-	+-------------------------------------------------+
-Then, after
+> > Do not depend on firmware or a previous driver to leave the
+> > interface in boot protocol. Send SET_PROTOCOL(BOOT) during probe
+> > before the interrupt URB can be opened.
+> >
+> > Keep failures non-fatal. Some devices may reject the request while
+> > still sending boot-compatible reports. For those devices, the
+> > existing driver behavior is preferable.
+>
+> Do you really use these drivers for devices?  If so, why?
+>
+> And shouldn't the failure be fatal?  If not, why even attempt to send
+> it?
 
-2177  sitd =3D list_entry(iso_sched->td_list.next,
-2178    struct ehci_itd, sitd_list);
-2179  list_move_tail(&sitd->sitd_list, &stream->td_list);
+After checking the actual device path again, you are right: the devices
+I had in mind use the normal usbhid/hid-generic path, not usbkbd or
+usbmouse.
 
-is executed 3x, the schedule will look like
-	+-> stream <--> prev2 <--> prev1 <--> prev0 <--
-	|		        -->  new2 <--> new1  <--> new0  <-+
-	|	                        					=
-  |
-	+-------------------------------------------------+
+This patch came from reading the simple HID Boot Protocol drivers and
+noticing that they decode fixed boot reports without explicitly selecting
+boot protocol first. So this was a code-inspection cleanup rather than a
+fix for a device that I can show is bound to these drivers.
 
-> As far as I can see, there's nothing wrong with=20
-> allowing the first uframe to be partially occupied as long as the new=20=
+Given that I do not have a real user of usbkbd/usbmouse to justify the
+change and test coverage properly, please ignore/drop this patch.
 
-> sitd is added to the end of the uframe's queue, so it doesn't delay =
-the=20
-> sitd's already there.
-Oh yeah, I see that =E2=80=93 because then the large sitd can partially =
-occupy
-the uframe without needing to be broken up.
+Sorry for the noise, and thanks for pointing this out.
 
-> But in general, things will be simpler if each new sitd is always =
-added
-> to the end of the queue.  The code should be changed to do this.
-To be conservative, I didn't change sitd_link() in the patch.  I just
-submitted the newest version to this thread.  The whitespace formatting
-should be correct now.
+thanks,
 
-From,
-Brent Page
-
+Xu Rao
 
