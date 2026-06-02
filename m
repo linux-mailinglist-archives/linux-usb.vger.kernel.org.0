@@ -1,156 +1,169 @@
-Return-Path: <linux-usb+bounces-38278-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38279-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gLHoJlWHHmr0kgkAu9opvQ
-	(envelope-from <linux-usb+bounces-38278-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 09:33:41 +0200
+	id 8MEbNz2UHmrElAkAu9opvQ
+	(envelope-from <linux-usb+bounces-38279-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 10:28:45 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 017E0629BB9
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 09:33:40 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE16762A886
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 10:28:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DBA4530477F6
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 07:27:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D2023302293D
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 08:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1F021A434;
-	Tue,  2 Jun 2026 07:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Xm911NpV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B255F3C1418;
+	Tue,  2 Jun 2026 08:26:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A2D377567;
-	Tue,  2 Jun 2026 07:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAF870808
+	for <linux-usb@vger.kernel.org>; Tue,  2 Jun 2026 08:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780385271; cv=none; b=aQ3Rxu+O9W2yhnHYavfaFumTyM3foQUqWeZTC3w1MFFwO8t6si8rKp4FIDU00UMgP0Z3jAXTgbOP0X35dImMtIuLwcgl6DYYSzJmcKk3XIUbfLPbrNSvQpNP31RWjOBUOt/0HEcYZYwQmUVA0OSccpj3s2b6WPJP36bXbww7Fgk=
+	t=1780388771; cv=none; b=FiB1duYufc9bePMe0THeflH4zYEe2heNuwT84e++t/57A+8WgBj5OLz23z8uGAakmeugT9Nq7btb3ua1CaQEtCEvryUCMkcnwALa+ehClGk/iUkbFyS9+QpM9wLmxX56IUeZSXS29M1rhj0WytU/t7Qu9lX2IjD1h1ljEsl5wkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780385271; c=relaxed/simple;
-	bh=3euCun7Jp5CRBu0O+v8ACnx6GZBdjsUp/93zV0Jkqdk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o5Q/GgtWnhdo5xdkoPCXPVWqBIU2t59QnPlOc+Pn14/2zZkvprfOzdiS1U0pYdosMJzuOhk2P2HhXonAHIyZpVZDSbMjlY3uw3QKdd8GtM5G+dh++FCE6l0weik5V0hMc5VPX3JHo1u9Nvz40Lz65OINNOgV4P3TWXz/RGl0WuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Xm911NpV; arc=none smtp.client-ip=54.254.200.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780385230;
-	bh=vsF8kWjgQSV1qS0tbe1TS4ygkPiCw+uDiqzC3knABzY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Xm911NpVIVge5CC3kHPdzrBF4AwuWOo5+8nXsv8bso3/cWjHlGoyJcsaCAGQUHKhb
-	 HDrz916Pj7jwn3kcGobcDRQ3OLDjjwnEW/Y7d247i7QyljdG0NkhzEpZAubfGX41SU
-	 TIEI56egkCUwBayVxQkeXtbxk0NUH/PBAaII2qqU=
-X-QQ-mid: esmtpgz11t1780385214t2e033139
-X-QQ-Originating-IP: YkueepEfC1E+8Z0tCC5Lyrr2sBaHIPI6QH1s42k0c08=
-Received: from PEN202512010004 ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 02 Jun 2026 15:26:53 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 18430485532748447633
-EX-QQ-RecipientCnt: 7
-From: Xu Rao <raoxu@uniontech.com>
-To: gregkh@linuxfoundation.org
-Cc: bentiss@kernel.org,
-	jikos@kernel.org,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	raoxu@uniontech.com
-Subject: Re: [PATCH] HID: usbhid: switch HIDBP devices to boot protocol
-Date: Tue,  2 Jun 2026 15:26:52 +0800
-Message-ID: <C8E9803E69FFBFC6+20260602072653.3053911-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <2026060216-freezable-donated-99e5@gregkh>
-References: <2026060216-freezable-donated-99e5@gregkh>
+	s=arc-20240116; t=1780388771; c=relaxed/simple;
+	bh=ZQkpBhdyPFX8K1AgwsbSqD6e4PBbKm/F+6uEvcBzPyk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pStNPTYAhFMaxFjvnZA6XlW7ufocpERgt8HuR9LfF0Lyd4SQcbpVkPOSCT8WHaezOFaQeRtie/jbKODbVFNJ1pIaYZbgPuCJArVSdL6NBfB8ALXIv/nQOPjZbQHVbos7u5xQN/8/P3l2ect4UW8l8mlf1+iGSyvenZY7d7XNx7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wUKQZ-0001Gf-0T; Tue, 02 Jun 2026 10:24:47 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wUKQT-000iZa-13;
+	Tue, 02 Jun 2026 10:24:41 +0200
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wUKQT-000000003ba-0TqR;
+	Tue, 02 Jun 2026 10:24:41 +0200
+Message-ID: <6af284545729f03a60d06479339862a2f08c6b7e.camel@pengutronix.de>
+Subject: Re: [PATCH 22/23] reset: rzg2l: use
+ platform_device_set_of_node_from_dev()
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Lee Jones	
+ <lee@kernel.org>, Mark Brown <broonie@opensource.wolfsonmicro.com>, Thierry
+ Reding <thierry.reding@avionic-design.de>, Sebastian Hesselbarth	
+ <sebastian.hesselbarth@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Srinivas Kandagatla <srini@kernel.org>, Greg
+ Kroah-Hartman	 <gregkh@linuxfoundation.org>, Vinod Koul <vkoul@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
+ <dakr@kernel.org>, Rob Herring <robh@kernel.org>,  Saravana Kannan
+ <saravanak@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Michael
+ Ellerman	 <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Andy Shevchenko	
+ <andriy.shevchenko@linux.intel.com>, Joerg Roedel <joro@8bytes.org>, Will
+ Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Doug Berger
+ <opendmb@gmail.com>,  Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list	
+ <bcm-kernel-feedback-list@broadcom.com>, Ulf Hansson <ulfh@kernel.org>, 
+ Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team	 <kernel@pengutronix.de>, Fabio Estevam
+ <festevam@gmail.com>, Matthew Brost	 <matthew.brost@intel.com>, Thomas
+ =?ISO-8859-1?Q?Hellstr=F6m?=	 <thomas.hellstrom@linux.intel.com>, Rodrigo
+ Vivi <rodrigo.vivi@intel.com>,  David Airlie <airlied@gmail.com>, Simona
+ Vetter <simona@ffwll.ch>, Peter Chen <peter.chen@kernel.org>,  Paul
+ Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>, Maximilian Luz
+ <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, Ilpo
+ =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,  Krzysztof
+ Kozlowski	 <krzk@kernel.org>, Benjamin Herrenschmidt
+ <benh@kernel.crashing.org>
+Cc: brgl@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+	driver-core@lists.linux.dev, devicetree@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+ iommu@lists.linux.dev, 	linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, 
+	linux-mips@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Date: Tue, 02 Jun 2026 10:24:41 +0200
+In-Reply-To: <20260521-pdev-fwnode-ref-v1-22-88c324a1b8d2@oss.qualcomm.com>
+References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
+	 <20260521-pdev-fwnode-ref-v1-22-88c324a1b8d2@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: OOCyznbq6KdUpkzm7v6h9rLygkgDqf97HAJmFMeWZljY+5hCjePIHUD4
-	TiDAW6LrZiuCpFCPiBZ91dKh88sw2CgSrDujzkWnUzEosG7qJWY3545TZEd/8ixXBcFrnGz
-	ZUbipKAHZvFBwUqWXYVpSjuCXzVZx15+mDtkj4FBunS1mNy5ADJpfDaGa9/PajgVCpR1cX7
-	Ll2DJvJUHvQtMhvpWASc/xEn9mzRaPMW8DcaYvY2u7DKzqaEHNT49T7oTYZ5dnj918LJtQ8
-	5tEmzvuk3zprfbejUd2SFNs0IH/n8vuOtgAWJ/xW1/+WnRJBWX3JpXfvE/Q5eMfs7zoNTeP
-	UTWwzcNh4My2cl/QXN3EgIT1AOR1sbOr8qhOIQEpEEc8rkhIwldsYo8lVybQlcJfpZpY3ca
-	zj6QQi1NtrS4yET1haPq31gntOOef30J9qdTpNynmvWNnAP3pgKN9e6Fc9Jv8yqMPk9Va9c
-	BKLWwcAto8JFq++yZ/eZqTe56mDngPjTMjHDCnPJ2XZsfQm6FNZMjBTbmBKZ6F5o9J5BMdY
-	/e5PzLr9rbRtlQrbKwWs4/T99GuJKYwRfPjaaCJc0TehNPhRYlBJietccmsnhfnnnG8UmiI
-	8B5igi86J/um26idGa2BSPTAvSmbxCjhs9pvod4XnRW4Wdyt43neoJuhhOmmvtwClVszjTs
-	Oe3wVt/kQ8PPP7NgXb/c73HUh3/uLy5+gSJQ34fX15ikajJLr3UP1YCfcTAx/MNyxTBrBIh
-	h+bzcbzFz1Q+lFJtx9NQJEBv+602ixwlBV8GxZJWYSIcF125hY4bla2a5INjxCGQ5AC91Ed
-	z508NFG4hy7I4Tv62h+nRNy0JGp9+KTY9485mChowVXAp1MEAOnOnGTX56GkQOrfGtAojk4
-	2Fq3TBYa0jpjyYQfOvpTSx+Is+IpwJg/pMH0vJGg452x0CN2CfnQSsneH7GsK7Rj9uFxesG
-	LZ60FpupeJ9bkCslhrn/U4+YGyA9a3QRJz+rguHjee9Ivo5Hu53pq4GOaLF+O2yO9vQgCGP
-	iVQkRYfg==
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-X-QQ-RECHKSPAM: 0
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38278-lists,linux-usb=lfdr.de];
-	TO_DN_NONE(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[uniontech.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:mid,uniontech.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 017E0629BB9
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38279-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[pengutronix.de];
+	FREEMAIL_TO(0.00)[oss.qualcomm.com,kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,linux.intel.com,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[p.zabel@pengutronix.de,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[65];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:mid,pengutronix.de:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,qualcomm.com:email]
+X-Rspamd-Queue-Id: BE16762A886
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Greg,
+On Do, 2026-05-21 at 10:36 +0200, Bartosz Golaszewski wrote:
+> Ahead of reworking the reference counting logic for platform devices,
+> encapsulate the assignment of the OF node from another device for
+> dynamically allocated platform devices with the provided helper.
+>=20
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> ---
+>  drivers/reset/reset-rzg2l-usbphy-ctrl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/rese=
+t-rzg2l-usbphy-ctrl.c
+> index fd75d9601a3bfde7b7e3f6db287ec8c5c45a20ab..f003b360629c90bb37ed0ade7=
+a675b5b0f28fa7e 100644
+> --- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+> +++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+> @@ -249,7 +249,7 @@ static int rzg2l_usbphy_ctrl_probe(struct platform_de=
+vice *pdev)
+>  	vdev->dev.parent =3D dev;
+>  	priv->vdev =3D vdev;
+> =20
+> -	device_set_of_node_from_dev(&vdev->dev, dev);
+> +	platform_device_set_of_node_from_dev(vdev, dev);
+>  	error =3D platform_device_add(vdev);
+>  	if (error)
+>  		goto err_device_put;
 
-> > Do not depend on firmware or a previous driver to leave the
-> > interface in boot protocol. Send SET_PROTOCOL(BOOT) during probe
-> > before the interrupt URB can be opened.
-> >
-> > Keep failures non-fatal. Some devices may reject the request while
-> > still sending boot-compatible reports. For those devices, the
-> > existing driver behavior is preferable.
->
-> Do you really use these drivers for devices?  If so, why?
->
-> And shouldn't the failure be fatal?  If not, why even attempt to send
-> it?
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-After checking the actual device path again, you are right: the devices
-I had in mind use the normal usbhid/hid-generic path, not usbkbd or
-usbmouse.
-
-This patch came from reading the simple HID Boot Protocol drivers and
-noticing that they decode fixed boot reports without explicitly selecting
-boot protocol first. So this was a code-inspection cleanup rather than a
-fix for a device that I can show is bound to these drivers.
-
-Given that I do not have a real user of usbkbd/usbmouse to justify the
-change and test coverage properly, please ignore/drop this patch.
-
-Sorry for the noise, and thanks for pointing this out.
-
-thanks,
-
-Xu Rao
+regards
+Philipp
 
