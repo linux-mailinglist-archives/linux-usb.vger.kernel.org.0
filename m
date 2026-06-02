@@ -1,169 +1,136 @@
-Return-Path: <linux-usb+bounces-38279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38280-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8MEbNz2UHmrElAkAu9opvQ
-	(envelope-from <linux-usb+bounces-38279-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 10:28:45 +0200
+	id IKe2Nr+dHmq5CgAAu9opvQ
+	(envelope-from <linux-usb+bounces-38280-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 11:09:19 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE16762A886
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 10:28:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6417662B130
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 11:09:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D2023302293D
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 08:26:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C5D743013ABC
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 09:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B255F3C1418;
-	Tue,  2 Jun 2026 08:26:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB033C9EC2;
+	Tue,  2 Jun 2026 09:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="BBxWCwli"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAF870808
-	for <linux-usb@vger.kernel.org>; Tue,  2 Jun 2026 08:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF22F3C81A9;
+	Tue,  2 Jun 2026 09:05:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780388771; cv=none; b=FiB1duYufc9bePMe0THeflH4zYEe2heNuwT84e++t/57A+8WgBj5OLz23z8uGAakmeugT9Nq7btb3ua1CaQEtCEvryUCMkcnwALa+ehClGk/iUkbFyS9+QpM9wLmxX56IUeZSXS29M1rhj0WytU/t7Qu9lX2IjD1h1ljEsl5wkk=
+	t=1780391143; cv=none; b=BPlkLOGWCoEgDiE76R+Xx7iOMrGmMr6ud0Kyg2R4vnykjsFZn+Qajjmf4UtWxQFmfpdWRSUVl2qwobVVR80otOwQL1F4hyT62edWkqHKcl2SV/SKXYG29ORmMpeYZHjfzoMNmzrAYm4o+P0VNTg7HM8GZ7vs4wrxur2BNZKhQ4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780388771; c=relaxed/simple;
-	bh=ZQkpBhdyPFX8K1AgwsbSqD6e4PBbKm/F+6uEvcBzPyk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pStNPTYAhFMaxFjvnZA6XlW7ufocpERgt8HuR9LfF0Lyd4SQcbpVkPOSCT8WHaezOFaQeRtie/jbKODbVFNJ1pIaYZbgPuCJArVSdL6NBfB8ALXIv/nQOPjZbQHVbos7u5xQN/8/P3l2ect4UW8l8mlf1+iGSyvenZY7d7XNx7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1wUKQZ-0001Gf-0T; Tue, 02 Jun 2026 10:24:47 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1wUKQT-000iZa-13;
-	Tue, 02 Jun 2026 10:24:41 +0200
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1wUKQT-000000003ba-0TqR;
-	Tue, 02 Jun 2026 10:24:41 +0200
-Message-ID: <6af284545729f03a60d06479339862a2f08c6b7e.camel@pengutronix.de>
-Subject: Re: [PATCH 22/23] reset: rzg2l: use
- platform_device_set_of_node_from_dev()
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Lee Jones	
- <lee@kernel.org>, Mark Brown <broonie@opensource.wolfsonmicro.com>, Thierry
- Reding <thierry.reding@avionic-design.de>, Sebastian Hesselbarth	
- <sebastian.hesselbarth@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Srinivas Kandagatla <srini@kernel.org>, Greg
- Kroah-Hartman	 <gregkh@linuxfoundation.org>, Vinod Koul <vkoul@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
- <dakr@kernel.org>, Rob Herring <robh@kernel.org>,  Saravana Kannan
- <saravanak@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Michael
- Ellerman	 <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Andi Shyti
- <andi.shyti@kernel.org>, Andy Shevchenko	
- <andriy.shevchenko@linux.intel.com>, Joerg Roedel <joro@8bytes.org>, Will
- Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Doug Berger
- <opendmb@gmail.com>,  Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list	
- <bcm-kernel-feedback-list@broadcom.com>, Ulf Hansson <ulfh@kernel.org>, 
- Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team	 <kernel@pengutronix.de>, Fabio Estevam
- <festevam@gmail.com>, Matthew Brost	 <matthew.brost@intel.com>, Thomas
- =?ISO-8859-1?Q?Hellstr=F6m?=	 <thomas.hellstrom@linux.intel.com>, Rodrigo
- Vivi <rodrigo.vivi@intel.com>,  David Airlie <airlied@gmail.com>, Simona
- Vetter <simona@ffwll.ch>, Peter Chen <peter.chen@kernel.org>,  Paul
- Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>, Maximilian Luz
- <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, Ilpo
- =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,  Krzysztof
- Kozlowski	 <krzk@kernel.org>, Benjamin Herrenschmidt
- <benh@kernel.crashing.org>
-Cc: brgl@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
-	driver-core@lists.linux.dev, devicetree@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
- iommu@lists.linux.dev, 	linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, 
-	linux-mips@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Date: Tue, 02 Jun 2026 10:24:41 +0200
-In-Reply-To: <20260521-pdev-fwnode-ref-v1-22-88c324a1b8d2@oss.qualcomm.com>
-References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
-	 <20260521-pdev-fwnode-ref-v1-22-88c324a1b8d2@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	s=arc-20240116; t=1780391143; c=relaxed/simple;
+	bh=4ISKIg302H0QG5EBCnN1MlangFR1q9sYBrKBVGXrdeM=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=Rv7ZyAg2PWI3qb1UnciFnNfAOAep/hPngun3M1JRVZnjCHx7qDMyFtg9lHxz5aOPIap+qi+XqshXx391j6vquuUfpINygiP6/GeLatYWNimyLswGq0EzStiWxWDFfuRAd1avyoGaF1D2Wz11RNM6JoJMqyrba4XEGCbRtt/TVUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=BBxWCwli; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1780391134;
+	bh=Q0WNm6g10MFQgiEZ0ypFJR4luc9FuEribuvlDn2kdAg=;
+	h=From:To:Cc:Subject:Date;
+	b=BBxWCwli42+mIHT/jFV4BPL+Jir8hgsWVSCGROlflovCpWoFoE5YQ0hchmS3kenrI
+	 7SHEaHIxcp4VJt2fXHX+i70AhHJZTyIGDLIHeKoDG2R6R5LE+gXpGJgkvNPFLQ5tEw
+	 dZsKPjuQXmGhHTgkmpRT34zgUgbYsFHf5MBBlPIs=
+Received: from localhost.localdomain ([2409:8915:2067:10d5:5f88:ceb0:c03b:f401])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id 15E02E54; Tue, 02 Jun 2026 17:05:30 +0800
+X-QQ-mid: xmsmtpt1780391130twvfyou6u
+Message-ID: <tencent_29CB862D5756CBCBAFD2EE436EBAC98A7E05@qq.com>
+X-QQ-XMAILINFO: OR5rDBBXAGpMjtPEPR6GPwz00IW16RuB49+OJyu68YY5og/IdBpSnq2wgE9PRb
+	 CTVT4AmjpsUqpXomcaERwoW6t8hueu6cRv8Oy7qlWRCQFBQ3gYJLOWQDUrt6rY5FJCBwW3tax/ZL
+	 ZwqrRVOzAWrKwN2EpbkArRN5yPOuS1XtAyBgnO78m45oQhBUNMpOdwa7SNVwo+Bz4OjhGjVclZUs
+	 h1qV/fruRXy0HjILeHqeJWus6GIWZGgXWMF40SJaBn4nl4IP6Koi4J0TVPBU2ceR22hwt0JrCGgS
+	 UmcBGy8+OgIZcrVzstfr0AJTI9Fh1siD7DRwIsMTN1kuSdBV2vZAiojnf9VgpKfbiWJqFKjHU3kD
+	 U1dyY8DjVoMEmaGcO/4LpFzn6CzFE7MF2KCJr8Y/d6BOgGfN5RnEC8bU6/zprlEr5chauYCy4y0R
+	 DktC0MJ6Ag1+o83/c0hUrde4b/IVVpnnrceYTSBVr+nEN9TCoF2lL/dZ220lubnUPANF3yoE99OF
+	 XvhUOIH6WegUiLQH90OsaJYsMLxyckDQbMEf3FCwlYY9OVDdr7/RCSkFXVDeDlWC4mMcBz8OX5S3
+	 WHKvM7VymMbNq76Cvf2VeMlyYTmCme475Qxvmt1upfrOLHIWamVGiw79T+kzhZZWs7b2dDDVNdyd
+	 nzlT+rHCGK69qFKwI8i5FK3S3b0RWl631FBsakOcoyuWQoEBF2TCYpnVX70yihdG2wgB/vvsYdMm
+	 rAJdktgNhI3G3TNYFnkqbOXl29b9M5lYDsVv6EHT7rJjUTjiGVgMCDYlN5KR7nDgP5V73OCs2CeX
+	 1uo+V93fcVaoo2FFYX1KtTCVn8BhlJJ7JpcazSGqWf4wpzCoAOeOtuhuePvl7X4LBOCmmq639YxX
+	 /3dkm4BK0kMbgRdFAjOLzQTTETbjaXIJuEtPXwW/+y9+7t+745MAP+CN11HXp175qrjta1TXd03i
+	 R5jh5coz4kMX1juuulv05KGeZtQnS06W/UptDoGuGIoazTm7WySODw9HAgLkIgV0TJG51bphxU5O
+	 Cv5yMqgqLd6cuZsLzMW56+zyJNBxsrO2Bauok4pXQmYp8I/BXOa7bfqegZr6ORuNWv2LI+WA==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+From: Shaoxu Liu <shaoxul@foxmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: shaoxul@foxmail.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/2] rndis_host: add LE310X1 ID and enable low-power handling
+Date: Tue,  2 Jun 2026 17:05:26 +0800
+X-OQ-MSGID: <20260602090528.2544-1-shaoxul@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spamd-Result: default: False [0.04 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 6417662B130
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[foxmail.com,none];
+	R_DKIM_ALLOW(-0.20)[foxmail.com:s=s201512];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38279-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	FREEMAIL_TO(0.00)[oss.qualcomm.com,kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,linux.intel.com,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCVD_COUNT_FIVE(0.00)[6];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[foxmail.com,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-38280-lists,linux-usb=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[p.zabel@pengutronix.de,linux-usb@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[65];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:mid,pengutronix.de:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,qualcomm.com:email]
-X-Rspamd-Queue-Id: BE16762A886
+	FROM_NEQ_ENVFROM(0.00)[shaoxul@foxmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[foxmail.com:+];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FREEMAIL_FROM(0.00)[foxmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[foxmail.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qq.com:mid]
 X-Rspamd-Action: no action
-X-Rspamd-Server: lfdr
 
-On Do, 2026-05-21 at 10:36 +0200, Bartosz Golaszewski wrote:
-> Ahead of reworking the reference counting logic for platform devices,
-> encapsulate the assignment of the OF node from another device for
-> dynamically allocated platform devices with the provided helper.
->=20
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> ---
->  drivers/reset/reset-rzg2l-usbphy-ctrl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/rese=
-t-rzg2l-usbphy-ctrl.c
-> index fd75d9601a3bfde7b7e3f6db287ec8c5c45a20ab..f003b360629c90bb37ed0ade7=
-a675b5b0f28fa7e 100644
-> --- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-> +++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-> @@ -249,7 +249,7 @@ static int rzg2l_usbphy_ctrl_probe(struct platform_de=
-vice *pdev)
->  	vdev->dev.parent =3D dev;
->  	priv->vdev =3D vdev;
-> =20
-> -	device_set_of_node_from_dev(&vdev->dev, dev);
-> +	platform_device_set_of_node_from_dev(vdev, dev);
->  	error =3D platform_device_add(vdev);
->  	if (error)
->  		goto err_device_put;
+This series adds RNDIS support for Telit Cinterion LE310X1 and then enables
+USB power management for that specific ID.
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+v2:
+- split v1 single patch into two patches, per review
+- patch 1: add LE310X1 USB ID only
+- patch 2: enable power management only for LE310X1
+- improve commit messages to separate enumeration from behavior change
+- Link to v1: https://lore.kernel.org/netdev/<replace-with-v1-message-id>/
 
-regards
-Philipp
+Shaoxu Liu (2):
+  rndis_host: add Telit LE310X1 RNDIS USB ID
+  rndis_host: enable power management for Telit LE310X1
+
+ drivers/net/usb/rndis_host.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+-- 
+2.34.1
+
 
