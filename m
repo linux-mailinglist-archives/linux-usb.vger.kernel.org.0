@@ -1,203 +1,157 @@
-Return-Path: <linux-usb+bounces-38272-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38273-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gKHfIWhrHmq3jAkAu9opvQ
-	(envelope-from <linux-usb+bounces-38272-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 07:34:32 +0200
+	id gKXOAZZsHmrEjAkAu9opvQ
+	(envelope-from <linux-usb+bounces-38273-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 07:39:34 +0200
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0184E62897D
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 07:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 34C896289D6
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 07:39:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 918D4301627C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 05:34:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3599F3007645
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 05:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3BC531985D;
-	Tue,  2 Jun 2026 05:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3242F329373;
+	Tue,  2 Jun 2026 05:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="peqtZNLl"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="XzDpdAmh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0503312807
-	for <linux-usb@vger.kernel.org>; Tue,  2 Jun 2026 05:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780378462; cv=pass; b=gx/Df5znr1PaPSNU7Rn69/F/HkZxfwfvzDNTPLQwSlBT1+ZNboEhFvyXqIjT0QKKjwhqghGY/DRIDPnJNXFWRQBBbcLevMZDxIiAd1zU2o20Rt+d2VJRscwhs7BogMTU3AFdWdWaka3KxgAkEbnyJhe0avLgi2nkEwy739k1G1g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780378462; c=relaxed/simple;
-	bh=7MCh1WehuUu3JURwEcRIdX8TakMkC1Oqa6Ne90OmRa4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FA0NeUquo9BNYAkA1AECWeMIe7m66rq63JOYvgVQDDZHnUfZCbzD9nVSiRV52CSbddFNpbJhYSTr4R/j4uY8V7yAYf4bc8Itgq0hsGjqgbpGAvxLpANXlzCrdQt7c4c4h+UQfUB/GmsN6rMJzC6C/jUrc0PRY4EExn0ur1r7+WY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xwf.google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=peqtZNLl; arc=pass smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xwf.google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-51765331535so2831cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2026 22:34:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780378460; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IbOaRw3PRPmaWsSjEmAm2KVBr8mmltdmXHm3U1IFZnoicPKbZmsiUTI0MUPcfG4p9K
-         uZAGDq4ZPaAe3y4dcTC9e2P/dDULxth2PNsirAeB/pU+ruBE6jmT8QuHQnZ9+f4+NbFF
-         8yZriq1OZ2nnBw3OAFgNUZGBI6DXejkbnUdC+rCyu0SMsVMj9m7GQs6l8iFKzzptrLh3
-         +Km8qnISNEvZUpkqDRaM12BUmCdhB71SrcIXoiC+uI64nnB5qJvFmJAzltcdK4xlRDq3
-         qvKIbyj2AxXK2xSIDtkJKJKSoagiMUh6pOVMo1PtHA0sKu6DnIsHWiIj7S5LEwkoA5D8
-         ygDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:dkim-signature;
-        bh=i0l2wtQxncflisN7xBk+r4OI4gRjk3fLa+hgzVH9c1Y=;
-        fh=ruUrVm0SoeOeMfbASLNlbR8jSo7orcGZ6ygumULdR0o=;
-        b=a1w509IjIHQdK0VZXAFLqvwnn78V2UuEHrAdM1ivwHi8YjIBH9lhHRRRef9sPA3TRU
-         Fa1l/XaFy79gZGXfWjKH4yHQr0hbhO0CVQ3ED7tWFQpZWrGp0yg6qE0jDwJUorgXI+OW
-         dxgBs/78n8tAa5v5VmxeXlRwVAoxYwJN1Dh99Mgdjbgv0mbnIMX1yZTYrdwonMEAt4Uf
-         NRl4Ra2dc4PbV2Hydxa/hmC1CIAfvI1/rfKMgicoftneDMWKRu5cRnGNFWXgoK9fJMdC
-         vOs9T4huMd5uMDQ5LO/9yVe9g2zgEAQvaxBbCbr6y1nfRszSXzVqpW3+YjXuZO2LhYEi
-         zhuw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780378460; x=1780983260; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=i0l2wtQxncflisN7xBk+r4OI4gRjk3fLa+hgzVH9c1Y=;
-        b=peqtZNLlH8C4EUSOQiGBOOxeV3c1UYJltkTB0rnyusaNanQ4h0wKg38kegQvuN50rM
-         ys+64Hja4YA8IZfnbtutbqqvlvyl8cfOgHvAe51aksr2qFo3Z/LSuI2tQ939GnW0eViG
-         e/LiJcqx+DIMZ/y7gucKg23q3e0bpanUX43O+W9z7uf04ljmGZx3aXrh3dKYFO927QJz
-         SgMtFJYs/xQZp4+KyQslY9EBifRKxSnTLRAYOjst7vzskM5Pri4iTtbBWoh4VmfFuLy1
-         5fVIN5pMUHPSwGm/kGqlgDqIUmeH2b6jdSp90q9/bHS9L+q2k+OMcmpMpqnFg1rxQdgA
-         gGbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780378460; x=1780983260;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i0l2wtQxncflisN7xBk+r4OI4gRjk3fLa+hgzVH9c1Y=;
-        b=Rth3CQy+XeHkBTEZIMjxvrlBHfbxsOzr17ekRSnh0NtzJ1Uwdmr6qOs6IVAz1EgZDf
-         LCBr02yMCRDa9WfzfsaCMyILUWtAFqiJ8imUWkDDALDCaiIhjF6iI965NKU/4jnddKnR
-         ySFg3PhmaeXJDA8nquT1hnxfifm6YHdMbcuHCKWFt8Li/cZ9Mwyha51ef4Pfy7s1VrM5
-         T9AK798lNyEXx/CS1oGlHiSO+K3X0n3gtFgSP4hNpeoLpvphx1UhA79CaICLFxRfhfD9
-         JsdcmJ6Ts2ipteqcEVqi1XxMq6yo7vejMqr7UDuxeyavqKfklCqN0m+wHUTeZolWVemr
-         W3Mg==
-X-Forwarded-Encrypted: i=1; AFNElJ8bYB7+4vmwGPBJD7TDqigKAGOXXVhmDvJ+LL+ysNwyoQpfib5Mh27tUtVYcaCvyAhMlvg+9c9eiCI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1FO8hnsc52LI3JhDpSfdqDKXNs9xxwEXYnwx3F2Y1J78/hhOX
-	Mmn77KxaQnUP2r8oEDvXYlvOP7Yj2/sLUDgLh5K147stGeoBOs4QWndxV3hGJ1LAU9Rqg5Pv9g6
-	s953L2Zqalr+AYJzg2KFrHcAGFzja2LhaY0ONcW8/DH2gwhvDaASs2d0qBac=
-X-Gm-Gg: Acq92OG6W+MI52fk69VwT/swXV3N+GOi0dwarrcNABbNAzerirAa/mpuwEtHB7W9TfV
-	VN+BKIHdSGlW12Bgh9ez7JpJG3QOq0nNXJAVfXfaScVC5xUvwRNTgzn2vn1ARMsvmCfcnEks0TV
-	0mEOc7Fppkw1jAWuGbgDfhf1PuwzTcV2+KKZ+s9sdrnOy7QKsvv9oPug7NExsW4eL3sOMd86q4L
-	e+ld52EHXxhiPmnqgOsb5BlIdirvsuLSkO/DPtp/NUC6RQe6zfoagdmj+uAq+qRf+NxSjivhna0
-	C6DCx/hEfF+KKey6/M1D
-X-Received: by 2002:a05:622a:5c10:b0:517:5d71:84e5 with SMTP id
- d75a77b69052e-51768fe06fcmr6099541cf.5.1780378459480; Mon, 01 Jun 2026
- 22:34:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FF331F9A3;
+	Tue,  2 Jun 2026 05:39:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780378770; cv=none; b=ebio+JxWRiH4BcRtDnK8UJSpyY5dO3niU3FX02iobLUzBVMQJDSdnpy2Y4+nRm2I8iiVuSVBGM7Rimqr1qprKexSUy0QOpF83mfFrGBJ/uhVpGzgWWDeyteQlMj/xMKfgV7pNvgc7+1rAPJYKbrtcgNViGiHawwpstKUti/5t8E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780378770; c=relaxed/simple;
+	bh=1BhGTYq54hgGLJFihgGNb0SEG935m4VPcXLCmxtAb2s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a6CZIjNUDR50IU/m3zWSjarWJ3qCZR1Dh8fvcRb0X3FqR8zLwe16qxjrCP6amHme7aH1QAgYM2gW+PNLJwmwOZ3OUkx5+jrLWpEJljuWKyffscQLV9BAaUy/3CqqW0SPLAoF9hqlNCFUWYGIFxNWulz7MWWHFwaQeBW7Ipw2ZQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=XzDpdAmh; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1780378741;
+	bh=5IvKXzieiLfOwAt4guOFpeLmZg9SSiunCrz6BxpvmnY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=XzDpdAmhIjluCi/14CMxucGYLLuB5TVS7cJDTV765xXnQLoedVueqtXqA00EQIkOg
+	 Th02uOwRZQBGmlTGhYwaLp7jEAin5Xen+7Wg3mbhTGX9547ctRs8Uorp1xonBdoFS7
+	 4gkE6oJkr28Cq+FZaOJVFU94oJBXnEANne3YQ8HQ=
+X-QQ-mid: esmtpsz11t1780378725t17bb632e
+X-QQ-Originating-IP: /hTCVjlJ4wEeRzrCb0tZ2azPYvh26SbtWm1gIxLgzRs=
+Received: from PEN202512010004 ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 02 Jun 2026 13:38:43 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 16038459506249195353
+EX-QQ-RecipientCnt: 6
+From: Xu Rao <raoxu@uniontech.com>
+To: stern@rowland.harvard.edu
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	raoxu@uniontech.com
+Subject: [PATCH] USB: storage: include US_FL_NO_SAME in quirks mask
+Date: Tue,  2 Jun 2026 13:38:42 +0800
+Message-ID: <3BCE5880F9A45C2E+20260602053842.2920137-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260526070635.839701-1-hhhuuu@google.com> <1f7a7bf2-4d21-4944-9da0-36082d052b25@rowland.harvard.edu>
-In-Reply-To: <1f7a7bf2-4d21-4944-9da0-36082d052b25@rowland.harvard.edu>
-Reply-To: hhhuuu@xwf.google.com
-From: "Jimmy Hu (xWF)" <hhhuuu@xwf.google.com>
-Date: Tue, 2 Jun 2026 13:34:07 +0800
-X-Gm-Features: AVHnY4J1Pfr-KMpUk2aKTCSyb0iCgb3wHalc4jtJOnhX4DoFuPOdgWZoWR9FlSc
-Message-ID: <CAJh=zjLLrY-NpV-ZcmH0V6q8CjNuKt7CmW-GEFQ8_y3zm9v1yw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc: Fix NULL pointer dereference in gadget_match_driver
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: NZcrde3zhHkV7Bhuw0834RiQfKFCePvkJ+gU45CUkt25WS7uAJ2gB/+H
+	aEh+A7ynsY7oOti9sr0RkqD5cLhUubm26qTRCSews9sOBQOUzKEJ3OH191/zBTY3VZUnJdr
+	tiRiR048b2XC3iSY7fhF73gKzCqLA7paHKhDiA2w0RxeM3ywl5ELJNXAZlMReq1XyDcp/ww
+	pGWAo1Ga4A+E5+6QAjWE4LV7Xvk/+ZVEKthYsFJNYBTdlxK5sQLfROKDwzwMCe43UwxQHof
+	8ixuSXItoAzEQ2+17CQGVYFL3p8imCLvVODNv9RaPXmi/Wzq2SVuwMnSIjkrBGaXwzLAAre
+	vJA1Spu9lih1rQpqEh9uXhi/SJ4/6+qPXXuvMxy8PAVwjZiKGOitEDZtr23r9qQ2fcjSxG1
+	GK2U1L2ny4bf1kS6MmtRsrTSJ2e9h4Ao+sBRdy1aF2uTxWChBgMjUIEexyL/qAUQmwUN3EJ
+	FgiEPgOj1Xlk/Yuu2c2dM+VyfvkwCgfH6yCbRTDeVm2M520ckMQc/zhExK31aeXGfwLWAAV
+	ZyB+slzRHVM1QGy+5OyTQzMmUEW8QVHjkhv99pFtHDZVUCCfYl15uqmeQj/wKPYXw1WWjAL
+	8AZYZeMFOQc8sgw9YcOUiEUE9fCl69dLsamBAf9iYb8cRi2BH9uhw5bmOgOzvf95vorEcPY
+	LtLWXZu0UGcl27nMGxI0WZ5URBbBi3lUTzXnnh69RVfPG5ZXIFsDrVHk/oMUFSfezxStfw1
+	mMQ7twDq2COiAgG737lHlhs21ttJXpyOW9QPxGOEGJzwSIIWpFvib1EmjRncE5fHOAkmWu0
+	UHgNGahccheGJawJkcBDyjqO+w+RjzTosaAHUkiqTSnSHNWLJCrQ2Tok8xd86oPT4y0ymxW
+	1CNX2d072/mpUfSD+5Zkku7vmD/tc6WrDMgfi0JT5LS4GVlYZjI6bt0XqP5qNFjfkELl0I+
+	i2d6rJHHoPcn7iSWjovle05X8zjnZK1ImL6FUPDBc6vvYR4XwFs2RSCnEi6gxydWZWqJVkj
+	odKMrvgA==
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+X-QQ-RECHKSPAM: 0
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38272-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,xwf.google.com:replyto];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hhhuuu@xwf.google.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-38273-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	HAS_REPLYTO(0.00)[hhhuuu@xwf.google.com]
-X-Rspamd-Queue-Id: 0184E62897D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,uniontech.com:email,uniontech.com:mid,uniontech.com:dkim]
+X-Rspamd-Queue-Id: 34C896289D6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 27, 2026 at 2:00=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Tue, May 26, 2026 at 03:06:35PM +0800, Jimmy Hu wrote:
-> > A NULL pointer dereference occurs in gadget_match_driver() because a
-> > race condition exists between the DRD mode-switch work and the
-> > configfs UDC write path:
-> >
-> > 1. The DRD mode-switch work invokes __dwc3_set_mode(), which calls
-> >    dwc3_gadget_exit() and subsequently frees the UDC device name via
-> >    device_unregister(&udc->dev).
-> > 2. The configfs UDC write path invokes gadget_dev_desc_UDC_store(),
-> >    which calls usb_gadget_register_driver() and subsequently
-> >    compares the UDC device name via gadget_match_driver().
-> >
-> > If gadget_match_driver() runs concurrently during UDC unregistration, i=
-t
-> > may access the freed UDC device name. Once the freed memory is zeroed,
-> > dev_name(&udc->dev) returns NULL, causing a panic in strcmp().
->
-> I don't see how this can happen.  gadget_match_driver() runs during
-> probing of a gadget, which takes place only while the gadget is
-> registered in the device core.  But usb_del_gadget() calls
-> device_del(&gadget->dev) before it calls device_unregister(&udc->dev).
-> This means that at any time when gadget_match_driver() can run, the UDC
-> device name must still be allocated.
->
-> You should run more tests.  Add debugging printk() calls just before and
-> just after the device_del(&gadget->dev) and device_unregister(&udc->dev)
-> lines, and inside gadget_match_driver(), so the tests will show
-> unambiguously when these things happen with respect to each other.
->
-> > Fix this by checking dev_name(&udc->dev) before calling strcmp().
->
-> Adding a check like this will not fix a race; it will only make the race
-> less likely to occur.  It won't prevent the name from being deallocated
-> between the check and the strcmp() call.
->
-> Alan Stern
+usb_stor_adjust_quirks() parses the usb-storage.quirks module
+parameter into a new flag set and then applies it with the quirk
+mask to override built-in flags.
 
-Hi Alan,
+The mask is meant to cover the flags that can be overridden by
+the module parameter. The 'k' quirk character sets US_FL_NO_SAME,
+but US_FL_NO_SAME is not included in the mask.
 
-Thank you for the review. You are absolutely right about the TOCTOU risk;
-the simple NULL check does not prevent the name from being deallocated
-after the check but before the strcmp() call.
+As a result, the module parameter can set US_FL_NO_SAME, but it
+cannot clear a built-in US_FL_NO_SAME flag by providing an override
+entry that omits 'k'.
 
-I will submit a v2 patch that uses get_device(&udc->dev) and put_device()
-to increment the UDC reference count during the matching phase. This will
-guarantee that the UDC device name remains allocated and valid throughout
-the entire duration of strcmp(), eliminating the race condition structurall=
-y.
+Add US_FL_NO_SAME to the mask so that the module parameter can
+override it in the same way as the other supported flags.
 
-Does this approach sound reasonable to you?
+Fixes: 8010622c86ca ("USB: UAS: introduce a quirk to set no_write_same")
+Signed-off-by: Xu Rao <raoxu@uniontech.com>
+---
+ drivers/usb/storage/usb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Jimmy
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index fa83fe0defe2..064c7fc8e368 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -570,7 +570,7 @@ void usb_stor_adjust_quirks(struct usb_device *udev, u64 *fflags)
+ 			US_FL_INITIAL_READ10 | US_FL_WRITE_CACHE |
+ 			US_FL_NO_ATA_1X | US_FL_NO_REPORT_OPCODES |
+ 			US_FL_MAX_SECTORS_240 | US_FL_NO_REPORT_LUNS |
+-			US_FL_ALWAYS_SYNC);
++			US_FL_ALWAYS_SYNC | US_FL_NO_SAME);
+
+ 	p = quirks;
+ 	while (*p) {
+--
+2.50.1
+
 
