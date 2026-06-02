@@ -1,161 +1,203 @@
-Return-Path: <linux-usb+bounces-38271-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38272-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yM0oN7FRHmpqigkAu9opvQ
-	(envelope-from <linux-usb+bounces-38271-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 05:44:49 +0200
+	id gKHfIWhrHmq3jAkAu9opvQ
+	(envelope-from <linux-usb+bounces-38272-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 07:34:32 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B983627DC3
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 05:44:49 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0184E62897D
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 07:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D9CAE301CCFC
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 03:44:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 918D4301627C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 05:34:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93975349CDE;
-	Tue,  2 Jun 2026 03:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3BC531985D;
+	Tue,  2 Jun 2026 05:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="eY7e8zCI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="peqtZNLl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6203E31F9A3;
-	Tue,  2 Jun 2026 03:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780371882; cv=none; b=JENd9XDcYlEhyzCFj95fFXUbD4x8IPp4a51c5aXAHYFNjtLfAHsHQrAaBoXfKSgb3nT7Qmxxkn1oJ8KxfhjCFVMoHiiATdWVoBrfEEpbK8Imvk8xPxA/D8AtHzuX2imq664sB1oNBHcSq7eWrQZs+j0jnuiha6D1r1WQX5J/5Mo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780371882; c=relaxed/simple;
-	bh=jZ6pdMKOSFoDgnWsiBPRh8wXBbltts9dTS8KFsS6qeI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DcjPyrlGYR3H/sPwruRqHgx5VYVwY0tgqGN+YbiHCNxTwbUKFVWYOJspo2luvgy3u6uO/dwEVWFGTHqjiRBkL4q1IAYrFteQO696z6JmoLWpvnCTq4FcDd8hLXCOS/lsH8OhSg4gc1wRO4fXEoUel0ZXSSBWCzv/ifDMqQGdvrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=eY7e8zCI; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780371828;
-	bh=i7aAmzR2EINuxTnlO7fEKPv5dwDRoSiK5DmceKSw77E=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=eY7e8zCIR//OhR/w34DwSGZdk/CwTlrnSo1Xts8keZZT5//wRzfSz79rH5Y5hVK6R
-	 SJk9XEN8KFAglY4soT1kau3vAhrM72APQvBoFBokAtbjLzxuQPMrfmIWv5Yix3nErh
-	 RbuHwzW2uJCJggVtJpx4OUe1Z6g5HcjvJxQL5Ado=
-X-QQ-mid: esmtpsz19t1780371811tcc362642
-X-QQ-Originating-IP: zZRLl9JCMib1ECIoWoisp5aRgtrNKr/GFKDAqDbs6vI=
-Received: from PEN202512010004 ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 02 Jun 2026 11:43:29 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 15405620555191542574
-EX-QQ-RecipientCnt: 9
-From: Xu Rao <raoxu@uniontech.com>
-To: gregkh@linuxfoundation.org
-Cc: mathias.nyman@linux.intel.com,
-	niklas.neronin@linux.intel.com,
-	stern@rowland.harvard.edu,
-	michal.pecio@gmail.com,
-	ukaszb@chromium.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	raoxu@uniontech.com
-Subject: [PATCH] xhci: sideband: fix ring sg table pages leak
-Date: Tue,  2 Jun 2026 11:43:27 +0800
-Message-ID: <53B0BFAB966BDF11+20260602034327.2780520-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0503312807
+	for <linux-usb@vger.kernel.org>; Tue,  2 Jun 2026 05:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780378462; cv=pass; b=gx/Df5znr1PaPSNU7Rn69/F/HkZxfwfvzDNTPLQwSlBT1+ZNboEhFvyXqIjT0QKKjwhqghGY/DRIDPnJNXFWRQBBbcLevMZDxIiAd1zU2o20Rt+d2VJRscwhs7BogMTU3AFdWdWaka3KxgAkEbnyJhe0avLgi2nkEwy739k1G1g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780378462; c=relaxed/simple;
+	bh=7MCh1WehuUu3JURwEcRIdX8TakMkC1Oqa6Ne90OmRa4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FA0NeUquo9BNYAkA1AECWeMIe7m66rq63JOYvgVQDDZHnUfZCbzD9nVSiRV52CSbddFNpbJhYSTr4R/j4uY8V7yAYf4bc8Itgq0hsGjqgbpGAvxLpANXlzCrdQt7c4c4h+UQfUB/GmsN6rMJzC6C/jUrc0PRY4EExn0ur1r7+WY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xwf.google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=peqtZNLl; arc=pass smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xwf.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-51765331535so2831cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2026 22:34:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780378460; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IbOaRw3PRPmaWsSjEmAm2KVBr8mmltdmXHm3U1IFZnoicPKbZmsiUTI0MUPcfG4p9K
+         uZAGDq4ZPaAe3y4dcTC9e2P/dDULxth2PNsirAeB/pU+ruBE6jmT8QuHQnZ9+f4+NbFF
+         8yZriq1OZ2nnBw3OAFgNUZGBI6DXejkbnUdC+rCyu0SMsVMj9m7GQs6l8iFKzzptrLh3
+         +Km8qnISNEvZUpkqDRaM12BUmCdhB71SrcIXoiC+uI64nnB5qJvFmJAzltcdK4xlRDq3
+         qvKIbyj2AxXK2xSIDtkJKJKSoagiMUh6pOVMo1PtHA0sKu6DnIsHWiIj7S5LEwkoA5D8
+         ygDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:dkim-signature;
+        bh=i0l2wtQxncflisN7xBk+r4OI4gRjk3fLa+hgzVH9c1Y=;
+        fh=ruUrVm0SoeOeMfbASLNlbR8jSo7orcGZ6ygumULdR0o=;
+        b=a1w509IjIHQdK0VZXAFLqvwnn78V2UuEHrAdM1ivwHi8YjIBH9lhHRRRef9sPA3TRU
+         Fa1l/XaFy79gZGXfWjKH4yHQr0hbhO0CVQ3ED7tWFQpZWrGp0yg6qE0jDwJUorgXI+OW
+         dxgBs/78n8tAa5v5VmxeXlRwVAoxYwJN1Dh99Mgdjbgv0mbnIMX1yZTYrdwonMEAt4Uf
+         NRl4Ra2dc4PbV2Hydxa/hmC1CIAfvI1/rfKMgicoftneDMWKRu5cRnGNFWXgoK9fJMdC
+         vOs9T4huMd5uMDQ5LO/9yVe9g2zgEAQvaxBbCbr6y1nfRszSXzVqpW3+YjXuZO2LhYEi
+         zhuw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780378460; x=1780983260; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=i0l2wtQxncflisN7xBk+r4OI4gRjk3fLa+hgzVH9c1Y=;
+        b=peqtZNLlH8C4EUSOQiGBOOxeV3c1UYJltkTB0rnyusaNanQ4h0wKg38kegQvuN50rM
+         ys+64Hja4YA8IZfnbtutbqqvlvyl8cfOgHvAe51aksr2qFo3Z/LSuI2tQ939GnW0eViG
+         e/LiJcqx+DIMZ/y7gucKg23q3e0bpanUX43O+W9z7uf04ljmGZx3aXrh3dKYFO927QJz
+         SgMtFJYs/xQZp4+KyQslY9EBifRKxSnTLRAYOjst7vzskM5Pri4iTtbBWoh4VmfFuLy1
+         5fVIN5pMUHPSwGm/kGqlgDqIUmeH2b6jdSp90q9/bHS9L+q2k+OMcmpMpqnFg1rxQdgA
+         gGbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780378460; x=1780983260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i0l2wtQxncflisN7xBk+r4OI4gRjk3fLa+hgzVH9c1Y=;
+        b=Rth3CQy+XeHkBTEZIMjxvrlBHfbxsOzr17ekRSnh0NtzJ1Uwdmr6qOs6IVAz1EgZDf
+         LCBr02yMCRDa9WfzfsaCMyILUWtAFqiJ8imUWkDDALDCaiIhjF6iI965NKU/4jnddKnR
+         ySFg3PhmaeXJDA8nquT1hnxfifm6YHdMbcuHCKWFt8Li/cZ9Mwyha51ef4Pfy7s1VrM5
+         T9AK798lNyEXx/CS1oGlHiSO+K3X0n3gtFgSP4hNpeoLpvphx1UhA79CaICLFxRfhfD9
+         JsdcmJ6Ts2ipteqcEVqi1XxMq6yo7vejMqr7UDuxeyavqKfklCqN0m+wHUTeZolWVemr
+         W3Mg==
+X-Forwarded-Encrypted: i=1; AFNElJ8bYB7+4vmwGPBJD7TDqigKAGOXXVhmDvJ+LL+ysNwyoQpfib5Mh27tUtVYcaCvyAhMlvg+9c9eiCI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1FO8hnsc52LI3JhDpSfdqDKXNs9xxwEXYnwx3F2Y1J78/hhOX
+	Mmn77KxaQnUP2r8oEDvXYlvOP7Yj2/sLUDgLh5K147stGeoBOs4QWndxV3hGJ1LAU9Rqg5Pv9g6
+	s953L2Zqalr+AYJzg2KFrHcAGFzja2LhaY0ONcW8/DH2gwhvDaASs2d0qBac=
+X-Gm-Gg: Acq92OG6W+MI52fk69VwT/swXV3N+GOi0dwarrcNABbNAzerirAa/mpuwEtHB7W9TfV
+	VN+BKIHdSGlW12Bgh9ez7JpJG3QOq0nNXJAVfXfaScVC5xUvwRNTgzn2vn1ARMsvmCfcnEks0TV
+	0mEOc7Fppkw1jAWuGbgDfhf1PuwzTcV2+KKZ+s9sdrnOy7QKsvv9oPug7NExsW4eL3sOMd86q4L
+	e+ld52EHXxhiPmnqgOsb5BlIdirvsuLSkO/DPtp/NUC6RQe6zfoagdmj+uAq+qRf+NxSjivhna0
+	C6DCx/hEfF+KKey6/M1D
+X-Received: by 2002:a05:622a:5c10:b0:517:5d71:84e5 with SMTP id
+ d75a77b69052e-51768fe06fcmr6099541cf.5.1780378459480; Mon, 01 Jun 2026
+ 22:34:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: NNCgUTg3ctKTVkWMMleBohom5xFX/nhEOjdgIEG8pHLl+Xg43LVK1aXH
-	KJBqOzTVBSAJaU+XwISrYvHKlI53Mh3ZwbTtl2TWUxYaqRIcLeQ77NVqFVXHsx0SoyHqB8f
-	SURIj6p0OWL8df4j5Oq+FlbKiYBNbZAnHG5cB45ODHWt8OJKKlRhr0/YHAFGR16kmzA4Lc9
-	CKAGd6yHkMYE1i05Qkhd7fWO75LjuToBKKTuHdUB1G5XzQxnhzgNpaBpalLsAQhbq6zDmwk
-	z2G4laRYknOLYk5TpDqnXI19XhfIxMtTe+TBCNrOje85R7bQXkoprs0TScSF4gZAiX/ueaL
-	HSuweR6VUwS9EBbNwdumD3AjPMnqp3V5xsT8n931KFdFmSWWbZMfwqME6wfWGY30Dvo7PUj
-	GXiG9dEX9vR4cXf1TveLNhivQPuLdAkSJ9NUxGXKs9es5KaQ5VRgkISWPDNtIE3NiJaAGxF
-	fK2RDshFejvlTAkN1/+XIIXWP5gS8gQ+45KzSOcURgqdxOeg1iIPtNeNKuioyxAdHx6WN0H
-	K6ww7+jhqSUyRdpUuODNEaUbO4W6NcgxkipkihfxA6/ey9K5OZjx0sTlnwZ207VpSOEVqnD
-	rHzPKVVsoLPW1fcqYMsbVijuLy+7pxnrwByGk2RBgRJxMtdMWYtqI4jb84lgfqjDvFZOyYo
-	gEUF7JhrLEjpR4JFoo87GjY7hL+AsfTsv5J4K/v5JQsq6khtzssTzAyRTKVc41jzb4JF5Bg
-	shuyRnJH/MMmiHX3keUrnIfpodnuLecOtKpBsDAOCHLFR6YeMdOL4PnrdaSJvUly29R8k61
-	7IC2KOGhX5kr9fnB2C852Ias7VSMRZPeVv+9YtE2go3ZzqGVAKIOuBq2mDbYez3uEOZe+FH
-	atOMIOCyAZIYsb0aw/HbUMglj3fINJqqMI/GUvuKLu3oggi9LEDBXaIz7QeUZ5sr6Qa4j0b
-	hFcUmfDfU311j3tm9DasZQyoL0qUtf4Rte1X8Bd2EIEEPpk/aRdskp7o3YX+/RNxEc80KvR
-	jgdtmvdw==
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
-X-QQ-RECHKSPAM: 0
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+References: <20260526070635.839701-1-hhhuuu@google.com> <1f7a7bf2-4d21-4944-9da0-36082d052b25@rowland.harvard.edu>
+In-Reply-To: <1f7a7bf2-4d21-4944-9da0-36082d052b25@rowland.harvard.edu>
+Reply-To: hhhuuu@xwf.google.com
+From: "Jimmy Hu (xWF)" <hhhuuu@xwf.google.com>
+Date: Tue, 2 Jun 2026 13:34:07 +0800
+X-Gm-Features: AVHnY4J1Pfr-KMpUk2aKTCSyb0iCgb3wHalc4jtJOnhX4DoFuPOdgWZoWR9FlSc
+Message-ID: <CAJh=zjLLrY-NpV-ZcmH0V6q8CjNuKt7CmW-GEFQ8_y3zm9v1yw@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: udc: Fix NULL pointer dereference in gadget_match_driver
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-38271-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-38272-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,rowland.harvard.edu,gmail.com,chromium.org,vger.kernel.org,uniontech.com];
-	DKIM_TRACE(0.00)[uniontech.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,xwf.google.com:replyto];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[google.com:+];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hhhuuu@xwf.google.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,uniontech.com:email,uniontech.com:mid,uniontech.com:dkim]
-X-Rspamd-Queue-Id: 6B983627DC3
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	HAS_REPLYTO(0.00)[hhhuuu@xwf.google.com]
+X-Rspamd-Queue-Id: 0184E62897D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-xhci_ring_to_sgtable() allocates a temporary pages array and
-uses it to build the returned sg_table with
-sg_alloc_table_from_pages().
+On Wed, May 27, 2026 at 2:00=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Tue, May 26, 2026 at 03:06:35PM +0800, Jimmy Hu wrote:
+> > A NULL pointer dereference occurs in gadget_match_driver() because a
+> > race condition exists between the DRD mode-switch work and the
+> > configfs UDC write path:
+> >
+> > 1. The DRD mode-switch work invokes __dwc3_set_mode(), which calls
+> >    dwc3_gadget_exit() and subsequently frees the UDC device name via
+> >    device_unregister(&udc->dev).
+> > 2. The configfs UDC write path invokes gadget_dev_desc_UDC_store(),
+> >    which calls usb_gadget_register_driver() and subsequently
+> >    compares the UDC device name via gadget_match_driver().
+> >
+> > If gadget_match_driver() runs concurrently during UDC unregistration, i=
+t
+> > may access the freed UDC device name. Once the freed memory is zeroed,
+> > dev_name(&udc->dev) returns NULL, causing a panic in strcmp().
+>
+> I don't see how this can happen.  gadget_match_driver() runs during
+> probing of a gadget, which takes place only while the gadget is
+> registered in the device core.  But usb_del_gadget() calls
+> device_del(&gadget->dev) before it calls device_unregister(&udc->dev).
+> This means that at any time when gadget_match_driver() can run, the UDC
+> device name must still be allocated.
+>
+> You should run more tests.  Add debugging printk() calls just before and
+> just after the device_del(&gadget->dev) and device_unregister(&udc->dev)
+> lines, and inside gadget_match_driver(), so the tests will show
+> unambiguously when these things happen with respect to each other.
+>
+> > Fix this by checking dev_name(&udc->dev) before calling strcmp().
+>
+> Adding a check like this will not fix a race; it will only make the race
+> less likely to occur.  It won't prevent the name from being deallocated
+> between the check and the strcmp() call.
+>
+> Alan Stern
 
-The error paths free the pages array, but the success path
-returns the sg_table without freeing it. This leaks the temporary
-array every time a sideband client gets an endpoint or event ring
-buffer.
+Hi Alan,
 
-Free the pages array after sg_alloc_table_from_pages() succeeds.
-The returned sg_table has its own scatterlist entries and does not
-depend on the temporary array after construction.
+Thank you for the review. You are absolutely right about the TOCTOU risk;
+the simple NULL check does not prevent the name from being deallocated
+after the check but before the strcmp() call.
 
-Fixes: de66754e9f80 ("xhci: sideband: add initial api to register a secondary interrupter entity")
+I will submit a v2 patch that uses get_device(&udc->dev) and put_device()
+to increment the UDC reference count during the matching phase. This will
+guarantee that the UDC device name remains allocated and valid throughout
+the entire duration of strcmp(), eliminating the race condition structurall=
+y.
 
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
----
- drivers/usb/host/xhci-sideband.c | 2 ++
- 1 file changed, 2 insertions(+)
+Does this approach sound reasonable to you?
 
-diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
-index 23153e136d4b..a5deeee4d5dc 100644
---- a/drivers/usb/host/xhci-sideband.c
-+++ b/drivers/usb/host/xhci-sideband.c
-@@ -58,6 +58,8 @@ xhci_ring_to_sgtable(struct xhci_sideband *sb, struct xhci_ring *ring)
- 	if (sg_alloc_table_from_pages(sgt, pages, n_pages, 0, sz, GFP_KERNEL))
- 		goto err;
-
-+	kvfree(pages);
-+
- 	/*
- 	 * Save first segment dma address to sg dma_address field for the sideband
- 	 * client to have access to the IOVA of the ring.
---
-2.50.1
-
+Thanks,
+Jimmy
 
