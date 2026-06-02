@@ -1,65 +1,77 @@
-Return-Path: <linux-usb+bounces-38269-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-38270-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id bRnCKp02Hmr4hwkAu9opvQ
-	(envelope-from <linux-usb+bounces-38269-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 03:49:17 +0200
+	id QOh0MANNHmrmiQkAu9opvQ
+	(envelope-from <linux-usb+bounces-38270-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 05:24:51 +0200
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1E3D626F1F
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 03:49:16 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F53627B83
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Jun 2026 05:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0908F301157D
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 01:49:11 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 71AB2300C0E4
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2026 03:24:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A92F33A03F;
-	Tue,  2 Jun 2026 01:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69B5369206;
+	Tue,  2 Jun 2026 03:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="MnkDr39R"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="gAWqknYF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9840E1ACEDE;
-	Tue,  2 Jun 2026 01:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6A83233E8;
+	Tue,  2 Jun 2026 03:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780364946; cv=none; b=RTuzqvqukidT6OmE8mLF/jAWFs2wWez3ZsbAg3z3w1dHZGuDpzIYzJckGAZdrQJ9XoDDWrP+/HHHanvwNI9S+ewDjHbFhs9l8qFalU24wthIfo3gYjxyffSyuIlYTD/R7sxCdMIms0/hv1tsXybH24g+pjWOoPCm/ae69mFWoEY=
+	t=1780370686; cv=none; b=VVMlChvbb02NepKVc/ZW1FxM+GaAAhwkoHkzKOdyMg+oQ/N8uDW8jqXrk8Z5gBe4aiKVTf2qK/RxQAPZGGyJvk7dWC0zODv1kKzuVs4B1Zq4nIQDgzzQWD4sYc/EdO38fRyYnBudGDGxMoziQVtnMFB+60ZyuUj6lgU4v1RaT8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780364946; c=relaxed/simple;
-	bh=wnF1heJbBlLvdq8C/beCoH5VXz4FdA5bf60F9F86fQ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JS4HSgeyxbtVPgIYJHLC4W3D9aRjcQ1N15vezyXh7653Q4Vr7LDJqmIusf0UeZ68GkQJYrZfQ50uf2+qZo8lD39l88yWayFHjQH07lciPfwgCjxsDXEWQOiAiMpAN2V2fNIsu6A5bMyyq5E6QmjZjalUp9bomZNQ5FDXqmU8kzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=MnkDr39R; arc=none smtp.client-ip=54.207.19.206
+	s=arc-20240116; t=1780370686; c=relaxed/simple;
+	bh=rcfAdu5JFRv9+PpxSEcJbPJNa2MF5dRJrCA4ua5wwCM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hOChlArlFp7bB+Pau7d8MFfJoSWmzZ01U3PYl1K3j+HgWkJbrhekcDaBJzGendKujhmvVGgarubQ+fxd5RD8CE4nZOzQb5HcA3mmj0r5ZOqS0ms3jeeT085g+qsZAuWlMS7GC0I7lOeQi7intxkCjFszSN7MGTDI9yev5/nq2hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=gAWqknYF; arc=none smtp.client-ip=54.204.34.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780364924;
-	bh=UN5zPWn0uN8JzzeI98EPSs6ubSqSctrsvd+UUhNckNo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=MnkDr39ReOtHwC2bKKsB6iwz+ydzOVutqbOo7PkybX+LHcMVgLseeDSaP4et+DhRR
-	 RK9jTGbQP7BlZ7RgHLXxi11O0Mqg7gODOPHJIRSQhEiTW5yTlq8ypn9LJIV2iLRZ7E
-	 1Natz7z5DhYniI47+rg7mxDcSCFjLnRShlWgNw/E=
-X-QQ-mid: zesmtpsz8t1780364919t4b32c3ad
-X-QQ-Originating-IP: C64eDZ0OMW20Ijn4wwlOxhb/MqZNcGhz8ym3NIWOPlk=
-Received: from PEN202512010004 ( [113.57.152.160])
+	s=onoh2408; t=1780370678;
+	bh=dn8IPubHvNeXEKuaSdvnWy3G1wDEcbOyhaRuCaFScCU=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=gAWqknYFmAbwuWLhg58rFiASb2xteKDZCsspk+X+bLzXtYsjV6h28jMunRrexrs8n
+	 cSCsKH9Bwxy96DWIrc7O+lRAx+q7oEAOzLFcRAKpwA6IT/h1TVtWlGs1WUU403Yfwu
+	 y+8zuJoUAJXqwZ67AbBQ/4s0pguX671fjkOVQFxk=
+X-QQ-mid: zesmtpsz3t1780370660t3a9299aa
+X-QQ-Originating-IP: fmcuOrwsv3WsdBsngma3ziQrLiGuL1e1TVsH2hItIlk=
+Received: from localhost.localdomain ( [113.57.152.160])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 02 Jun 2026 09:48:38 +0800 (CST)
+	id ; Tue, 02 Jun 2026 11:24:17 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 5798188003343830360
-EX-QQ-RecipientCnt: 6
-From: Xu Rao <raoxu@uniontech.com>
-To: jikos@kernel.org
-Cc: bentiss@kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org,
+X-BIZMAIL-ID: 18384957555402254008
+EX-QQ-RecipientCnt: 15
+From: Haowen Tu <tuhaowen@uniontech.com>
+To: rafael@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	hansg@kernel.org,
+	kernel@uniontech.com,
+	laurent.pinchart@ideasonboard.com,
+	lenb@kernel.org,
 	linux-kernel@vger.kernel.org,
-	raoxu@uniontech.com
-Subject: [PATCH] HID: usbhid: switch HIDBP devices to boot protocol
-Date: Tue,  2 Jun 2026 09:48:35 +0800
-Message-ID: <A49C63267F00CDA8+20260602014835.2624940-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
+	linux-media@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mchehab@kernel.org,
+	oneukum@suse.com,
+	pavel@kernel.org,
+	stern@rowland.harvard.edu,
+	tuhaowen@uniontech.com
+Subject: Re: [PATCH v2 1/2] PM: hibernate: add pm_hibernation_snapshot_done() helper
+Date: Tue,  2 Jun 2026 11:24:13 +0800
+Message-Id: <20260602032413.1540166-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <CAJZ5v0gvcsowJL0oqKqaG-VFinpb9Rj06KNOkG9XaQ+6wp0Ygg@mail.gmail.com>
+References: <20260528081840.3528089-2-tuhaowen@uniontech.com> <CAJZ5v0gvcsowJL0oqKqaG-VFinpb9Rj06KNOkG9XaQ+6wp0Ygg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,23 +80,24 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: OM4amKHspT9JghnZQwG+eJMejArdHjTT7D4UeU+KTukwNU3d2Qo+Odu/
-	mNCWEczk/It5l1dUfckBX1Zcwt3FRk/WTD5h9s77ktVaht+XSRPXD+56xajfnXUHXul5Tsq
-	Z+S9C7RjqfzCUddQP5zu0hD83tvMU5dlGHKYw9nGPjoGbiAdZ27Ki3Xh15OKb0shsMX6yPn
-	1Y5ZYHLSrXI5KoMjlLSicXwYkcZ9jV7oUZWuK49yEedySQTRkgHH1xlfaqGP78uIqCboldL
-	JZ5nNRZ2DaEHQCbajeymcbR6kHrGxIqMC8RnbyeCjGMFV1MgjnMT23b5KEi5fx7zjONVAzf
-	lsSEA49A5Z60hHCK50iVjn99A6k4r3BstMGu69yNaoXPfuwAHPs8Tn5ux0CPR1KYvO5MgpK
-	SC33znmh1c/uGnwlN9DtScHVQw1dPcKKNim11Mjq84rFwoY9dzmHf2HAxGHUv3O2oEiGg4l
-	90/YUkL69vTBFMgzfekQKSLLn3Zyo1ydDlWkVDFKgwIoOGcmI1ZMaG4cSDh7MPWr9/b3PtU
-	7it+rQj7UWNkMjvyb5YHSJ4TBI4nPZFi26Bqx3QrvXRV4Ti9MY7QA/IB9Fj7800u3W4vFHG
-	v1qOW/+rtwMVIzZUWh2lMLsstTtFylAzYNsPCzHvNd81Z62esQmgJroGNy23dm1IgUkshnI
-	GhT9YCh5kB6+fxAnxEAaQdvqmhsvb5p2r/oupIjCL1SFeiGXDw0eg6x2oY6bhmw4AH/prdC
-	RONHbcBXPp1F0AKwV/datqb7XQfTjHGennfaM/YQebbLUKjhrkNQgKWYRCFBXYqrrREwr8n
-	DhkzUamwO6IpnETbjt66rYTxwmSuDHMw3hxlcPDw/QRXJ/TEQpzjIGhF+MNpyrhX1EV+/ag
-	nS02iEwu8cxtpiYwlNjiiGrCod9uagKxyanG1nRTqbCEKr38vKA+rE+oGKd2Ygc2KV9N73r
-	mqur7j+bcXgjgo4pCSIgrNSvwdqkjdW+FrpwtcZynQG0uyo48Jb6XohSf
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: MbBTNOOgGymjteoZkaQ8JswGfC+XpLjEY+MwtwKgppJfYH33yXSOzmdV
+	e1yd3ScvY4UDRzFvizRIkiQakvNmzVjMxJO2PxD0zrgCfAetqgpP2r2itPzm2rsJnMZxebq
+	W9AQjGBsO+DT2dPEasYoUoO+DcSyZyfSegMFzshcBQy3MHtAjVLvTawB4tMf/OA8mfQSAiC
+	uE/2YxwUHkmo/XCpHizuJT2SDKKWIizDSukaB67LclGBbnB8MUcAfzh++jhET/zxM9OLS+n
+	riX8KKCvLC4E9I4uS3Ik5LfR0HexsAPt7/5HIdiRlSBFzeKKvrVbryA6gql3m9WLrkiFXxg
+	gboZQPbjIL2nc0UhOs1RAypU7LrS1pFIDU8boPVj/JP409DdXjLaKTcBdPoS9CZaUXwaHXN
+	bt+fvGsL0Gyy3tFAsKSPs47hbD6sDx3FShVv8yQTe2ACIpakjLrN7Q5sj+ejuFHwsnWu5Ol
+	+FuYvhjBj9sWrI6MFQyvxJyJ9dpFeGwyBZ3ctSZj+PtCjCc9Qtytparpwm17tiucWG9A827
+	WggPn452dc/eXUMdgpmX9+XjibUeZV0mU+60DSYJTtyBDIZUQ33SSPom170vfHaWPskzuUK
+	EU2ZPLodRgBlc3P1jO805Z00KKvcfOTZ4RPt+chSFU4c1C3XIrGiBRjw1Ihe2e2knyLzfYj
+	nIU7rtG0Jyi6fIQN1gBcxwAdanoWGUHQZcUZLPqYVHgcOudHP70FJFnARv6kmWJ8hm7fnEE
+	XHiQsqMoeQmdVzclLdpIg6AGdIVOLJSH7KkKe6xCNyumotTx4KGEeaKIqFwCMWchQYFykUM
+	+kl1FuERC3ai52rHEw5twq/BUp1ZRF7CNN7XYqANBu3frjgrJ5SLZjn0LuYpslklR+nqKtz
+	C245w6lvbIujB13mUqdTwxJ8tysy52YWfUP/sVbdQjpw5kyCGXTcrEBvz2YrgYv9zSsAZvl
+	noOevTI4d8axBWoF6VF7hwaWeGtn0WWjJlHgbXOE9OdlpTN6rYJwrU6Gj+2p9Olume0yoLs
+	9J1GwzTCp4JP+z1RMTBJJc0pppzugBm6NXhVohCw==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
 X-QQ-RECHKSPAM: 0
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -92,7 +105,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
 	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -100,127 +113,83 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-38269-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-38270-lists,linux-usb=lfdr.de];
 	DKIM_TRACE(0.00)[uniontech.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_NEQ_ENVFROM(0.00)[tuhaowen@uniontech.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:email,uniontech.com:mid,uniontech.com:dkim,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: B1E3D626F1F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,uniontech.com:email,uniontech.com:mid,uniontech.com:dkim]
+X-Rspamd-Queue-Id: 40F53627B83
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-usbkbd and usbmouse are HID Boot Protocol drivers. They do not
-parse report descriptors before decoding interrupt reports; instead,
-they interpret input data as the fixed boot keyboard and boot mouse
-formats.
+Hi Rafael,
 
-The HID specification defines SET_PROTOCOL as the class request
-to select report or boot protocol. Boot subclass devices may power
-up or return from reset in report protocol, and hosts are expected
-to select the protocol they intend to use.
+On Mon, Jun 01, 2026 at 08:22:00PM +0200, Rafael J. Wysocki wrote:
+> On Thu, May 28, 2026 at 10:19 AM Haowen Tu <tuhaowen@uniontech.com> wrote:
+> >
+> > During hibernation, after create_image() saves the memory snapshot, the
+> > kernel resumes devices with PMSG_THAW solely to write the hibernation
+> > image to storage, then powers off.  Drivers for hardware not involved in
+> > storage I/O have no reason to reinitialize during this transient phase.
+>
+> They do have a reason for doing it.
+>
+> Their poweroff (or shutdown) callbacks will be called while preparing
+> to power off the system subsequently and they need to be ready for
+> that.  The most straightforward way to achieve this is to resume so
+> they can "suspend" again.
 
-Do not depend on firmware or a previous driver to leave the
-interface in boot protocol. Send SET_PROTOCOL(BOOT) during probe
-before the interrupt URB can be opened.
+Thanks for pointing this out.
 
-Keep failures non-fatal. Some devices may reject the request while
-still sending boot-compatible reports. For those devices, the
-existing driver behavior is preferable.
+My understanding is that the hibernation image contains the state from
+the snapshot point, that is before the subsequent THAW and image-write
+phase.  Therefore, on the later restore path, the kernel resumes from the
+state captured at the snapshot point and still goes through the normal
+PMSG_RESTORE resume path.  The THAW activity after the snapshot is not
+part of the restored image state.
 
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
----
- drivers/hid/usbhid/usbkbd.c   | 22 ++++++++++++++++++++++
- drivers/hid/usbhid/usbmouse.c | 22 ++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
+That said, I agree that some devices may need to be resumed before the
+final poweroff/shutdown callbacks run, so the wording in the changelog is
+too broad.  I did not mean to suggest that all non-storage devices can or
+should skip THAW resume.
 
-diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
-index 6b33e6ad0846..f3b83f0396c8 100644
---- a/drivers/hid/usbhid/usbkbd.c
-+++ b/drivers/hid/usbhid/usbkbd.c
-@@ -233,6 +233,26 @@ static void usb_kbd_close(struct input_dev *dev)
- 	usb_kill_urb(kbd->irq);
- }
+The helper is meant to expose this PM state, not to prescribe that
+drivers should skip THAW resume.  Whether a driver uses it would remain a
+driver-specific decision, based on whether skipping the hardware
+reinitialization is safe for that device, including its subsequent
+poweroff/shutdown handling.  Drivers that need the normal THAW resume
+before poweroff/shutdown would simply not use it.
 
-+static void usb_kbd_set_boot_protocol(struct usb_device *dev,
-+				      struct usb_interface *iface)
-+{
-+	struct usb_host_interface *interface = iface->cur_altsetting;
-+	int error;
-+
-+	/*
-+	 * usbkbd does not parse report descriptors. Make the device produce
-+	 * the fixed boot report format that the driver decodes.
-+	 */
-+	error = usb_control_msg_send(dev, 0, HID_REQ_SET_PROTOCOL,
-+				     USB_DIR_OUT | USB_TYPE_CLASS |
-+				     USB_RECIP_INTERFACE, HID_BOOT_PROTOCOL,
-+				     interface->desc.bInterfaceNumber, NULL, 0,
-+				     USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
-+	if (error < 0)
-+		dev_dbg(&iface->dev, "failed to set boot protocol: %d\n",
-+			error);
-+}
-+
- static int usb_kbd_alloc_mem(struct usb_device *dev, struct usb_kbd *kbd)
- {
- 	if (!(kbd->irq = usb_alloc_urb(0, GFP_KERNEL)))
-@@ -289,6 +309,8 @@ static int usb_kbd_probe(struct usb_interface *iface,
- 	if (usb_kbd_alloc_mem(dev, kbd))
- 		goto fail2;
+In this series the user is uvcvideo.  For USB devices, and specifically
+for UVC cameras, the device is hotpluggable and the driver already needs
+to tolerate device removal and disconnect-like conditions.  The UVC
+driver also does not need the camera streaming engine to be restarted in
+order to write the hibernation image, while restarting it has a visible
+side effect by turning the camera LED back on.  The check is placed after
+the driver's frozen state is cleared, so if image writeout fails, the
+driver is not left in the frozen state.
 
-+	usb_kbd_set_boot_protocol(dev, iface);
-+
- 	kbd->usbdev = dev;
- 	kbd->dev = input_dev;
- 	spin_lock_init(&kbd->leds_lock);
-diff --git a/drivers/hid/usbhid/usbmouse.c b/drivers/hid/usbhid/usbmouse.c
-index 7cc4f9558e5f..c1b9d95f957e 100644
---- a/drivers/hid/usbhid/usbmouse.c
-+++ b/drivers/hid/usbhid/usbmouse.c
-@@ -103,6 +103,26 @@ static void usb_mouse_close(struct input_dev *dev)
- 	usb_kill_urb(mouse->irq);
- }
+I will reword the changelog in the next version to avoid implying that
+non-storage devices generally have no reason to resume during THAW.
 
-+static void usb_mouse_set_boot_protocol(struct usb_device *dev,
-+					struct usb_interface *intf)
-+{
-+	struct usb_host_interface *interface = intf->cur_altsetting;
-+	int error;
-+
-+	/*
-+	 * usbmouse does not parse report descriptors. Make the device produce
-+	 * the fixed boot report format that the driver decodes.
-+	 */
-+	error = usb_control_msg_send(dev, 0, HID_REQ_SET_PROTOCOL,
-+				     USB_DIR_OUT | USB_TYPE_CLASS |
-+				     USB_RECIP_INTERFACE, HID_BOOT_PROTOCOL,
-+				     interface->desc.bInterfaceNumber, NULL, 0,
-+				     USB_CTRL_SET_TIMEOUT, GFP_KERNEL);
-+	if (error < 0)
-+		dev_dbg(&intf->dev, "failed to set boot protocol: %d\n",
-+			error);
-+}
-+
- static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_id *id)
- {
- 	struct usb_device *dev = interface_to_usbdev(intf);
-@@ -138,6 +158,8 @@ static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_i
- 	if (!mouse->irq)
- 		goto fail2;
+> > Clear in_suspend before releasing snapshot memory on hibernation failure
+> > paths and after swsusp_write() returns, so the helper does not report a
+> > stale snapshot after the snapshot pages have been released.
+>
+> This last piece needs to be split off into a separate patch.
 
-+	usb_mouse_set_boot_protocol(dev, intf);
-+
- 	mouse->usbdev = dev;
- 	mouse->dev = input_dev;
+Sure, I will split the in_suspend cleanup into a separate patch in the
+next version.
 
---
-2.50.1
+I will wait for your feedback before sending the next version.
 
+Thanks,
+Haowen
 
